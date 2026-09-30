@@ -24,6 +24,8 @@ También se puede publicar con **GitHub Pages** (Settings → Pages → Deploy f
 - **Combustible**: cuenta corriente YPF (transferencias de clientes menos cargas) y litros/importe por chofer.
 - **Basurales**: cada retiro registra a qué basural fue.
 - **Tablero del día** con solo "Por asignar" y "Retiros".
+- **Mapa real** (Leaflet + OpenStreetMap/CARTO, gratuito) con 3 estados: en cliente (verde), por vencer (amarillo) y vencido (rojo). Si no hay conexión, muestra un esquema de la zona.
+- **Horario de retiro**: se acuerda en Retiros y se registra la hora real al marcar el retiro.
 - Pestañas por perfil: Logística y Ventas ven Inicio, Agenda, Entregas, Retiros, Choferes, Combustible, Basurales, Contenedores y Mapa; Ventas además Pagos; administrador y dueño ven todo.
 
 ## Qué incluía la versión 1
@@ -35,7 +37,7 @@ También se puede publicar con **GitHub Pages** (Settings → Pages → Deploy f
 - **Operaciones**: alta en un formulario simple, con aviso de cliente duplicado. Cada operación se divide en comercial, logística y pago.
 - **Contenedores**: tabla con filtros y ficha con historial completo de movimientos.
 - **Retiros**: semáforo verde / amarillo / rojo según el plazo.
-- **Mapa**: contenedores en clientes por localidad. En la demo es un mapa esquemático; en el sistema final se usa OpenStreetMap + Leaflet.
+- **Mapa**: contenedores en clientes por localidad (esquema).
 - **Clientes, Pagos, Choferes, Reportes, Usuarios y permisos, Historial de cambios**.
 
 ## Reglas que ya muestra la demo

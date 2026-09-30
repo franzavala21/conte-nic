@@ -1,4 +1,4 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>[hidden]{display:none!important}body{margin:0}</style>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
 <title>Sistema Conte Nic</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
@@ -284,7 +284,7 @@ details.hist summary{cursor:pointer;font-weight:600;color:var(--muted)}
 .mitem.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .mitem small{display:block;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mapbox{position:relative;background:var(--map-bg);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.mapbox svg{display:block;width:100%;height:min(78vh,780px)}
+.mapbox>svg{display:block;width:100%;height:min(78vh,780px)}
 .mapbox .zoom{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:6px}
 .m-hill{fill:var(--map-hill)}.m-hill2{fill:var(--map-hill2)}.m-road{fill:none;stroke:var(--map-road);stroke-linecap:round;stroke-linejoin:round}
 .m-water{fill:var(--map-water)}.m-town{fill:var(--map-text)}.m-lbl{fill:var(--map-text);font-family:var(--f-body);font-weight:600}
@@ -416,6 +416,674 @@ td a:hover{text-decoration-color:var(--accent)}
 .cmb{max-width:170px}
 .day td:nth-child(4){min-width:150px}
 .day td:nth-child(5){white-space:nowrap}
+/* required styles */
+
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-tile-container,
+.leaflet-pane > svg,
+.leaflet-pane > canvas,
+.leaflet-zoom-box,
+.leaflet-image-layer,
+.leaflet-layer {
+	position: absolute;
+	left: 0;
+	top: 0;
+	}
+.leaflet-container {
+	overflow: hidden;
+	}
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	        user-select: none;
+	  -webkit-user-drag: none;
+	}
+/* Prevents IE11 from highlighting tiles in blue */
+.leaflet-tile::selection {
+	background: transparent;
+}
+/* Safari renders non-retina tile on retina better with this, but Chrome is worse */
+.leaflet-safari .leaflet-tile {
+	image-rendering: -webkit-optimize-contrast;
+	}
+/* hack that prevents hw layers "stretching" when loading new tiles */
+.leaflet-safari .leaflet-tile-container {
+	width: 1600px;
+	height: 1600px;
+	-webkit-transform-origin: 0 0;
+	}
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+	display: block;
+	}
+/* .leaflet-container svg: reset svg max-width decleration shipped in Joomla! (joomla.org) 3.x */
+/* .leaflet-container img: map is broken in FF if you have max-width: 100% on tiles */
+.leaflet-container .leaflet-overlay-pane svg {
+	max-width: none !important;
+	max-height: none !important;
+	}
+.leaflet-container .leaflet-marker-pane img,
+.leaflet-container .leaflet-shadow-pane img,
+.leaflet-container .leaflet-tile-pane img,
+.leaflet-container img.leaflet-image-layer,
+.leaflet-container .leaflet-tile {
+	max-width: none !important;
+	max-height: none !important;
+	width: auto;
+	padding: 0;
+	}
+
+.leaflet-container img.leaflet-tile {
+	/* See: https://bugs.chromium.org/p/chromium/issues/detail?id=600120 */
+	mix-blend-mode: plus-lighter;
+}
+
+.leaflet-container.leaflet-touch-zoom {
+	-ms-touch-action: pan-x pan-y;
+	touch-action: pan-x pan-y;
+	}
+.leaflet-container.leaflet-touch-drag {
+	-ms-touch-action: pinch-zoom;
+	/* Fallback for FF which doesn't support pinch-zoom */
+	touch-action: none;
+	touch-action: pinch-zoom;
+}
+.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
+	-ms-touch-action: none;
+	touch-action: none;
+}
+.leaflet-container {
+	-webkit-tap-highlight-color: transparent;
+}
+.leaflet-container a {
+	-webkit-tap-highlight-color: rgba(51, 181, 229, 0.4);
+}
+.leaflet-tile {
+	filter: inherit;
+	visibility: hidden;
+	}
+.leaflet-tile-loaded {
+	visibility: inherit;
+	}
+.leaflet-zoom-box {
+	width: 0;
+	height: 0;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+	z-index: 800;
+	}
+/* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */
+.leaflet-overlay-pane svg {
+	-moz-user-select: none;
+	}
+
+.leaflet-pane         { z-index: 400; }
+
+.leaflet-tile-pane    { z-index: 200; }
+.leaflet-overlay-pane { z-index: 400; }
+.leaflet-shadow-pane  { z-index: 500; }
+.leaflet-marker-pane  { z-index: 600; }
+.leaflet-tooltip-pane   { z-index: 650; }
+.leaflet-popup-pane   { z-index: 700; }
+
+.leaflet-map-pane canvas { z-index: 100; }
+.leaflet-map-pane svg    { z-index: 200; }
+
+.leaflet-vml-shape {
+	width: 1px;
+	height: 1px;
+	}
+.lvml {
+	behavior: url(#default#VML);
+	display: inline-block;
+	position: absolute;
+	}
+
+
+/* control positioning */
+
+.leaflet-control {
+	position: relative;
+	z-index: 800;
+	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
+	pointer-events: auto;
+	}
+.leaflet-top,
+.leaflet-bottom {
+	position: absolute;
+	z-index: 1000;
+	pointer-events: none;
+	}
+.leaflet-top {
+	top: 0;
+	}
+.leaflet-right {
+	right: 0;
+	}
+.leaflet-bottom {
+	bottom: 0;
+	}
+.leaflet-left {
+	left: 0;
+	}
+.leaflet-control {
+	float: left;
+	clear: both;
+	}
+.leaflet-right .leaflet-control {
+	float: right;
+	}
+.leaflet-top .leaflet-control {
+	margin-top: 10px;
+	}
+.leaflet-bottom .leaflet-control {
+	margin-bottom: 10px;
+	}
+.leaflet-left .leaflet-control {
+	margin-left: 10px;
+	}
+.leaflet-right .leaflet-control {
+	margin-right: 10px;
+	}
+
+
+/* zoom and fade animations */
+
+.leaflet-fade-anim .leaflet-popup {
+	opacity: 0;
+	-webkit-transition: opacity 0.2s linear;
+	   -moz-transition: opacity 0.2s linear;
+	        transition: opacity 0.2s linear;
+	}
+.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {
+	opacity: 1;
+	}
+.leaflet-zoom-animated {
+	-webkit-transform-origin: 0 0;
+	    -ms-transform-origin: 0 0;
+	        transform-origin: 0 0;
+	}
+svg.leaflet-zoom-animated {
+	will-change: transform;
+}
+
+.leaflet-zoom-anim .leaflet-zoom-animated {
+	-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);
+	   -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1);
+	        transition:         transform 0.25s cubic-bezier(0,0,0.25,1);
+	}
+.leaflet-zoom-anim .leaflet-tile,
+.leaflet-pan-anim .leaflet-tile {
+	-webkit-transition: none;
+	   -moz-transition: none;
+	        transition: none;
+	}
+
+.leaflet-zoom-anim .leaflet-zoom-hide {
+	visibility: hidden;
+	}
+
+
+/* cursors */
+
+.leaflet-interactive {
+	cursor: pointer;
+	}
+.leaflet-grab {
+	cursor: -webkit-grab;
+	cursor:    -moz-grab;
+	cursor:         grab;
+	}
+.leaflet-crosshair,
+.leaflet-crosshair .leaflet-interactive {
+	cursor: crosshair;
+	}
+.leaflet-popup-pane,
+.leaflet-control {
+	cursor: auto;
+	}
+.leaflet-dragging .leaflet-grab,
+.leaflet-dragging .leaflet-grab .leaflet-interactive,
+.leaflet-dragging .leaflet-marker-draggable {
+	cursor: move;
+	cursor: -webkit-grabbing;
+	cursor:    -moz-grabbing;
+	cursor:         grabbing;
+	}
+
+/* marker & overlays interactivity */
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-image-layer,
+.leaflet-pane > svg path,
+.leaflet-tile-container {
+	pointer-events: none;
+	}
+
+.leaflet-marker-icon.leaflet-interactive,
+.leaflet-image-layer.leaflet-interactive,
+.leaflet-pane > svg path.leaflet-interactive,
+svg.leaflet-image-layer.leaflet-interactive path {
+	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
+	pointer-events: auto;
+	}
+
+/* visual tweaks */
+
+.leaflet-container {
+	background: #ddd;
+	outline-offset: 1px;
+	}
+.leaflet-container a {
+	color: #0078A8;
+	}
+.leaflet-zoom-box {
+	border: 2px dotted #38f;
+	background: rgba(255,255,255,0.5);
+	}
+
+
+/* general typography */
+.leaflet-container {
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-size: 0.75rem;
+	line-height: 1.5;
+	}
+
+
+/* general toolbar styles */
+
+.leaflet-bar {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+	border-radius: 4px;
+	}
+.leaflet-bar a {
+	background-color: #fff;
+	border-bottom: 1px solid #ccc;
+	width: 26px;
+	height: 26px;
+	line-height: 26px;
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	color: black;
+	}
+.leaflet-bar a,
+.leaflet-control-layers-toggle {
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	}
+.leaflet-bar a:hover,
+.leaflet-bar a:focus {
+	background-color: #f4f4f4;
+	}
+.leaflet-bar a:first-child {
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	}
+.leaflet-bar a:last-child {
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom: none;
+	}
+.leaflet-bar a.leaflet-disabled {
+	cursor: default;
+	background-color: #f4f4f4;
+	color: #bbb;
+	}
+
+.leaflet-touch .leaflet-bar a {
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	}
+.leaflet-touch .leaflet-bar a:first-child {
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	}
+.leaflet-touch .leaflet-bar a:last-child {
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+	}
+
+/* zoom control */
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+	font: bold 18px 'Lucida Console', Monaco, monospace;
+	text-indent: 1px;
+	}
+
+.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {
+	font-size: 22px;
+	}
+
+
+/* layers control */
+
+.leaflet-control-layers {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+	background: #fff;
+	border-radius: 5px;
+	}
+.leaflet-control-layers-toggle {
+	background-image: url(images/layers.png);
+	width: 36px;
+	height: 36px;
+	}
+.leaflet-retina .leaflet-control-layers-toggle {
+	background-image: url(images/layers-2x.png);
+	background-size: 26px 26px;
+	}
+.leaflet-touch .leaflet-control-layers-toggle {
+	width: 44px;
+	height: 44px;
+	}
+.leaflet-control-layers .leaflet-control-layers-list,
+.leaflet-control-layers-expanded .leaflet-control-layers-toggle {
+	display: none;
+	}
+.leaflet-control-layers-expanded .leaflet-control-layers-list {
+	display: block;
+	position: relative;
+	}
+.leaflet-control-layers-expanded {
+	padding: 6px 10px 6px 6px;
+	color: #333;
+	background: #fff;
+	}
+.leaflet-control-layers-scrollbar {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding-right: 5px;
+	}
+.leaflet-control-layers-selector {
+	margin-top: 2px;
+	position: relative;
+	top: 1px;
+	}
+.leaflet-control-layers label {
+	display: block;
+	font-size: 13px;
+	font-size: 1.08333em;
+	}
+.leaflet-control-layers-separator {
+	height: 0;
+	border-top: 1px solid #ddd;
+	margin: 5px -10px 5px -6px;
+	}
+
+/* Default icon URLs */
+.leaflet-default-icon-path { /* used only in path-guessing heuristic, see L.Icon.Default */
+	background-image: url(images/marker-icon.png);
+	}
+
+
+/* attribution and scale controls */
+
+.leaflet-container .leaflet-control-attribution {
+	background: #fff;
+	background: rgba(255, 255, 255, 0.8);
+	margin: 0;
+	}
+.leaflet-control-attribution,
+.leaflet-control-scale-line {
+	padding: 0 5px;
+	color: #333;
+	line-height: 1.4;
+	}
+.leaflet-control-attribution a {
+	text-decoration: none;
+	}
+.leaflet-control-attribution a:hover,
+.leaflet-control-attribution a:focus {
+	text-decoration: underline;
+	}
+.leaflet-attribution-flag {
+	display: inline !important;
+	vertical-align: baseline !important;
+	width: 1em;
+	height: 0.6669em;
+	}
+.leaflet-left .leaflet-control-scale {
+	margin-left: 5px;
+	}
+.leaflet-bottom .leaflet-control-scale {
+	margin-bottom: 5px;
+	}
+.leaflet-control-scale-line {
+	border: 2px solid #777;
+	border-top: none;
+	line-height: 1.1;
+	padding: 2px 5px 1px;
+	white-space: nowrap;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+	background: rgba(255, 255, 255, 0.8);
+	text-shadow: 1px 1px #fff;
+	}
+.leaflet-control-scale-line:not(:first-child) {
+	border-top: 2px solid #777;
+	border-bottom: none;
+	margin-top: -2px;
+	}
+.leaflet-control-scale-line:not(:first-child):not(:last-child) {
+	border-bottom: 2px solid #777;
+	}
+
+.leaflet-touch .leaflet-control-attribution,
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+	box-shadow: none;
+	}
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+	border: 2px solid rgba(0,0,0,0.2);
+	background-clip: padding-box;
+	}
+
+
+/* popup */
+
+.leaflet-popup {
+	position: absolute;
+	text-align: center;
+	margin-bottom: 20px;
+	}
+.leaflet-popup-content-wrapper {
+	padding: 1px;
+	text-align: left;
+	border-radius: 12px;
+	}
+.leaflet-popup-content {
+	margin: 13px 24px 13px 20px;
+	line-height: 1.3;
+	font-size: 13px;
+	font-size: 1.08333em;
+	min-height: 1px;
+	}
+.leaflet-popup-content p {
+	margin: 17px 0;
+	margin: 1.3em 0;
+	}
+.leaflet-popup-tip-container {
+	width: 40px;
+	height: 20px;
+	position: absolute;
+	left: 50%;
+	margin-top: -1px;
+	margin-left: -20px;
+	overflow: hidden;
+	pointer-events: none;
+	}
+.leaflet-popup-tip {
+	width: 17px;
+	height: 17px;
+	padding: 1px;
+
+	margin: -10px auto 0;
+	pointer-events: auto;
+
+	-webkit-transform: rotate(45deg);
+	   -moz-transform: rotate(45deg);
+	    -ms-transform: rotate(45deg);
+	        transform: rotate(45deg);
+	}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+	background: white;
+	color: #333;
+	box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+	}
+.leaflet-container a.leaflet-popup-close-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: none;
+	text-align: center;
+	width: 24px;
+	height: 24px;
+	font: 16px/24px Tahoma, Verdana, sans-serif;
+	color: #757575;
+	text-decoration: none;
+	background: transparent;
+	}
+.leaflet-container a.leaflet-popup-close-button:hover,
+.leaflet-container a.leaflet-popup-close-button:focus {
+	color: #585858;
+	}
+.leaflet-popup-scrolled {
+	overflow: auto;
+	}
+
+.leaflet-oldie .leaflet-popup-content-wrapper {
+	-ms-zoom: 1;
+	}
+.leaflet-oldie .leaflet-popup-tip {
+	width: 24px;
+	margin: 0 auto;
+
+	-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)";
+	filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678);
+	}
+
+.leaflet-oldie .leaflet-control-zoom,
+.leaflet-oldie .leaflet-control-layers,
+.leaflet-oldie .leaflet-popup-content-wrapper,
+.leaflet-oldie .leaflet-popup-tip {
+	border: 1px solid #999;
+	}
+
+
+/* div icon */
+
+.leaflet-div-icon {
+	background: #fff;
+	border: 1px solid #666;
+	}
+
+
+/* Tooltip */
+/* Base styles for the element that has a tooltip */
+.leaflet-tooltip {
+	position: absolute;
+	padding: 6px;
+	background-color: #fff;
+	border: 1px solid #fff;
+	border-radius: 3px;
+	color: #222;
+	white-space: nowrap;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	pointer-events: none;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+	}
+.leaflet-tooltip.leaflet-interactive {
+	cursor: pointer;
+	pointer-events: auto;
+	}
+.leaflet-tooltip-top:before,
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+	position: absolute;
+	pointer-events: none;
+	border: 6px solid transparent;
+	background: transparent;
+	content: "";
+	}
+
+/* Directions */
+
+.leaflet-tooltip-bottom {
+	margin-top: 6px;
+}
+.leaflet-tooltip-top {
+	margin-top: -6px;
+}
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-top:before {
+	left: 50%;
+	margin-left: -6px;
+	}
+.leaflet-tooltip-top:before {
+	bottom: 0;
+	margin-bottom: -12px;
+	border-top-color: #fff;
+	}
+.leaflet-tooltip-bottom:before {
+	top: 0;
+	margin-top: -12px;
+	margin-left: -6px;
+	border-bottom-color: #fff;
+	}
+.leaflet-tooltip-left {
+	margin-left: -6px;
+}
+.leaflet-tooltip-right {
+	margin-left: 6px;
+}
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+	top: 50%;
+	margin-top: -6px;
+	}
+.leaflet-tooltip-left:before {
+	right: 0;
+	margin-right: -12px;
+	border-left-color: #fff;
+	}
+.leaflet-tooltip-right:before {
+	left: 0;
+	margin-left: -12px;
+	border-right-color: #fff;
+	}
+
+/* Printing */
+
+@media print {
+	/* Prevent printers from removing background-images of controls. */
+	.leaflet-control {
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+		}
+	}
+
+#lmap{z-index:0;isolation:isolate;height:min(78vh,780px);background:#e8e6e1}
+.lm-dep{background:#17212B;color:#fff;font:700 12px/1 var(--f-body);padding:6px 8px;border-radius:6px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.3);transform:translate(-4px,-50%)}
+.leaflet-container{font-family:var(--f-body)}
+.leaflet-tooltip{font-weight:600;font-size:13px}
+.dot.g{background:#1E9E55}.dot.y{background:#F2B705}.dot.r{background:#D93025}
+.m-mk.g{fill:#1E9E55}.m-mk.y{fill:#F2B705}.m-mk.r{fill:#D93025}
 @media (max-width:1300px){.tiles7{grid-template-columns:repeat(4,minmax(0,1fr))}.tiles5{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:980px){.fuel{grid-template-columns:minmax(0,1fr)}.tiles4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.tiles7,.tiles5{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -428,6 +1096,7 @@ td a:hover{text-decoration-color:var(--accent)}
 <div id="dialog"></div>
 <div id="toast" class="toast" aria-live="polite"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script>
 /* ============ utilidades ============ */
 const $=s=>document.querySelector(s);
@@ -588,7 +1257,7 @@ function pickCustomer(){const r=R();if(r<.14)return DB.customers[0];if(r<.22)ret
 function newOp(o){
  const op=Object.assign({id:++DB.seq.op,type:'Alquiler',qty:1,size:5,customerId:null,addrId:null,reqDay:TODAY,slot:'A coordinar',min:17*60,price:0,payMethod:'Efectivo',payAcct:null,paid:0,payDay:null,verified:false,receipt:null,obs:'',status:'Solicitado',
   cids:[],driverId:null,remito:null,firmado:false,delDay:null,delMin:null,plannedPickup:null,pickDay:null,pickMin:null,pickDriverId:null,basural:null,pickPlace:null,
-  replacesOpId:null,closedByRecambio:false,pendConf:false,sameTrip:null,photos:[],demoPhoto:false,createdBy:'Belén',createdDay:TODAY,pickDriverPlan:null,logObs:''},o);
+  replacesOpId:null,closedByRecambio:false,pendConf:false,sameTrip:null,photos:[],demoPhoto:false,createdBy:'Belén',createdDay:TODAY,pickDriverPlan:null,pickSlot:'A coordinar',logObs:''},o);
  DB.ops.push(op);return op;
 }
 function doAssign(op,cids,drvId,day,min,user,log){
@@ -672,6 +1341,7 @@ function makeOp(d,{assign=true,creator='Belén',createdDay=d,log=false,slot=null
  const cx=makeOp(TODAY-3,{assign:false,createdDay:TODAY-4});if(cx){cx.status='Cancelado';aud(TODAY-3,9*60+12,'Belén',`Belén canceló el pedido ${opn(cx.id)} (llovió, el cliente reprograma)`,cx.id)}
  // pedidos futuros sin pago: forma de pago lista; transferencias previas a la entrega
  DB.ops.filter(o=>preDel(o)&&o.payMethod==='Transferencia'&&R()<.3).forEach(o=>{o.paid=o.price;o.payDay=TODAY;o.receipt=`transferencia_${o.id}.jpg`;o.verified=R()<.5});
+ DB.ops.filter(isActive).forEach(o=>o.pickSlot=wpick(SLOTS,[30,18,30,5,6,4,4,3]));
  // algunos vencidos
  DB.ops.filter(o=>isActive(o)&&o.delDay<=TODAY-5&&o.plannedPickup>=TODAY).slice(0,3).forEach((o,i)=>{o.plannedPickup=TODAY-[1,2,4][i]});
  // ubicaciones de depósito
@@ -695,7 +1365,7 @@ function makeOp(d,{assign=true,creator='Belén',createdDay=d,log=false,slot=null
 const S={user:null,view:'inicio',period:'hoy',from:TODAY-13,to:TODAY,
  ag:{when:'semana',day:TODAY,q:'',drv:''},en:{when:'todas',barrio:'',drv:''},rt:{f:'todos',barrio:'',drv:''},
  cf:{q:'',pl:'',size:'',loc:''},clq:'',pf:{when:'mes',day:TODAY,m:'',st:'',q:''},cp:'mes',bp:'mes',dp:'semana',dsel:null,
- mq:'',mst:{cli:true,venc:true},msel:null,mzoom:null,af:{u:'',q:''},navOpen:false,drawer:null,modal:null,dialog:null,editCom:null};
+ mq:'',mst:{g:true,y:true,r:true},mapView:null,msel:null,mzoom:null,af:{u:'',q:''},navOpen:false,drawer:null,modal:null,dialog:null,editCom:null};
 
 const role=()=>S.user.role;
 const inR=(...r)=>r.includes(role());
@@ -772,9 +1442,11 @@ const cnt=place=>DB.containers.filter(c=>c.place===place).length;
 
 /* ============ render ============ */
 function render(){
+ killMap();
  const ae=document.activeElement,fid=ae&&ae.id,pos=ae&&typeof ae.selectionStart==='number'?ae.selectionStart:null;
  $('#app').innerHTML=S.user?shell():loginView();
  renderLayers();
+ if(S.user&&S.view==='mapa')initMap();
  if(fid){const el=byId(fid);if(el&&el!==document.activeElement){el.focus({preventScroll:true});if(pos!=null)try{el.setSelectionRange(pos,pos)}catch(e){}}}
 }
 function renderLayers(){
@@ -926,10 +1598,11 @@ function vRet(){
  <div class="filters"><select class="sel" id="rtb" data-f="rt.barrio" aria-label="Barrio">${barrioOptions(base,S.rt.barrio)}</select>
   <select class="sel" id="rtd" data-f="rt.drv" aria-label="Chofer"><option value="">Todos los choferes</option>${DB.drivers.map(d=>`<option value="${d.id}" ${S.rt.drv==d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select></div>
  ${S.rt.barrio?`<div class="warn-box" style="margin-bottom:14px;background:var(--info-bg)">${ic('link')}<span>En <b>${esc(S.rt.barrio.split('|')[0])}</b> hay <b>${otherEnt}</b> entrega${otherEnt===1?'':'s'} pendiente${otherEnt===1?'':'s'}. Combinalas en el mismo viaje: el camión deja el contenedor nuevo y retira el usado.</span><button class="btn sm" data-act="goView" data-v="entregas" data-k="en.barrio" data-val="${esc(S.rt.barrio)}">Ver entregas del barrio</button></div>`:''}
- <div class="tbl-wrap"><table class="dense"><thead><tr><th>Plazo</th><th>Cliente</th><th>Dirección</th><th>Contenedor</th><th>Entregado</th><th>Retiro previsto</th><th>Chofer asignado</th><th>Mismo viaje</th>${can.field()?'<th></th>':''}</tr></thead><tbody>
+ <div class="tbl-wrap"><table class="dense"><thead><tr><th>Plazo</th><th>Cliente</th><th>Dirección</th><th>Contenedor</th><th>Entregado</th><th>Retiro previsto</th><th>Horario de retiro</th><th>Chofer asignado</th><th>Mismo viaje</th>${can.field()?'<th></th>':''}</tr></thead><tbody>
  ${list.map(o=>{const[k,t]=sem(o),a=addr(o);return `<tr><td><span class="b ${k}">${t}</span></td><td><a href="#" data-act="openOp" data-id="${o.id}"><b>${esc(cust(o).name)}</b></a><span class="sub">${esc(cust(o).phone)}</span></td><td><b>${esc(a.barrio!=='Centro'?a.barrio:a.loc)}</b><span class="sub">${esc(a.street)} · ${esc(a.loc)}</span></td><td>${o.cids.map(c=>`<a href="#" class="cname" data-act="openCont" data-id="${c}">${c}</a>`).join('<br>')}</td><td class="tnum">${fs(o.delDay)}</td><td class="tnum ${k==='bad'?'late':''}">${fd(o.plannedPickup)}</td>
+ <td>${can.assign()?`<select class="sel sm" id="ps-${o.id}" data-chg="pslot" data-id="${o.id}" aria-label="Horario de retiro">${SLOTS.map(x=>`<option ${o.pickSlot===x?'selected':''}>${x}</option>`).join('')}</select>`:esc(o.pickSlot)}</td>
  <td>${can.assign()?`<select class="sel sm" id="pd-${o.id}" data-chg="pdrv" data-id="${o.id}" aria-label="Chofer para el retiro">${DB.drivers.map(d=>`<option value="${d.id}" ${(o.pickDriverPlan||o.driverId)===d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select>`:pill(o.pickDriverPlan||o.driverId)}</td>
- <td>${combineSelect(o,'ret')}</td>${can.field()?`<td><button class="btn sm pri" data-act="pickDlg" data-id="${o.id}">Retirado</button></td>`:''}</tr>`}).join('')||`<tr><td colspan="9" class="empty">No hay retiros con esos filtros.</td></tr>`}
+ <td>${combineSelect(o,'ret')}</td>${can.field()?`<td><button class="btn sm pri" data-act="pickDlg" data-id="${o.id}">Retirado</button></td>`:''}</tr>`}).join('')||`<tr><td colspan="10" class="empty">No hay retiros con esos filtros.</td></tr>`}
  </tbody></table></div>`;
 }
 
@@ -940,7 +1613,7 @@ function jcard(o,kind){
  if(kind==='ret'&&can.field())acts=`<button class="btn pri" data-act="pickDlg" data-id="${o.id}">Retirado</button>`;
  const late=kind==='ret'&&o.plannedPickup<TODAY?`<span class="b bad">Vencido hace ${TODAY-o.plannedPickup} ${TODAY-o.plannedPickup===1?'día':'días'}</span>`:'';
  return `<article class="jc"><button class="jc-open" data-act="openOp" data-id="${o.id}">
-  <span class="jc-top"><span class="time">${kind==='ret'?fs(o.plannedPickup):esc(o.slot)}</span><span>${kind==='ret'?`<span class="cname">${o.cids.join(', ')}</span>`:`${o.type!=='Alquiler'?badge(o.type,{Recambio:'acc',Movimiento:'rep'}):''} ${o.qty>1?o.qty+'× ':''}${sz(o.size)}`}</span></span>
+  <span class="jc-top"><span class="time">${kind==='ret'?fs(o.plannedPickup)+' · '+esc(o.pickSlot):esc(o.slot)}</span><span>${kind==='ret'?`<span class="cname">${o.cids.join(', ')}</span>`:`${o.type!=='Alquiler'?badge(o.type,{Recambio:'acc',Movimiento:'rep'}):''} ${o.qty>1?o.qty+'× ':''}${sz(o.size)}`}</span></span>
   <b>${esc(cu.name)}</b><span class="addr">${esc(aline(a))} · ${esc(a.loc)}</span></button>
   <div class="row">${o.reqDay<TODAY&&kind==='asig'?'<span class="b bad">Atrasado</span>':''}${kind==='ret'?pill(o.pickDriverPlan||o.driverId):''}${late}${o.obs?`<span class="muted">${esc(o.obs)}</span>`:''}</div>${pcTag(o)}${stTag(o)}
   ${acts?`<div class="acts">${acts}</div>`:''}</article>`;
@@ -1111,12 +1784,12 @@ function mOp(){
   lg=`<dl class="dl"><dt>Contenedor</dt><dd>${o.cids.length?o.cids.map(c=>`<a href="#" data-act="openCont" data-id="${c}">${cname(C(c))}</a>`).join('<br>'):(o.type==='Movimiento'?'—':'Sin asignar')}</dd><dt>Chofer</dt><dd>${o.driverId?esc(dname(o.driverId)):'—'}</dd>
    <dt>Entrega</dt><dd>${o.delDay!=null?fd(o.delDay)+' · '+fmin(o.delMin):'Agendado '+fd(o.reqDay)+' · '+esc(o.slot)}</dd>
    <dt>Remito</dt><dd>${o.remito?'N° '+o.remito+' '+(o.firmado?badge('Firmado',{Firmado:'ok'}):badge('Sin firmar',{'Sin firmar':'warn'})):'—'}</dd>
-   ${o.plannedPickup!=null?`<dt>Retiro previsto</dt><dd class="${o.plannedPickup<TODAY&&isActive(o)?'late':''}">${fd(o.plannedPickup)}</dd>`:''}
-   ${o.pickDay!=null?`<dt>Retirado</dt><dd>${fd(o.pickDay)} · ${esc(dname(o.pickDriverId))}${o.closedByRecambio?' (recambio)':''}</dd><dt>Basural</dt><dd>B. ${esc(o.basural)}</dd><dt>Quedó en</dt><dd>${esc(o.pickPlace)}</dd>`:''}
+   ${o.plannedPickup!=null?`<dt>Retiro previsto</dt><dd class="${o.plannedPickup<TODAY&&isActive(o)?'late':''}">${fd(o.plannedPickup)}${isActive(o)?' · '+esc(o.pickSlot):''}</dd>`:''}
+   ${o.pickDay!=null?`<dt>Retirado</dt><dd>${fd(o.pickDay)} ${fmin(o.pickMin)} · ${esc(dname(o.pickDriverId))}${o.closedByRecambio?' (recambio)':''}</dd><dt>Basural</dt><dd>B. ${esc(o.basural)}</dd><dt>Quedó en</dt><dd>${esc(o.pickPlace)}</dd>`:''}
    ${o.logObs?`<dt>Obs. logística</dt><dd>${esc(o.logObs)}</dd>`:''}</dl>
    ${o.cids.length&&o.delDay!=null?`<div class="photos">${photosOf(o)}</div>`:''}
    ${can.field()&&o.remito&&!o.firmado&&o.status!=='Cancelado'?`<div><button class="btn sm" data-act="signRemito" data-id="${o.id}">Marcar remito firmado</button></div>`:''}
-   ${can.field()&&isActive(o)?`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end"><label class="fld" style="flex:1 1 160px"><span>Cambiar fecha de retiro</span><input type="date" id="pp-d" value="${dOut(o.plannedPickup)}"></label><button class="btn sm" data-act="savePP" data-id="${o.id}">Guardar fecha</button></div>`:''}`;
+   ${can.field()&&isActive(o)?`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end"><label class="fld" style="flex:1 1 150px"><span>Fecha de retiro</span><input type="date" id="pp-d" value="${dOut(o.plannedPickup)}"></label><label class="fld" style="flex:1 1 130px"><span>Horario</span><select id="pp-s">${SLOTS.map(x=>`<option ${o.pickSlot===x?'selected':''}>${x}</option>`).join('')}</select></label><button class="btn sm" data-act="savePP" data-id="${o.id}">Guardar</button></div>`:''}`;
  }
  const pg=`<dl class="dl"><dt>Precio</dt><dd>${money(o.price)}</dd><dt>Forma</dt><dd>${esc(payLabel(o))}</dd><dt>Pagado</dt><dd>${money(o.paid)}</dd><dt>Pendiente</dt><dd class="${ps==='Vencido'?'late':''}">${money(Math.max(0,o.price-o.paid))}</dd><dt>Estado</dt><dd>${o.status==='Cancelado'?'—':badge(ps,BP)}</dd><dt>Fecha de pago</dt><dd>${fd(o.payDay)}</dd><dt>Comprobante</dt><dd>${esc(o.receipt)||'—'}</dd></dl>
   <div style="display:flex;gap:8px;flex-wrap:wrap">${can.pay()&&ps==='Por verificar'?`<button class="btn sm pri" data-act="verify" data-id="${o.id}">${ic('check')}Verificar transferencia</button>`:''}${can.pay()&&o.status!=='Cancelado'&&['Pendiente','Vencido'].includes(ps)?`<button class="btn sm" data-act="payDlg" data-id="${o.id}">${ic('cash')}Registrar pago</button>`:''}</div>`;
@@ -1202,6 +1875,7 @@ const DIALOGS={
  pickup:()=>{const o=O(S.dialog.id),a=addr(o);return `<div class="m-head"><div><p class="eyebrow">${opn(o.id)}</p><h2>Registrar retiro</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
   <div class="m-body"><p>Retirar <b class="cname">${o.cids.join(', ')}</b> de <b>${esc(cust(o).name)}</b>, ${esc(aline(a))} (${esc(a.loc)}).</p>
   <div class="fld"><span>Chofer que retira</span><div class="seg">${DB.drivers.map(d=>`<label><input type="radio" name="pk-d" value="${d.id}" ${(o.pickDriverPlan||o.driverId)===d.id?'checked':''}><span>${esc(d.name)}</span></label>`).join('')}</div></div>
+  <div class="fgrid"><label class="fld"><span>Hora del retiro</span><input type="time" id="pk-h" value="${fmin(nowMin())}"></label><div class="fld"><span>Horario acordado</span><b style="padding-top:10px">${esc(o.pickSlot)}</b></div></div>
   <div class="fld"><span>¿A qué basural lo llevó?</span><div class="seg">${radios('pk-b',BASURALES.map(b=>[b,'B. '+b]),basFor(a.loc))}</div></div>
   <div class="fld"><span>¿Dónde queda el contenedor?</span><div class="seg">${radios('pk-r',['Lote Paraguay','Simonna','Otro lugar'],'Lote Paraguay')}</div></div>
   <label class="fld"><span>Observaciones (opcional)</span><input id="pk-o" placeholder="Ej.: golpe en el lateral, va al taller"></label></div>
@@ -1226,8 +1900,9 @@ const DIALOGS={
 const MB={lat0:-30.99,lat1:-31.33,lng0:-64.37,lng1:-64.23,W:600,H:800};
 const px=(la,ln)=>[(ln-MB.lng0)/(MB.lng1-MB.lng0)*MB.W,(MB.lat0-la)/(MB.lat0-MB.lat1)*MB.H];
 const DEPOT_POS={'Lote Paraguay':[-31.276,-64.281],'Simonna':[-31.305,-64.285]};
-function mapData(){const q=norm(S.mq);return DB.ops.filter(isActive).filter(o=>o.plannedPickup<TODAY?S.mst.venc:S.mst.cli).filter(o=>{const a=addr(o);return !q||norm(a.loc).includes(q)||norm(aline(a)).includes(q)||norm(cust(o).name).includes(q)||o.cids.some(c=>norm(c).includes(q))})}
-const mkClass=o=>o.plannedPickup<TODAY?'bad':o.plannedPickup<=TODAY?'warn':'info';
+const MKC={g:'#1E9E55',y:'#F2B705',r:'#D93025'},MKL={g:'En cliente',y:'Por vencer',r:'Vencido'};
+function mapData(){const q=norm(S.mq);return DB.ops.filter(isActive).filter(o=>S.mst[mkClass(o)]).filter(o=>{const a=addr(o);return !q||norm(a.loc).includes(q)||norm(aline(a)).includes(q)||norm(cust(o).name).includes(q)||o.cids.some(c=>norm(c).includes(q))})}
+const mkClass=o=>o.plannedPickup<TODAY?'r':o.plannedPickup<=TODAY+2?'y':'g';
 function mapSvg(list){
  let vb=[0,0,600,800];if(S.mzoom&&LOCS[S.mzoom]){const[x,y]=px(LOCS[S.mzoom].lat,LOCS[S.mzoom].lng);vb=[x-110,y-146,220,293]}
  const k=vb[2]/600,towns=LOC_NAMES.map(n=>({n,p:px(LOCS[n].lat,LOCS[n].lng)})).sort((a,b)=>b.p[1]-a.p[1]);
@@ -1241,26 +1916,44 @@ function mapSvg(list){
  <text class="m-lbl" x="590" y="786" text-anchor="end" font-size="${13*k}" opacity=".8">Córdoba capital →</text>
  ${towns.map(t=>`<circle class="m-town" cx="${t.p[0]}" cy="${t.p[1]}" r="${3.5*k}"/><text class="m-lbl" x="${t.p[0]+10*k}" y="${t.p[1]-8*k}" font-size="${14*k}">${t.n}</text>`).join('')}
  ${DEPOTS.map(dn=>{const[x,y]=px(...DEPOT_POS[dn]);return `<rect class="m-dep" x="${x-8*k}" y="${y-8*k}" width="${16*k}" height="${16*k}" rx="${3*k}"/><text class="m-lbl" x="${x+13*k}" y="${y+4*k}" font-size="${12*k}">${dn} · ${cnt(dn)}</text>`}).join('')}`;
- list.forEach(o=>{const a=addr(o);if(a.lat==null)return;const[x,y]=px(a.lat,a.lng),sel=S.msel===o.id;s+=`<g data-act="mapSel" data-id="${o.id}"><title>${o.cids.join(', ')} · ${esc(cust(o).name)}</title>${sel?`<circle class="m-sel" cx="${x}" cy="${y}" r="${13*k}" stroke-width="${2.5*k}"/>`:''}<circle class="m-mk ${mkClass(o)}" cx="${x}" cy="${y}" r="${(sel?8.5:6.5)*k}" stroke-width="${1.8*k}"/></g>`});
+ list.forEach(o=>{const a=addr(o);if(a.lat==null)return;const[x,y]=px(a.lat,a.lng),sel=S.msel===o.id;s+=`<g data-act="mapSel" data-id="${o.id}"><title>${o.cids.join(', ')} · ${esc(cust(o).name)}</title>${sel?`<circle class="m-sel" cx="${x}" cy="${y}" r="${16*k}" stroke-width="${2.5*k}"/>`:''}<circle class="m-mk ${mkClass(o)}" cx="${x}" cy="${y}" r="${(sel?11:9)*k}" stroke-width="${2*k}"/></g>`});
  return s+'</svg>';
+}
+let LMAP=null,MAPMODE=typeof L!=='undefined'?'try':'schem',TILE_OK=false;
+function killMap(){if(LMAP){try{S.mapView={c:LMAP.getCenter(),z:LMAP.getZoom()};LMAP.remove()}catch(e){}LMAP=null}}
+function mapFail(){if(MAPMODE!=='try')return;MAPMODE='schem';killMap();if(S.view==='mapa'&&S.user)render()}
+function initMap(){
+ const el=byId('lmap');if(!el||MAPMODE==='schem')return;
+ const m=L.map(el,{zoomControl:true});LMAP=m;
+ const t=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>'}).addTo(m);
+ t.on('tileload',()=>{TILE_OK=true;if(MAPMODE==='try')MAPMODE='ok'});
+ t.on('tileerror',()=>{if(!TILE_OK)setTimeout(()=>{if(!TILE_OK)mapFail()},600)});
+ if(MAPMODE==='try')setTimeout(()=>{if(!TILE_OK)mapFail()},5000);
+ if(S.mzoom&&LOCS[S.mzoom])m.setView([LOCS[S.mzoom].lat,LOCS[S.mzoom].lng],14);
+ else if(S.mapView)m.setView(S.mapView.c,S.mapView.z);
+ else m.fitBounds([[-31.32,-64.35],[-31.0,-64.25]]);
+ DEPOTS.forEach(dn=>L.marker(DEPOT_POS[dn],{icon:L.divIcon({className:'',html:`<div class="lm-dep">${dn} · ${cnt(dn)}</div>`,iconSize:null}),keyboard:false}).addTo(m));
+ mapData().forEach(o=>{const a=addr(o);if(a.lat==null)return;const k=mkClass(o),sel=S.msel===o.id;
+  L.circleMarker([a.lat,a.lng],{radius:sel?14:10,color:sel?'#17212B':'#ffffff',weight:sel?4:2.5,fillColor:MKC[k],fillOpacity:.95}).addTo(m)
+   .bindTooltip(`${o.cids.join(', ')} · ${esc(cust(o).name)} · ${MKL[k]}`,{direction:'top',offset:[0,-8]}).on('click',()=>ACT.mapSel({id:o.id}))});
 }
 function vMapa(){
  const list=mapData(),sel=S.msel?O(S.msel):null,sinU=list.filter(o=>addr(o).lat==null);
- const detail=sel&&isActive(sel)?(()=>{const a=addr(sel);return `<div class="mcard"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b class="cname" style="font-size:20px">${sel.cids.join(', ')}</b>${sel.plannedPickup<TODAY?badge('Vencido',{Vencido:'bad'}):badge('En calle',BPL)}</div>
-  <dl class="dl"><dt>Cliente</dt><dd>${esc(cust(sel).name)}</dd><dt>Barrio</dt><dd>${esc(a.barrio)}</dd><dt>Dirección</dt><dd>${esc(a.street)} · ${esc(a.loc)}</dd><dt>Entrega</dt><dd>${fd(sel.delDay)}</dd><dt>Retiro previsto</dt><dd class="${sel.plannedPickup<TODAY?'late':''}">${fd(sel.plannedPickup)}</dd><dt>Chofer</dt><dd>${esc(dname(sel.driverId))}</dd></dl>
+ const detail=sel&&isActive(sel)?(()=>{const a=addr(sel);return `<div class="mcard"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b class="cname" style="font-size:20px">${sel.cids.join(', ')}</b><span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;background:var(--surface2);font-weight:600;font-size:13px"><i class="dot ${mkClass(sel)}"></i>${MKL[mkClass(sel)]}</span></div>
+  <dl class="dl"><dt>Cliente</dt><dd>${esc(cust(sel).name)}</dd><dt>Barrio</dt><dd>${esc(a.barrio)}</dd><dt>Dirección</dt><dd>${esc(a.street)} · ${esc(a.loc)}</dd><dt>Entrega</dt><dd>${fd(sel.delDay)}</dd><dt>Retiro previsto</dt><dd class="${sel.plannedPickup<TODAY?'late':''}">${fd(sel.plannedPickup)} · ${esc(sel.pickSlot)}</dd><dt>Chofer</dt><dd>${esc(dname(sel.driverId))}</dd></dl>
   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-act="openCont" data-id="${sel.cids[0]}">Ver ficha</button><button class="btn sm" data-act="openOp" data-id="${sel.id}">Ver pedido</button></div></div>`})():'';
  return pageHead('Mapa de contenedores',`${list.length} pedidos en calle${S.mzoom?' · '+S.mzoom:''}`)+`
  <div class="mapwrap"><div class="mapside">
    <input class="inp" id="mq" data-f="mq" value="${esc(S.mq)}" placeholder="Buscar barrio, dirección, cliente o contenedor" aria-label="Buscar en el mapa">
    <select class="sel" id="mz" data-f="mzoom" aria-label="Acercar a localidad"><option value="">Ver toda la zona</option>${LOC_NAMES.map(l=>`<option ${S.mzoom===l?'selected':''}>${l}</option>`).join('')}</select>
-   <div class="chips"><button class="chip ${S.mst.cli?'on':''}" data-act="mst" data-k="cli"><i class="dot info"></i>En plazo</button><button class="chip ${S.mst.venc?'on':''}" data-act="mst" data-k="venc"><i class="dot bad"></i>Vencidos</button></div>
+   <div class="chips">${['g','y','r'].map(k=>`<button class="chip ${S.mst[k]?'on':''}" data-act="mst" data-k="${k}"><i class="dot ${k}"></i>${MKL[k]} <span>${DB.ops.filter(o=>isActive(o)&&mkClass(o)===k).length}</span></button>`).join('')}</div>
    ${detail}
    ${sinU.length?`<div class="warn-box">${ic('alert')}<span><b>${sinU.length} sin ubicación en el mapa:</b> ${sinU.map(o=>`<a href="#" data-act="openOp" data-id="${o.id}">${o.cids.join(', ')}</a>`).join(', ')}. Hay que corregir la dirección.</span></div>`:''}
    <div class="mlist">${list.map(o=>{const a=addr(o);return `<button class="mitem ${S.msel===o.id?'on':''}" data-act="mapSel" data-id="${o.id}"><i class="dot ${mkClass(o)}"></i><span style="min-width:0"><b class="cname">${o.cids.join(', ')}</b> · ${esc(cust(o).name)}<small>${esc(aline(a))} · ${esc(a.loc)}</small></span></button>`}).join('')||'<p class="muted">Nada coincide con la búsqueda.</p>'}</div>
   </div><div>
-   <div class="mapbox">${mapSvg(list)}${S.mzoom?`<div class="zoom"><button class="btn sm" data-act="mapZoom" data-loc="">Ver toda la zona</button></div>`:''}</div>
-   <ul class="legend"><li><i class="dot info"></i>En calle, en plazo</li><li><i class="dot warn"></i>Retiro hoy</li><li><i class="dot bad"></i>Retiro vencido</li><li><i class="dot" style="background:var(--ink);border-radius:2px"></i>Lote Paraguay y Simonna</li></ul>
-   <p class="note">Mapa esquemático para la demo. En el sistema final se usa OpenStreetMap.</p></div></div>`;
+   ${MAPMODE==='schem'?`<div class="mapbox">${mapSvg(list)}${S.mzoom?`<div class="zoom"><button class="btn sm" data-act="mapZoom" data-loc="">Ver toda la zona</button></div>`:''}</div>`:`<div class="mapbox" id="lmap" role="region" aria-label="Mapa de contenedores en calle"></div>`}
+   <ul class="legend"><li><i class="dot g"></i>En cliente (faltan más de 2 días)</li><li><i class="dot y"></i>Por vencer (hoy a 2 días)</li><li><i class="dot r"></i>Vencido</li><li><i class="dot" style="background:#17212B;border-radius:2px"></i>Lote Paraguay y Simonna</li></ul>
+   <p class="note">${MAPMODE==='schem'?'No se pudo cargar el mapa real desde acá, así que se muestra un esquema de la zona. Abriendo la demo desde GitHub o desde el archivo se ve el mapa de OpenStreetMap.':'Mapa: © OpenStreetMap · © CARTO (gratuito). Las ubicaciones son aproximadas, de ejemplo.'}</p></div></div>`;
 }
 
 /* ---------- Pagos ---------- */
@@ -1338,7 +2031,7 @@ function setF(path,v){
  if(path==='pfday'){const d=dIn(v);if(d!=null){S.pf.day=d;S.pf.when='fecha'}return}
  if(path==='lday'){S.lday=+v;return}
  const[a,b]=path.split('.');if(b)S[a][b]=v;else S[a]=v;
- if(path==='mzoom'&&!v)S.mzoom=null;
+ if(path==='mzoom'){S.mapView=null;if(!v)S.mzoom=null}
 }
 function findDup(name,phone,exceptId){const n=norm(name),p=digits(phone);return DB.customers.find(c=>c.id!==exceptId&&((p.length>=7&&digits(c.phone).slice(-7)===p.slice(-7))||(n.length>3&&norm(c.name)===n)))}
 function confirmDlg(title,text,ok,run,danger,extra){S.dialog={t:'confirm',title,text,ok,run,danger,extra};renderLayers()}
@@ -1400,11 +2093,11 @@ const ACT={
  delDlg:d=>{S.dialog={t:'deliver',id:+d.id};renderLayers()},
  confirmDeliver:()=>{const o=O(S.dialog.id);if(byId('dl-f'))o.firmado=byId('dl-f').checked;const old=o.type==='Recambio'&&o.replacesOpId?O(o.replacesOpId):null;doDeliver(o,TODAY,nowMin(),S.user.name,+(val('dl-p')||4));S.dialog=null;render();toast(`${o.type==='Movimiento'?'Movimiento':'Entrega'} registrada.${old?' '+old.cids.join(', ')+' retirado por recambio.':''}`)},
  pickDlg:d=>{S.dialog={t:'pickup',id:+d.id};renderLayers()},
- confirmPickup:()=>{const o=O(S.dialog.id),pl=val('pk-r'),obs=byId('pk-o').value.trim();doPickup(o,TODAY,nowMin(),+val('pk-d'),val('pk-b'),pl,S.user.name,false);
+ confirmPickup:()=>{const o=O(S.dialog.id),pl=val('pk-r'),obs=byId('pk-o').value.trim();const hm=(byId('pk-h').value||fmin(nowMin())).split(':').map(Number);doPickup(o,TODAY,hm[0]*60+hm[1],+val('pk-d'),val('pk-b'),pl,S.user.name,false);
   if(pl==='Otro lugar')o.cids.forEach(id=>C(id).placeNote=obs||'A definir');if(obs){o.cids.forEach(id=>C(id).obs=obs);o.logObs=(o.logObs?o.logObs+' · ':'')+obs}
   if(o.sameTrip){const x=O(o.sameTrip);if(x)x.sameTrip=null;o.sameTrip=null}
-  S.dialog=null;render();toast(`Retiro registrado: B. ${o.basural}, queda en ${pl}.`)},
- savePP:d=>{const o=O(d.id),nd=dIn(byId('pp-d').value);if(nd==null)return;o.plannedPickup=nd;audNow(`${S.user.name} cambió la fecha de retiro de ${o.cids.join(', ')} al ${fd(nd)}`,o.id);render();toast(`Nueva fecha de retiro: ${fd(nd)}.`)},
+  S.dialog=null;render();toast(`Retiro registrado a las ${fmin(o.pickMin)}: B. ${o.basural}, queda en ${pl}.`)},
+ savePP:d=>{const o=O(d.id),nd=dIn(byId('pp-d').value);if(nd==null)return;o.plannedPickup=nd;o.pickSlot=byId('pp-s').value;audNow(`${S.user.name} cambió el retiro de ${o.cids.join(', ')} al ${fd(nd)} · ${o.pickSlot}`,o.id);render();toast(`Retiro: ${fd(nd)} · ${o.pickSlot}.`)},
  signRemito:d=>{const o=O(d.id);o.firmado=true;audNow(`${S.user.name} marcó firmado el remito N° ${o.remito}`,o.id);render()},
  cancelOp:d=>{const o=O(d.id);confirmDlg('¿Cancelar el pedido?',`${opn(o.id)} de ${cust(o).name}. Queda registrado como cancelado, no se borra.${o.cids.length?' '+o.cids.join(', ')+' vuelve a estar libre.':''}`,'Sí, cancelar',()=>{
   o.cids.forEach(id=>{const c=C(id);if(c.opId===o.id){c.opId=null;mv(TODAY,nowMin(),id,`Liberado por cancelación de ${opn(o.id)}`,'disponible',o.id)}});if(o.type!=='Movimiento')o.cids=[];
@@ -1418,7 +2111,7 @@ const ACT={
  contPlace:d=>{const c=C(d.id);confirmDlg(`¿Llevar ${c.id} a ${d.pl}?`,d.pl==='Otro lugar'?'Anotá dónde queda.':'Va a quedar disponible para asignar desde ahí.','Confirmar',()=>{
   c.place=d.pl;c.placeNote=d.pl==='Otro lugar'?(byId('cp-note')&&byId('cp-note').value.trim()||'A definir'):'';mv(TODAY,nowMin(),c.id,`Llevado a ${d.pl}${c.placeNote?': '+c.placeNote:''}`,'disponible');audNow(`${S.user.name} llevó ${c.id} a ${d.pl}`,c.id);toast(`${c.id}: ${d.pl}.`)},false,d.pl==='Otro lugar'?'<label class="fld" style="margin-top:12px"><span>¿Dónde?</span><input id="cp-note" placeholder="Ej.: taller de soldadura"></label>':'')},
  saveContObs:d=>{const c=C(d.id);c.obs=byId('c-obs').value.trim();audNow(`${S.user.name} actualizó la observación de ${c.id}`,c.id);toast('Observación guardada.')},
- mapSel:d=>{S.msel=+d.id;render()},mapZoom:d=>{S.mzoom=d.loc||null;render()},mst:d=>{S.mst[d.k]=!S.mst[d.k];render()},
+ mapSel:d=>{S.msel=+d.id;render()},mapZoom:d=>{S.mzoom=d.loc||null;S.mapView=null;render()},mst:d=>{S.mst[d.k]=!S.mst[d.k];render()},
  dsel:d=>{S.dsel=S.dsel===+d.id?null:+d.id;render()},
  fuelDlg:()=>{S.dialog={t:'fuel'};renderLayers()},
  saveFuel:()=>{const l=+String(byId('fu-l').value).replace(',','.'),v=+digits(byId('fu-v').value),day=dIn(byId('fu-d').value),dr=+val('fu-dr');
@@ -1444,10 +2137,11 @@ const LIVE={
  noAddr:t=>{byId('no-newaddr').hidden=t.value!=='__new'},
  locB:t=>{const b=byId(t.dataset.b);if(b)b.innerHTML=barrioOpts(t.value)},
  ecm:t=>{byId('ec-a-box').hidden=t.value!=='Transferencia'},
+ pslot:t=>{const o=O(t.dataset.id);o.pickSlot=t.value;audNow(`${S.user.name} fijó el horario de retiro de ${o.cids.join(', ')}: ${t.value}`,o.id);toast(`Retiro de ${o.cids.join(', ')}: ${t.value}.`)},
  pdrv:t=>{const o=O(t.dataset.id);o.pickDriverPlan=+t.value;audNow(`${S.user.name} asignó a ${dname(+t.value)} el retiro de ${o.cids.join(', ')}`,o.id);toast(`Retiro de ${o.cids.join(', ')}: ${dname(+t.value)}.`)},
  combine:t=>{if(!t.value)return;const o=O(t.dataset.id),x=O(t.value);const ret=isActive(o)?o:x,ent=ret===o?x:o;
   const d=ret.pickDriverPlan||ret.driverId||ent.driverId;ret.sameTrip=ent.id;ent.sameTrip=ret.id;ret.pickDriverPlan=d;if(!ent.driverId){ent.driverId=d;if(ent.status==='Solicitado')ent.status='Confirmado';if(!ent.remito)ent.remito=++DB.seq.remito}else ret.pickDriverPlan=ent.driverId;
-  const dd=ent.driverId;ent.pickDriverPlan=ent.pickDriverPlan||dd;
+  ret.pickSlot=ent.slot;const dd=ent.driverId;ent.pickDriverPlan=ent.pickDriverPlan||dd;
   audNow(`${S.user.name} combinó en el mismo viaje la entrega ${opn(ent.id)} y el retiro de ${ret.cids.join(', ')} en ${addr(ent).barrio}`,ent.id);
   render();toast(`Mismo viaje en ${addr(ent).barrio}: ${dname(dd)} entrega a ${cust(ent).name} y retira ${ret.cids.join(', ')}.`)},
  payFile:t=>{const f=t.files[0];byId('py-fn').textContent=f?f.name:'Adjuntar foto o PDF'}
