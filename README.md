@@ -13,7 +13,20 @@ Necesita internet solo para cargar las tipografías.
 
 También se puede publicar con **GitHub Pages** (Settings → Pages → Deploy from branch → `main` / root).
 
-## Qué incluye
+## Versión 2 · cambios de la reunión con el cliente
+
+- **Inicio** (lo ven todos): resumen del día con pedidos, transferencias SAS / YPF / Otro, efectivo, deudores y Chamba; contenedores en calle, en Simonna, en Lote Paraguay y en otro lugar; viajes a cada basural; combustible por chofer.
+- **Agenda** (antes "Operaciones"): una tabla por día con N.º, cantidad, cliente, dirección, horario, chofer, contenedor, pago, observaciones y estado. Filtros: hoy, mañana, esta semana, este mes, todas las fechas o un día puntual.
+- **Transferencias**: al elegir transferencia se indica la cuenta (SAS, YPF u Otro). Ventas verifica que llegó.
+- **Contenedores** con nombre `CN-000 | DETALLE | medida` y ubicación (en calle, Simonna, Lote Paraguay, otro lugar).
+- **Entregas y Retiros** filtrables por barrio, con opción de combinar una entrega y un retiro en el mismo viaje.
+- **Etiqueta "Pendiente de confirmación"** para pedidos que el cliente todavía no confirmó.
+- **Combustible**: cuenta corriente YPF (transferencias de clientes menos cargas) y litros/importe por chofer.
+- **Basurales**: cada retiro registra a qué basural fue.
+- **Tablero del día** con solo "Por asignar" y "Retiros".
+- Pestañas por perfil: Logística y Ventas ven Inicio, Agenda, Entregas, Retiros, Choferes, Combustible, Basurales, Contenedores y Mapa; Ventas además Pagos; administrador y dueño ven todo.
+
+## Qué incluía la versión 1
 
 - **Ingreso por perfil**: Administrador, Ventas, Logística y Dueño. Cada uno ve solo lo que necesita.
 - **Inicio**: contenedores (totales, operativos, disponibles, en clientes, pendientes de retiro, en reparación), operaciones, pagos, servicios por chofer y alertas. Se filtra por hoy, semana, mes o rango.
