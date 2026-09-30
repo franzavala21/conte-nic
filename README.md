@@ -25,6 +25,7 @@ También se puede publicar con **GitHub Pages** (Settings → Pages → Deploy f
 - **Basurales**: cada retiro registra a qué basural fue.
 - **Tablero del día** con solo "Por asignar" y "Retiros".
 - **Mapa real** (Leaflet con OpenStreetMap y Esri, gratuito y sin clave, con vista satelital) con 3 estados: en cliente (verde), por vencer (amarillo) y vencido (rojo). Si no hay conexión, muestra un esquema de la zona.
+- **Link de Google Maps** al agendar un pedido: si trae coordenadas, el pedido se ubica en el punto exacto del mapa. El link se ve en la Agenda, Entregas, Retiros, el Tablero y la ficha del pedido.
 - **Horario de retiro**: se acuerda en Retiros y se registra la hora real al marcar el retiro.
 - Pestañas por perfil: Logística y Ventas ven Inicio, Agenda, Entregas, Retiros, Choferes, Combustible, Basurales, Contenedores y Mapa; Ventas además Pagos; administrador y dueño ven todo.
 

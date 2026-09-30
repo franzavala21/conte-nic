@@ -1078,6 +1078,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 		}
 	}
 
+.gm{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:var(--info);text-decoration:none;white-space:nowrap}.gm .ic{width:15px;height:15px}.gm:hover{text-decoration:underline}
 #lmap{z-index:0;isolation:isolate;height:min(78vh,780px);background:#e8e6e1}
 .lm-dep{background:#17212B;color:#fff;font:700 12px/1 var(--f-body);padding:6px 8px;border-radius:6px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.3);transform:translate(-4px,-50%)}
 .leaflet-container{font-family:var(--f-body)}
@@ -1212,6 +1213,9 @@ const drv=id=>DB.drivers.find(d=>d.id===+id);
 const dname=id=>(drv(id)||{}).name||'—';
 const pill=id=>id?`<span class="pd ${(drv(id)||{}).cls||'off'}">${esc(dname(id))}</span>`:'<span class="pd off">Sin asignar</span>';
 const aline=a=>`${a.barrio&&a.barrio!=='Centro'?a.barrio+', ':''}${a.street}`;
+function parseMaps(u){const m=u.match(/@(-?\d+\.\d+),\s*(-?\d+\.\d+)/)||u.match(/[?&](?:q|query|ll|center|destination)=(-?\d+\.\d+)(?:,|%2C)\s*(-?\d+\.\d+)/i)||u.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/)||u.match(/^\s*(-?\d+\.\d+),\s*(-?\d+\.\d+)\s*$/);if(!m)return null;const la=+m[1],ln=+m[2];return Math.abs(la)<=90&&Math.abs(ln)<=180?[la,ln]:null}
+const mapsUrl=o=>o.mapsUrl||addr(o).mapsUrl||'';
+const gmaps=(o,label)=>{const u=mapsUrl(o);return u?`<a class="gm" href="${esc(u)}" target="_blank" rel="noopener">${ic('pin')}${label||'Google Maps'}</a>`:''};
 const isActive=o=>o.delDay!=null&&o.pickDay==null&&o.status!=='Cancelado'&&o.type!=='Movimiento';
 const preDel=o=>['Solicitado','Confirmado','En camino'].includes(o.status);
 const payLabel=o=>o.payMethod==='Transferencia'?`Transf ${o.payAcct||'Otro'}`:o.payMethod==='Grupo Chamba'?'Chamba':o.payMethod;
@@ -1352,6 +1356,8 @@ function makeOp(d,{assign=true,creator='Belén',createdDay=d,log=false,slot=null
  // sin ubicación en el mapa
  const act=DB.ops.filter(o=>isActive(o)&&!cust(o).company);
  [act[3],act[11]].filter(Boolean).forEach((o,i)=>{const a=addr(o);a.lat=null;a.lng=null;a.barrio='Centro';a.street=i?'Camino a Los Hornillos s/n, km 3':'Pasaje sin nombre, detrás de la capilla'});
+ // links de Google Maps de ejemplo
+ DB.customers.forEach(c=>c.addrs.forEach(a=>{if(a.lat!=null&&R()<.45)a.mapsUrl=`https://www.google.com/maps?q=${a.lat.toFixed(6)},${a.lng.toFixed(6)}`}));
  // combustible
  for(let d=TODAY-42;d<=TODAY;d++){if(dow(d)===0)continue;
   DB.drivers.forEach(dr=>{if(R()<.7&&(d<TODAY||R()<.5)){const l=+(ri(5500,11500)/100).toFixed(2),p=1215+(d-TODAY+42)*.9;DB.fuel.push({day:d,min:ri(6*60+10,8*60+40),plate:dr.plates[R()<.8?0:dr.plates.length-1],driverId:dr.id,liters:l,amount:Math.round(l*p),user:'Lucía'})}});
@@ -1541,7 +1547,7 @@ function vAgenda(){
   const pend=act.filter(o=>['Pendiente','Vencido'].includes(payStatus(o))).length,sin=act.filter(o=>!o.driverId&&preDel(o)).length;
   return `<section class="day"><div class="dayh"><h2>${ic('cal')}${fLong(d)}${d===TODAY?' · hoy':''}</h2><small>${act.length} pedidos · ${pend} pendiente${pend===1?'':'s'} de pago · ${sin} sin asignar</small></div>
   <div class="tbl-wrap"><table class="dense"><thead><tr><th>N.º</th><th>Cant.</th><th>Cliente / Servicio</th><th>Dirección</th><th>Horario</th><th>Chofer</th><th>Contenedor</th><th>Pago</th><th>Observaciones</th><th>Estado</th></tr></thead><tbody>
-  ${ops.map((o,i)=>{const ad=addr(o);return `<tr data-act="openOp" data-id="${o.id}" tabindex="0" style="${o.status==='Cancelado'?'opacity:.55':''}"><td class="tnum">${i+1}</td><td class="tnum">${o.qty}</td><td><b>${esc(cust(o).name)}</b><span class="sub">${o.type} · ${o.size} m³</span></td><td><b>${esc(ad.loc)}</b><span class="sub">${esc(aline(ad))}</span></td><td>${esc(o.slot)}</td><td>${pill(o.driverId)}</td><td>${contCell(o)}</td><td>${payCell(o)}</td><td>${esc(o.obs)||'<span class="muted">—</span>'}${stTag(o)}</td><td>${badge(o.status==='Realizado'&&o.pickDay!=null?'Realizado':o.status,BO)}${o.pickDay!=null&&!o.closedByRecambio?`<span class="sub">Retirado ${fs(o.pickDay)}</span>`:''}${pcTag(o)}</td></tr>`}).join('')||`<tr><td colspan="10" class="empty">No hay pedidos agendados para este día.</td></tr>`}
+  ${ops.map((o,i)=>{const ad=addr(o);return `<tr data-act="openOp" data-id="${o.id}" tabindex="0" style="${o.status==='Cancelado'?'opacity:.55':''}"><td class="tnum">${i+1}</td><td class="tnum">${o.qty}</td><td><b>${esc(cust(o).name)}</b><span class="sub">${o.type} · ${o.size} m³</span></td><td><b>${esc(ad.loc)}</b><span class="sub">${esc(aline(ad))}</span>${gmaps(o)}</td><td>${esc(o.slot)}</td><td>${pill(o.driverId)}</td><td>${contCell(o)}</td><td>${payCell(o)}</td><td>${esc(o.obs)||'<span class="muted">—</span>'}${stTag(o)}</td><td>${badge(o.status==='Realizado'&&o.pickDay!=null?'Realizado':o.status,BO)}${o.pickDay!=null&&!o.closedByRecambio?`<span class="sub">Retirado ${fs(o.pickDay)}</span>`:''}${pcTag(o)}</td></tr>`}).join('')||`<tr><td colspan="10" class="empty">No hay pedidos agendados para este día.</td></tr>`}
   </tbody></table>${can.createOp()?`<button class="addrow" data-act="newOp" data-day="${d}">${ic('plus')}Agregar pedido para este día</button>`:''}</div></section>`};
  return pageHead('Agenda de pedidos','Ventas · coordinación con logística',can.createOp()?`<button class="btn pri big" data-act="newOp">${ic('plus')}Agendar pedido</button>`:'')+`
  <div class="filters">${chips('ag.when',W,S.ag.when)}<label class="chip ${S.ag.when==='fecha'?'on':''}" style="gap:8px">${ic('cal')}Elegir fecha<input type="date" id="agd" data-f="agday" value="${dOut(S.ag.day)}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0" aria-label="Elegir fecha"></label></div>
@@ -1579,7 +1585,7 @@ function vEnt(){
   <select class="sel" id="endr" data-f="en.drv" aria-label="Chofer"><option value="">Todos los choferes</option>${DB.drivers.map(d=>`<option value="${d.id}" ${S.en.drv==d.id?'selected':''}>${esc(d.name)}</option>`).join('')}<option value="none" ${S.en.drv==='none'?'selected':''}>Sin asignar</option></select></div>
  ${S.en.barrio?`<div class="warn-box" style="margin-bottom:14px;background:var(--info-bg)">${ic('link')}<span>En <b>${esc(S.en.barrio.split('|')[0])}</b> también hay <b>${otherRet}</b> retiro${otherRet===1?'':'s'} pendiente${otherRet===1?'':'s'}. Usá “Mismo viaje” para entrar al barrio una sola vez.</span><button class="btn sm" data-act="goView" data-v="retiros" data-k="rt.barrio" data-val="${esc(S.en.barrio)}">Ver retiros del barrio</button></div>`:''}
  <div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Cliente</th><th>Dirección</th><th>Servicio</th><th>Contenedor</th><th>Chofer</th><th>Pago</th><th>Mismo viaje</th>${can.field()?'<th></th>':''}</tr></thead><tbody>
- ${list.map(o=>{const a=addr(o);return `<tr><td class="tnum ${o.reqDay<TODAY?'late':''}">${fs(o.reqDay)}<span class="sub">${esc(o.slot)}</span></td><td><a href="#" data-act="openOp" data-id="${o.id}"><b>${esc(cust(o).name)}</b></a>${badge(o.status,BO)}${pcTag(o)}</td><td><b>${esc(a.barrio!=='Centro'?a.barrio:a.loc)}</b><span class="sub">${esc(a.street)} · ${esc(a.loc)}</span></td><td>${o.type} · ${o.qty}× ${o.size} m³</td><td>${contCell(o)}</td><td>${pill(o.driverId)}</td><td>${payCell(o)}</td><td>${combineSelect(o,'ent')}</td>
+ ${list.map(o=>{const a=addr(o);return `<tr><td class="tnum ${o.reqDay<TODAY?'late':''}">${fs(o.reqDay)}<span class="sub">${esc(o.slot)}</span></td><td><a href="#" data-act="openOp" data-id="${o.id}"><b>${esc(cust(o).name)}</b></a>${badge(o.status,BO)}${pcTag(o)}</td><td><b>${esc(a.barrio!=='Centro'?a.barrio:a.loc)}</b><span class="sub">${esc(a.street)} · ${esc(a.loc)}</span>${gmaps(o)}</td><td>${o.type} · ${o.qty}× ${o.size} m³</td><td>${contCell(o)}</td><td>${pill(o.driverId)}</td><td>${payCell(o)}</td><td>${combineSelect(o,'ent')}</td>
  ${can.field()?`<td>${o.driverId&&(o.cids.length===o.qty||o.type==='Movimiento')?`<button class="btn sm pri" data-act="delDlg" data-id="${o.id}">Entregado</button>`:can.assign()?`<button class="btn sm" data-act="openOp" data-id="${o.id}">Asignar</button>`:''}</td>`:''}</tr>`}).join('')||`<tr><td colspan="9" class="empty">No hay entregas pendientes con esos filtros.</td></tr>`}
  </tbody></table></div>`;
 }
@@ -1599,7 +1605,7 @@ function vRet(){
   <select class="sel" id="rtd" data-f="rt.drv" aria-label="Chofer"><option value="">Todos los choferes</option>${DB.drivers.map(d=>`<option value="${d.id}" ${S.rt.drv==d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select></div>
  ${S.rt.barrio?`<div class="warn-box" style="margin-bottom:14px;background:var(--info-bg)">${ic('link')}<span>En <b>${esc(S.rt.barrio.split('|')[0])}</b> hay <b>${otherEnt}</b> entrega${otherEnt===1?'':'s'} pendiente${otherEnt===1?'':'s'}. Combinalas en el mismo viaje: el camión deja el contenedor nuevo y retira el usado.</span><button class="btn sm" data-act="goView" data-v="entregas" data-k="en.barrio" data-val="${esc(S.rt.barrio)}">Ver entregas del barrio</button></div>`:''}
  <div class="tbl-wrap"><table class="dense"><thead><tr><th>Plazo</th><th>Cliente</th><th>Dirección</th><th>Contenedor</th><th>Entregado</th><th>Retiro previsto</th><th>Horario de retiro</th><th>Chofer asignado</th><th>Mismo viaje</th>${can.field()?'<th></th>':''}</tr></thead><tbody>
- ${list.map(o=>{const[k,t]=sem(o),a=addr(o);return `<tr><td><span class="b ${k}">${t}</span></td><td><a href="#" data-act="openOp" data-id="${o.id}"><b>${esc(cust(o).name)}</b></a><span class="sub">${esc(cust(o).phone)}</span></td><td><b>${esc(a.barrio!=='Centro'?a.barrio:a.loc)}</b><span class="sub">${esc(a.street)} · ${esc(a.loc)}</span></td><td>${o.cids.map(c=>`<a href="#" class="cname" data-act="openCont" data-id="${c}">${c}</a>`).join('<br>')}</td><td class="tnum">${fs(o.delDay)}</td><td class="tnum ${k==='bad'?'late':''}">${fd(o.plannedPickup)}</td>
+ ${list.map(o=>{const[k,t]=sem(o),a=addr(o);return `<tr><td><span class="b ${k}">${t}</span></td><td><a href="#" data-act="openOp" data-id="${o.id}"><b>${esc(cust(o).name)}</b></a><span class="sub">${esc(cust(o).phone)}</span></td><td><b>${esc(a.barrio!=='Centro'?a.barrio:a.loc)}</b><span class="sub">${esc(a.street)} · ${esc(a.loc)}</span>${gmaps(o)}</td><td>${o.cids.map(c=>`<a href="#" class="cname" data-act="openCont" data-id="${c}">${c}</a>`).join('<br>')}</td><td class="tnum">${fs(o.delDay)}</td><td class="tnum ${k==='bad'?'late':''}">${fd(o.plannedPickup)}</td>
  <td>${can.assign()?`<select class="sel sm" id="ps-${o.id}" data-chg="pslot" data-id="${o.id}" aria-label="Horario de retiro">${SLOTS.map(x=>`<option ${o.pickSlot===x?'selected':''}>${x}</option>`).join('')}</select>`:esc(o.pickSlot)}</td>
  <td>${can.assign()?`<select class="sel sm" id="pd-${o.id}" data-chg="pdrv" data-id="${o.id}" aria-label="Chofer para el retiro">${DB.drivers.map(d=>`<option value="${d.id}" ${(o.pickDriverPlan||o.driverId)===d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select>`:pill(o.pickDriverPlan||o.driverId)}</td>
  <td>${combineSelect(o,'ret')}</td>${can.field()?`<td><button class="btn sm pri" data-act="pickDlg" data-id="${o.id}">Retirado</button></td>`:''}</tr>`}).join('')||`<tr><td colspan="10" class="empty">No hay retiros con esos filtros.</td></tr>`}
@@ -1615,7 +1621,7 @@ function jcard(o,kind){
  return `<article class="jc"><button class="jc-open" data-act="openOp" data-id="${o.id}">
   <span class="jc-top"><span class="time">${kind==='ret'?fs(o.plannedPickup)+' · '+esc(o.pickSlot):esc(o.slot)}</span><span>${kind==='ret'?`<span class="cname">${o.cids.join(', ')}</span>`:`${o.type!=='Alquiler'?badge(o.type,{Recambio:'acc',Movimiento:'rep'}):''} ${o.qty>1?o.qty+'× ':''}${sz(o.size)}`}</span></span>
   <b>${esc(cu.name)}</b><span class="addr">${esc(aline(a))} · ${esc(a.loc)}</span></button>
-  <div class="row">${o.reqDay<TODAY&&kind==='asig'?'<span class="b bad">Atrasado</span>':''}${kind==='ret'?pill(o.pickDriverPlan||o.driverId):''}${late}${o.obs?`<span class="muted">${esc(o.obs)}</span>`:''}</div>${pcTag(o)}${stTag(o)}
+  <div class="row">${gmaps(o)}${o.reqDay<TODAY&&kind==='asig'?'<span class="b bad">Atrasado</span>':''}${kind==='ret'?pill(o.pickDriverPlan||o.driverId):''}${late}${o.obs?`<span class="muted">${esc(o.obs)}</span>`:''}</div>${pcTag(o)}${stTag(o)}
   ${acts?`<div class="acts">${acts}</div>`:''}</article>`;
 }
 function vTab(){
@@ -1759,10 +1765,11 @@ function mOp(){
    <label class="fld"><span>Fecha</span><input type="date" id="ec-d" value="${dOut(o.reqDay)}"></label><label class="fld"><span>Horario</span><select id="ec-s">${SLOTS.map(s=>`<option ${o.slot===s?'selected':''}>${s}</option>`).join('')}</select></label>
    <label class="fld"><span>Precio</span><input id="ec-p" inputmode="numeric" value="${o.price}"></label><label class="fld"><span>Forma de pago</span><select id="ec-m" data-chg="ecm">${PAY_METHODS.map(m=>`<option ${o.payMethod===m?'selected':''}>${m}</option>`).join('')}</select></label>
    ${acctBlock('ec-a',o.payAcct,o.payMethod==='Transferencia')}
+   <label class="fld full"><span>Link de Google Maps</span><input id="ec-maps" inputmode="url" value="${esc(mapsUrl(o))}" placeholder="https://maps.app.goo.gl/…"></label>
    <label class="check full"><input type="checkbox" id="ec-pc" ${o.pendConf?'checked':''}> Pendiente de confirmación del cliente</label>
    <label class="fld full"><span>Observaciones</span><textarea id="ec-o">${esc(o.obs)}</textarea></label>
    <div class="full" style="display:flex;gap:8px"><button class="btn sm pri" data-act="saveCom" data-id="${o.id}">Guardar</button><button class="btn sm ghost" data-act="editCom" data-id="">Cancelar</button></div></div>`
-  :`<dl class="dl"><dt>Cliente</dt><dd>${esc(cu.name)}</dd><dt>Teléfono</dt><dd>${esc(cu.phone)}</dd><dt>Dirección</dt><dd>${esc(aline(a))}</dd><dt>Localidad</dt><dd>${esc(a.loc)}</dd>
+  :`<dl class="dl"><dt>Cliente</dt><dd>${esc(cu.name)}</dd><dt>Teléfono</dt><dd>${esc(cu.phone)}</dd><dt>Dirección</dt><dd>${esc(aline(a))}</dd><dt>Localidad</dt><dd>${esc(a.loc)}</dd>${mapsUrl(o)?`<dt>Ubicación</dt><dd>${gmaps(o,'Abrir en Google Maps')}</dd>`:''}
    <dt>Servicio</dt><dd>${o.type} · ${o.qty}× ${o.size} m³</dd>${rep?`<dt>${o.type==='Movimiento'?'Contenedor':'Sale'}</dt><dd>${rep.cids.join(', ')} (${opn(rep.id)})</dd>`:''}
    <dt>Fecha</dt><dd>${fd(o.reqDay)} · ${esc(o.slot)}</dd><dt>Precio</dt><dd>${money(o.price)}</dd><dt>Forma de pago</dt><dd>${esc(payLabel(o))}</dd><dt>Observaciones</dt><dd>${esc(o.obs)||'—'}</dd><dt>Agendó</dt><dd>${esc(o.createdBy)} · ${fs(o.createdDay)}</dd></dl>`;
  let lg;
@@ -1846,6 +1853,7 @@ function mNewOp(){
   <label class="fld"><span>Precio</span><input id="no-price" inputmode="numeric" value="${DEFP[5]}"></label>
   <div class="fld full"><span>Forma de pago</span><div class="seg">${radios('no-pay',PAY_METHODS,pre&&pre.name==='Grupo Chamba'?'Grupo Chamba':'Transferencia')}</div></div>
   ${acctBlock('no-acct','SAS',!(pre&&pre.name==='Grupo Chamba'))}
+  <label class="fld full"><span>Link de Google Maps (opcional)</span><input id="no-maps" inputmode="url" placeholder="Pegá el link de ubicación que manda el cliente por WhatsApp"><small class="muted" style="font-weight:500">Si el link trae coordenadas, el pedido aparece en el punto exacto del mapa.</small></label>
   <label class="check full"><input type="checkbox" id="no-paid"> El cliente ya pagó (queda por verificar si es transferencia)</label>
   <label class="check full"><input type="checkbox" id="no-pc"> Pendiente de confirmación del cliente (lluvia u otro motivo)</label>
   <label class="fld full"><span>Observaciones</span><textarea id="no-obs" placeholder="Ej.: permiten ingreso, llamar antes"></textarea></label>
@@ -1948,7 +1956,7 @@ function vMapa(){
  const list=mapData(),sel=S.msel?O(S.msel):null,sinU=list.filter(o=>addr(o).lat==null);
  const detail=sel&&isActive(sel)?(()=>{const a=addr(sel);return `<div class="mcard"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b class="cname" style="font-size:20px">${sel.cids.join(', ')}</b><span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;background:var(--surface2);font-weight:600;font-size:13px"><i class="dot ${mkClass(sel)}"></i>${MKL[mkClass(sel)]}</span></div>
   <dl class="dl"><dt>Cliente</dt><dd>${esc(cust(sel).name)}</dd><dt>Barrio</dt><dd>${esc(a.barrio)}</dd><dt>Dirección</dt><dd>${esc(a.street)} · ${esc(a.loc)}</dd><dt>Entrega</dt><dd>${fd(sel.delDay)}</dd><dt>Retiro previsto</dt><dd class="${sel.plannedPickup<TODAY?'late':''}">${fd(sel.plannedPickup)} · ${esc(sel.pickSlot)}</dd><dt>Chofer</dt><dd>${esc(dname(sel.driverId))}</dd></dl>
-  <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-act="openCont" data-id="${sel.cids[0]}">Ver ficha</button><button class="btn sm" data-act="openOp" data-id="${sel.id}">Ver pedido</button></div></div>`})():'';
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${gmaps(sel,'Abrir en Google Maps')}<button class="btn sm" data-act="openCont" data-id="${sel.cids[0]}">Ver ficha</button><button class="btn sm" data-act="openOp" data-id="${sel.id}">Ver pedido</button></div></div>`})():'';
  return pageHead('Mapa de contenedores',`${list.length} pedidos en calle${S.mzoom?' · '+S.mzoom:''}`)+`
  <div class="mapwrap"><div class="mapside">
    <input class="inp" id="mq" data-f="mq" value="${esc(S.mq)}" placeholder="Buscar barrio, dirección, cliente o contenedor" aria-label="Buscar en el mapa">
@@ -2069,8 +2077,10 @@ const ACT={
   else{const sel=byId('no-addr').value;if(sel==='__new'){const street=byId('no-street2').value.trim();if(!street)return err('Escribí la nueva dirección.');const a=mkAddr(byId('no-loc2').value,street,byId('no-bar2').value,true);cu.addrs.push(a);addrId=a.id}else addrId=+sel}
   let repl=null;if(type!=='Alquiler'){const r=byId('no-repl');if(!r||!r.value)return err(`Para un ${type.toLowerCase()} elegí el contenedor.`);repl=+r.value}
   const day=dIn(byId('no-date').value);if(day==null)return err('Elegí la fecha.');const price=+digits(byId('no-price').value);if(!price)return err('Poné el precio.');
+  {const mu=byId('no-maps').value.trim();if(mu&&!/^https?:\/\//i.test(mu)&&!parseMaps(mu))return err('El link de Google Maps tiene que empezar con https://')}
   const pm=val('no-pay'),slot=byId('no-slot').value;
   const op=newOp({type,qty:type==='Alquiler'?qty:(O(repl)||{qty:1}).qty,size:repl?O(repl).size:size,customerId:cu.id,addrId:repl?O(repl).addrId:addrId,reqDay:day,slot,min:SLOTMIN[slot],price,payMethod:pm,payAcct:pm==='Transferencia'?val('no-acct'):null,obs:byId('no-obs').value.trim(),pendConf:byId('no-pc').checked,replacesOpId:repl,createdBy:S.user.name,createdDay:TODAY});
+  const mu=byId('no-maps').value.trim();if(mu){if(!/^https?:\/\//i.test(mu)&&!parseMaps(mu))return err('El link de Google Maps tiene que empezar con https://');const a=addr(op);op.mapsUrl=/^https?:/i.test(mu)?mu:`https://www.google.com/maps?q=${mu.replace(/\s/g,'')}`;a.mapsUrl=op.mapsUrl;const ll=parseMaps(mu);if(ll){a.lat=ll[0];a.lng=ll[1];a.approx=false}}
   setPay(op,byId('no-paid').checked);
   audNow(`${S.user.name} agendó el pedido ${opn(op.id)} (${cu.name})${op.pendConf?' · pendiente de confirmación':''}`,op.id);
   S.modal=null;render();toast(`Pedido ${opn(op.id)} agendado para el ${fs(day)}.`);
@@ -2086,7 +2096,7 @@ const ACT={
  addClaim:d=>{const t=byId('cl-new').value.trim();if(!t)return;DB.claims.push({id:DB.claims.length+1,customerId:+d.id,day:TODAY,text:t,status:'Abierto'});audNow(`${S.user.name} registró un reclamo de ${CU(d.id).name}`);renderLayers();toast('Reclamo registrado.')},
  resolveClaim:d=>{const k=DB.claims.find(x=>x.id===+d.id);k.status='Resuelto';audNow(`${S.user.name} marcó resuelto un reclamo de ${CU(k.customerId).name}`);renderLayers()},
  editCom:d=>{S.editCom=d.id?+d.id:null;renderLayers()},
- saveCom:d=>{const o=O(d.id),day=dIn(byId('ec-d').value);if(day!=null)o.reqDay=day;o.slot=byId('ec-s').value;o.min=SLOTMIN[o.slot];const p=+digits(byId('ec-p').value);if(p)o.price=p;o.payMethod=byId('ec-m').value;o.payAcct=o.payMethod==='Transferencia'?val('ec-a'):null;o.pendConf=byId('ec-pc').checked;o.obs=byId('ec-o').value.trim();
+ saveCom:d=>{const o=O(d.id),day=dIn(byId('ec-d').value);if(day!=null)o.reqDay=day;o.slot=byId('ec-s').value;o.min=SLOTMIN[o.slot];const p=+digits(byId('ec-p').value);if(p)o.price=p;o.payMethod=byId('ec-m').value;o.payAcct=o.payMethod==='Transferencia'?val('ec-a'):null;o.pendConf=byId('ec-pc').checked;o.obs=byId('ec-o').value.trim();{const mu=byId('ec-maps').value.trim(),a=addr(o);if(mu!==mapsUrl(o)){o.mapsUrl=mu;a.mapsUrl=mu;const ll=mu&&parseMaps(mu);if(ll){a.lat=ll[0];a.lng=ll[1];a.approx=false}}}
   S.editCom=null;audNow(`${S.user.name} modificó los datos comerciales del pedido ${opn(o.id)}`,o.id);render();toast('Cambios guardados.')},
  saveLog:d=>{const o=O(d.id),e=m=>byId('lg-err').innerHTML=`<p class="err">${esc(m)}</p>`,dr=+val('lg-drv');
   if(o.type==='Movimiento'){if(!dr)return e('Elegí el chofer.');o.driverId=dr;if(o.status==='Solicitado')o.status='Confirmado';audNow(`${S.user.name} asignó a ${dname(dr)} al pedido ${opn(o.id)}`,o.id);render();toast('Chofer asignado.');return}
@@ -2153,7 +2163,7 @@ const LIVE={
   render();toast(`Mismo viaje en ${addr(ent).barrio}: ${dname(dd)} entrega a ${cust(ent).name} y retira ${ret.cids.join(', ')}.`)},
  payFile:t=>{const f=t.files[0];byId('py-fn').textContent=f?f.name:'Adjuntar foto o PDF'}
 };
-document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(!t||t.tagName==='INPUT'||t.tagName==='SELECT')return;const fn=ACT[t.dataset.act];if(fn){e.preventDefault();fn(t.dataset,t,e)}});
+document.addEventListener('click',e=>{if(e.target.closest('a[target="_blank"]'))return;const t=e.target.closest('[data-act]');if(!t||t.tagName==='INPUT'||t.tagName==='SELECT')return;const fn=ACT[t.dataset.act];if(fn){e.preventDefault();fn(t.dataset,t,e)}});
 document.addEventListener('keydown',e=>{
  if(e.key==='Escape'){if(S.dialog)ACT.closeDialog();else if(S.modal)ACT.closeModal();else if(S.drawer)ACT.closeDrawer();else if(byId('gq-res'))byId('gq-res').hidden=true;return}
  if(e.key==='Enter'){const t=e.target;if(t.matches&&t.matches('tr[data-act],g[data-act]')){e.preventDefault();t.click()}if(t.id==='gq'){const b=document.querySelector('#gq-res button');if(b)b.click()}}
