@@ -1,0 +1,352 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>[hidden]{display:none!important}</style>
+<title>Modelo de datos Conte Nic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: lienzo ancho con zonas por área (como un plano), tarjetas = tablas, líneas = relaciones; ficha lateral al tocar una tabla */
+:root{
+  --bg:#F2F3EF; --surface:#FFFFFF; --surface2:#F7F8F4; --ink:#17212B; --muted:#5A6570; --line:#D6D9D0; --line2:#E7E9E2;
+  --accent:#C9520A; --accent-2:#FCE7D6; --edge:#8B96A1; --focus:#2B6CB0;
+  --z-cli:#E3ECF7; --z-cli-i:#1D5A97; --z-ped:#FCEBDD; --z-ped-i:#B04A0A; --z-con:#E2F1E6; --z-con-i:#1F6F44;
+  --z-log:#ECE5F6; --z-log-i:#673FA0; --z-din:#F8F0D6; --z-din-i:#8A6100; --z-acc:#E9EBE6; --z-acc-i:#4F5A65;
+  --shadow:0 1px 2px rgba(23,33,43,.06),0 6px 18px rgba(23,33,43,.07);
+  --f-body:'Barlow',system-ui,sans-serif; --f-cond:'Barlow Condensed','Arial Narrow',sans-serif; --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E141A; --surface:#161E27; --surface2:#1B2530; --ink:#E6EBEF; --muted:#9AA5B0; --line:#2B3743; --line2:#212B35;
+  --accent:#F07E34; --accent-2:#3A2415; --edge:#6E7A86; --focus:#7DB4F0;
+  --z-cli:#14243A; --z-cli-i:#86B8EE; --z-ped:#33200F; --z-ped-i:#F4A266; --z-con:#12291C; --z-con-i:#6FD49A;
+  --z-log:#251C36; --z-log-i:#BFA0EE; --z-din:#2E2610; --z-din-i:#E8C15C; --z-acc:#1E252D; --z-acc-i:#A9B4BE;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E141A; --surface:#161E27; --surface2:#1B2530; --ink:#E6EBEF; --muted:#9AA5B0; --line:#2B3743; --line2:#212B35;
+  --accent:#F07E34; --accent-2:#3A2415; --edge:#6E7A86; --focus:#7DB4F0;
+  --z-cli:#14243A; --z-cli-i:#86B8EE; --z-ped:#33200F; --z-ped-i:#F4A266; --z-con:#12291C; --z-con-i:#6FD49A;
+  --z-log:#251C36; --z-log-i:#BFA0EE; --z-din:#2E2610; --z-din-i:#E8C15C; --z-acc:#1E252D; --z-acc-i:#A9B4BE;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px rgba(0,0,0,.35); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);margin:0}
+h1,h2,h3,p{margin:0}
+h1,h2{text-wrap:balance}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.wrap{max-width:1360px;margin:0 auto;padding-inline:24px;padding-block:28px 64px;display:flex;flex-direction:column;gap:36px}
+header.hero{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;align-items:flex-end}
+.eyebrow{font:600 12px var(--f-body);text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
+h1{font:600 44px/1.02 var(--f-cond);margin-top:6px}
+.lead{max-width:68ch;color:var(--muted);font-size:17px;margin-top:10px}
+.lead b{color:var(--ink)}
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{padding:10px 16px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.stat b{display:block;font:600 28px/1 var(--f-cond)}
+.stat span{font-size:13px;color:var(--muted);font-weight:600}
+h2{font:600 28px/1.1 var(--f-cond);margin-bottom:6px}
+.sub{color:var(--muted);max-width:72ch}
+.legend{display:flex;flex-wrap:wrap;gap:16px;align-items:center;font-size:13px;color:var(--muted);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.k{font:600 11px var(--f-mono);padding:1px 5px;border-radius:4px;border:1px solid var(--line)}
+.k.pk{color:var(--accent);border-color:var(--accent)}
+.k.fk{color:var(--focus);border-color:var(--focus)}
+
+/* lienzo */
+.scroller{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface2)}
+.canvas{position:relative;width:1300px;padding:22px;display:grid;grid-template-columns:repeat(4,1fr);gap:40px 54px;align-items:start}
+.zone{position:relative;border-radius:14px;padding:34px 14px 14px;display:flex;flex-direction:column;gap:20px}
+.zone.row{flex-direction:row;align-items:flex-start}
+.zone.row .card{flex:1}
+.zone>.zl{position:absolute;top:10px;left:14px;font:700 12px var(--f-body);text-transform:uppercase;letter-spacing:.09em}
+.z-cli{background:var(--z-cli)}.z-cli>.zl{color:var(--z-cli-i)}.z-ped{background:var(--z-ped)}.z-ped>.zl{color:var(--z-ped-i)}
+.z-con{background:var(--z-con)}.z-con>.zl{color:var(--z-con-i)}.z-log{background:var(--z-log)}.z-log>.zl{color:var(--z-log-i)}
+.z-din{background:var(--z-din)}.z-din>.zl{color:var(--z-din-i)}.z-acc{background:var(--z-acc)}.z-acc>.zl{color:var(--z-acc-i)}
+svg.edges{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:visible}
+.card{position:relative;z-index:2;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);cursor:pointer;transition:opacity .15s,box-shadow .15s,transform .15s;text-align:left;padding:0;font:inherit;color:inherit;width:100%}
+.card:hover{box-shadow:0 0 0 2px var(--edge),var(--shadow)}
+.card.sel{box-shadow:0 0 0 2.5px var(--accent),var(--shadow)}
+.card .ch{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px;padding:10px 12px 8px;border-bottom:1px solid var(--line2)}
+.card .ch b{font:600 19px/1.1 var(--f-cond)}
+.card .ch code{font:400 11.5px var(--f-mono);color:var(--muted)}
+.card .cd{padding:6px 12px 0;font-size:12.5px;color:var(--muted);line-height:1.35}
+.card ul{list-style:none;margin:0;padding:6px 0 8px}
+.card li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:4px;align-items:center;padding:2px 12px;font:12px/1.5 var(--f-mono)}
+.card li .t{color:var(--muted);font-size:11px;white-space:nowrap}
+.card li .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card li.pk .n{color:var(--accent);font-weight:600}
+.card li.fk .n{color:var(--focus)}
+.card .more{display:block;padding:0 12px 10px;font:600 12px var(--f-body);color:var(--muted)}
+.dim .card:not(.rel):not(.sel){opacity:.28}
+path.e{fill:none;stroke:var(--edge);stroke-width:1.4;opacity:.55}
+path.e.meta{opacity:0}
+.dim path.e{opacity:.12}
+.dim path.e.meta{opacity:0}
+.dim path.e.on{opacity:1;stroke:var(--accent);stroke-width:2.4}
+circle.ep{fill:var(--surface);stroke:var(--edge);stroke-width:1.4;opacity:.7}
+.dim circle.ep{opacity:.1}.dim circle.ep.on{opacity:1;stroke:var(--accent)}
+path.crow{fill:none;stroke:var(--edge);stroke-width:1.4;opacity:.7}
+.dim path.crow{opacity:.1}.dim path.crow.on{opacity:1;stroke:var(--accent)}
+
+/* ficha lateral */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--surface);border-left:1px solid var(--line);box-shadow:var(--shadow);z-index:20;transform:translateX(102%);transition:transform .2s ease;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.drawer.open{transform:none}
+.dh{display:flex;justify-content:space-between;gap:12px;padding:18px 20px 12px;border-bottom:1px solid var(--line2)}
+.dh h3{font:600 30px/1.05 var(--f-cond)}
+.dh code{font:400 13px var(--f-mono);color:var(--muted)}
+.x{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;font-size:20px;flex:none}
+.db{overflow:auto;padding:16px 20px 28px;display:flex;flex-direction:column;gap:18px}
+.db h4{font:700 12px var(--f-body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 6px}
+.ftab{width:100%;border-collapse:collapse;font-size:13.5px}
+.ftab td{padding:7px 6px;border-top:1px solid var(--line2);vertical-align:top}
+.ftab td:first-child{font:600 12.5px var(--f-mono);white-space:nowrap}
+.ftab td.ty{font:12px var(--f-mono);color:var(--muted);white-space:nowrap}
+.ftab tr.pk td:first-child{color:var(--accent)}.ftab tr.fk td:first-child{color:var(--focus)}
+.rels{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+.rels li{padding:8px 10px;border-radius:8px;background:var(--surface2);font-size:14px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font:600 12.5px var(--f-body);cursor:pointer;color:var(--ink)}
+.chip:hover{border-color:var(--accent)}
+.enum{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.enum span{font:11px var(--f-mono);padding:1px 6px;border-radius:4px;background:var(--surface2);border:1px solid var(--line2)}
+
+/* secciones */
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}
+ol.flow{list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:0;counter-reset:s}
+ol.flow li{counter-increment:s;position:relative;padding:0 0 18px 46px}
+ol.flow li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font:600 15px var(--f-cond)}
+ol.flow li::after{content:"";position:absolute;left:14px;top:32px;bottom:2px;width:2px;background:var(--line)}
+ol.flow li:last-child::after{display:none}
+ol.flow b{display:block;font-size:16px}
+ol.flow p{color:var(--muted);font-size:14px;margin:2px 0 6px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-top:14px}
+table.t{width:100%;border-collapse:collapse;font-size:14px}
+table.t th{text-align:left;font:600 11.5px var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:10px 12px;background:var(--surface2);border-bottom:1px solid var(--line)}
+table.t td{padding:9px 12px;border-top:1px solid var(--line2);vertical-align:top}
+table.t td code{font:12.5px var(--f-mono)}
+.todo{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.todo div{padding:12px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent)}
+.todo b{display:block}
+.todo span{color:var(--muted);font-size:14px}
+details.code{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-top:14px}
+details.code summary{cursor:pointer;padding:14px 16px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:12px}
+details.code pre{margin:0;padding:16px;border-top:1px solid var(--line2);overflow:auto;max-height:640px;font:12.5px/1.55 var(--f-mono);background:var(--surface2)}
+.btn{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 14px var(--f-body);cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+@media (max-width:900px){.two{grid-template-columns:minmax(0,1fr)}h1{font-size:36px}.wrap{padding-inline:16px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head><body>
+
+<div class="wrap">
+ <header class="hero">
+  <div>
+   <p class="eyebrow">Conte Nic · borrador para empezar a programar</p>
+   <h1>Modelo de datos</h1>
+   <p class="lead">El corazón es <b>Pedido → Estadía → Contenedor</b>: Ventas carga el pedido una vez, cada contenedor que sale queda como una estadía (reserva, entrega, retiro) y el historial del contenedor nunca se pierde. Tocá cualquier tabla para ver sus campos y con qué se relaciona.</p>
+  </div>
+  <div class="stats" id="stats"></div>
+ </header>
+
+ <section>
+  <h2>Mapa de tablas</h2>
+  <p class="sub">Cada recuadro de color es un área del negocio. Las líneas unen una tabla con la que referencia: el círculo marca el lado “uno” y la pata de gallo el lado “muchos”. Las relaciones con Usuario (quién cargó qué) aparecen al tocar Usuario.</p>
+  <div class="legend"><span><span class="k pk">PK</span>identificador de la tabla</span><span><span class="k fk">FK</span>apunta a otra tabla</span><span><b>?</b> campo opcional</span><span><b>[ ]</b> lista</span></div>
+  <div class="scroller" style="margin-top:14px"><div class="canvas" id="canvas"><svg class="edges" id="edges" aria-hidden="true"></svg></div></div>
+ </section>
+
+ <section class="two">
+  <div>
+   <h2>Un pedido de punta a punta</h2>
+   <p class="sub">Qué tablas se escriben en cada paso. Tocá un nombre para ver la tabla.</p>
+   <ol class="flow" id="flow"></ol>
+  </div>
+  <div>
+   <h2>Lo que no se guarda, se calcula</h2>
+   <p class="sub">Guardar estos datos duplicaría información y se desincronizaría. El sistema los calcula al momento.</p>
+   <div class="tw"><table class="t"><thead><tr><th>Dato</th><th>Cómo se obtiene</th></tr></thead><tbody id="calc"></tbody></table></div>
+  </div>
+ </section>
+
+ <section>
+  <h2>Del Excel a la base</h2>
+  <p class="sub">Cómo se reparten las columnas de la planilla actual (hoja de septiembre, YPF y agenda) cuando se importe el historial.</p>
+  <div class="tw"><table class="t"><thead><tr><th>Columna del Excel</th><th>Va a</th><th>Nota</th></tr></thead><tbody id="excel"></tbody></table></div>
+ </section>
+
+ <section>
+  <h2>Para definir con el cliente</h2>
+  <p class="sub">El modelo ya deja lugar para estas cosas; falta saber cómo funcionan.</p>
+  <div class="todo" id="open"></div>
+ </section>
+
+ <section>
+  <h2>Esquema para programar</h2>
+  <p class="sub">El mismo modelo en Prisma (PostgreSQL), validado. Está en el repo como <code>db/schema.prisma</code>, con la conexión en <code>prisma.config.ts</code>.</p>
+  <details class="code"><summary><span>Ver schema.prisma</span><button class="btn" id="copy" type="button">Copiar</button></summary><pre id="schema"></pre></details>
+ </section>
+</div>
+
+<aside class="drawer" id="drawer" aria-label="Detalle de la tabla" role="dialog"><div class="dh"><div><h3 id="dt"></h3><code id="dc"></code></div><button class="x" id="dx" aria-label="Cerrar">×</button></div><div class="db" id="dbody"></div></aside>
+
+<script>
+const DATA={"models": [{"name": "User", "doc": "Personas que usan el sistema", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "name", "t": "String", "a": "", "d": ""}, {"n": "email", "t": "String", "a": "@unique", "d": ""}, {"n": "passwordHash", "t": "String", "a": "", "d": ""}, {"n": "role", "t": "Role", "a": "", "d": ""}, {"n": "active", "t": "Boolean", "a": "@default(true)", "d": ""}, {"n": "lastLoginAt", "t": "DateTime?", "a": "", "d": ""}, {"n": "createdAt", "t": "DateTime", "a": "@default(now())", "d": ""}, {"n": "driver", "t": "Driver?", "a": "", "d": ""}, {"n": "ordersCreated", "t": "Order[]", "a": "@relation(\"OrderCreatedBy\")", "d": ""}, {"n": "paymentsCreated", "t": "Payment[]", "a": "@relation(\"PaymentCreatedBy\")", "d": ""}, {"n": "paymentsVerified", "t": "Payment[]", "a": "@relation(\"PaymentVerifiedBy\")", "d": ""}, {"n": "fuelLoads", "t": "FuelLoad[]", "a": "", "d": ""}, {"n": "movements", "t": "ContainerMovement[]", "a": "", "d": ""}, {"n": "attachments", "t": "Attachment[]", "a": "", "d": ""}, {"n": "auditLogs", "t": "AuditLog[]", "a": "", "d": ""}]}, {"name": "AuditLog", "doc": "Historial de cambios: quién hizo qué y cuándo", "fields": [{"n": "id", "t": "BigInt", "a": "@id @default(autoincrement())", "d": ""}, {"n": "userId", "t": "Int?", "a": "", "d": ""}, {"n": "action", "t": "String", "a": "", "d": "\"crear\", \"asignar\", \"entregar\", \"retirar\", \"verificar_pago\"..."}, {"n": "entity", "t": "String", "a": "", "d": "\"Order\", \"Container\", \"Payment\"..."}, {"n": "entityId", "t": "String", "a": "", "d": ""}, {"n": "summary", "t": "String", "a": "", "d": "\"Lucía asignó CN-056 al pedido #000582\""}, {"n": "before", "t": "Json?", "a": "", "d": ""}, {"n": "after", "t": "Json?", "a": "", "d": ""}, {"n": "at", "t": "DateTime", "a": "@default(now())", "d": ""}, {"n": "user", "t": "User?", "a": "@relation(fields: [userId], references: [id])", "d": ""}]}, {"name": "Customer", "doc": "", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "name", "t": "String", "a": "", "d": ""}, {"n": "type", "t": "CustomerType", "a": "@default(PARTICULAR)", "d": ""}, {"n": "phone", "t": "String?", "a": "", "d": ""}, {"n": "email", "t": "String?", "a": "", "d": ""}, {"n": "taxId", "t": "String?", "a": "", "d": "CUIT, si factura"}, {"n": "notes", "t": "String?", "a": "", "d": ""}, {"n": "flagged", "t": "Boolean", "a": "@default(false)", "d": "\"cliente problema\""}, {"n": "createdAt", "t": "DateTime", "a": "@default(now())", "d": ""}, {"n": "updatedAt", "t": "DateTime", "a": "@updatedAt", "d": ""}, {"n": "deletedAt", "t": "DateTime?", "a": "", "d": ""}, {"n": "addresses", "t": "Address[]", "a": "", "d": ""}, {"n": "orders", "t": "Order[]", "a": "", "d": ""}, {"n": "claims", "t": "Claim[]", "a": "", "d": ""}]}, {"name": "Locality", "doc": "", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "name", "t": "String", "a": "@unique", "d": "Villa Allende, Mendiolaza, Unquillo, Río Ceballos..."}, {"n": "barrios", "t": "Barrio[]", "a": "", "d": ""}, {"n": "addresses", "t": "Address[]", "a": "", "d": ""}, {"n": "landfills", "t": "Landfill[]", "a": "", "d": ""}]}, {"name": "Barrio", "doc": "Barrio (cerrado o no). Sirve para filtrar entregas/retiros y combinar viajes.", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "localityId", "t": "Int", "a": "", "d": ""}, {"n": "name", "t": "String", "a": "", "d": "El Terrón, Comarca de Allende, La Cercanía..."}, {"n": "gated", "t": "Boolean", "a": "@default(false)", "d": "barrio cerrado"}, {"n": "accessHours", "t": "String?", "a": "", "d": "\"Lun a sáb 8 a 12 h\" (a definir con el cliente)"}, {"n": "accessNotes", "t": "String?", "a": "", "d": "\"avisar en guardia\", \"no permite ingreso\""}, {"n": "locality", "t": "Locality", "a": "@relation(fields: [localityId], references: [id])", "d": ""}, {"n": "addresses", "t": "Address[]", "a": "", "d": ""}]}, {"name": "Address", "doc": "", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "customerId", "t": "Int", "a": "", "d": ""}, {"n": "localityId", "t": "Int", "a": "", "d": ""}, {"n": "barrioId", "t": "Int?", "a": "", "d": ""}, {"n": "street", "t": "String", "a": "", "d": "calle y número, o \"Mz 12 L 4\""}, {"n": "reference", "t": "String?", "a": "", "d": "\"portón verde\", \"detrás de la capilla\""}, {"n": "lat", "t": "Decimal?", "a": "@db.Decimal(9, 6)", "d": ""}, {"n": "lng", "t": "Decimal?", "a": "@db.Decimal(9, 6)", "d": ""}, {"n": "mapsUrl", "t": "String?", "a": "", "d": "link de Google Maps que manda el cliente"}, {"n": "approximate", "t": "Boolean", "a": "@default(true)", "d": "false cuando las coordenadas vienen del link"}, {"n": "createdAt", "t": "DateTime", "a": "@default(now())", "d": ""}, {"n": "customer", "t": "Customer", "a": "@relation(fields: [customerId], references: [id])", "d": ""}, {"n": "locality", "t": "Locality", "a": "@relation(fields: [localityId], references: [id])", "d": ""}, {"n": "barrio", "t": "Barrio?", "a": "@relation(fields: [barrioId], references: [id])", "d": ""}, {"n": "orders", "t": "Order[]", "a": "", "d": ""}]}, {"name": "Claim", "doc": "", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "customerId", "t": "Int", "a": "", "d": ""}, {"n": "orderId", "t": "Int?", "a": "", "d": ""}, {"n": "text", "t": "String", "a": "", "d": ""}, {"n": "status", "t": "ClaimStatus", "a": "@default(ABIERTO)", "d": ""}, {"n": "createdAt", "t": "DateTime", "a": "@default(now())", "d": ""}, {"n": "resolvedAt", "t": "DateTime?", "a": "", "d": ""}, {"n": "customer", "t": "Customer", "a": "@relation(fields: [customerId], references: [id])", "d": ""}, {"n": "order", "t": "Order?", "a": "@relation(fields: [orderId], references: [id])", "d": ""}]}, {"name": "Order", "doc": "Pedido de la Agenda: lo carga Ventas una sola vez", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": "número de pedido: #000582"}, {"n": "type", "t": "OrderType", "a": "", "d": ""}, {"n": "status", "t": "OrderStatus", "a": "@default(SOLICITADO)", "d": ""}, {"n": "customerId", "t": "Int", "a": "", "d": ""}, {"n": "addressId", "t": "Int", "a": "", "d": ""}, {"n": "quantity", "t": "Int", "a": "@default(1)", "d": ""}, {"n": "sizeM3", "t": "Int", "a": "", "d": "3, 5 o 6"}, {"n": "scheduledDate", "t": "DateTime", "a": "@db.Date", "d": ""}, {"n": "timeSlot", "t": "String?", "a": "", "d": "\"Mañana\", \"10 – 12 h\", \"A coordinar\""}, {"n": "price", "t": "Decimal", "a": "@db.Decimal(12, 2)", "d": ""}, {"n": "paymentMethod", "t": "PaymentMethod", "a": "", "d": ""}, {"n": "paymentAccountId", "t": "Int?", "a": "", "d": "SAS / YPF / Otro si es transferencia"}, {"n": "pendingConfirmation", "t": "Boolean", "a": "@default(false)", "d": "el cliente todavía no confirmó"}, {"n": "notes", "t": "String?", "a": "", "d": ""}, {"n": "logisticsNotes", "t": "String?", "a": "", "d": ""}, {"n": "driverId", "t": "Int?", "a": "", "d": "chofer de la entrega"}, {"n": "tripId", "t": "Int?", "a": "", "d": "viaje (para combinar con retiros)"}, {"n": "remitoNumber", "t": "Int?", "a": "@unique", "d": ""}, {"n": "remitoSigned", "t": "Boolean", "a": "@default(false)", "d": ""}, {"n": "replacesOrderId", "t": "Int?", "a": "", "d": "recambio / movimiento: pedido cuyo contenedor se reemplaza o se mueve"}, {"n": "createdById", "t": "Int", "a": "", "d": ""}, {"n": "createdAt", "t": "DateTime", "a": "@default(now())", "d": ""}, {"n": "updatedAt", "t": "DateTime", "a": "@updatedAt", "d": ""}, {"n": "cancelledAt", "t": "DateTime?", "a": "", "d": ""}, {"n": "cancelReason", "t": "String?", "a": "", "d": ""}, {"n": "customer", "t": "Customer", "a": "@relation(fields: [customerId], references: [id])", "d": ""}, {"n": "address", "t": "Address", "a": "@relation(fields: [addressId], references: [id])", "d": ""}, {"n": "paymentAccount", "t": "PaymentAccount?", "a": "@relation(fields: [paymentAccountId], references: [id])", "d": ""}, {"n": "driver", "t": "Driver?", "a": "@relation(fields: [driverId], references: [id])", "d": ""}, {"n": "trip", "t": "Trip?", "a": "@relation(fields: [tripId], references: [id])", "d": ""}, {"n": "replacesOrder", "t": "Order?", "a": "@relation(\"Replaces\", fields: [replacesOrderId], references: [id])", "d": ""}, {"n": "replacedBy", "t": "Order[]", "a": "@relation(\"Replaces\")", "d": ""}, {"n": "createdBy", "t": "User", "a": "@relation(\"OrderCreatedBy\", fields: [createdById], references: [id])", "d": ""}, {"n": "placements", "t": "Placement[]", "a": "", "d": ""}, {"n": "payments", "t": "Payment[]", "a": "", "d": ""}, {"n": "attachments", "t": "Attachment[]", "a": "", "d": ""}, {"n": "claims", "t": "Claim[]", "a": "", "d": ""}, {"n": "movements", "t": "ContainerMovement[]", "a": "", "d": ""}]}, {"name": "Placement", "doc": "Estadía: un contenedor dentro de un pedido, desde que se reserva hasta que se retira. Un pedido de 2 contenedores tiene 2 estadías.", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "orderId", "t": "Int", "a": "", "d": ""}, {"n": "containerId", "t": "Int", "a": "", "d": ""}, {"n": "status", "t": "PlacementStatus", "a": "@default(RESERVADO)", "d": ""}, {"n": "deliveredAt", "t": "DateTime?", "a": "", "d": ""}, {"n": "deliveryDriverId", "t": "Int?", "a": "", "d": ""}, {"n": "plannedPickupDate", "t": "DateTime?", "a": "@db.Date", "d": ""}, {"n": "pickupSlot", "t": "String?", "a": "", "d": "horario acordado para el retiro"}, {"n": "pickupDriverId", "t": "Int?", "a": "", "d": ""}, {"n": "pickupTripId", "t": "Int?", "a": "", "d": ""}, {"n": "pickedUpAt", "t": "DateTime?", "a": "", "d": "hora real del retiro"}, {"n": "landfillId", "t": "Int?", "a": "", "d": "basural donde se vació"}, {"n": "returnLocationId", "t": "Int?", "a": "", "d": "dónde quedó: Lote Paraguay, Simonna..."}, {"n": "byRecambio", "t": "Boolean", "a": "@default(false)", "d": ""}, {"n": "order", "t": "Order", "a": "@relation(fields: [orderId], references: [id])", "d": ""}, {"n": "container", "t": "Container", "a": "@relation(fields: [containerId], references: [id])", "d": ""}, {"n": "deliveryDriver", "t": "Driver?", "a": "@relation(\"DeliveryDriver\", fields: [deliveryDriverId], references: [id])", "d": ""}, {"n": "pickupDriver", "t": "Driver?", "a": "@relation(\"PickupDriver\", fields: [pickupDriverId], references: [id])", "d": ""}, {"n": "pickupTrip", "t": "Trip?", "a": "@relation(\"PickupTrip\", fields: [pickupTripId], references: [id])", "d": ""}, {"n": "landfill", "t": "Landfill?", "a": "@relation(fields: [landfillId], references: [id])", "d": ""}, {"n": "returnLocation", "t": "Location?", "a": "@relation(fields: [returnLocationId], references: [id])", "d": ""}, {"n": "movements", "t": "ContainerMovement[]", "a": "", "d": ""}]}, {"name": "Attachment", "doc": "", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "kind", "t": "AttachmentKind", "a": "", "d": ""}, {"n": "url", "t": "String", "a": "", "d": ""}, {"n": "orderId", "t": "Int?", "a": "", "d": ""}, {"n": "containerId", "t": "Int?", "a": "", "d": ""}, {"n": "paymentId", "t": "Int?", "a": "", "d": ""}, {"n": "uploadedById", "t": "Int", "a": "", "d": ""}, {"n": "createdAt", "t": "DateTime", "a": "@default(now())", "d": ""}, {"n": "order", "t": "Order?", "a": "@relation(fields: [orderId], references: [id])", "d": ""}, {"n": "container", "t": "Container?", "a": "@relation(fields: [containerId], references: [id])", "d": ""}, {"n": "payment", "t": "Payment?", "a": "@relation(fields: [paymentId], references: [id])", "d": ""}, {"n": "uploadedBy", "t": "User", "a": "@relation(fields: [uploadedById], references: [id])", "d": ""}]}, {"name": "Container", "doc": "CN-056 | VILLA BLANCO | 5m3", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "code", "t": "String", "a": "@unique", "d": "CN-056"}, {"n": "detail", "t": "String", "a": "", "d": "VILLA BLANCO, SE AMARILLO..."}, {"n": "sizeM3", "t": "Int", "a": "", "d": ""}, {"n": "locationId", "t": "Int?", "a": "", "d": "depósito donde está; vacío si está en la calle"}, {"n": "active", "t": "Boolean", "a": "@default(true)", "d": ""}, {"n": "notes", "t": "String?", "a": "", "d": ""}, {"n": "createdAt", "t": "DateTime", "a": "@default(now())", "d": ""}, {"n": "deletedAt", "t": "DateTime?", "a": "", "d": ""}, {"n": "location", "t": "Location?", "a": "@relation(fields: [locationId], references: [id])", "d": ""}, {"n": "placements", "t": "Placement[]", "a": "", "d": ""}, {"n": "movements", "t": "ContainerMovement[]", "a": "", "d": ""}, {"n": "attachments", "t": "Attachment[]", "a": "", "d": ""}]}, {"name": "Location", "doc": "Lugares propios: Lote Paraguay, Simonna, taller, otro lugar", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "name", "t": "String", "a": "@unique", "d": ""}, {"n": "kind", "t": "LocationKind", "a": "@default(DEPOSITO)", "d": ""}, {"n": "lat", "t": "Decimal?", "a": "@db.Decimal(9, 6)", "d": ""}, {"n": "lng", "t": "Decimal?", "a": "@db.Decimal(9, 6)", "d": ""}, {"n": "notes", "t": "String?", "a": "", "d": ""}, {"n": "containers", "t": "Container[]", "a": "", "d": ""}, {"n": "returns", "t": "Placement[]", "a": "", "d": ""}, {"n": "movements", "t": "ContainerMovement[]", "a": "", "d": ""}]}, {"name": "ContainerMovement", "doc": "Historial de cada contenedor (nunca se borra)", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "containerId", "t": "Int", "a": "", "d": ""}, {"n": "type", "t": "MovementType", "a": "", "d": ""}, {"n": "at", "t": "DateTime", "a": "@default(now())", "d": ""}, {"n": "orderId", "t": "Int?", "a": "", "d": ""}, {"n": "placementId", "t": "Int?", "a": "", "d": ""}, {"n": "driverId", "t": "Int?", "a": "", "d": ""}, {"n": "locationId", "t": "Int?", "a": "", "d": "depósito de destino, si aplica"}, {"n": "userId", "t": "Int?", "a": "", "d": ""}, {"n": "note", "t": "String?", "a": "", "d": ""}, {"n": "container", "t": "Container", "a": "@relation(fields: [containerId], references: [id])", "d": ""}, {"n": "order", "t": "Order?", "a": "@relation(fields: [orderId], references: [id])", "d": ""}, {"n": "placement", "t": "Placement?", "a": "@relation(fields: [placementId], references: [id])", "d": ""}, {"n": "driver", "t": "Driver?", "a": "@relation(fields: [driverId], references: [id])", "d": ""}, {"n": "location", "t": "Location?", "a": "@relation(fields: [locationId], references: [id])", "d": ""}, {"n": "user", "t": "User?", "a": "@relation(fields: [userId], references: [id])", "d": ""}]}, {"name": "Driver", "doc": "", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "name", "t": "String", "a": "", "d": "Gustavo, Nico, Chucky"}, {"n": "phone", "t": "String?", "a": "", "d": ""}, {"n": "active", "t": "Boolean", "a": "@default(true)", "d": ""}, {"n": "userId", "t": "Int?", "a": "@unique", "d": "si el chofer entra al sistema"}, {"n": "notes", "t": "String?", "a": "", "d": ""}, {"n": "user", "t": "User?", "a": "@relation(fields: [userId], references: [id])", "d": ""}, {"n": "trucks", "t": "Truck[]", "a": "", "d": ""}, {"n": "orders", "t": "Order[]", "a": "", "d": ""}, {"n": "trips", "t": "Trip[]", "a": "", "d": ""}, {"n": "deliveries", "t": "Placement[]", "a": "@relation(\"DeliveryDriver\")", "d": ""}, {"n": "pickups", "t": "Placement[]", "a": "@relation(\"PickupDriver\")", "d": ""}, {"n": "fuelLoads", "t": "FuelLoad[]", "a": "", "d": ""}, {"n": "movements", "t": "ContainerMovement[]", "a": "", "d": ""}]}, {"name": "Truck", "doc": "", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "plate", "t": "String", "a": "@unique", "d": "RXB 892"}, {"n": "description", "t": "String?", "a": "", "d": ""}, {"n": "defaultDriverId", "t": "Int?", "a": "", "d": ""}, {"n": "active", "t": "Boolean", "a": "@default(true)", "d": ""}, {"n": "defaultDriver", "t": "Driver?", "a": "@relation(fields: [defaultDriverId], references: [id])", "d": ""}, {"n": "trips", "t": "Trip[]", "a": "", "d": ""}, {"n": "fuelLoads", "t": "FuelLoad[]", "a": "", "d": ""}]}, {"name": "Trip", "doc": "Viaje de un camión: agrupa entregas y retiros hechos juntos (\"mismo viaje\")", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "date", "t": "DateTime", "a": "@db.Date", "d": ""}, {"n": "driverId", "t": "Int", "a": "", "d": ""}, {"n": "truckId", "t": "Int?", "a": "", "d": ""}, {"n": "notes", "t": "String?", "a": "", "d": ""}, {"n": "driver", "t": "Driver", "a": "@relation(fields: [driverId], references: [id])", "d": ""}, {"n": "truck", "t": "Truck?", "a": "@relation(fields: [truckId], references: [id])", "d": ""}, {"n": "orders", "t": "Order[]", "a": "", "d": ""}, {"n": "pickups", "t": "Placement[]", "a": "@relation(\"PickupTrip\")", "d": ""}]}, {"name": "Landfill", "doc": "", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "name", "t": "String", "a": "@unique", "d": "Basural Villa Allende, Unquillo, Río Ceballos, Salsipuedes"}, {"n": "localityId", "t": "Int?", "a": "", "d": ""}, {"n": "locality", "t": "Locality?", "a": "@relation(fields: [localityId], references: [id])", "d": ""}, {"n": "pickups", "t": "Placement[]", "a": "", "d": ""}]}, {"name": "PaymentAccount", "doc": "Cuentas donde entra la plata: SAS, YPF (cuenta corriente de combustible), Otro", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "name", "t": "String", "a": "@unique", "d": ""}, {"n": "isFuelAccount", "t": "Boolean", "a": "@default(false)", "d": "true para YPF"}, {"n": "openingBalance", "t": "Decimal", "a": "@default(0) @db.Decimal(14, 2)", "d": ""}, {"n": "openingDate", "t": "DateTime", "a": "@default(now()) @db.Date", "d": ""}, {"n": "orders", "t": "Order[]", "a": "", "d": ""}, {"n": "payments", "t": "Payment[]", "a": "", "d": ""}, {"n": "fuelLoads", "t": "FuelLoad[]", "a": "", "d": ""}]}, {"name": "Payment", "doc": "", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "orderId", "t": "Int", "a": "", "d": ""}, {"n": "amount", "t": "Decimal", "a": "@db.Decimal(12, 2)", "d": ""}, {"n": "method", "t": "PaymentMethod", "a": "", "d": ""}, {"n": "accountId", "t": "Int?", "a": "", "d": "SAS / YPF / Otro"}, {"n": "paidAt", "t": "DateTime", "a": "", "d": ""}, {"n": "verified", "t": "Boolean", "a": "@default(false)", "d": "Ventas confirmó que la transferencia llegó"}, {"n": "verifiedAt", "t": "DateTime?", "a": "", "d": ""}, {"n": "verifiedById", "t": "Int?", "a": "", "d": ""}, {"n": "note", "t": "String?", "a": "", "d": ""}, {"n": "createdById", "t": "Int", "a": "", "d": ""}, {"n": "createdAt", "t": "DateTime", "a": "@default(now())", "d": ""}, {"n": "order", "t": "Order", "a": "@relation(fields: [orderId], references: [id])", "d": ""}, {"n": "account", "t": "PaymentAccount?", "a": "@relation(fields: [accountId], references: [id])", "d": ""}, {"n": "verifiedBy", "t": "User?", "a": "@relation(\"PaymentVerifiedBy\", fields: [verifiedById], references: [id])", "d": ""}, {"n": "createdBy", "t": "User", "a": "@relation(\"PaymentCreatedBy\", fields: [createdById], references: [id])", "d": ""}, {"n": "attachments", "t": "Attachment[]", "a": "", "d": ""}]}, {"name": "FuelLoad", "doc": "Carga de combustible pagada con la cuenta YPF", "fields": [{"n": "id", "t": "Int", "a": "@id @default(autoincrement())", "d": ""}, {"n": "loadedAt", "t": "DateTime", "a": "", "d": ""}, {"n": "accountId", "t": "Int", "a": "", "d": "cuenta YPF"}, {"n": "truckId", "t": "Int?", "a": "", "d": "vacío si es bidón o bomba"}, {"n": "driverId", "t": "Int?", "a": "", "d": ""}, {"n": "liters", "t": "Decimal", "a": "@db.Decimal(8, 2)", "d": ""}, {"n": "amount", "t": "Decimal", "a": "@db.Decimal(12, 2)", "d": ""}, {"n": "source", "t": "String?", "a": "", "d": "\"BIDÓN\", \"BOMBA\""}, {"n": "userId", "t": "Int", "a": "", "d": ""}, {"n": "note", "t": "String?", "a": "", "d": ""}, {"n": "createdAt", "t": "DateTime", "a": "@default(now())", "d": ""}, {"n": "account", "t": "PaymentAccount", "a": "@relation(fields: [accountId], references: [id])", "d": ""}, {"n": "truck", "t": "Truck?", "a": "@relation(fields: [truckId], references: [id])", "d": ""}, {"n": "driver", "t": "Driver?", "a": "@relation(fields: [driverId], references: [id])", "d": ""}, {"n": "user", "t": "User", "a": "@relation(fields: [userId], references: [id])", "d": ""}]}], "enums": {"Role": ["ADMIN", "VENTAS", "LOGISTICA", "DUENO"], "CustomerType": ["PARTICULAR", "EMPRESA"], "OrderType": ["ALQUILER", "RECAMBIO", "MOVIMIENTO", "VIAJE", "EXTENSION"], "OrderStatus": ["SOLICITADO", "CONFIRMADO", "EN_CAMINO", "REALIZADO", "CANCELADO"], "PlacementStatus": ["RESERVADO", "EN_CALLE", "RETIRADO", "CANCELADO"], "LocationKind": ["DEPOSITO", "TALLER", "OTRO"], "MovementType": ["RESERVADO", "LIBERADO", "ENTREGADO", "RETIRADO", "TRASLADO", "MOVIDO_EN_OBRA"], "PaymentMethod": ["EFECTIVO", "TRANSFERENCIA", "CHAMBA", "CLIENTE_APARTE", "CHEQUE"], "ClaimStatus": ["ABIERTO", "RESUELTO"], "AttachmentKind": ["FOTO_CONTENEDOR", "FOTO_REMITO", "COMPROBANTE_PAGO", "FACTURA", "OTRO"]}};
+const SCHEMA="// Conte Nic · modelo de datos (borrador v1)\n// PostgreSQL + Prisma. Los nombres de tablas y campos van en inglés (convención de código);\n// cada uno tiene su explicación en castellano.\n//\n// Ideas base:\n// - Cada dato se carga una sola vez y se relaciona (cliente, dirección, pedido, contenedor, pago).\n// - Lo que se puede calcular no se guarda (saldo de un pedido, si un retiro está vencido, saldo de YPF).\n// - Nada se borra: los registros importantes tienen deletedAt / cancelledAt y todo cambio va a AuditLog.\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\n// La conexión (DATABASE_URL) se configura en prisma.config.ts (Prisma 7)\ndatasource db {\n  provider = \"postgresql\"\n}\n\n// ─────────────────────────────── Tipos fijos ───────────────────────────────\n\nenum Role {\n  ADMIN\n  VENTAS\n  LOGISTICA\n  DUENO\n}\n\nenum CustomerType {\n  PARTICULAR\n  EMPRESA\n}\n\nenum OrderType {\n  ALQUILER\n  RECAMBIO\n  MOVIMIENTO\n  VIAJE\n  EXTENSION\n}\n\nenum OrderStatus {\n  SOLICITADO\n  CONFIRMADO\n  EN_CAMINO\n  REALIZADO\n  CANCELADO\n}\n\n/// Estado de un contenedor dentro de un pedido\nenum PlacementStatus {\n  RESERVADO // asignado al pedido, todavía en el depósito\n  EN_CALLE // entregado al cliente\n  RETIRADO // ya volvió\n  CANCELADO\n}\n\nenum LocationKind {\n  DEPOSITO\n  TALLER\n  OTRO\n}\n\nenum MovementType {\n  RESERVADO\n  LIBERADO\n  ENTREGADO\n  RETIRADO\n  TRASLADO // de un depósito a otro\n  MOVIDO_EN_OBRA\n}\n\nenum PaymentMethod {\n  EFECTIVO\n  TRANSFERENCIA\n  CHAMBA\n  CLIENTE_APARTE\n  CHEQUE\n}\n\nenum ClaimStatus {\n  ABIERTO\n  RESUELTO\n}\n\nenum AttachmentKind {\n  FOTO_CONTENEDOR\n  FOTO_REMITO\n  COMPROBANTE_PAGO\n  FACTURA\n  OTRO\n}\n\n// ─────────────────────────────── Acceso ───────────────────────────────\n\n/// Personas que usan el sistema\nmodel User {\n  id           Int       @id @default(autoincrement())\n  name         String\n  email        String    @unique\n  passwordHash String\n  role         Role\n  active       Boolean   @default(true)\n  lastLoginAt  DateTime?\n  createdAt    DateTime  @default(now())\n\n  driver           Driver?\n  ordersCreated    Order[]             @relation(\"OrderCreatedBy\")\n  paymentsCreated  Payment[]           @relation(\"PaymentCreatedBy\")\n  paymentsVerified Payment[]           @relation(\"PaymentVerifiedBy\")\n  fuelLoads        FuelLoad[]\n  movements        ContainerMovement[]\n  attachments      Attachment[]\n  auditLogs        AuditLog[]\n}\n\n/// Historial de cambios: quién hizo qué y cuándo\nmodel AuditLog {\n  id       BigInt   @id @default(autoincrement())\n  userId   Int?\n  action   String // \"crear\", \"asignar\", \"entregar\", \"retirar\", \"verificar_pago\"...\n  entity   String // \"Order\", \"Container\", \"Payment\"...\n  entityId String\n  summary  String // \"Lucía asignó CN-056 al pedido #000582\"\n  before   Json?\n  after    Json?\n  at       DateTime @default(now())\n\n  user User? @relation(fields: [userId], references: [id])\n\n  @@index([entity, entityId])\n  @@index([at])\n}\n\n// ─────────────────────────────── Clientes y lugares ───────────────────────────────\n\nmodel Customer {\n  id        Int          @id @default(autoincrement())\n  name      String\n  type      CustomerType @default(PARTICULAR)\n  phone     String?\n  email     String?\n  taxId     String? // CUIT, si factura\n  notes     String?\n  flagged   Boolean      @default(false) // \"cliente problema\"\n  createdAt DateTime     @default(now())\n  updatedAt DateTime     @updatedAt\n  deletedAt DateTime?\n\n  addresses Address[]\n  orders    Order[]\n  claims    Claim[]\n\n  @@index([name])\n  @@index([phone])\n}\n\nmodel Locality {\n  id   Int    @id @default(autoincrement())\n  name String @unique // Villa Allende, Mendiolaza, Unquillo, Río Ceballos...\n\n  barrios   Barrio[]\n  addresses Address[]\n  landfills Landfill[]\n}\n\n/// Barrio (cerrado o no). Sirve para filtrar entregas/retiros y combinar viajes.\nmodel Barrio {\n  id          Int     @id @default(autoincrement())\n  localityId  Int\n  name        String // El Terrón, Comarca de Allende, La Cercanía...\n  gated       Boolean @default(false) // barrio cerrado\n  accessHours String? // \"Lun a sáb 8 a 12 h\" (a definir con el cliente)\n  accessNotes String? // \"avisar en guardia\", \"no permite ingreso\"\n\n  locality  Locality  @relation(fields: [localityId], references: [id])\n  addresses Address[]\n\n  @@unique([localityId, name])\n}\n\nmodel Address {\n  id          Int      @id @default(autoincrement())\n  customerId  Int\n  localityId  Int\n  barrioId    Int?\n  street      String // calle y número, o \"Mz 12 L 4\"\n  reference   String? // \"portón verde\", \"detrás de la capilla\"\n  lat         Decimal? @db.Decimal(9, 6)\n  lng         Decimal? @db.Decimal(9, 6)\n  mapsUrl     String? // link de Google Maps que manda el cliente\n  approximate Boolean  @default(true) // false cuando las coordenadas vienen del link\n  createdAt   DateTime @default(now())\n\n  customer Customer @relation(fields: [customerId], references: [id])\n  locality Locality @relation(fields: [localityId], references: [id])\n  barrio   Barrio?  @relation(fields: [barrioId], references: [id])\n  orders   Order[]\n\n  @@index([customerId])\n  @@index([barrioId])\n}\n\nmodel Claim {\n  id         Int         @id @default(autoincrement())\n  customerId Int\n  orderId    Int?\n  text       String\n  status     ClaimStatus @default(ABIERTO)\n  createdAt  DateTime    @default(now())\n  resolvedAt DateTime?\n\n  customer Customer @relation(fields: [customerId], references: [id])\n  order    Order?   @relation(fields: [orderId], references: [id])\n}\n\n// ─────────────────────────────── Pedidos (Agenda) ───────────────────────────────\n\n/// Pedido de la Agenda: lo carga Ventas una sola vez\nmodel Order {\n  id                  Int           @id @default(autoincrement()) // número de pedido: #000582\n  type                OrderType\n  status              OrderStatus   @default(SOLICITADO)\n  customerId          Int\n  addressId           Int\n  quantity            Int           @default(1)\n  sizeM3              Int // 3, 5 o 6\n  scheduledDate       DateTime      @db.Date\n  timeSlot            String? // \"Mañana\", \"10 – 12 h\", \"A coordinar\"\n  price               Decimal       @db.Decimal(12, 2)\n  paymentMethod       PaymentMethod\n  paymentAccountId    Int? // SAS / YPF / Otro si es transferencia\n  pendingConfirmation Boolean       @default(false) // el cliente todavía no confirmó\n  notes               String?\n  logisticsNotes      String?\n  driverId            Int? // chofer de la entrega\n  tripId              Int? // viaje (para combinar con retiros)\n  remitoNumber        Int?          @unique\n  remitoSigned        Boolean       @default(false)\n  replacesOrderId     Int? // recambio / movimiento: pedido cuyo contenedor se reemplaza o se mueve\n  createdById         Int\n  createdAt           DateTime      @default(now())\n  updatedAt           DateTime      @updatedAt\n  cancelledAt         DateTime?\n  cancelReason        String?\n\n  customer       Customer        @relation(fields: [customerId], references: [id])\n  address        Address         @relation(fields: [addressId], references: [id])\n  paymentAccount PaymentAccount? @relation(fields: [paymentAccountId], references: [id])\n  driver         Driver?         @relation(fields: [driverId], references: [id])\n  trip           Trip?           @relation(fields: [tripId], references: [id])\n  replacesOrder  Order?          @relation(\"Replaces\", fields: [replacesOrderId], references: [id])\n  replacedBy     Order[]         @relation(\"Replaces\")\n  createdBy      User            @relation(\"OrderCreatedBy\", fields: [createdById], references: [id])\n\n  placements  Placement[]\n  payments    Payment[]\n  attachments Attachment[]\n  claims      Claim[]\n  movements   ContainerMovement[]\n\n  @@index([scheduledDate])\n  @@index([status])\n  @@index([customerId])\n}\n\n/// Estadía: un contenedor dentro de un pedido, desde que se reserva hasta que se retira.\n/// Un pedido de 2 contenedores tiene 2 estadías.\nmodel Placement {\n  id                Int             @id @default(autoincrement())\n  orderId           Int\n  containerId       Int\n  status            PlacementStatus @default(RESERVADO)\n  deliveredAt       DateTime?\n  deliveryDriverId  Int?\n  plannedPickupDate DateTime?       @db.Date\n  pickupSlot        String? // horario acordado para el retiro\n  pickupDriverId    Int?\n  pickupTripId      Int?\n  pickedUpAt        DateTime? // hora real del retiro\n  landfillId        Int? // basural donde se vació\n  returnLocationId  Int? // dónde quedó: Lote Paraguay, Simonna...\n  byRecambio        Boolean         @default(false)\n\n  order          Order               @relation(fields: [orderId], references: [id])\n  container      Container           @relation(fields: [containerId], references: [id])\n  deliveryDriver Driver?             @relation(\"DeliveryDriver\", fields: [deliveryDriverId], references: [id])\n  pickupDriver   Driver?             @relation(\"PickupDriver\", fields: [pickupDriverId], references: [id])\n  pickupTrip     Trip?               @relation(\"PickupTrip\", fields: [pickupTripId], references: [id])\n  landfill       Landfill?           @relation(fields: [landfillId], references: [id])\n  returnLocation Location?           @relation(fields: [returnLocationId], references: [id])\n  movements      ContainerMovement[]\n\n  @@index([containerId, status])\n  @@index([plannedPickupDate])\n}\n\nmodel Attachment {\n  id           Int            @id @default(autoincrement())\n  kind         AttachmentKind\n  url          String\n  orderId      Int?\n  containerId  Int?\n  paymentId    Int?\n  uploadedById Int\n  createdAt    DateTime       @default(now())\n\n  order      Order?     @relation(fields: [orderId], references: [id])\n  container  Container? @relation(fields: [containerId], references: [id])\n  payment    Payment?   @relation(fields: [paymentId], references: [id])\n  uploadedBy User       @relation(fields: [uploadedById], references: [id])\n}\n\n// ─────────────────────────────── Contenedores ───────────────────────────────\n\n/// CN-056 | VILLA BLANCO | 5m3\nmodel Container {\n  id         Int       @id @default(autoincrement())\n  code       String    @unique // CN-056\n  detail     String // VILLA BLANCO, SE AMARILLO...\n  sizeM3     Int\n  locationId Int? // depósito donde está; vacío si está en la calle\n  active     Boolean   @default(true)\n  notes      String?\n  createdAt  DateTime  @default(now())\n  deletedAt  DateTime?\n\n  location    Location?           @relation(fields: [locationId], references: [id])\n  placements  Placement[]\n  movements   ContainerMovement[]\n  attachments Attachment[]\n}\n\n/// Lugares propios: Lote Paraguay, Simonna, taller, otro lugar\nmodel Location {\n  id    Int          @id @default(autoincrement())\n  name  String       @unique\n  kind  LocationKind @default(DEPOSITO)\n  lat   Decimal?     @db.Decimal(9, 6)\n  lng   Decimal?     @db.Decimal(9, 6)\n  notes String?\n\n  containers Container[]\n  returns    Placement[]\n  movements  ContainerMovement[]\n}\n\n/// Historial de cada contenedor (nunca se borra)\nmodel ContainerMovement {\n  id          Int          @id @default(autoincrement())\n  containerId Int\n  type        MovementType\n  at          DateTime     @default(now())\n  orderId     Int?\n  placementId Int?\n  driverId    Int?\n  locationId  Int? // depósito de destino, si aplica\n  userId      Int?\n  note        String?\n\n  container Container  @relation(fields: [containerId], references: [id])\n  order     Order?     @relation(fields: [orderId], references: [id])\n  placement Placement? @relation(fields: [placementId], references: [id])\n  driver    Driver?    @relation(fields: [driverId], references: [id])\n  location  Location?  @relation(fields: [locationId], references: [id])\n  user      User?      @relation(fields: [userId], references: [id])\n\n  @@index([containerId, at])\n}\n\n// ─────────────────────────────── Logística ───────────────────────────────\n\nmodel Driver {\n  id     Int     @id @default(autoincrement())\n  name   String // Gustavo, Nico, Chucky\n  phone  String?\n  active Boolean @default(true)\n  userId Int?    @unique // si el chofer entra al sistema\n  notes  String?\n\n  user       User?               @relation(fields: [userId], references: [id])\n  trucks     Truck[]\n  orders     Order[]\n  trips      Trip[]\n  deliveries Placement[]         @relation(\"DeliveryDriver\")\n  pickups    Placement[]         @relation(\"PickupDriver\")\n  fuelLoads  FuelLoad[]\n  movements  ContainerMovement[]\n}\n\nmodel Truck {\n  id              Int     @id @default(autoincrement())\n  plate           String  @unique // RXB 892\n  description     String?\n  defaultDriverId Int?\n  active          Boolean @default(true)\n\n  defaultDriver Driver?    @relation(fields: [defaultDriverId], references: [id])\n  trips         Trip[]\n  fuelLoads     FuelLoad[]\n}\n\n/// Viaje de un camión: agrupa entregas y retiros hechos juntos (\"mismo viaje\")\nmodel Trip {\n  id       Int      @id @default(autoincrement())\n  date     DateTime @db.Date\n  driverId Int\n  truckId  Int?\n  notes    String?\n\n  driver  Driver      @relation(fields: [driverId], references: [id])\n  truck   Truck?      @relation(fields: [truckId], references: [id])\n  orders  Order[]\n  pickups Placement[] @relation(\"PickupTrip\")\n}\n\nmodel Landfill {\n  id         Int    @id @default(autoincrement())\n  name       String @unique // Basural Villa Allende, Unquillo, Río Ceballos, Salsipuedes\n  localityId Int?\n\n  locality Locality?   @relation(fields: [localityId], references: [id])\n  pickups  Placement[]\n}\n\n// ─────────────────────────────── Dinero ───────────────────────────────\n\n/// Cuentas donde entra la plata: SAS, YPF (cuenta corriente de combustible), Otro\nmodel PaymentAccount {\n  id             Int      @id @default(autoincrement())\n  name           String   @unique\n  isFuelAccount  Boolean  @default(false) // true para YPF\n  openingBalance Decimal  @default(0) @db.Decimal(14, 2)\n  openingDate    DateTime @default(now()) @db.Date\n\n  orders    Order[]\n  payments  Payment[]\n  fuelLoads FuelLoad[]\n}\n\nmodel Payment {\n  id           Int           @id @default(autoincrement())\n  orderId      Int\n  amount       Decimal       @db.Decimal(12, 2)\n  method       PaymentMethod\n  accountId    Int? // SAS / YPF / Otro\n  paidAt       DateTime\n  verified     Boolean       @default(false) // Ventas confirmó que la transferencia llegó\n  verifiedAt   DateTime?\n  verifiedById Int?\n  note         String?\n  createdById  Int\n  createdAt    DateTime      @default(now())\n\n  order       Order           @relation(fields: [orderId], references: [id])\n  account     PaymentAccount? @relation(fields: [accountId], references: [id])\n  verifiedBy  User?           @relation(\"PaymentVerifiedBy\", fields: [verifiedById], references: [id])\n  createdBy   User            @relation(\"PaymentCreatedBy\", fields: [createdById], references: [id])\n  attachments Attachment[]\n\n  @@index([paidAt])\n  @@index([accountId, paidAt])\n}\n\n/// Carga de combustible pagada con la cuenta YPF\nmodel FuelLoad {\n  id        Int      @id @default(autoincrement())\n  loadedAt  DateTime\n  accountId Int // cuenta YPF\n  truckId   Int? // vacío si es bidón o bomba\n  driverId  Int?\n  liters    Decimal  @db.Decimal(8, 2)\n  amount    Decimal  @db.Decimal(12, 2)\n  source    String? // \"BIDÓN\", \"BOMBA\"\n  userId    Int\n  note      String?\n  createdAt DateTime @default(now())\n\n  account PaymentAccount @relation(fields: [accountId], references: [id])\n  truck   Truck?         @relation(fields: [truckId], references: [id])\n  driver  Driver?        @relation(fields: [driverId], references: [id])\n  user    User           @relation(fields: [userId], references: [id])\n\n  @@index([loadedAt])\n}\n";
+const ES={
+ User:['Usuario','Personas que entran al sistema, con su rol (Administrador, Ventas, Logística, Dueño).'],
+ AuditLog:['Historial de cambios','Cada acción queda registrada: quién, qué, cuándo, y cómo estaba antes.'],
+ Customer:['Cliente','Particular o empresa. Puede tener varias direcciones.'],
+ Locality:['Localidad','Villa Allende, Mendiolaza, Unquillo, Río Ceballos…'],
+ Barrio:['Barrio','Barrios cerrados o zonas. Sirve para filtrar y combinar viajes.'],
+ Address:['Dirección','Dónde va el contenedor, con link de Google Maps y coordenadas.'],
+ Claim:['Reclamo','Reclamos o consultas de un cliente.'],
+ Order:['Pedido','Lo que carga Ventas en la Agenda: servicio, fecha, horario, precio, forma de pago.'],
+ Placement:['Estadía','Un contenedor dentro de un pedido: se reserva, se entrega y se retira.'],
+ Attachment:['Archivo','Fotos del contenedor, del remito y comprobantes de pago.'],
+ Container:['Contenedor','CN-056 | VILLA BLANCO | 5m3. Si no está en un lugar propio, está en la calle.'],
+ Location:['Lugar propio','Lote Paraguay, Simonna, taller u otro lugar.'],
+ ContainerMovement:['Movimiento','Historial de cada contenedor. Nunca se borra.'],
+ Driver:['Chofer','Gustavo, Nico, Chucky…'],
+ Truck:['Camión','Patente y chofer habitual.'],
+ Trip:['Viaje','Agrupa entregas y retiros hechos en el mismo recorrido.'],
+ Landfill:['Basural','Dónde se vacía cada contenedor retirado.'],
+ PaymentAccount:['Cuenta','SAS, YPF (cuenta corriente de combustible) u Otro.'],
+ Payment:['Pago','Cobro de un pedido: efectivo, transferencia a una cuenta, Chamba.'],
+ FuelLoad:['Carga de combustible','Litros e importe cargados con la cuenta YPF.']
+};
+const FD={id:'Identificador',createdAt:'Fecha de alta',updatedAt:'Última modificación',deletedAt:'Fecha de baja (no se borra)',name:'Nombre',notes:'Observaciones',phone:'Teléfono',email:'Email',active:'Activo',lat:'Latitud',lng:'Longitud',status:'Estado',type:'Tipo',amount:'Monto',role:'Rol',passwordHash:'Clave encriptada',lastLoginAt:'Último ingreso',text:'Texto del reclamo',resolvedAt:'Fecha de resolución',kind:'Tipo',url:'Dirección del archivo',at:'Fecha y hora',note:'Nota',plate:'Patente',date:'Fecha',quantity:'Cantidad de contenedores',sizeM3:'Medida (m³)',scheduledDate:'Fecha agendada',price:'Precio',paymentMethod:'Forma de pago',cancelledAt:'Fecha de cancelación',cancelReason:'Motivo de cancelación',deliveredAt:'Fecha y hora de entrega',plannedPickupDate:'Fecha prevista de retiro',paidAt:'Fecha de pago',verifiedAt:'Cuándo se verificó',liters:'Litros',loadedAt:'Fecha y hora de carga',method:'Forma de pago',description:'Descripción',code:'Código',detail:'Detalle',summary:'Resumen legible',action:'Acción',entity:'Tabla afectada',entityId:'Registro afectado',before:'Cómo estaba',after:'Cómo quedó',openingBalance:'Saldo inicial',openingDate:'Fecha del saldo inicial',isFuelAccount:'Es la cuenta de combustible',flagged:'Cliente problema',taxId:'CUIT',street:'Calle o Mz/Lote',gated:'Barrio cerrado'};
+const ZONES=[
+ {id:'cli',name:'Clientes y lugares',col:'1',row:'1',models:['Customer','Address','Barrio','Locality','Claim']},
+ {id:'ped',name:'Pedidos · Agenda',col:'2',row:'1',models:['Order','Placement','Attachment']},
+ {id:'con',name:'Contenedores',col:'3',row:'1',models:['Container','ContainerMovement','Location']},
+ {id:'log',name:'Logística',col:'4',row:'1',models:['Driver','Trip','Truck','Landfill']},
+ {id:'acc',name:'Usuarios e historial',col:'1',row:'2',models:['User','AuditLog']},
+ {id:'din',name:'Dinero y combustible',col:'2 / span 3',row:'2',models:['Payment','PaymentAccount','FuelLoad'],row2:true}
+];
+const M=Object.fromEntries(DATA.models.map(m=>[m.name,m]));
+const base=t=>t.replace(/[?\[\]]/g,'');
+const isRel=f=>!!M[base(f.t)];
+const EDGES=[];
+DATA.models.forEach(m=>m.fields.forEach(f=>{const mt=base(f.t),mm=f.a.match(/fields:\s*\[(\w+)\]/);if(M[mt]&&mm)EDGES.push({from:m.name,fk:mm[1],to:mt,via:f.n,opt:f.t.endsWith('?'),meta:mt==='User'})}));
+const FK={};EDGES.forEach(e=>{(FK[e.from]=FK[e.from]||{})[e.fk]=e.to});
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const label=n=>(ES[n]||[n])[0];
+const SHOW=9,expanded=new Set();
+let sel=null,hov=null;
+
+function card(n){
+ const m=M[n],sc=m.fields.filter(f=>!isRel(f)),show=expanded.has(n)?sc:sc.slice(0,SHOW);
+ return `<button class="card" id="c-${n}" data-m="${n}" type="button" aria-label="${esc(label(n))}"><div class="ch"><b>${esc(label(n))}</b><code>${n}</code></div><p class="cd">${esc((ES[n]||['',''])[1])}</p><ul>${show.map(f=>{const pk=/@id/.test(f.a),fk=FK[n]&&FK[n][f.n];return `<li class="${pk?'pk':fk?'fk':''}" data-f="${f.n}"><span>${pk?'<span class="k pk">PK</span>':fk?'<span class="k fk">FK</span>':''}</span><span class="n">${f.n}</span><span class="t">${esc(f.t)}</span></li>`}).join('')}</ul>${sc.length>SHOW?`<span class="more" data-more="${n}">${expanded.has(n)?'Ver menos':`+ ${sc.length-SHOW} campos más`}</span>`:''}</button>`;
+}
+function build(){
+ const cv=document.getElementById('canvas');
+ cv.querySelectorAll('.zone').forEach(z=>z.remove());
+ ZONES.forEach(z=>{const d=document.createElement('div');d.className=`zone z-${z.id}${z.row2?' row':''}`;d.style.gridColumn=z.col;d.style.gridRow=z.row;d.innerHTML=`<span class="zl">${z.name}</span>`+z.models.map(card).join('');cv.appendChild(d)});
+ requestAnimationFrame(draw);
+}
+function pt(n,field){
+ const cv=document.getElementById('canvas').getBoundingClientRect(),c=document.getElementById('c-'+n).getBoundingClientRect();
+ const li=field&&document.querySelector(`#c-${n} li[data-f="${field}"]`);
+ const y=li?li.getBoundingClientRect().top+li.offsetHeight/2:c.top+22;
+ return{l:c.left-cv.left,r:c.right-cv.left,y:y-cv.top};
+}
+function draw(){
+ const svg=document.getElementById('edges');let h='';
+ const focus=sel||hov,rel=new Set();
+ EDGES.forEach((e,i)=>{
+  const a=pt(e.from,e.fk),b=pt(e.to,'id');let d,ax,bx,adir,bdir;
+  const overlap=!(a.r<b.l-10||b.r<a.l-10);
+  if(overlap){ax=a.r;bx=b.r;adir=1;bdir=1;const k=Math.max(ax,bx)+34+(i%4)*7;d=`M${ax},${a.y} C${k},${a.y} ${k},${b.y} ${bx},${b.y}`}
+  else if(a.r<b.l){ax=a.r;bx=b.l;adir=1;bdir=-1;const m=(ax+bx)/2;d=`M${ax},${a.y} C${m},${a.y} ${m},${b.y} ${bx},${b.y}`}
+  else{ax=a.l;bx=b.r;adir=-1;bdir=1;const m=(ax+bx)/2;d=`M${ax},${a.y} C${m},${a.y} ${m},${b.y} ${bx},${b.y}`}
+  const on=focus&&(e.from===focus||e.to===focus);if(on){rel.add(e.from);rel.add(e.to)}
+  const cls=`${e.meta?'meta':''} ${on?'on':''}`;
+  if(e.meta&&!on)return;
+  h+=`<path class="e ${cls}" d="${d}"/>`;
+  const cx=ax+adir*9;h+=`<path class="crow ${cls}" d="M${ax},${a.y-6} L${cx},${a.y} L${ax},${a.y+6} M${cx},${a.y-6} L${cx},${a.y+6}"/>`;
+  h+=`<circle class="ep ${cls}" cx="${bx+bdir*5}" cy="${b.y}" r="3.6"/>`;
+ });
+ svg.innerHTML=h;
+ const cv=document.getElementById('canvas');cv.classList.toggle('dim',!!focus);
+ cv.querySelectorAll('.card').forEach(c=>{c.classList.toggle('rel',rel.has(c.dataset.m));c.classList.toggle('sel',c.dataset.m===sel)});
+}
+function relText(n){
+ const out=[];
+ EDGES.filter(e=>e.from===n&&!(e.meta&&n!=='User')).forEach(e=>out.push(`Cada ${label(n).toLowerCase()} ${e.opt?'puede tener':'tiene'} <b>un</b> ${chip(e.to)} <span style="color:var(--muted)">(campo <code>${e.fk}</code>)</span>`));
+ EDGES.filter(e=>e.to===n&&!(e.meta&&n!=='User')).forEach(e=>out.push(`Un ${label(n).toLowerCase()} puede tener <b>muchos</b> ${chip(e.from)} <span style="color:var(--muted)">(${e.fk})</span>`));
+ if(n!=='User'&&EDGES.some(e=>e.from===n&&e.meta))out.push(`Guarda qué ${chip('User')} hizo el registro.`);
+ return out;
+}
+const chip=n=>`<span class="chip" role="button" tabindex="0" data-open="${n}">${esc(label(n))}</span>`;
+function openDrawer(n){
+ sel=n;const m=M[n],sc=m.fields.filter(f=>!isRel(f));
+ document.getElementById('dt').textContent=label(n);document.getElementById('dc').textContent=n;
+ document.getElementById('dbody').innerHTML=`<p>${esc(m.doc||(ES[n]||['',''])[1])}</p>
+ <div><h4>Campos (${sc.length})</h4><table class="ftab"><tbody>${sc.map(f=>{const pk=/@id/.test(f.a),fk=FK[n]&&FK[n][f.n],en=DATA.enums[base(f.t)];
+  const desc=f.d||(fk?'Apunta a '+label(fk):FD[f.n]||'');
+  return `<tr class="${pk?'pk':fk?'fk':''}"><td>${f.n}</td><td class="ty">${esc(f.t)}${/@unique/.test(f.a)?' · único':''}</td><td>${esc(desc)}${fk?' '+chip(fk):''}${en?`<div class="enum">${en.map(v=>`<span>${v}</span>`).join('')}</div>`:''}</td></tr>`}).join('')}</tbody></table></div>
+ <div><h4>Relaciones</h4><ul class="rels">${relText(n).map(t=>`<li>${t}</li>`).join('')}</ul></div>`;
+ document.getElementById('drawer').classList.add('open');draw();
+}
+function closeDrawer(){sel=null;document.getElementById('drawer').classList.remove('open');draw()}
+document.addEventListener('click',e=>{
+ const more=e.target.closest('[data-more]');if(more){e.stopPropagation();const n=more.dataset.more;expanded.has(n)?expanded.delete(n):expanded.add(n);const z=document.getElementById('c-'+n);z.outerHTML=card(n);requestAnimationFrame(draw);return}
+ const o=e.target.closest('[data-open]');if(o){openDrawer(o.dataset.open);return}
+ const c=e.target.closest('.card');if(c){sel===c.dataset.m?closeDrawer():openDrawer(c.dataset.m);return}
+ if(e.target.id==='dx')closeDrawer();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.open)openDrawer(e.target.dataset.open)});
+document.addEventListener('mouseover',e=>{const c=e.target.closest('.card');const n=c?c.dataset.m:null;if(n!==hov){hov=n;draw()}});
+addEventListener('resize',()=>requestAnimationFrame(draw));
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>requestAnimationFrame(draw));
+
+/* contenido de texto */
+const nModels=DATA.models.length,nRels=EDGES.filter(e=>!e.meta).length;
+document.getElementById('stats').innerHTML=`<div class="stat"><b>${nModels}</b><span>tablas</span></div><div class="stat"><b>${ZONES.length}</b><span>áreas</span></div><div class="stat"><b>${nRels}</b><span>relaciones</span></div><div class="stat"><b>${Object.keys(DATA.enums).length}</b><span>listas fijas</span></div>`;
+const FLOW=[
+ ['Ventas agenda el pedido','Busca el cliente o lo crea. Elige dirección (con link de Maps), servicio, medida, fecha, horario, precio y forma de pago.',['Customer','Address','Order','AuditLog']],
+ ['Logística asigna chofer y contenedor','Por cada contenedor se crea una estadía en estado RESERVADO y un movimiento en su historial.',['Placement','ContainerMovement','Trip']],
+ ['Entrega','La estadía pasa a EN_CALLE, el contenedor deja de estar en un lugar propio y se guarda la fecha prevista de retiro. Fotos y remito van como archivos.',['Placement','Container','Attachment']],
+ ['Cobro','Se registra el pago con su cuenta (SAS, YPF u Otro). Si es transferencia, Ventas la verifica.',['Payment','PaymentAccount']],
+ ['Retiro','Se anota la hora real, el chofer, el basural y dónde queda el contenedor. Si se hizo con otra entrega, comparten el mismo viaje.',['Placement','Landfill','Location','Trip','ContainerMovement']],
+ ['Combustible','Cada carga descuenta de la cuenta YPF, que a su vez suma lo que transfieren los clientes.',['FuelLoad','PaymentAccount','Truck']]
+];
+document.getElementById('flow').innerHTML=FLOW.map(([t,p,ms])=>`<li><b>${t}</b><p>${p}</p>${ms.map(chip).join(' ')}</li>`).join('');
+const CALC=[
+ ['¿Dónde está un contenedor?','Si tiene una estadía EN_CALLE, está en esa dirección; si no, en su lugar propio.'],
+ ['Saldo de un pedido','Precio del pedido menos la suma de sus pagos.'],
+ ['Deudores','Pedidos entregados con saldo mayor a cero, agrupados por cliente.'],
+ ['Retiro vencido / por vencer','Fecha prevista de retiro de la estadía comparada con hoy.'],
+ ['Saldo de la cuenta YPF','Saldo inicial + pagos a la cuenta YPF − cargas de combustible.'],
+ ['Viajes a cada basural','Cantidad de estadías retiradas con ese basural en el período.'],
+ ['Servicios por chofer','Entregas (chofer del pedido) + retiros (chofer del retiro).'],
+ ['Contenedores en calle, Simonna, Lote Paraguay','Conteo de contenedores por lugar propio, más los que tienen estadía en calle.']
+];
+document.getElementById('calc').innerHTML=CALC.map(([a,b])=>`<tr><td><b>${a}</b></td><td>${b}</td></tr>`).join('');
+const XL=[
+ ['FECHA, HORA','Order.scheduledDate, timeSlot','La hora real de entrega va en Placement.deliveredAt'],
+ ['N° REMITO, FIRMADO','Order.remitoNumber, remitoSigned',''],
+ ['N°TACHO (CN-056 | VILLA BLANCO | 5m3)','Container.code, detail, sizeM3','Se separa en tres campos'],
+ ['SERVICIO, PRODUCTO','Order.type','Tierra y Agua quedan como servicios aparte, a definir'],
+ ['CHOFER, columnas Gustavo / Nico / Axel','Order.driverId','Las columnas con “1” se vuelven innecesarias: se cuentan solas'],
+ ['ESTADO','Order.status y Placement.status',''],
+ ['CLIENTE, CELULAR','Customer.name, phone','Hoy el nombre trae el barrio pegado: hay que limpiarlo'],
+ ['DOMICILIO, LOCALIDAD','Address.street, barrioId, localityId','“RECAMBIO …” al inicio del domicilio pasa a Order.type'],
+ ['PAGO TRANSF, PAGO EFECT., G.CHAMBA','Payment.amount, method','Una fila por pago'],
+ ['MONTO DEBEN, ESTADO $','—','Se calcula: precio − pagos'],
+ ['FORMA DE PAGO, COBRADOR (SAS / YPF)','Payment.method, accountId',''],
+ ['COMPROBANTE, N° FACTURA, PDF FC','Attachment (COMPROBANTE_PAGO, FACTURA)',''],
+ ['F. RETIRO, CHOFER RET','Placement.pickedUpAt, pickupDriverId',''],
+ ['Hoja YPF: transferencias','Payment con cuenta YPF',''],
+ ['Hoja YPF: fecha de carga, patente, litros, monto','FuelLoad (loadedAt, truckId, liters, amount)','BIDÓN y BOMBA van en FuelLoad.source'],
+ ['Hoja agenda: especificación, retiros/extras','Order.notes / logisticsNotes','“SI PERMITE INGRESO” puede pasar a Barrio.accessNotes']
+];
+document.getElementById('excel').innerHTML=XL.map(([a,b,c])=>`<tr><td><b>${a}</b></td><td><code>${b}</code></td><td>${c}</td></tr>`).join('');
+const OPEN=[
+ ['Grupo Chamba','Hoy es una forma de pago y un cliente. Si funciona como cuenta corriente, se suma una tabla de liquidaciones.'],
+ ['Cheques','Ya existe CHEQUE como forma de pago. Si hay que seguir vencimientos o bancos, se agrega una tabla de cheques.'],
+ ['Horario de ingreso de barrios cerrados','Barrio.accessHours ya está; falta cargar los horarios reales.'],
+ ['Qué más mostrar de basurales','Se puede sumar tipo de material o costo por viaje en el retiro.'],
+ ['Tierra y agua','Aparecen en el Excel como productos. Pueden ser otro tipo de pedido o una tabla de productos.'],
+ ['Choferes con usuario propio','Driver.userId permite que cada chofer entre desde el celular y marque entregas y retiros.']
+];
+document.getElementById('open').innerHTML=OPEN.map(([a,b])=>`<div><b>${a}</b><span>${b}</span></div>`).join('');
+document.getElementById('schema').textContent=SCHEMA;
+document.getElementById('copy').addEventListener('click',e=>{e.preventDefault();const b=e.currentTarget;navigator.clipboard.writeText(SCHEMA).then(()=>{b.textContent='Copiado'},()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('schema'));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Seleccionado'})});
+build();
+</script>
+</body></html>

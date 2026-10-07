@@ -1,0 +1,485 @@
+// Conte Nic · modelo de datos (borrador v1)
+// PostgreSQL + Prisma. Los nombres de tablas y campos van en inglés (convención de código);
+// cada uno tiene su explicación en castellano.
+//
+// Ideas base:
+// - Cada dato se carga una sola vez y se relaciona (cliente, dirección, pedido, contenedor, pago).
+// - Lo que se puede calcular no se guarda (saldo de un pedido, si un retiro está vencido, saldo de YPF).
+// - Nada se borra: los registros importantes tienen deletedAt / cancelledAt y todo cambio va a AuditLog.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// La conexión (DATABASE_URL) se configura en prisma.config.ts (Prisma 7)
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────── Tipos fijos ───────────────────────────────
+
+enum Role {
+  ADMIN
+  VENTAS
+  LOGISTICA
+  DUENO
+}
+
+enum CustomerType {
+  PARTICULAR
+  EMPRESA
+}
+
+enum OrderType {
+  ALQUILER
+  RECAMBIO
+  MOVIMIENTO
+  VIAJE
+  EXTENSION
+}
+
+enum OrderStatus {
+  SOLICITADO
+  CONFIRMADO
+  EN_CAMINO
+  REALIZADO
+  CANCELADO
+}
+
+/// Estado de un contenedor dentro de un pedido
+enum PlacementStatus {
+  RESERVADO // asignado al pedido, todavía en el depósito
+  EN_CALLE // entregado al cliente
+  RETIRADO // ya volvió
+  CANCELADO
+}
+
+enum LocationKind {
+  DEPOSITO
+  TALLER
+  OTRO
+}
+
+enum MovementType {
+  RESERVADO
+  LIBERADO
+  ENTREGADO
+  RETIRADO
+  TRASLADO // de un depósito a otro
+  MOVIDO_EN_OBRA
+}
+
+enum PaymentMethod {
+  EFECTIVO
+  TRANSFERENCIA
+  CHAMBA
+  CLIENTE_APARTE
+  CHEQUE
+}
+
+enum ClaimStatus {
+  ABIERTO
+  RESUELTO
+}
+
+enum AttachmentKind {
+  FOTO_CONTENEDOR
+  FOTO_REMITO
+  COMPROBANTE_PAGO
+  FACTURA
+  OTRO
+}
+
+// ─────────────────────────────── Acceso ───────────────────────────────
+
+/// Personas que usan el sistema
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         Role
+  active       Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+
+  driver           Driver?
+  ordersCreated    Order[]             @relation("OrderCreatedBy")
+  paymentsCreated  Payment[]           @relation("PaymentCreatedBy")
+  paymentsVerified Payment[]           @relation("PaymentVerifiedBy")
+  fuelLoads        FuelLoad[]
+  movements        ContainerMovement[]
+  attachments      Attachment[]
+  auditLogs        AuditLog[]
+}
+
+/// Historial de cambios: quién hizo qué y cuándo
+model AuditLog {
+  id       BigInt   @id @default(autoincrement())
+  userId   Int?
+  action   String // "crear", "asignar", "entregar", "retirar", "verificar_pago"...
+  entity   String // "Order", "Container", "Payment"...
+  entityId String
+  summary  String // "Lucía asignó CN-056 al pedido #000582"
+  before   Json?
+  after    Json?
+  at       DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([entity, entityId])
+  @@index([at])
+}
+
+// ─────────────────────────────── Clientes y lugares ───────────────────────────────
+
+model Customer {
+  id        Int          @id @default(autoincrement())
+  name      String
+  type      CustomerType @default(PARTICULAR)
+  phone     String?
+  email     String?
+  taxId     String? // CUIT, si factura
+  notes     String?
+  flagged   Boolean      @default(false) // "cliente problema"
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  deletedAt DateTime?
+
+  addresses Address[]
+  orders    Order[]
+  claims    Claim[]
+
+  @@index([name])
+  @@index([phone])
+}
+
+model Locality {
+  id   Int    @id @default(autoincrement())
+  name String @unique // Villa Allende, Mendiolaza, Unquillo, Río Ceballos...
+
+  barrios   Barrio[]
+  addresses Address[]
+  landfills Landfill[]
+}
+
+/// Barrio (cerrado o no). Sirve para filtrar entregas/retiros y combinar viajes.
+model Barrio {
+  id          Int     @id @default(autoincrement())
+  localityId  Int
+  name        String // El Terrón, Comarca de Allende, La Cercanía...
+  gated       Boolean @default(false) // barrio cerrado
+  accessHours String? // "Lun a sáb 8 a 12 h" (a definir con el cliente)
+  accessNotes String? // "avisar en guardia", "no permite ingreso"
+
+  locality  Locality  @relation(fields: [localityId], references: [id])
+  addresses Address[]
+
+  @@unique([localityId, name])
+}
+
+model Address {
+  id          Int      @id @default(autoincrement())
+  customerId  Int
+  localityId  Int
+  barrioId    Int?
+  street      String // calle y número, o "Mz 12 L 4"
+  reference   String? // "portón verde", "detrás de la capilla"
+  lat         Decimal? @db.Decimal(9, 6)
+  lng         Decimal? @db.Decimal(9, 6)
+  mapsUrl     String? // link de Google Maps que manda el cliente
+  approximate Boolean  @default(true) // false cuando las coordenadas vienen del link
+  createdAt   DateTime @default(now())
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  locality Locality @relation(fields: [localityId], references: [id])
+  barrio   Barrio?  @relation(fields: [barrioId], references: [id])
+  orders   Order[]
+
+  @@index([customerId])
+  @@index([barrioId])
+}
+
+model Claim {
+  id         Int         @id @default(autoincrement())
+  customerId Int
+  orderId    Int?
+  text       String
+  status     ClaimStatus @default(ABIERTO)
+  createdAt  DateTime    @default(now())
+  resolvedAt DateTime?
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  order    Order?   @relation(fields: [orderId], references: [id])
+}
+
+// ─────────────────────────────── Pedidos (Agenda) ───────────────────────────────
+
+/// Pedido de la Agenda: lo carga Ventas una sola vez
+model Order {
+  id                  Int           @id @default(autoincrement()) // número de pedido: #000582
+  type                OrderType
+  status              OrderStatus   @default(SOLICITADO)
+  customerId          Int
+  addressId           Int
+  quantity            Int           @default(1)
+  sizeM3              Int // 3, 5 o 6
+  scheduledDate       DateTime      @db.Date
+  timeSlot            String? // "Mañana", "10 – 12 h", "A coordinar"
+  price               Decimal       @db.Decimal(12, 2)
+  paymentMethod       PaymentMethod
+  paymentAccountId    Int? // SAS / YPF / Otro si es transferencia
+  pendingConfirmation Boolean       @default(false) // el cliente todavía no confirmó
+  notes               String?
+  logisticsNotes      String?
+  driverId            Int? // chofer de la entrega
+  tripId              Int? // viaje (para combinar con retiros)
+  remitoNumber        Int?          @unique
+  remitoSigned        Boolean       @default(false)
+  replacesOrderId     Int? // recambio / movimiento: pedido cuyo contenedor se reemplaza o se mueve
+  createdById         Int
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  cancelledAt         DateTime?
+  cancelReason        String?
+
+  customer       Customer        @relation(fields: [customerId], references: [id])
+  address        Address         @relation(fields: [addressId], references: [id])
+  paymentAccount PaymentAccount? @relation(fields: [paymentAccountId], references: [id])
+  driver         Driver?         @relation(fields: [driverId], references: [id])
+  trip           Trip?           @relation(fields: [tripId], references: [id])
+  replacesOrder  Order?          @relation("Replaces", fields: [replacesOrderId], references: [id])
+  replacedBy     Order[]         @relation("Replaces")
+  createdBy      User            @relation("OrderCreatedBy", fields: [createdById], references: [id])
+
+  placements  Placement[]
+  payments    Payment[]
+  attachments Attachment[]
+  claims      Claim[]
+  movements   ContainerMovement[]
+
+  @@index([scheduledDate])
+  @@index([status])
+  @@index([customerId])
+}
+
+/// Estadía: un contenedor dentro de un pedido, desde que se reserva hasta que se retira.
+/// Un pedido de 2 contenedores tiene 2 estadías.
+model Placement {
+  id                Int             @id @default(autoincrement())
+  orderId           Int
+  containerId       Int
+  status            PlacementStatus @default(RESERVADO)
+  deliveredAt       DateTime?
+  deliveryDriverId  Int?
+  plannedPickupDate DateTime?       @db.Date
+  pickupSlot        String? // horario acordado para el retiro
+  pickupDriverId    Int?
+  pickupTripId      Int?
+  pickedUpAt        DateTime? // hora real del retiro
+  landfillId        Int? // basural donde se vació
+  returnLocationId  Int? // dónde quedó: Lote Paraguay, Simonna...
+  byRecambio        Boolean         @default(false)
+
+  order          Order               @relation(fields: [orderId], references: [id])
+  container      Container           @relation(fields: [containerId], references: [id])
+  deliveryDriver Driver?             @relation("DeliveryDriver", fields: [deliveryDriverId], references: [id])
+  pickupDriver   Driver?             @relation("PickupDriver", fields: [pickupDriverId], references: [id])
+  pickupTrip     Trip?               @relation("PickupTrip", fields: [pickupTripId], references: [id])
+  landfill       Landfill?           @relation(fields: [landfillId], references: [id])
+  returnLocation Location?           @relation(fields: [returnLocationId], references: [id])
+  movements      ContainerMovement[]
+
+  @@index([containerId, status])
+  @@index([plannedPickupDate])
+}
+
+model Attachment {
+  id           Int            @id @default(autoincrement())
+  kind         AttachmentKind
+  url          String
+  orderId      Int?
+  containerId  Int?
+  paymentId    Int?
+  uploadedById Int
+  createdAt    DateTime       @default(now())
+
+  order      Order?     @relation(fields: [orderId], references: [id])
+  container  Container? @relation(fields: [containerId], references: [id])
+  payment    Payment?   @relation(fields: [paymentId], references: [id])
+  uploadedBy User       @relation(fields: [uploadedById], references: [id])
+}
+
+// ─────────────────────────────── Contenedores ───────────────────────────────
+
+/// CN-056 | VILLA BLANCO | 5m3
+model Container {
+  id         Int       @id @default(autoincrement())
+  code       String    @unique // CN-056
+  detail     String // VILLA BLANCO, SE AMARILLO...
+  sizeM3     Int
+  locationId Int? // depósito donde está; vacío si está en la calle
+  active     Boolean   @default(true)
+  notes      String?
+  createdAt  DateTime  @default(now())
+  deletedAt  DateTime?
+
+  location    Location?           @relation(fields: [locationId], references: [id])
+  placements  Placement[]
+  movements   ContainerMovement[]
+  attachments Attachment[]
+}
+
+/// Lugares propios: Lote Paraguay, Simonna, taller, otro lugar
+model Location {
+  id    Int          @id @default(autoincrement())
+  name  String       @unique
+  kind  LocationKind @default(DEPOSITO)
+  lat   Decimal?     @db.Decimal(9, 6)
+  lng   Decimal?     @db.Decimal(9, 6)
+  notes String?
+
+  containers Container[]
+  returns    Placement[]
+  movements  ContainerMovement[]
+}
+
+/// Historial de cada contenedor (nunca se borra)
+model ContainerMovement {
+  id          Int          @id @default(autoincrement())
+  containerId Int
+  type        MovementType
+  at          DateTime     @default(now())
+  orderId     Int?
+  placementId Int?
+  driverId    Int?
+  locationId  Int? // depósito de destino, si aplica
+  userId      Int?
+  note        String?
+
+  container Container  @relation(fields: [containerId], references: [id])
+  order     Order?     @relation(fields: [orderId], references: [id])
+  placement Placement? @relation(fields: [placementId], references: [id])
+  driver    Driver?    @relation(fields: [driverId], references: [id])
+  location  Location?  @relation(fields: [locationId], references: [id])
+  user      User?      @relation(fields: [userId], references: [id])
+
+  @@index([containerId, at])
+}
+
+// ─────────────────────────────── Logística ───────────────────────────────
+
+model Driver {
+  id     Int     @id @default(autoincrement())
+  name   String // Gustavo, Nico, Chucky
+  phone  String?
+  active Boolean @default(true)
+  userId Int?    @unique // si el chofer entra al sistema
+  notes  String?
+
+  user       User?               @relation(fields: [userId], references: [id])
+  trucks     Truck[]
+  orders     Order[]
+  trips      Trip[]
+  deliveries Placement[]         @relation("DeliveryDriver")
+  pickups    Placement[]         @relation("PickupDriver")
+  fuelLoads  FuelLoad[]
+  movements  ContainerMovement[]
+}
+
+model Truck {
+  id              Int     @id @default(autoincrement())
+  plate           String  @unique // RXB 892
+  description     String?
+  defaultDriverId Int?
+  active          Boolean @default(true)
+
+  defaultDriver Driver?    @relation(fields: [defaultDriverId], references: [id])
+  trips         Trip[]
+  fuelLoads     FuelLoad[]
+}
+
+/// Viaje de un camión: agrupa entregas y retiros hechos juntos ("mismo viaje")
+model Trip {
+  id       Int      @id @default(autoincrement())
+  date     DateTime @db.Date
+  driverId Int
+  truckId  Int?
+  notes    String?
+
+  driver  Driver      @relation(fields: [driverId], references: [id])
+  truck   Truck?      @relation(fields: [truckId], references: [id])
+  orders  Order[]
+  pickups Placement[] @relation("PickupTrip")
+}
+
+model Landfill {
+  id         Int    @id @default(autoincrement())
+  name       String @unique // Basural Villa Allende, Unquillo, Río Ceballos, Salsipuedes
+  localityId Int?
+
+  locality Locality?   @relation(fields: [localityId], references: [id])
+  pickups  Placement[]
+}
+
+// ─────────────────────────────── Dinero ───────────────────────────────
+
+/// Cuentas donde entra la plata: SAS, YPF (cuenta corriente de combustible), Otro
+model PaymentAccount {
+  id             Int      @id @default(autoincrement())
+  name           String   @unique
+  isFuelAccount  Boolean  @default(false) // true para YPF
+  openingBalance Decimal  @default(0) @db.Decimal(14, 2)
+  openingDate    DateTime @default(now()) @db.Date
+
+  orders    Order[]
+  payments  Payment[]
+  fuelLoads FuelLoad[]
+}
+
+model Payment {
+  id           Int           @id @default(autoincrement())
+  orderId      Int
+  amount       Decimal       @db.Decimal(12, 2)
+  method       PaymentMethod
+  accountId    Int? // SAS / YPF / Otro
+  paidAt       DateTime
+  verified     Boolean       @default(false) // Ventas confirmó que la transferencia llegó
+  verifiedAt   DateTime?
+  verifiedById Int?
+  note         String?
+  createdById  Int
+  createdAt    DateTime      @default(now())
+
+  order       Order           @relation(fields: [orderId], references: [id])
+  account     PaymentAccount? @relation(fields: [accountId], references: [id])
+  verifiedBy  User?           @relation("PaymentVerifiedBy", fields: [verifiedById], references: [id])
+  createdBy   User            @relation("PaymentCreatedBy", fields: [createdById], references: [id])
+  attachments Attachment[]
+
+  @@index([paidAt])
+  @@index([accountId, paidAt])
+}
+
+/// Carga de combustible pagada con la cuenta YPF
+model FuelLoad {
+  id        Int      @id @default(autoincrement())
+  loadedAt  DateTime
+  accountId Int // cuenta YPF
+  truckId   Int? // vacío si es bidón o bomba
+  driverId  Int?
+  liters    Decimal  @db.Decimal(8, 2)
+  amount    Decimal  @db.Decimal(12, 2)
+  source    String? // "BIDÓN", "BOMBA"
+  userId    Int
+  note      String?
+  createdAt DateTime @default(now())
+
+  account PaymentAccount @relation(fields: [accountId], references: [id])
+  truck   Truck?         @relation(fields: [truckId], references: [id])
+  driver  Driver?        @relation(fields: [driverId], references: [id])
+  user    User           @relation(fields: [userId], references: [id])
+
+  @@index([loadedAt])
+}

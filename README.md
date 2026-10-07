@@ -13,6 +13,11 @@ Necesita internet solo para cargar las tipografías.
 
 También se puede publicar con **GitHub Pages** (Settings → Pages → Deploy from branch → `main` / root).
 
+## Modelo de datos (borrador)
+
+- `docs/modelo-de-datos.html`: diagrama interactivo de las tablas y sus relaciones, recorrido de un pedido, datos que se calculan y cómo se importa el Excel.
+- `db/schema.prisma`: el mismo modelo en Prisma (PostgreSQL), validado. La conexión va en `prisma.config.ts` (variable `DATABASE_URL` en un `.env`).
+
 ## Versión 2 · cambios de la reunión con el cliente
 
 - **Inicio** (lo ven todos): resumen del día con pedidos, transferencias SAS / YPF / Otro, efectivo, deudores y Chamba; contenedores en calle, en Simonna, en Lote Paraguay y en otro lugar; viajes a cada basural; combustible por chofer.
