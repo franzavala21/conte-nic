@@ -1,4 +1,4 @@
-// Conte Nic · modelo de datos (borrador v2 · modificaciones 06/10)
+// Conte Nic · modelo de datos (borrador v2.1 · modificaciones 06/10 + planilla de facturación)
 // PostgreSQL + Prisma. Los nombres de tablas y campos van en inglés (convención de código);
 // cada uno tiene su explicación en castellano.
 //
@@ -67,6 +67,13 @@ enum InvoiceType {
   C
 }
 
+/// Condición de la factura (colores de la planilla: amarillo, verde, rojo)
+enum InvoiceStatus {
+  DEBE
+  PAGADA
+  ANULADA // mal facturada: se hace otra que la reemplaza
+}
+
 enum EmployeeArea {
   CHOFER
   OFICINA
@@ -98,6 +105,7 @@ enum PaymentMethod {
   CHAMBA
   CLIENTE_APARTE
   CHEQUE
+  ECHEQ
 }
 
 enum ClaimStatus {
@@ -138,6 +146,8 @@ model User {
   attachments      Attachment[]
   auditLogs        AuditLog[]
   invoicesVerified Invoice[]           @relation("InvoiceVerifiedBy")
+  invoicesCreated  Invoice[]           @relation("InvoiceCreatedBy")
+  invoicePayments  InvoicePayment[]
   salaryPayments   SalaryPayment[]
   expenses         Expense[]
 }
@@ -178,6 +188,7 @@ model Customer {
   addresses Address[]
   orders    Order[]
   claims    Claim[]
+  invoices  Invoice[]
 
   @@index([name])
   @@index([phone])
@@ -287,7 +298,7 @@ model Order {
 
   placements  Placement[]
   payments    Payment[]
-  invoice     Invoice?
+  invoiceItems InvoiceItem[]
   attachments Attachment[]
   claims      Claim[]
   movements   ContainerMovement[]
@@ -482,6 +493,7 @@ model PaymentAccount {
   fuelLoads FuelLoad[]
   salaries  SalaryPayment[]
   expenses  Expense[]
+  invoicePayments InvoicePayment[]
 }
 
 model Payment {
@@ -534,26 +546,76 @@ model FuelLoad {
 
 // ─────────────────────────────── Administración ───────────────────────────────
 
-/// Factura de un pedido. Se emite al tomar el pedido; la razón social puede ser distinta de quien pidió.
+/// Factura. Puede cubrir un pedido o varios (abono mensual). La razón social puede ser distinta de quien pidió.
+/// Columnas de la planilla: tipo, N°, fecha, vencimiento, período, CUIT, razón social, producto, neto, con IVA, condición, forma y fecha de pago.
 model Invoice {
-  id             Int         @id @default(autoincrement())
-  orderId        Int         @unique
+  id             Int           @id @default(autoincrement())
   type           InvoiceType
-  number         String? // 0003-00004521 (se puede cargar después)
+  pointOfSale    String // punto de venta: "00030", "00015"
+  number         Int // 565 → se muestra 000-000-565
+  issuedAt       DateTime      @db.Date // fecha de inicio
+  dueDate        DateTime      @db.Date // vencimiento
+  periodFrom     DateTime      @db.Date // período facturado desde
+  periodTo       DateTime      @db.Date // período facturado hasta
+  customerId     Int? // quién pidió (puede no coincidir con la razón social)
   businessName   String // razón social a la que se factura
   taxId          String? // CUIT de la factura
-  issuedAt       DateTime    @default(now())
-  amount         Decimal     @db.Decimal(12, 2)
-  verifiedInBank Boolean     @default(false) // Mili la comparó con el banco
+  description    String // producto / servicio: "1 contenedor 12/01", "abono mensual 4 cont + 2 extras"
+  netAmount      Decimal       @db.Decimal(14, 2) // monto neto
+  vatAmount      Decimal       @db.Decimal(14, 2) // IVA 21% (0 en factura C)
+  totalAmount    Decimal       @db.Decimal(14, 2) // monto con IVA
+  status         InvoiceStatus @default(DEBE)
+  voidReason     String? // "Mal facturado"
+  replacesId     Int?          @unique // la factura anulada que esta corrige
+  verifiedInBank Boolean       @default(false) // Mili la comparó con el banco
   verifiedAt     DateTime?
   verifiedById   Int?
+  createdById    Int
+  createdAt      DateTime      @default(now())
 
-  order       Order        @relation(fields: [orderId], references: [id])
-  verifiedBy  User?        @relation("InvoiceVerifiedBy", fields: [verifiedById], references: [id])
+  customer    Customer?        @relation(fields: [customerId], references: [id])
+  replaces    Invoice?         @relation("InvoiceReplacement", fields: [replacesId], references: [id])
+  replacedBy  Invoice?         @relation("InvoiceReplacement")
+  verifiedBy  User?            @relation("InvoiceVerifiedBy", fields: [verifiedById], references: [id])
+  createdBy   User             @relation("InvoiceCreatedBy", fields: [createdById], references: [id])
+  items       InvoiceItem[]
+  payments    InvoicePayment[]
   attachments Attachment[]
 
+  @@unique([type, pointOfSale, number])
   @@index([businessName])
   @@index([taxId])
+  @@index([status, dueDate])
+}
+
+/// Qué pedidos incluye cada factura. Una anulada conserva sus pedidos; un pedido debería tener una sola factura vigente.
+model InvoiceItem {
+  id        Int     @id @default(autoincrement())
+  invoiceId Int
+  orderId   Int?
+  amount    Decimal @db.Decimal(14, 2) // neto de este pedido dentro de la factura
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id])
+  order   Order?  @relation(fields: [orderId], references: [id])
+
+  @@index([orderId])
+}
+
+/// Pagos de una factura. Puede haber pagos parciales (ej. echeq + retenciones).
+model InvoicePayment {
+  id          Int           @id @default(autoincrement())
+  invoiceId   Int
+  paidAt      DateTime      @db.Date
+  method      PaymentMethod
+  accountId   Int? // SAS, YPF u Otro si fue transferencia
+  amount      Decimal       @db.Decimal(14, 2)
+  note        String?
+  createdById Int
+  createdAt   DateTime      @default(now())
+
+  invoice   Invoice         @relation(fields: [invoiceId], references: [id])
+  account   PaymentAccount? @relation(fields: [accountId], references: [id])
+  createdBy User            @relation(fields: [createdById], references: [id])
 }
 
 /// Choferes y personal de oficina que cobran sueldo semanal

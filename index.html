@@ -1098,6 +1098,18 @@ svg.leaflet-image-layer.leaflet-interactive path {
 @media (max-width:1300px){.tiles7{grid-template-columns:repeat(4,minmax(0,1fr))}.tiles5{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:980px){.fuel{grid-template-columns:minmax(0,1fr)}.tiles4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.tiles7,.tiles5{grid-template-columns:repeat(2,minmax(0,1fr))}}
+tr.iv-Debe>td{background:color-mix(in srgb,var(--warn) 11%,transparent)}
+tr.iv-Pagada>td{background:color-mix(in srgb,var(--ok) 9%,transparent)}
+tr.iv-Anulada>td{background:color-mix(in srgb,var(--bad) 12%,transparent)}
+tr.iv-Anulada .amt{text-decoration:line-through}
+.ivn{font-family:var(--f-mono);font-size:12.5px;white-space:nowrap}
+.ivleg{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);margin:4px 0 10px}
+.ivleg i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px}
+.ivops{display:flex;flex-wrap:wrap;gap:6px}
+.ivops label{display:inline-flex;flex-direction:row;gap:8px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px;font-weight:500;width:auto}
+.ivops input[type=checkbox]{width:16px;height:16px;min-height:0;padding:0;margin:0;flex:none;accent-color:var(--accent)}
+.ivtot{font:600 15px var(--f-body);padding:10px 12px;border-radius:10px;background:var(--surface2);display:flex;gap:18px;flex-wrap:wrap}
+tr.grp>td{background:var(--surface2);font-weight:600}
 </style></head><body>
 
 <div id="app"></div>
@@ -1210,8 +1222,43 @@ const CATS={'Camiones':['Mantenimiento','Cubiertas','Seguro','Patentes','Lavado'
 const PAYOUT=['Efectivo · Oficina','Efectivo · FWU 010','Efectivo · EPK 581','Efectivo · RXB 892','Transf SAS','Transf YPF','Transf Otro'];
 const CSTATES=['Disponible','En reparación','Fuera de servicio','Dado de baja'];
 const BCS={'Disponible':'ok','En reparación':'rep','Fuera de servicio':'warn','Dado de baja':'off'};
-const invState=o=>!o.inv?'Sin factura':!o.inv.num?'Sin número':o.inv.verified?'Verificada':'Por verificar';
-const BINV={'Sin factura':'off','Sin número':'warn','Por verificar':'acc','Verificada':'ok'};
+const invState=o=>!o.inv?'Sin factura':o.inv.cond==='Pagada'?(o.inv.verified?'Verificada':'Por verificar'):o.inv.cond;
+const BINV={'Sin factura':'off','Debe':'warn','Anulada':'bad','Por verificar':'acc','Verificada':'ok','Pagada':'ok','Vencida':'bad'};
+const PVS=['00030','00015'],INV_PAY=['SAS','YPF','Otro','Echeq','Efectivo'];
+const ivn=i=>{const s=String(i.num).padStart(9,'0');return `${s.slice(0,3)}-${s.slice(3,6)}-${s.slice(6)}`};
+const ivLabel=i=>`FC ${i.tipo} ${i.pv} · ${ivn(i)}`;
+const invTotal=(tipo,neto)=>tipo==='C'?neto:Math.round(neto*121)/100;
+const invDet=o=>o.type==='Extensión'?`extensión ${o.extDays||''} días`.replace('  ',' '):o.type==='Recambio'?`recambio ${fs(o.reqDay)}`:o.type==='Movimiento'?`movimiento ${fs(o.reqDay)}`:`${o.qty} contenedor${o.qty>1?'es':''} ${fs(o.reqDay)}`;
+const opPaidVia=o=>o.payMethod==='Transferencia'?(o.payAcct||'SAS'):o.payMethod==='Efectivo'?'Efectivo':'Otro';
+const ivVenc=i=>i.cond==='Debe'&&i.venc<TODAY;
+const isAbono=cid=>(DB.cfg.abono||[]).includes(cid);
+function mkInv(r){const pv=r.pv||'00030';DB.invSeq[pv]=Math.max(DB.invSeq[pv]||0,r.num||0)+(r.num?0:1);
+ const i={id:DB.invs.length+1,pv,num:r.num||DB.invSeq[pv],tipo:r.tipo,day:r.day,venc:r.venc??r.day,pd:r.pd??r.day,ph:r.ph??r.day,cid:r.cid??(r.ops&&r.ops.length?r.ops[0].customerId:null),rs:r.rs,cuit:r.cuit||'',det:r.det||'',neto:r.neto,total:invTotal(r.tipo,r.neto),cond:'Debe',forma:'',payDay:null,paid:0,verified:false,vby:null,opIds:(r.ops||[]).map(o=>o.id),motivo:'',repl:null,replBy:null,by:r.by||'Mili'};
+ DB.invs.push(i);(r.ops||[]).forEach(o=>o.inv=i);return i}
+function settleInv(i){const ops=i.opIds.map(O);if(!ops.length||!ops.every(o=>o.paid>=o.price))return;
+ i.cond='Pagada';i.paid=i.total;i.payDay=Math.min(TODAY,Math.max(i.day,...ops.map(o=>o.payDay??i.day)));i.forma=ops.length>2&&R()<.4?'Echeq':opPaidVia(ops[0]);
+ if(i.forma==='Efectivo'||(i.payDay<TODAY-2&&R()<.8)){i.verified=true;i.vby=i.forma==='Efectivo'?'':pick(['Mili','Camilo'])}}
+function seedInvoices(){
+ DB.invs=[];DB.invSeq={'00030':564,'00015':0};
+ const ops=DB.ops.filter(o=>o.status!=='Cancelado'&&o.type&&o.price>0&&o.payMethod!=='Grupo Chamba');
+ const comp=DB.customers.filter(c=>c.company).map(c=>[c.id,ops.filter(o=>o.customerId===c.id).length]).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0]);
+ DB.cfg=DB.cfg||{};DB.cfg.abono=comp;
+ const mth=monthStart(TODAY),raw=[],groups={};
+ ops.forEach(o=>{const cu=cust(o);
+  if(comp.includes(cu.id)){if(o.reqDay>=mth)return;const k=cu.id+'_'+monthStart(o.reqDay);(groups[k]=groups[k]||[]).push(o);return}
+  if(R()>.9)return;
+  if(cu.altRs===undefined)cu.altRs=!cu.company&&R()<.18?{n:`${cu.name.split(' ').pop()} ${pick(['Construcciones SRL','Obras SAS','Desarrollos SA','Arquitectura SRL','Inversiones SA'])}`,c:`30-${ri(70000000,71999999)}-${ri(0,9)}`}:null;
+  const alt=!!cu.altRs&&R()<.85,rs=alt?cu.altRs:{n:cu.name,c:cu.cuit},day=Math.min(o.reqDay,TODAY);
+  raw.push({ops:[o],day,venc:day,pd:o.reqDay,ph:o.reqDay,tipo:cu.company||alt?'A':wpick(['B','C'],[85,15]),rs:rs.n,cuit:rs.c||'',det:invDet(o)})});
+ Object.values(groups).forEach(g=>{const cu=cust(g[0]),ms=monthStart(g[0].reqDay),me=monthStart(ms+40)-1;let day=me+1;while(dow(day)===0)day++;if(day>TODAY)return;
+  const q=g.reduce((s,o)=>s+o.qty,0);raw.push({ops:g,day,venc:day+10,pd:ms,ph:me,tipo:'A',rs:cu.name,cuit:cu.cuit||'',det:`abono mensual · ${q} contenedores ${MESES[Dt(ms).getUTCMonth()]}`})});
+ raw.sort((a,b)=>a.day-b.day).forEach(r=>{
+  const pv=r.ops.length===1&&R()<.08?'00015':'00030',neto=r.ops.reduce((s,o)=>s+o.price,0);
+  const i=mkInv({...r,pv,neto});
+  if(r.ops.length===1&&R()<.025&&r.day<TODAY-3){i.cond='Anulada';i.motivo='Mal facturado';const j=mkInv({...r,pv,neto:neto-5000,day:Math.min(r.day+1,TODAY)});j.repl=i.id;i.replBy=j.id;settleInv(j)}
+  else settleInv(i)});
+ const part=DB.invs.find(i=>i.cond==='Debe'&&i.opIds.length>1);if(part){part.paid=Math.round(part.total*.6);part.forma='Echeq';part.payDay=Math.min(TODAY,part.day+3)}
+}
 const USERS=[
  {id:'mili',user:'mili',pass:'conte',name:'Mili',role:'Administración',desc:'Facturación, pagos, Grupo Chamba, sueldos y gastos. Ve todo.',last:TODAY},
  {id:'camilo',user:'camilo',pass:'conte',name:'Camilo',role:'Administración',desc:'Administración. Ve todo el sistema.',last:TODAY-1},
@@ -1393,13 +1440,8 @@ function makeOp(d,{assign=true,creator='Belén',createdDay=d,log=false,slot=null
   const cu=cust(o);
   if(o.payMethod==='Efectivo')o.cashAt=R()<.3||!o.driverId?'Oficina':drv(o.driverId).plates[0];
   if(o.payMethod==='Grupo Chamba'){o.chamba={cobrado:wpick([145000,150000,140000],[6,2,1])*o.qty,via:wpick(['Efectivo','Transferencia'],[60,40]),devuelto:false};o.chamba.devuelto=o.chamba.via==='Efectivo'&&o.reqDay<TODAY-6&&R()<.8}
-  if(o.status==='Cancelado'||R()>.88)return;
-  const alt=!cu.company&&R()<.22,rs=alt?pick(RS_ALT):{n:cu.name,c:cu.cuit};
-  o.inv={tipo:cu.company||alt?'A':wpick(['B','C'],[85,15]),num:'',rs:rs.n,cuit:rs.c||'',day:o.reqDay,verified:false,vby:null};
-  if(o.delDay!=null||R()<.5)o.inv.num=`0003-${String(++fnum).padStart(8,'0')}`;
-  if(o.inv.num&&o.paid>0&&o.payDay<TODAY-2&&R()<.8){o.inv.verified=true;o.inv.vby='Mili'}
  });
- DB.seq.inv=fnum;
+ seedInvoices();
  const free=DB.containers.filter(c=>c.place!=='En calle'&&!c.opId);
  free.slice(0,3).forEach(c=>{c.state='En reparación';c.obs=c.obs||'Soldadura en el lateral'});
  free.slice(5,7).forEach(c=>{c.state='Fuera de servicio';c.obs='Fondo perforado, espera chapa'});
@@ -1414,12 +1456,12 @@ function makeOp(d,{assign=true,creator='Belén',createdDay=d,log=false,slot=null
  for(let d=TODAY-42;d<=TODAY;d++){if(dow(d)===0)continue;if(R()<.4){const x=pick(EXS),amt=Math.round(ri(x[3][0],x[3][1])/1000)*1000;DB.exp.push({id:++eid,day:d,cat:x[0],sub:x[1],medio:x[0]==='Basurales'?'Efectivo · '+pick(['FWU 010','EPK 581','RXB 892']):pick(PAYOUT),amount:amt,desc:x[2],receipt:'',user:'Mili'})}
   if(Dt(d).getUTCDate()===5){DB.exp.push({id:++eid,day:d,cat:'Oficina',sub:'Alquiler',medio:'Transf SAS',amount:350000,desc:'Alquiler oficina',receipt:'',user:'Mili'});DB.exp.push({id:++eid,day:d,cat:'Camiones',sub:'Seguro',medio:'Transf SAS',amount:210000,desc:'Seguro mensual de la flota',receipt:'',user:'Mili'})}}
  DB.seq.exp=eid;DB.seq.pay=pid;
- DB.cfg={chambaPrice:125000};
+ DB.cfg=Object.assign(DB.cfg||{},{chambaPrice:125000});
 })();
 
 /* ============ estado de la interfaz ============ */
 const S={user:null,view:'inicio',period:'hoy',from:TODAY-13,to:TODAY,
- ag:{when:'semana',day:TODAY,q:'',loc:'',barrio:'',pc:''},tb:{tab:'asig',loc:'',barrio:''},fc:{when:'mes',st:'',q:'',by:'lista'},ch:{from:TODAY-13,to:TODAY},su:{week:weekStart(TODAY)},gx:{when:'mes',cat:'',q:''},dsvc:'',en:{when:'todas',barrio:'',drv:''},rt:{f:'todos',barrio:'',drv:''},
+ ag:{when:'semana',day:TODAY,q:'',loc:'',barrio:'',pc:''},tb:{tab:'asig',loc:'',barrio:''},fc:{tab:'fact',when:'mes',st:'',q:'',tipo:''},ch:{from:TODAY-13,to:TODAY},su:{week:weekStart(TODAY)},gx:{when:'mes',cat:'',q:''},dsvc:'',en:{when:'todas',barrio:'',drv:''},rt:{f:'todos',barrio:'',drv:''},
  cf:{q:'',pl:'',size:'',loc:''},clq:'',pf:{when:'mes',day:TODAY,m:'',st:'',q:''},cp:'mes',bp:'mes',dp:'semana',dsel:null,
  mq:'',mst:{g:true,y:true,r:true},mapView:null,msel:null,mzoom:null,af:{u:'',q:''},navOpen:false,drawer:null,modal:null,dialog:null,editCom:null};
 
@@ -1847,18 +1889,14 @@ function mOp(){
    ${acctBlock('ec-a',o.payAcct,o.payMethod==='Transferencia')}${cashBlock('ec-cash',o.cashAt,o.payMethod==='Efectivo')}
    <label class="fld"><span>CUIT de quien pide</span><input id="ec-cuit" value="${esc(cu.cuit)}" placeholder="20-12345678-9"></label>
    <label class="fld"><span>Link de Google Maps</span><input id="ec-maps" inputmode="url" value="${esc(mapsUrl(o))}" placeholder="https://maps.app.goo.gl/…"></label>
-   <p class="full sublbl">Facturación</p>
-   <label class="fld"><span>Tipo de factura</span><select id="ec-it">${INV_TYPES.map(t=>`<option ${(inv?inv.tipo:'Sin factura')===t?'selected':''}>${t}</option>`).join('')}</select></label>
-   <label class="fld"><span>N° de factura</span><input id="ec-in" value="${esc(inv&&inv.num)}" placeholder="0003-00004521"></label>
-   <label class="fld"><span>Razón social</span><input id="ec-ir" value="${esc(inv?inv.rs:cu.name)}"></label>
-   <label class="fld"><span>CUIT de la factura</span><input id="ec-ic" value="${esc(inv?inv.cuit:cu.cuit)}"></label>
+
    <label class="check full"><input type="checkbox" id="ec-pc" ${o.pendConf?'checked':''}> Pendiente de confirmación del cliente</label>
    <label class="fld full"><span>Observaciones</span><textarea id="ec-o">${esc(o.obs)}</textarea></label>
    <div class="full" style="display:flex;gap:8px"><button class="btn sm pri" data-act="saveCom" data-id="${o.id}">Guardar</button><button class="btn sm ghost" data-act="editCom" data-id="">Cancelar</button></div></div>`
   :`<dl class="dl"><dt>Cliente</dt><dd>${esc(cu.name)}</dd><dt>CUIT</dt><dd>${esc(cu.cuit)||'—'}</dd><dt>Teléfono</dt><dd>${esc(cu.phone)}</dd><dt>Dirección</dt><dd>${esc(aline(a))}</dd><dt>Localidad</dt><dd>${esc(a.loc)}</dd>${mapsUrl(o)?`<dt>Ubicación</dt><dd>${gmaps(o,'Abrir en Google Maps')}</dd>`:''}
    <dt>Servicio</dt><dd>${o.type==='Extensión'?`Extensión · +${o.extDays||'?'} días`:`${o.type} · ${o.qty}× ${o.size} m³`}</dd>${rep?`<dt>${o.type==='Recambio'?'Sale':'Contenedor'}</dt><dd>${rep.cids.join(', ')} (${opn(rep.id)})</dd>`:''}
    <dt>Fecha</dt><dd>${fd(o.reqDay)} · ${esc(o.slot)}</dd><dt>Precio</dt><dd>${money(o.price)}</dd><dt>Forma de pago</dt><dd>${esc(payLabel(o))}</dd><dt>Observaciones</dt><dd>${esc(o.obs)||'—'}</dd><dt>Agendó</dt><dd>${esc(o.createdBy)} · ${fs(o.createdDay)}</dd></dl>
-   <div class="subsect"><p class="sublbl">Facturación</p>${inv?`<dl class="dl"><dt>Factura</dt><dd>${inv.tipo} ${esc(inv.num)||'<span class="muted">sin número</span>'}</dd><dt>Razón social</dt><dd>${esc(inv.rs)}</dd><dt>CUIT</dt><dd>${esc(inv.cuit)||'—'}</dd><dt>En banco</dt><dd>${badge(invState(o),BINV)}</dd></dl>`:'<p class="muted">Sin factura.</p>'}</div>`;
+   <div class="subsect"><p class="sublbl">Facturación</p>${inv?`<dl class="dl"><dt>Factura</dt><dd><span class="ivn">${ivLabel(inv)}</span></dd><dt>Razón social</dt><dd>${esc(inv.rs)}</dd><dt>CUIT</dt><dd>${esc(inv.cuit)||'—'}</dd><dt>Con IVA</dt><dd>${money(inv.total)}${inv.opIds.length>1?` <span class="muted">· incluye ${inv.opIds.length} pedidos</span>`:''}</dd><dt>Condición</dt><dd>${badge(invState(o),BINV)}</dd></dl>${can.verify()?`<button class="btn sm ghost" data-act="fcGo" data-v="${ivn(inv)}">Ver en Facturación</button>`:''}`:`<p class="muted">Sin facturar.</p>${can.verify()&&o.status!=='Cancelado'?`<button class="btn sm" data-act="invNew" data-ops="${o.id}">Facturar</button>`:''}`}</div>`;
  const rphotos=o.photos.filter(p=>p.kind==='Foto del remito');
  const remito=o.type==='Extensión'?'':(can.com()&&o.status!=='Cancelado'?`<div class="subsect"><p class="sublbl">Remito</p><div class="fgrid">
    <label class="fld"><span>N° de remito</span><input id="rm-n" inputmode="numeric" value="${esc(o.remito||'')}" placeholder="${DB.seq.remito+1}"></label><label class="check" style="align-self:end"><input type="checkbox" id="rm-f" ${o.firmado?'checked':''}> Remito firmado</label>
@@ -1956,7 +1994,7 @@ function mNewOp(){
   <div class="fld full"><span>Tipo de factura</span><div class="seg">${radios('no-it',INV_TYPES,'B')}</div></div>
   <label class="fld"><span>Razón social a facturar</span><input id="no-ir" placeholder="Si queda vacío, va a nombre del cliente"></label>
   <label class="fld"><span>CUIT de la factura</span><input id="no-ic" placeholder="Si queda vacío, usa el del cliente"></label>
-  <label class="fld"><span>N° de factura (si ya está)</span><input id="no-in" placeholder="0003-00004521"></label>
+  <label class="fld"><span>N° de factura (si queda vacío, el siguiente)</span><input id="no-in" inputmode="numeric" placeholder="${DB.invSeq['00030']+1}"></label>
   <label class="fld"><span>N° de remito (si ya está)</span><input id="no-rm" inputmode="numeric"></label>
   <label class="fld full"><span>Link de Google Maps (opcional)</span><input id="no-maps" inputmode="url" placeholder="Pegá el link de ubicación que manda el cliente por WhatsApp"></label>
   <label class="check full"><input type="checkbox" id="no-pc"> Pendiente de confirmación del cliente (lluvia u otro motivo)</label>
@@ -1987,10 +2025,35 @@ function mNewCont(){
 const MODALS={newcont:mNewCont,op:mOp,newop:mNewOp,newcust:mNewCust,driver:mDriver,user:mUser};
 
 const DIALOGS={
- inv:()=>{const o=O(S.dialog.id),i=o.inv||{tipo:'B',num:'',rs:cust(o).name,cuit:cust(o).cuit||''};return `<div class="m-head"><div><p class="eyebrow">${opn(o.id)} · pidió ${esc(cust(o).name)}</p><h2>${o.inv?'Editar factura':'Facturar pedido'}</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
-  <div class="m-body"><div class="fgrid"><div class="fld full"><span>Tipo</span><div class="seg">${radios('iv-t',['A','B','C'],i.tipo)}</div></div><label class="fld"><span>N° de factura</span><input id="iv-n" value="${esc(i.num)}" placeholder="0003-${String(DB.seq.inv+1).padStart(8,'0')}"></label><label class="fld"><span>Monto</span><b style="padding-top:10px;font:600 22px var(--f-cond)">${money(o.price)}</b></label>
-  <label class="fld"><span>Razón social</span><input id="iv-r" value="${esc(i.rs)}"></label><label class="fld"><span>CUIT</span><input id="iv-c" value="${esc(i.cuit)}"></label></div><div id="iv-err"></div></div>
-  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="saveInv">${ic('check')}Guardar</button></div>`},
+ inv:()=>{const D=S.dialog,ed=D.inv?DB.invs[D.inv-1]:null,src=ed||(D.repl?DB.invs[D.repl-1]:null);
+  const ops=(ed?ed.opIds:D.ops||[]).map(O).filter(Boolean),cid=ed?ed.cid:D.cid??(ops[0]?ops[0].customerId:null),cu=cid?DB.customers.find(c=>c.id===cid):null;
+  const tipo=src?src.tipo:cu&&cu.company?'A':'B',pv=src?src.pv:'00030',num=ed?ed.num:(DB.invSeq[pv]||0)+1;
+  const neto=ed?ed.neto:ops.reduce((s,o)=>s+o.price,0),d0=ops.length?Math.min(...ops.map(o=>o.reqDay)):TODAY,d1=ops.length?Math.max(...ops.map(o=>o.reqDay)):TODAY;
+  const det=ed?ed.det:src?src.det:ops.length===1?invDet(ops[0]):ops.length?`${ops.reduce((s,o)=>s+o.qty,0)} contenedores`:'';
+  const ab=cu&&isAbono(cu.id)&&ops.length>1;
+  return `<div class="m-head"><div><p class="eyebrow">${src&&!ed?`Reemplaza la ${ivn(src)} (anulada)`:cu?'Pidió '+esc(cu.name):'Factura suelta'}</p><h2>${ed?'Editar factura':'Nueva factura'}</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid">
+  ${ed?'':`<label class="fld full"><span>Cliente (quien pidió)</span><select id="iv-cli" data-chg="ivCli"><option value="">Sin cliente cargado</option>${DB.customers.map(c=>`<option value="${c.id}" ${c.id===cid?'selected':''}>${esc(c.name)}</option>`).join('')}</select></label>`}
+  ${ops.length?`<div class="fld full"><span>Pedidos incluidos</span><div class="ivops">${ops.map(o=>`<label><input type="checkbox" class="iv-op" value="${o.id}" checked data-chg="ivOps"> ${opn(o.id)} · ${esc(invDet(o))} · ${money(o.price)}</label>`).join('')}</div></div>`:cu?'<p class="full muted">Este cliente no tiene pedidos sin facturar. Se puede hacer igual la factura suelta.</p>':''}
+  <label class="fld"><span>Tipo</span><select id="iv-t" data-chg="ivCalc">${['A','B','C'].map(t=>`<option ${t===tipo?'selected':''}>${t}</option>`).join('')}</select></label>
+  <label class="fld"><span>Punto de venta</span><select id="iv-pv" data-chg="ivPv" ${ed?'disabled':''}>${PVS.map(v=>`<option ${v===pv?'selected':''}>${v}</option>`).join('')}</select></label>
+  <label class="fld"><span>N° de factura</span><input id="iv-n" inputmode="numeric" value="${num}" ${ed?'disabled':''}></label>
+  <label class="fld"><span>Fecha</span><input type="date" id="iv-d" value="${dOut(ed?ed.day:TODAY)}"></label>
+  <label class="fld"><span>Vence</span><input type="date" id="iv-v" value="${dOut(ed?ed.venc:ab?TODAY+10:TODAY)}"></label>
+  <label class="fld"><span>Período desde</span><input type="date" id="iv-pd" value="${dOut(ed?ed.pd:ab?monthStart(d0):d0)}"></label>
+  <label class="fld"><span>Período hasta</span><input type="date" id="iv-ph" value="${dOut(ed?ed.ph:ab?monthStart(monthStart(d0)+40)-1:d1)}"></label>
+  <label class="fld"><span>Razón social</span><input id="iv-r" value="${esc(src?src.rs:cu?cu.name:'')}" placeholder="Puede ser distinta de quien pidió"></label>
+  <label class="fld"><span>CUIT</span><input id="iv-c" value="${esc(src?src.cuit:cu?cu.cuit:'')}" placeholder="30-12345678-9"></label>
+  <label class="fld full"><span>Producto / servicio</span><input id="iv-det" value="${esc(det)}" placeholder="1 contenedor 12/03 · abono mensual · recambio…"></label>
+  <label class="fld"><span>Monto neto</span><input id="iv-neto" inputmode="numeric" value="${Math.round(neto)||''}" data-live="ivCalc"></label>
+  <div class="fld"><span>&nbsp;</span><div class="ivtot" id="iv-tot"></div></div>
+  </div><div id="iv-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="saveInv">${ic('check')}${ed?'Guardar':'Crear factura'}</button></div>`},
+ invpay:()=>{const i=DB.invs[S.dialog.id-1],f=i.opIds.length?opPaidVia(O(i.opIds[0])):'SAS';return `<div class="m-head"><div><p class="eyebrow">${ivLabel(i)} · ${esc(i.rs)}</p><h2>Registrar pago</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><div class="fld full"><span>Forma de pago</span><div class="seg">${radios('ip-f',INV_PAY,f)}</div></div>
+  <label class="fld"><span>Fecha de pago</span><input type="date" id="ip-d" value="${dOut(TODAY)}"></label><label class="fld"><span>Monto</span><input id="ip-m" inputmode="numeric" value="${Math.round((i.total-i.paid)*100)/100}"></label>
+  <p class="full note" style="margin:0">Total con IVA ${money(i.total)}${i.paid?` · ya pagó ${money(i.paid)}`:''}. Si paga menos, queda en Debe con el saldo.</p></div><div id="ip-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="saveInvPay">${ic('check')}Registrar</button></div>`},
  sal:()=>{const D=S.dialog;return `<div class="m-head"><div><p class="eyebrow">Sueldos</p><h2>Registrar pago</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
   <div class="m-body"><div class="fgrid"><label class="fld"><span>Empleado</span><select id="sl-e">${DB.emps.map(e=>`<option value="${e.id}" ${D.emp==e.id?'selected':''}>${esc(e.name)} · ${e.area}</option>`).join('')}</select></label><label class="fld"><span>Fecha</span><input type="date" id="sl-d" value="${dOut(TODAY)}"></label>
   <div class="fld full"><span>Tipo</span><div class="seg">${radios('sl-t',['Sueldo','Adelanto'],D.type||'Sueldo')}</div></div>
@@ -2171,30 +2234,55 @@ function vAud(){
  ${list.slice(0,200).map(h=>`<tr ${typeof h.ref==='number'?`data-act="openOp" data-id="${h.ref}" tabindex="0"`:typeof h.ref==='string'?`data-act="openCont" data-id="${h.ref}" tabindex="0"`:''}><td class="tnum">${fd(Math.floor(h.t/1440))}</td><td class="tnum">${fmin(h.t%1440)}</td><td><b>${esc(h.user)}</b></td><td>${esc(h.text)}</td></tr>`).join('')||`<tr><td colspan="4" class="empty">Sin registros.</td></tr>`}
  </tbody></table></div>${list.length>200?`<p class="note">Mostrando los 200 más recientes de ${list.length}.</p>`:''}`;
 }
-function factRange(){return range(S.fc.when)}
+function factRange(){const m=monthStart(TODAY);return S.fc.when==='ant'?[monthStart(m-1),m-1]:S.fc.when==='todas'?[-1e9,1e9]:[m,TODAY]}
+const ivPer=i=>i.pd===i.ph?fs(i.pd):`${fs(i.pd)} al ${fs(i.ph)}`;
 function vFact(){
+ const T=S.fc.tab,unb=DB.ops.filter(o=>o.status!=='Cancelado'&&o.type&&o.price>0&&!o.inv&&o.payMethod!=='Grupo Chamba'&&o.reqDay<=TODAY+7);
+ const head=pageHead('Facturación','Mismo orden que la planilla de facturas. Mili compara cada factura cobrada con la razón social que aparece en el banco.',`<button class="btn pri" data-act="invNew">${ic('plus')}Nueva factura</button>`)
+  +`<div class="filters">${chips('fc.tab',[['fact','Facturas'],['cli','Por razón social'],['sin',`Pedidos sin facturar (${unb.length})`]],T)}</div>`;
+ if(T==='sin'){
+  const g={};unb.forEach(o=>(g[o.customerId]=g[o.customerId]||[]).push(o));
+  const rows=Object.values(g).sort((a,b)=>b.length-a.length||Math.min(...a.map(o=>o.reqDay))-Math.min(...b.map(o=>o.reqDay)));
+  return head+`<p class="note" style="margin-top:0">Pedidos que todavía no tienen factura. Los clientes con abono mensual se facturan juntos a fin de mes. Los de Grupo Chamba no aparecen acá.</p>
+  <div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Pedido</th><th>Servicio</th><th>Estado</th><th class="r">Precio</th><th></th></tr></thead><tbody>
+  ${rows.map(os=>{const cu=cust(os[0]),t=os.reduce((s,o)=>s+o.price,0);return `<tr class="grp"><td colspan="4">${esc(cu.name)} <span class="muted" style="font-weight:400">· ${esc(cu.cuit)||'sin CUIT'}</span> ${isAbono(cu.id)?badge('Abono mensual',{'Abono mensual':'info'}):''}</td><td class="r tnum">${money(t)}</td><td><button class="btn sm pri" data-act="invNew" data-ops="${os.map(o=>o.id).join(',')}">Facturar ${os.length>1?`los ${os.length}`:'pedido'}</button></td></tr>`
+   +(os.length>1?os.map(o=>`<tr><td class="tnum">${fs(o.reqDay)}</td><td><a href="#" class="code" data-act="openOp" data-id="${o.id}">${opn(o.id)}</a></td><td>${esc(invDet(o))}</td><td>${esc(o.status)}</td><td class="r tnum">${money(o.price)}</td><td><button class="btn sm ghost" data-act="invNew" data-ops="${o.id}">Facturar este</button></td></tr>`).join(''):`<tr><td class="tnum">${fs(os[0].reqDay)}</td><td><a href="#" class="code" data-act="openOp" data-id="${os[0].id}">${opn(os[0].id)}</a></td><td>${esc(invDet(os[0]))}</td><td>${esc(os[0].status)}</td><td class="r tnum">${money(os[0].price)}</td><td></td></tr>`)}).join('')||'<tr><td colspan="6" class="empty">Todo facturado.</td></tr>'}
+  </tbody></table></div>`;
+ }
  const[a,b]=factRange(),q=norm(S.fc.q);
- const base=DB.ops.filter(o=>o.status!=='Cancelado'&&o.type&&inRange(o.reqDay,a,b)&&(!q||norm(cust(o).name).includes(q)||(o.inv&&(norm(o.inv.rs).includes(q)||norm(o.inv.cuit).includes(q)||norm(o.inv.num).includes(q)))||String(o.id).includes(q)));
- const n={};base.forEach(o=>{const s=invState(o);n[s]=(n[s]||0)+1});
- const list=base.filter(o=>!S.fc.st||invState(o)===S.fc.st).sort((x,y)=>y.reqDay-x.reqDay||y.id-x.id);
- const tot=list.filter(o=>o.inv).reduce((s,o)=>s+o.price,0);
- const chip=(s,l)=>`<button class="chip ${S.fc.st===s?'on':''}" data-act="set" data-k="fc.st" data-v="${s}">${s?`<i class="dot ${BINV[s]}"></i>`:''}${l} <span>${s?n[s]||0:base.length}</span></button>`;
- let body;
- if(S.fc.by==='cliente'){
-  const g={};list.filter(o=>o.inv).forEach(o=>{const k=o.customerId;(g[k]=g[k]||{c:cust(o),n:0,t:0,v:0,p:0,rs:new Set()});g[k].n++;g[k].t+=o.price;g[k].rs.add(o.inv.rs);o.inv.verified?g[k].v++:g[k].p++});
-  const rows=Object.values(g).sort((x,y)=>y.t-x.t);
-  body=`<div class="tbl-wrap"><table class="dense"><thead><tr><th>Cliente (quien pidió)</th><th>Razones sociales facturadas</th><th class="r">Facturas</th><th class="r">Total facturado</th><th class="r">Verificadas</th><th class="r">Por verificar</th></tr></thead><tbody>
-  ${rows.map(r=>`<tr data-act="set" data-k="fc.q" data-v="${esc(r.c.name)}" tabindex="0"><td><b>${esc(r.c.name)}</b><span class="sub">${esc(r.c.cuit)||'sin CUIT'}</span></td><td>${[...r.rs].map(esc).join('<br>')}</td><td class="r tnum">${r.n}</td><td class="r tnum">${money(r.t)}</td><td class="r tnum">${r.v}</td><td class="r tnum ${r.p?'late':''}">${r.p}</td></tr>`).join('')||'<tr><td colspan="6" class="empty">Sin facturas en el período.</td></tr>'}</tbody></table></div><p class="note">Tocá un cliente para ver sus facturas una por una.</p>`;
- }else body=`<div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Factura</th><th>Razón social · CUIT</th><th>Pidió</th><th>Pedido</th><th class="r">Monto</th><th>Cobro</th><th>En banco</th><th></th></tr></thead><tbody>
-  ${list.slice(0,250).map(o=>{const s=invState(o),i=o.inv;return `<tr><td class="tnum">${fs(o.reqDay)}</td><td>${i?`<b>${i.tipo}</b> ${esc(i.num)||'<span class="muted">sin número</span>'}`:'<span class="muted">Sin factura</span>'}</td><td>${i?`<b>${esc(i.rs)}</b><span class="sub">${esc(i.cuit)||'sin CUIT'}</span>`:'—'}${i&&i.rs!==cust(o).name?'<span class="st-tag">Distinta de quien pidió</span>':''}</td><td>${esc(cust(o).name)}</td><td><a href="#" class="code" data-act="openOp" data-id="${o.id}">${opn(o.id)}</a></td><td class="r tnum">${money(o.price)}</td><td><b>${esc(payLabel(o))}</b><div>${badge(payStatus(o),BP)}</div></td><td>${badge(s,BINV)}${i&&i.verified&&i.vby?`<span class="sub">por ${esc(i.vby)}</span>`:''}</td>
-  <td style="white-space:nowrap">${s==='Por verificar'?`<button class="btn sm pri" data-act="verifyInv" data-id="${o.id}">Verificar en banco</button>`:''} <button class="btn sm ghost" data-act="invDlg" data-id="${o.id}">${i?'Editar':'Facturar'}</button></td></tr>`}).join('')||'<tr><td colspan="9" class="empty">Sin pedidos con esos filtros.</td></tr>'}</tbody></table></div>${list.length>250?`<p class="note">Mostrando 250 de ${list.length}.</p>`:''}`;
- return pageHead('Facturación','Se factura al tomar el pedido. Mili compara cada factura con la razón social que aparece en el banco.')+`
- <div class="filters">${chips('fc.when',[['hoy','Hoy'],['semana','Esta semana'],['mes','Este mes'],['todas','Todas']],S.fc.when)}${chips('fc.by',[['lista','Una por una'],['cliente','Por cliente']],S.fc.by)}</div>
- <div class="cards4"><div class="fig"><span>Facturado</span><b>${compact(tot)}</b><small>${list.filter(o=>o.inv).length} facturas</small></div><div class="fig"><span><i class="dot acc"></i>Por verificar en banco</span><b>${n['Por verificar']||0}</b></div><div class="fig"><span><i class="dot warn"></i>Sin número cargado</span><b>${n['Sin número']||0}</b></div><div class="fig"><span><i class="dot ok"></i>Verificadas</span><b>${n['Verificada']||0}</b></div></div>
- <div class="filters"><div class="chips">${chip('','Todos')}${['Por verificar','Sin número','Verificada','Sin factura'].map(s=>chip(s,s)).join('')}</div></div>
- <div class="filters"><input class="inp grow" id="fcq" data-f="fc.q" value="${esc(S.fc.q)}" placeholder="Buscar por cliente, razón social, CUIT o N° de factura" aria-label="Buscar factura">${S.fc.q?`<button class="btn sm ghost" data-act="set" data-k="fc.q" data-v="">Limpiar búsqueda</button>`:''}</div>
- ${body}<p class="note">Listado de ejemplo. Se ajusta con el Excel de facturas del cliente.</p>`;
+ const base=DB.invs.filter(i=>inRange(i.day,a,b)&&(!S.fc.tipo||i.tipo===S.fc.tipo)&&(!q||[i.rs,i.cuit,ivn(i),i.det,i.cid?DB.customers.find(c=>c.id===i.cid).name:''].some(x=>norm(x).includes(q))));
+ const valid=base.filter(i=>i.cond!=='Anulada'),sum=(l,f)=>l.reduce((s,i)=>s+f(i),0);
+ if(T==='cli'){
+  const g={};valid.forEach(i=>{const k=i.cuit||i.rs;const r=g[k]=g[k]||{rs:i.rs,cuit:i.cuit,who:new Set(),n:0,t:0,p:0,d:0,last:0};r.n++;r.t+=i.total;r.p+=i.paid;if(i.cond==='Debe')r.d+=i.total-i.paid;r.last=Math.max(r.last,i.day);if(i.cid)r.who.add(DB.customers.find(c=>c.id===i.cid).name)});
+  const rows=Object.values(g).sort((x,y)=>y.d-x.d||y.t-x.t);
+  return head+factFilters()+`<div class="tbl-wrap"><table class="dense"><thead><tr><th>Razón social · CUIT</th><th>Quién pidió</th><th class="r">Facturas</th><th class="r">Facturado con IVA</th><th class="r">Cobrado</th><th class="r">Adeuda</th><th>Última</th></tr></thead><tbody>
+  ${rows.map(r=>`<tr data-act="fcCli" data-v="${esc(r.cuit||r.rs)}" tabindex="0"><td><b>${esc(r.rs)}</b><span class="sub">${esc(r.cuit)||'sin CUIT'}</span></td><td>${(()=>{const w=[...r.who].map(x=>x===r.rs?'<span class="muted">la misma</span>':esc(x));return w.slice(0,3).join('<br>')+(w.length>3?`<br><span class="muted">+${w.length-3} más</span>`:'')})()}</td><td class="r tnum">${r.n}</td><td class="r tnum">${money(r.t)}</td><td class="r tnum">${money(r.p)}</td><td class="r tnum ${r.d?'late':''}">${r.d?money(r.d):'—'}</td><td class="tnum">${fs(r.last)}</td></tr>`).join('')||'<tr><td colspan="7" class="empty">Sin facturas en el período.</td></tr>'}
+  </tbody></table></div><p class="note">Tocá una razón social para ver sus facturas una por una.</p>`;
+ }
+ const M={'':()=>true,Debe:i=>i.cond==='Debe',venc:ivVenc,Pagada:i=>i.cond==='Pagada',verif:i=>i.cond==='Pagada'&&!i.verified,Anulada:i=>i.cond==='Anulada'};
+ const list=base.filter(M[S.fc.st]||M['']).sort((x,y)=>y.day-x.day||y.num-x.num);
+ const debe=valid.filter(M.Debe),venc=valid.filter(ivVenc),ver=valid.filter(M.verif);
+ const chip=(k,l,d)=>`<button class="chip ${S.fc.st===k?'on':''}" data-act="set" data-k="fc.st" data-v="${k}">${d?`<i class="dot ${d}"></i>`:''}${l} <span>${base.filter(M[k]).length}</span></button>`;
+ const cond=i=>{const late=ivVenc(i)?`<span class="sub late">Vencida hace ${TODAY-i.venc} d</span>`:'';
+  if(i.cond==='Anulada')return `${badge('Anulada',BINV)}<span class="sub">${esc(i.motivo||'')}${i.replBy?` · rehecha en ${ivn(DB.invs[i.replBy-1])}`:''}</span>`;
+  if(i.cond==='Debe')return `${badge('Debe',BINV)}${i.paid?`<span class="sub">Pagó ${money(i.paid)}, faltan ${money(i.total-i.paid)}</span>`:''}${late}`;
+  return `${badge('Pagada',BINV)}<span class="sub">${i.verified?(i.vby?'verificada por '+esc(i.vby):'efectivo'):'<b style="color:var(--accent)">por verificar en banco</b>'}</span>`};
+ const acts=i=>i.cond==='Anulada'?(i.replBy?'':`<button class="btn sm pri" data-act="invRedo" data-id="${i.id}">Hacer la correcta</button>`)
+  :`${i.cond==='Debe'?`<button class="btn sm pri" data-act="invPayDlg" data-id="${i.id}">Registrar pago</button>`:''}${i.cond==='Pagada'&&!i.verified?`<button class="btn sm pri" data-act="verifyInv" data-id="${i.id}">Verificar en banco</button>`:''} <button class="btn sm ghost" data-act="invEdit" data-id="${i.id}">Editar</button>${i.cond==='Debe'&&!i.paid?` <button class="btn sm ghost" data-act="invVoid" data-id="${i.id}">Anular</button>`:''}`;
+ const opsCell=i=>i.opIds.length?`<span class="sub">${i.opIds.length>3?`${i.opIds.length} pedidos`:i.opIds.map(id=>`<a href="#" class="code" data-act="openOp" data-id="${id}">${opn(id)}</a>`).join(' ')}</span>`:'';
+ return head+`<div class="cards4"><div class="fig"><span>Facturado con IVA</span><b>${compact(sum(valid,i=>i.total))}</b><small>${valid.length} facturas · neto ${compact(sum(valid,i=>i.neto))}</small></div>
+ <div class="fig"><span><i class="dot ok"></i>Cobrado</span><b>${compact(sum(valid,i=>i.paid))}</b></div>
+ <div class="fig"><span><i class="dot warn"></i>Adeudan</span><b>${compact(sum(debe,i=>i.total-i.paid))}</b><small>${debe.length} facturas${venc.length?` · <span class="late">${venc.length} vencidas</span>`:''}</small></div>
+ <div class="fig"><span><i class="dot acc"></i>Por verificar en banco</span><b>${ver.length}</b><small>${compact(sum(ver,i=>i.total))}</small></div></div>
+ ${factFilters()}
+ <div class="filters"><div class="chips">${chip('','Todas')}${chip('Debe','Debe','warn')}${chip('venc','Vencidas','bad')}${chip('Pagada','Pagadas','ok')}${chip('verif','Por verificar en banco','acc')}${chip('Anulada','Anuladas','bad')}</div></div>
+ <div class="ivleg"><span><i style="background:color-mix(in srgb,var(--warn) 45%,transparent)"></i>Debe</span><span><i style="background:color-mix(in srgb,var(--bad) 45%,transparent)"></i>Anulada · mal facturada</span><span><i style="background:color-mix(in srgb,var(--ok) 40%,transparent)"></i>Pagada</span></div>
+ <div class="tbl-wrap"><table class="dense"><thead><tr><th>Tipo</th><th>N° de factura</th><th>Fecha</th><th>Vence</th><th>Período facturado</th><th>CUIT</th><th>Razón social</th><th>Producto / servicio</th><th class="r">Neto</th><th class="r">Con IVA</th><th>Condición</th><th>Forma de pago</th><th>Fecha de pago</th><th></th></tr></thead><tbody>
+ ${list.slice(0,250).map(i=>{const cu=i.cid?DB.customers.find(c=>c.id===i.cid):null;return `<tr class="iv-${i.cond}"><td style="white-space:nowrap">Factura ${i.tipo}</td><td><span class="ivn">${ivn(i)}</span><span class="sub">PV ${i.pv}</span></td><td class="tnum">${fd(i.day)}</td><td class="tnum">${fd(i.venc)}</td><td class="tnum" style="white-space:nowrap">${ivPer(i)}</td><td class="tnum" style="white-space:nowrap">${esc(i.cuit)||'—'}</td>
+ <td><b>${esc(i.rs)}</b>${cu&&cu.name!==i.rs?`<span class="sub">pidió ${esc(cu.name)}</span>`:''}</td><td>${esc(i.det)}${opsCell(i)}</td><td class="r tnum amt">${money(i.neto)}</td><td class="r tnum amt"><b>${money(i.total)}</b></td><td>${cond(i)}</td><td>${esc(i.forma)||'—'}</td><td class="tnum">${i.payDay!=null?fd(i.payDay):'—'}</td><td style="white-space:nowrap">${acts(i)}</td></tr>`}).join('')||'<tr><td colspan="14" class="empty">Sin facturas con esos filtros.</td></tr>'}
+ </tbody></table></div>${list.length>250?`<p class="note">Mostrando 250 de ${list.length}.</p>`:''}`;
 }
+function factFilters(){return `<div class="filters">${chips('fc.when',[['mes','Este mes'],['ant','Mes pasado'],['todas','Todas']],S.fc.when)}<select class="sel" data-chg="fcTipo" aria-label="Tipo de factura"><option value="">Todos los tipos</option>${['A','B','C'].map(t=>`<option value="${t}" ${S.fc.tipo===t?'selected':''}>Factura ${t}</option>`).join('')}</select><input class="inp grow" id="fcq" data-f="fc.q" value="${esc(S.fc.q)}" placeholder="Buscar por razón social, CUIT, N° de factura o cliente" aria-label="Buscar factura">${S.fc.q?`<button class="btn sm ghost" data-act="set" data-k="fc.q" data-v="">Limpiar</button>`:''}</div>`}
 function vChamba(){
  const a=Math.min(S.ch.from,S.ch.to),b=Math.max(S.ch.from,S.ch.to),P=DB.cfg.chambaPrice;
  const list=DB.ops.filter(o=>o.payMethod==='Grupo Chamba'&&o.status!=='Cancelado'&&inRange(o.reqDay,a,b)).sort((x,y)=>x.reqDay-y.reqDay||x.id-y.id);
@@ -2274,7 +2362,8 @@ function saveOpImpl(d){
  const op=newOp({type,qty:old?old.qty:qty,size:old?old.size:size,customerId:cu.id,addrId:old?old.addrId:addrId,reqDay:day,slot,min:SLOTMIN[slot],price,payMethod:pm,payAcct:pm==='Transferencia'?val('no-acct'):null,cashAt:pm==='Efectivo'?val('no-cash'):null,obs:byId('no-obs').value.trim(),pendConf:byId('no-pc').checked,replacesOpId:repl,createdBy:S.user.name,createdDay:TODAY});
  if(pm==='Grupo Chamba')op.chamba={cobrado:+digits(byId('no-chc').value)||0,via:val('no-chv'),devuelto:false};
  const rm=+digits(byId('no-rm').value);if(rm)op.remito=rm;
- const it=val('no-it');if(it!=='Sin factura')op.inv={tipo:it,num:byId('no-in').value.trim(),rs:byId('no-ir').value.trim()||cu.name,cuit:byId('no-ic').value.trim()||cu.cuit||'',day:TODAY,verified:false,vby:null};
+ if(type==='Extensión')op.extDays=+val('no-ext');
+ const it=val('no-it');if(it!=='Sin factura'){const n=+digits(byId('no-in').value),pv='00030';if(n&&DB.invs.some(x=>x.pv===pv&&x.num===n))return err(`Ya existe la factura ${ivn({num:n})}.`);mkInv({ops:[op],pv,num:n||0,tipo:it,day:TODAY,venc:TODAY,pd:day,ph:day,rs:byId('no-ir').value.trim()||cu.name,cuit:byId('no-ic').value.trim()||cu.cuit||'',det:invDet(op),neto:price,by:S.user.name})}
  const mu=byId('no-maps').value.trim();if(mu){const a=addr(op);op.mapsUrl=/^https?:/i.test(mu)?mu:`https://www.google.com/maps?q=${mu.replace(/\s/g,'')}`;a.mapsUrl=op.mapsUrl;const ll=parseMaps(mu);if(ll){a.lat=ll[0];a.lng=ll[1];a.approx=false}}
  setPay(op,byId('no-paid').checked);
  if(type==='Extensión'){const n=+val('no-ext');op.extDays=n;op.cids=old.cids.slice();op.status='Realizado';op.delDay=TODAY;op.delMin=nowMin();old.plannedPickup=nextWork(Math.max(old.plannedPickup,TODAY)+n);
@@ -2286,11 +2375,30 @@ const ACT={
  doLogin:()=>{const u=norm(byId('lg-user').value),p=byId('lg-pass').value,us=DB.users.find(x=>x.user===u&&x.pass===p);if(!us){byId('lg-msg').innerHTML='<p class="err">Usuario o contraseña incorrectos.</p>';return}ACT.login({id:us.id})},
  fillLogin:d=>{byId('lg-user').value=d.u;byId('lg-pass').value='conte';byId('lg-pass').focus()},
  saveRemito:d=>{const o=O(d.id),n=+digits(byId('rm-n').value);o.remito=n||null;if(n>DB.seq.remito)DB.seq.remito=n;o.firmado=byId('rm-f').checked;audNow(`${S.user.name} cargó el remito ${n?'N° '+n:''}${o.firmado?' (firmado)':''} del pedido ${opn(o.id)}`,o.id);renderLayers();toast('Remito guardado.')},
- invDlg:d=>{S.dialog={t:'inv',id:+d.id};renderLayers()},
- saveInv:()=>{const o=O(S.dialog.id),rs=byId('iv-r').value.trim();if(!rs){byId('iv-err').innerHTML='<p class="err">Falta la razón social.</p>';return}
-  const was=o.inv&&o.inv.verified;o.inv={tipo:val('iv-t'),num:byId('iv-n').value.trim(),rs,cuit:byId('iv-c').value.trim(),day:o.inv?o.inv.day:TODAY,verified:!!was,vby:o.inv?o.inv.vby:null};
-  audNow(`${S.user.name} cargó la factura ${o.inv.tipo} ${o.inv.num||'(sin número)'} del pedido ${opn(o.id)} a ${rs}`,o.id);S.dialog=null;render();toast('Factura guardada.')},
- verifyInv:d=>{const o=O(d.id);confirmDlg('¿Verificada en el banco?',`Factura ${o.inv.tipo} ${o.inv.num} a ${o.inv.rs} (${o.inv.cuit||'sin CUIT'}) por ${money(o.price)}.`,'Sí, está verificada',()=>{o.inv.verified=true;o.inv.vby=S.user.name;audNow(`${S.user.name} verificó en el banco la factura ${o.inv.num} (${o.inv.rs})`,o.id);toast('Factura verificada.')})},
+ invNew:d=>{S.dialog={t:'inv',inv:null,ops:d.ops?d.ops.split(',').map(Number):[],repl:null};renderLayers();LIVE.ivCalc()},
+ invEdit:d=>{S.dialog={t:'inv',inv:+d.id};renderLayers();LIVE.ivCalc()},
+ invRedo:d=>{const i=DB.invs[d.id-1];S.dialog={t:'inv',inv:null,ops:i.opIds.filter(id=>!O(id).inv),repl:i.id,cid:i.cid};renderLayers();LIVE.ivCalc()},
+ fcCli:d=>{S.fc.tab='fact';S.fc.q=d.v;S.fc.st='';render()},
+ fcGo:d=>{S.modal=null;S.view='facturacion';S.fc.tab='fact';S.fc.when='todas';S.fc.st='';S.fc.q=d.v;render()},
+ saveInv:()=>{const D=S.dialog,ed=D.inv?DB.invs[D.inv-1]:null,e=m=>byId('iv-err').innerHTML=`<p class="err">${esc(m)}</p>`;
+  const rs=byId('iv-r').value.trim(),neto=+String(byId('iv-neto').value).replace(/[^\d,.]/g,'').replace(',','.'),tipo=byId('iv-t').value;
+  if(!rs)return e('Falta la razón social.');if(!neto)return e('Poné el monto neto.');
+  const ids=[...document.querySelectorAll('.iv-op')].filter(x=>x.checked).map(x=>+x.value),f={tipo,day:dIn(byId('iv-d').value)??TODAY,venc:dIn(byId('iv-v').value)??TODAY,pd:dIn(byId('iv-pd').value),ph:dIn(byId('iv-ph').value),rs,cuit:byId('iv-c').value.trim(),det:byId('iv-det').value.trim(),neto};
+  if(ed){(ed.opIds.filter(id=>!ids.includes(id))).forEach(id=>{const o=O(id);if(o.inv===ed)o.inv=null});Object.assign(ed,f,{total:invTotal(tipo,neto),opIds:ids});ids.forEach(id=>O(id).inv=ed);
+   audNow(`${S.user.name} modificó la factura ${ivLabel(ed)} (${rs})`);S.dialog=null;render();toast('Factura guardada.');return}
+  const pv=byId('iv-pv').value,num=+digits(byId('iv-n').value);if(!num)return e('Poné el número de factura.');
+  if(DB.invs.some(x=>x.pv===pv&&x.num===num))return e(`Ya existe la factura ${pv} · ${ivn({num})}.`);
+  const cid=D.cid??(ids.length?O(ids[0]).customerId:(byId('iv-cli')&&+byId('iv-cli').value)||null);
+  const i=mkInv({...f,pv,num,cid,ops:ids.map(O),by:S.user.name});
+  if(D.repl){const old=DB.invs[D.repl-1];old.replBy=i.id;i.repl=old.id}
+  audNow(`${S.user.name} hizo la factura ${ivLabel(i)} a ${rs} por ${money(i.total)}${D.repl?` (reemplaza ${ivn(DB.invs[D.repl-1])})`:''}`,ids[0]);S.dialog=null;S.fc.tab='fact';render();toast(`Factura ${ivn(i)} creada.`)},
+ invPayDlg:d=>{S.dialog={t:'invpay',id:+d.id};renderLayers()},
+ saveInvPay:()=>{const i=DB.invs[S.dialog.id-1],m=+String(byId('ip-m').value).replace(/[^\d,.]/g,'').replace(',','.'),day=dIn(byId('ip-d').value)??TODAY,f=val('ip-f');
+  if(!m){byId('ip-err').innerHTML='<p class="err">Poné el monto.</p>';return}
+  i.paid=Math.round((i.paid+m)*100)/100;i.forma=f;i.payDay=day;if(i.paid>=i.total-1){i.cond='Pagada';if(f==='Efectivo'){i.verified=true;i.vby=''}}
+  audNow(`${S.user.name} registró un pago de ${money(m)} (${f}) de la factura ${ivLabel(i)}`);S.dialog=null;render();toast(i.cond==='Pagada'?`Factura ${ivn(i)} pagada.${f==='Efectivo'?'':' Queda para verificar en el banco.'}`:`Pago parcial: faltan ${money(i.total-i.paid)}.`)},
+ invVoid:d=>{const i=DB.invs[d.id-1];confirmDlg(`¿Anular la factura ${ivn(i)}?`,`Queda en rojo como mal facturada y no suma en los totales. ${i.opIds.length?'Sus pedidos vuelven a quedar sin facturar y ':''}se abre la factura correcta para cargarla.`,'Anular y hacer la correcta',()=>{i.cond='Anulada';i.motivo='Mal facturado';i.opIds.forEach(id=>{const o=O(id);if(o.inv===i)o.inv=null});audNow(`${S.user.name} anuló la factura ${ivLabel(i)} (mal facturado)`);S.dialog={t:'inv',inv:null,ops:i.opIds.slice(),repl:i.id,cid:i.cid};setTimeout(()=>LIVE.ivCalc(),0)},true)},
+ verifyInv:d=>{const i=DB.invs[d.id-1];confirmDlg('¿Verificada en el banco?',`${ivLabel(i)} a ${i.rs} (${i.cuit||'sin CUIT'}) por ${money(i.total)}, pagada por ${i.forma} el ${fd(i.payDay)}.`,'Sí, está verificada',()=>{i.verified=true;i.vby=S.user.name;audNow(`${S.user.name} verificó en el banco la factura ${ivLabel(i)} (${i.rs})`);toast('Factura verificada.')})},
  saveChamba:()=>{const v=+digits(byId('chp').value);if(!v)return toast('Poné un valor.');DB.cfg.chambaPrice=v;audNow(`${S.user.name} cambió el valor del contenedor para Chamba a ${money(v)}`);render();toast(`Valor para Chamba: ${money(v)}. Se aplica a los pedidos nuevos.`)},
  chambaDev:d=>{const o=O(d.id);o.chamba.devuelto=true;audNow(`${S.user.name} marcó devuelto a Chamba ${money(o.chamba.cobrado-o.price)} del pedido ${opn(o.id)}`,o.id);render();toast('Marcado como devuelto.')},
  salDlg:d=>{S.dialog={t:'sal',emp:d.emp?+d.emp:null,type:d.type||null};renderLayers()},
@@ -2337,7 +2445,7 @@ const ACT={
  addClaim:d=>{const t=byId('cl-new').value.trim();if(!t)return;DB.claims.push({id:DB.claims.length+1,customerId:+d.id,day:TODAY,text:t,status:'Abierto'});audNow(`${S.user.name} registró un reclamo de ${CU(d.id).name}`);renderLayers();toast('Reclamo registrado.')},
  resolveClaim:d=>{const k=DB.claims.find(x=>x.id===+d.id);k.status='Resuelto';audNow(`${S.user.name} marcó resuelto un reclamo de ${CU(k.customerId).name}`);renderLayers()},
  editCom:d=>{S.editCom=d.id?+d.id:null;renderLayers()},
- saveCom:d=>{const o=O(d.id),day=dIn(byId('ec-d').value);if(day!=null)o.reqDay=day;o.slot=byId('ec-s').value;o.min=SLOTMIN[o.slot];const p=+digits(byId('ec-p').value);if(p)o.price=p;o.payMethod=byId('ec-m').value;o.payAcct=o.payMethod==='Transferencia'?val('ec-a'):null;o.cashAt=o.payMethod==='Efectivo'?val('ec-cash'):null;{const cu=cust(o);cu.cuit=byId('ec-cuit').value.trim();const it=byId('ec-it').value;if(it==='Sin factura')o.inv=null;else o.inv={tipo:it,num:byId('ec-in').value.trim(),rs:byId('ec-ir').value.trim()||cu.name,cuit:byId('ec-ic').value.trim(),day:o.inv?o.inv.day:TODAY,verified:o.inv?o.inv.verified:false,vby:o.inv?o.inv.vby:null}}o.pendConf=byId('ec-pc').checked;o.obs=byId('ec-o').value.trim();{const mu=byId('ec-maps').value.trim(),a=addr(o);if(mu!==mapsUrl(o)){o.mapsUrl=mu;a.mapsUrl=mu;const ll=mu&&parseMaps(mu);if(ll){a.lat=ll[0];a.lng=ll[1];a.approx=false}}}
+ saveCom:d=>{const o=O(d.id),day=dIn(byId('ec-d').value);if(day!=null)o.reqDay=day;o.slot=byId('ec-s').value;o.min=SLOTMIN[o.slot];const p=+digits(byId('ec-p').value);if(p)o.price=p;o.payMethod=byId('ec-m').value;o.payAcct=o.payMethod==='Transferencia'?val('ec-a'):null;o.cashAt=o.payMethod==='Efectivo'?val('ec-cash'):null;{const cu=cust(o);cu.cuit=byId('ec-cuit').value.trim();}o.pendConf=byId('ec-pc').checked;o.obs=byId('ec-o').value.trim();{const mu=byId('ec-maps').value.trim(),a=addr(o);if(mu!==mapsUrl(o)){o.mapsUrl=mu;a.mapsUrl=mu;const ll=mu&&parseMaps(mu);if(ll){a.lat=ll[0];a.lng=ll[1];a.approx=false}}}
   S.editCom=null;audNow(`${S.user.name} modificó los datos comerciales del pedido ${opn(o.id)}`,o.id);render();toast('Cambios guardados.')},
  saveLog:d=>{const o=O(d.id),e=m=>byId('lg-err').innerHTML=`<p class="err">${esc(m)}</p>`,dr=+val('lg-drv');
   if(o.type==='Movimiento'){if(!dr)return e('Elegí el chofer.');o.driverId=dr;if(o.status==='Solicitado')o.status='Confirmado';audNow(`${S.user.name} asignó a ${dname(dr)} al pedido ${opn(o.id)}`,o.id);render();toast('Chofer asignado.');return}
@@ -2396,6 +2504,11 @@ const LIVE={
  locB:t=>{const b=byId(t.dataset.b);if(b)b.innerHTML=barrioOpts(t.value)},
  ecm:t=>{byId('ec-a-box').hidden=t.value!=='Transferencia';byId('ec-cash-box').hidden=t.value!=='Efectivo'},
  cePl:t=>{byId('ce-note-box').hidden=t.value!=='Otro lugar'},
+ ivCalc:()=>{const b=byId('iv-tot');if(!b)return;const n=+String(byId('iv-neto').value).replace(/[^\d,.]/g,'').replace(',','.')||0,t=byId('iv-t').value,tot=invTotal(t,n);b.innerHTML=`<span>IVA ${t==='C'?'—':money(tot-n)}</span><span>Con IVA <b>${money(tot)}</b></span>`},
+ ivOps:()=>{const ids=[...document.querySelectorAll('.iv-op')].filter(x=>x.checked).map(x=>+x.value);byId('iv-neto').value=ids.reduce((s,id)=>s+O(id).price,0);LIVE.ivCalc()},
+ ivPv:t=>{byId('iv-n').value=(DB.invSeq[t.value]||0)+1},
+ ivCli:t=>{const c=+t.value||null;S.dialog.cid=c;S.dialog.ops=c?DB.ops.filter(o=>o.customerId===c&&o.status!=='Cancelado'&&o.type&&o.price>0&&!o.inv&&o.payMethod!=='Grupo Chamba').map(o=>o.id):[];renderLayers();LIVE.ivCalc()},
+ fcTipo:t=>{S.fc.tipo=t.value;render()},
  gxCat:t=>{byId('gx-s').innerHTML=CATS[t.value].map(x=>`<option>${esc(x)}</option>`).join('')},
  salFile:t=>{const f=t.files[0];byId('sl-fn').textContent=f?f.name:'Adjuntar foto o PDF'},
  gxFile:t=>{const f=t.files[0];byId('gx-fn').textContent=f?f.name:'Adjuntar foto o PDF'},

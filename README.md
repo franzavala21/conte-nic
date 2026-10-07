@@ -29,6 +29,8 @@ También se puede publicar con **GitHub Pages** (Settings → Pages → Deploy f
 - **Contenedores**: alta de contenedor nuevo y cambio de estado y ubicación.
 - **Pagos**: las transferencias las verifica Administración; muestra lo que queda en limpio (cobrado − gastos − sueldos).
 - Solo Administración: **Facturación** (verificar cada factura contra la razón social en el banco, listado por cliente), **Grupo Chamba** (cuenta corriente y diferencia a devolver), **Sueldos** (semanal y adelantos, efectivo/transferencia/comprobante) y **Gastos** (categoría y subcategoría).
+- **Facturación según la planilla del cliente**: tipo, N° (punto de venta 00030 / 00015), fecha, vencimiento, período facturado, CUIT, razón social, producto/servicio, neto, con IVA (21 %), condición Debe / Pagada / Anulada con los mismos colores, forma y fecha de pago. Una factura puede cubrir varios pedidos (abono mensual), admite pagos parciales y, si está mal facturada, se anula y se hace la que la reemplaza. Pestañas: Facturas, Por razón social y Pedidos sin facturar.
+- Modelo de datos v2.1: `Invoice` rehecha, más `InvoiceItem` (pedidos de cada factura) e `InvoicePayment` (pagos de factura).
 - Modelo de datos v2: nuevas tablas `Invoice`, `Employee`, `SalaryPayment`, `Expense`, `ExpenseCategory`, `Setting`.
 
 ## Versión 2 · cambios de la reunión con el cliente
