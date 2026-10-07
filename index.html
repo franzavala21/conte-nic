@@ -1085,11 +1085,20 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .leaflet-tooltip{font-weight:600;font-size:13px}
 .dot.g{background:#1E9E55}.dot.y{background:#F2B705}.dot.r{background:#D93025}
 .m-mk.g{fill:#1E9E55}.m-mk.y{fill:#F2B705}.m-mk.r{fill:#D93025}
+.loginf{display:flex;flex-direction:column;gap:12px;width:min(380px,100%);padding:22px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.demo-users{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:1040px}
+.subsect{border-top:1px solid var(--line2);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.sublbl{font:700 12px var(--f-body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:4px 0 0}
+.cardgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:10px}
+.pill.tabp{cursor:pointer}.pill.tabp.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.drv-br.four{grid-template-columns:repeat(4,1fr)}
+.dbtn{display:block;text-align:left;padding:8px 10px;border-radius:8px;background:var(--surface2);border:1.5px solid transparent;cursor:pointer;font:inherit;color:inherit}
+.dbtn:hover{border-color:var(--line)}.dbtn.on{border-color:var(--accent);background:var(--accent-2)}
+.dbtn b{display:block;font:600 20px var(--f-cond)}.dbtn span{font-size:12px;color:var(--muted);font-weight:600}
 @media (max-width:1300px){.tiles7{grid-template-columns:repeat(4,minmax(0,1fr))}.tiles5{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:980px){.fuel{grid-template-columns:minmax(0,1fr)}.tiles4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.tiles7,.tiles5{grid-template-columns:repeat(2,minmax(0,1fr))}}
-</style>
-</head><body>
+</style></head><body>
 
 <div id="app"></div>
 <div id="drawer"></div>
@@ -1194,11 +1203,20 @@ const DET=['VILLA BLANCO','VILLA AMARILLO','SE AMARILLO','TOP AMARILLO','CONTIEN
 const COLHEX={AMARILLO:'#E3B23C',BLANCO:'#E9E6DC',ROSA:'#E59BB0',AZUL:'#4D7FB8',VERDE:'#5E9E6A'};
 const colOf=c=>COLHEX[c.detail.split(' ').pop()]||'#E3B23C';
 const cname=c=>`${c.id} | ${c.detail} | ${c.size}m3`;
+const CASH_OPTS=['FWU 010','EPK 581','RXB 892','Oficina'];
+const INV_TYPES=['A','B','C','Sin factura'];
+const RS_ALT=[{n:'Rodríguez Construcciones SRL',c:'30-71598234-6'},{n:'Estudio Contable Ferreyra',c:'30-70851226-1'},{n:'Inmobiliaria Sierras SA',c:'30-71022871-4'},{n:'Desarrollos del Norte SRL',c:'33-71455302-9'},{n:'Consorcio Altos del Terrón',c:'30-71810045-2'}];
+const CATS={'Camiones':['Mantenimiento','Cubiertas','Seguro','Patentes','Lavado'],'Contenedores':['Soldadura y reparación','Pintura','Compra de contenedores'],'Basurales':['Tasa de descarga'],'Oficina':['Alquiler','Luz, agua y gas','Internet y teléfono','Librería e insumos'],'Impuestos':['ARCA (ex AFIP)','Ingresos Brutos','Tasa municipal'],'Sueldos y cargas':['Cargas sociales','Aguinaldo'],'Otros':['Varios']};
+const PAYOUT=['Efectivo · Oficina','Efectivo · FWU 010','Efectivo · EPK 581','Efectivo · RXB 892','Transf SAS','Transf YPF','Transf Otro'];
+const CSTATES=['Disponible','En reparación','Fuera de servicio','Dado de baja'];
+const BCS={'Disponible':'ok','En reparación':'rep','Fuera de servicio':'warn','Dado de baja':'off'};
+const invState=o=>!o.inv?'Sin factura':!o.inv.num?'Sin número':o.inv.verified?'Verificada':'Por verificar';
+const BINV={'Sin factura':'off','Sin número':'warn','Por verificar':'acc','Verificada':'ok'};
 const USERS=[
- {id:'francisco',name:'Francisco',role:'Administrador',desc:'Ve y modifica todo: pedidos, pagos, usuarios e historial.',last:TODAY},
- {id:'belen',name:'Belén',role:'Ventas',desc:'Agenda pedidos, verifica pagos y anota retiros y basurales.',last:TODAY},
- {id:'lucia',name:'Lucía',role:'Logística',desc:'Asigna contenedor y chofer, registra entregas, retiros y combustible.',last:TODAY},
- {id:'direccion',name:'Dirección',role:'Dueño',desc:'Ve todo el sistema: inicio, agenda, cuenta YPF y reportes.',last:TODAY-1}
+ {id:'mili',user:'mili',pass:'conte',name:'Mili',role:'Administración',desc:'Facturación, pagos, Grupo Chamba, sueldos y gastos. Ve todo.',last:TODAY},
+ {id:'camilo',user:'camilo',pass:'conte',name:'Camilo',role:'Administración',desc:'Administración. Ve todo el sistema.',last:TODAY-1},
+ {id:'belen',user:'belen',pass:'conte',name:'Belén',role:'Ventas',desc:'Agenda pedidos, factura, carga remitos y registra pagos.',last:TODAY},
+ {id:'lucia',user:'lucia',pass:'conte',name:'Lucía',role:'Logística',desc:'Asigna contenedor y chofer, entregas, retiros y basurales.',last:TODAY}
 ];
 const DB={containers:[],customers:[],ops:[],moves:[],audit:[],claims:[],fuel:[],users:USERS,
  drivers:[{id:1,name:'Gustavo',phone:'351 612-4480',status:'Activo',plates:['RXB 892','AHT 471'],cls:'info'},{id:2,name:'Nico',phone:'351 745-2031',status:'Activo',plates:['FWU 010','KLF 269'],cls:'ok'},{id:3,name:'Chucky',phone:'3543 58-1907',status:'Activo',plates:['EPK 581'],cls:'rep'}],
@@ -1216,9 +1234,9 @@ const aline=a=>`${a.barrio&&a.barrio!=='Centro'?a.barrio+', ':''}${a.street}`;
 function parseMaps(u){const m=u.match(/@(-?\d+\.\d+),\s*(-?\d+\.\d+)/)||u.match(/[?&](?:q|query|ll|center|destination)=(-?\d+\.\d+)(?:,|%2C)\s*(-?\d+\.\d+)/i)||u.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/)||u.match(/^\s*(-?\d+\.\d+),\s*(-?\d+\.\d+)\s*$/);if(!m)return null;const la=+m[1],ln=+m[2];return Math.abs(la)<=90&&Math.abs(ln)<=180?[la,ln]:null}
 const mapsUrl=o=>o.mapsUrl||addr(o).mapsUrl||'';
 const gmaps=(o,label)=>{const u=mapsUrl(o);return u?`<a class="gm" href="${esc(u)}" target="_blank" rel="noopener">${ic('pin')}${label||'Google Maps'}</a>`:''};
-const isActive=o=>o.delDay!=null&&o.pickDay==null&&o.status!=='Cancelado'&&o.type!=='Movimiento';
+const isActive=o=>o.delDay!=null&&o.pickDay==null&&o.status!=='Cancelado'&&o.type!=='Movimiento'&&o.type!=='Extensión';
 const preDel=o=>['Solicitado','Confirmado','En camino'].includes(o.status);
-const payLabel=o=>o.payMethod==='Transferencia'?`Transf ${o.payAcct||'Otro'}`:o.payMethod==='Grupo Chamba'?'Chamba':o.payMethod;
+const payLabel=o=>o.payMethod==='Transferencia'?`Transf ${o.payAcct||'Otro'}`:o.payMethod==='Grupo Chamba'?'Chamba':o.payMethod==='Efectivo'&&o.cashAt?`Efectivo · ${o.cashAt}`:o.payMethod;
 function payStatus(o){
  if(o.status==='Cancelado')return '—';
  if(o.payMethod==='Cliente aparte')return 'Cliente aparte';
@@ -1241,7 +1259,7 @@ function randPhone(){return R()<.5?`3543 ${ri(40,69)}-${ri(1000,9999)}`:`351 ${r
 
 /* ============ datos demo ============ */
 (function seedBase(){
- for(let i=1;i<=127;i++)DB.containers.push({id:'CN-'+String(i).padStart(3,'0'),size:wpick([3,5,6],[8,108,11]),detail:wpick(DET,[16,12,12,14,12,6,10,5,4,4,3,2]),place:'Lote Paraguay',placeNote:'',opId:null,obs:''});
+ for(let i=1;i<=127;i++)DB.containers.push({id:'CN-'+String(i).padStart(3,'0'),size:wpick([3,5,6],[8,108,11]),detail:wpick(DET,[16,12,12,14,12,6,10,5,4,4,3,2]),place:'Lote Paraguay',placeNote:'',opId:null,obs:'',state:'Disponible'});
  const FIRST=['Julio','Agostina','Diego','Daniel','Mariana','Lucas','Carolina','Martín','Florencia','Gabriel','Sofía','Pablo','Valeria','Ramiro','Natalia','Hernán','Cecilia','Federico','Paula','Emiliano','Laura','Sebastián','Romina','Gonzalo','Verónica','Matías','Julieta','Andrés','Silvina','Tomás','Micaela','Esteban','Lorena','Facundo','Analía','Ignacio','Rocío','Marcos','Eugenia','Leandro'];
  const LAST=['Ferreyra','Bustos','Oviedo','Medina','Quiroga','Luna','Vaca','Heredia','Moyano','Ledesma','Carranza','Olmos','Páez','Arce','Tissera','Villarreal','Cabrera','Brizuela','Zárate','Peralta','Molina','Sosa','Ceballos','Toledo','Aguirre','Juárez','Bazán','Funes'];
  const COMP=['Grupo Chamba','Constructora Los Algarrobos SRL','Obras Serranas','Estudio Arq. Páez & Luna','Consorcio El Terrón','Municipalidad (ejemplo)'];
@@ -1253,7 +1271,7 @@ function randPhone(){return R()<.5?`3543 ${ri(40,69)}-${ri(1000,9999)}`:`351 ${r
   DB.customers.push({id:++DB.seq.cust,name,phone:randPhone(),email:'',obs:R()<.08?'Portón verde, tocar timbre':'',addrs,company:false})}
 })();
 
-function availC(size,n){const l=DB.containers.filter(c=>DEPOTS.includes(c.place)&&!c.opId&&(!size||c.size===size));const out=[];while(out.length<n&&l.length){out.push(l.splice(Math.floor(R()*l.length),1)[0])}return out.length===n?out:null}
+function availC(size,n){const l=DB.containers.filter(c=>DEPOTS.includes(c.place)&&!c.opId&&c.state==='Disponible'&&(!size||c.size===size));const out=[];while(out.length<n&&l.length){out.push(l.splice(Math.floor(R()*l.length),1)[0])}return out.length===n?out:null}
 const drvPick=()=>wpick([1,2,3],[40,42,18]);
 const PLAZO=()=>wpick([4,5,7,10],[25,30,30,15]);
 function pickCustomer(){const r=R();if(r<.14)return DB.customers[0];if(r<.22)return pick(DB.customers.slice(1,6));return pick(DB.customers.slice(6))}
@@ -1261,7 +1279,7 @@ function pickCustomer(){const r=R();if(r<.14)return DB.customers[0];if(r<.22)ret
 function newOp(o){
  const op=Object.assign({id:++DB.seq.op,type:'Alquiler',qty:1,size:5,customerId:null,addrId:null,reqDay:TODAY,slot:'A coordinar',min:17*60,price:0,payMethod:'Efectivo',payAcct:null,paid:0,payDay:null,verified:false,receipt:null,obs:'',status:'Solicitado',
   cids:[],driverId:null,remito:null,firmado:false,delDay:null,delMin:null,plannedPickup:null,pickDay:null,pickMin:null,pickDriverId:null,basural:null,pickPlace:null,
-  replacesOpId:null,closedByRecambio:false,pendConf:false,sameTrip:null,photos:[],demoPhoto:false,createdBy:'Belén',createdDay:TODAY,pickDriverPlan:null,pickSlot:'A coordinar',logObs:''},o);
+  replacesOpId:null,closedByRecambio:false,cashAt:null,inv:null,chamba:null,dumpMin:null,extDays:null,pendConf:false,sameTrip:null,photos:[],demoPhoto:false,createdBy:'Belén',createdDay:TODAY,pickDriverPlan:null,pickSlot:'A coordinar',logObs:''},o);
  DB.ops.push(op);return op;
 }
 function doAssign(op,cids,drvId,day,min,user,log){
@@ -1280,6 +1298,7 @@ function doDeliver(op,day,min,user,plazo){
  if(op.type==='Recambio'&&op.replacesOpId){const old=O(op.replacesOpId);if(old&&isActive(old))doPickup(old,day,min+5,op.driverId,basFor(addr(old).loc),'Lote Paraguay',user,true)}
 }
 function doPickup(op,day,min,drvId,basural,place,user,recambio){
+ op.dumpMin=min+ri(20,50);
  op.pickDay=day;op.pickMin=min;op.pickDriverId=drvId;op.basural=basural;op.pickPlace=place;op.closedByRecambio=!!recambio;
  op.cids.forEach(id=>{const c=C(id);c.opId=null;c.place=place;
   mv(day,min,id,`${recambio?'Retirado por recambio en':'Retirado de'} ${cust(op).name} · basural ${basural}`,'retirado',op.id,drvId);
@@ -1367,24 +1386,55 @@ function makeOp(d,{assign=true,creator='Belén',createdDay=d,log=false,slot=null
  DB.claims.push({id:2,customerId:DB.customers[1].id,day:TODAY-1,text:'Consulta por factura del mes pasado, no le llegó el PDF.',status:'Abierto'});
 })();
 
+(function seedV3(){
+ DB.customers.forEach(c=>{c.cuit=c.company?`30-${ri(50000000,72000000)}-${ri(0,9)}`:(R()<.7?`${pick(['20','27','23'])}-${ri(14000000,44000000)}-${ri(0,9)}`:'')});
+ let fnum=4120;
+ [...DB.ops].sort((a,b)=>a.reqDay-b.reqDay||a.id-b.id).forEach(o=>{
+  const cu=cust(o);
+  if(o.payMethod==='Efectivo')o.cashAt=R()<.3||!o.driverId?'Oficina':drv(o.driverId).plates[0];
+  if(o.payMethod==='Grupo Chamba'){o.chamba={cobrado:wpick([145000,150000,140000],[6,2,1])*o.qty,via:wpick(['Efectivo','Transferencia'],[60,40]),devuelto:false};o.chamba.devuelto=o.chamba.via==='Efectivo'&&o.reqDay<TODAY-6&&R()<.8}
+  if(o.status==='Cancelado'||R()>.88)return;
+  const alt=!cu.company&&R()<.22,rs=alt?pick(RS_ALT):{n:cu.name,c:cu.cuit};
+  o.inv={tipo:cu.company||alt?'A':wpick(['B','C'],[85,15]),num:'',rs:rs.n,cuit:rs.c||'',day:o.reqDay,verified:false,vby:null};
+  if(o.delDay!=null||R()<.5)o.inv.num=`0003-${String(++fnum).padStart(8,'0')}`;
+  if(o.inv.num&&o.paid>0&&o.payDay<TODAY-2&&R()<.8){o.inv.verified=true;o.inv.vby='Mili'}
+ });
+ DB.seq.inv=fnum;
+ const free=DB.containers.filter(c=>c.place!=='En calle'&&!c.opId);
+ free.slice(0,3).forEach(c=>{c.state='En reparación';c.obs=c.obs||'Soldadura en el lateral'});
+ free.slice(5,7).forEach(c=>{c.state='Fuera de servicio';c.obs='Fondo perforado, espera chapa'});
+ if(free[8]){free[8].state='Dado de baja';free[8].obs='Para chatarra'}
+ DB.emps=[{id:1,name:'Gustavo',area:'Chofer',weekly:230000},{id:2,name:'Nico',area:'Chofer',weekly:230000},{id:3,name:'Chucky',area:'Chofer',weekly:200000},{id:4,name:'Belén',area:'Oficina',weekly:190000},{id:5,name:'Lucía',area:'Oficina',weekly:190000}];
+ DB.pay=[];let pid=0;
+ for(let w=weekStart(TODAY)-42;w<=weekStart(TODAY);w+=7)DB.emps.forEach(e=>{let adv=0;
+  if(R()<.22){const d=w+ri(1,3);if(d<=TODAY){adv=pick([30000,40000,50000]);const cash=R()<.6?adv:0;DB.pay.push({id:++pid,empId:e.id,day:d,type:'Adelanto',cash,transfer:adv-cash,receipt:adv-cash?`transf_adelanto_${pid}.jpg`:'',note:'',user:'Mili'})}}
+  const sat=w+5;if(sat<TODAY){const rest=e.weekly-adv,cash=R()<.5?rest:Math.round(rest*pick([.3,.5])/1000)*1000;DB.pay.push({id:++pid,empId:e.id,day:sat,type:'Sueldo',cash,transfer:rest-cash,receipt:rest-cash>0?`transf_sueldo_${pid}.jpg`:'',note:'',user:'Mili'})}});
+ DB.exp=[];let eid=0;
+ const EXS=[['Camiones','Mantenimiento','Cambio de aceite y filtros',[60000,140000]],['Camiones','Cubiertas','Cubierta trasera',[180000,260000]],['Camiones','Lavado','Lavado de camiones',[20000,35000]],['Contenedores','Soldadura y reparación','Soldadura de fondo',[45000,90000]],['Contenedores','Pintura','Pintura de contenedores',[70000,120000]],['Basurales','Tasa de descarga','Tasa semanal basural',[30000,60000]],['Oficina','Luz, agua y gas','Factura de luz',[40000,70000]],['Oficina','Internet y teléfono','Internet y celulares',[45000,45000]],['Oficina','Librería e insumos','Talonarios de remitos',[15000,30000]],['Impuestos','Ingresos Brutos','Anticipo IIBB',[90000,160000]],['Impuestos','Tasa municipal','Tasa de comercio',[25000,40000]]];
+ for(let d=TODAY-42;d<=TODAY;d++){if(dow(d)===0)continue;if(R()<.4){const x=pick(EXS),amt=Math.round(ri(x[3][0],x[3][1])/1000)*1000;DB.exp.push({id:++eid,day:d,cat:x[0],sub:x[1],medio:x[0]==='Basurales'?'Efectivo · '+pick(['FWU 010','EPK 581','RXB 892']):pick(PAYOUT),amount:amt,desc:x[2],receipt:'',user:'Mili'})}
+  if(Dt(d).getUTCDate()===5){DB.exp.push({id:++eid,day:d,cat:'Oficina',sub:'Alquiler',medio:'Transf SAS',amount:350000,desc:'Alquiler oficina',receipt:'',user:'Mili'});DB.exp.push({id:++eid,day:d,cat:'Camiones',sub:'Seguro',medio:'Transf SAS',amount:210000,desc:'Seguro mensual de la flota',receipt:'',user:'Mili'})}}
+ DB.seq.exp=eid;DB.seq.pay=pid;
+ DB.cfg={chambaPrice:125000};
+})();
+
 /* ============ estado de la interfaz ============ */
 const S={user:null,view:'inicio',period:'hoy',from:TODAY-13,to:TODAY,
- ag:{when:'semana',day:TODAY,q:'',drv:''},en:{when:'todas',barrio:'',drv:''},rt:{f:'todos',barrio:'',drv:''},
+ ag:{when:'semana',day:TODAY,q:'',loc:'',barrio:'',pc:''},tb:{tab:'asig',loc:'',barrio:''},fc:{when:'mes',st:'',q:'',by:'lista'},ch:{from:TODAY-13,to:TODAY},su:{week:weekStart(TODAY)},gx:{when:'mes',cat:'',q:''},dsvc:'',en:{when:'todas',barrio:'',drv:''},rt:{f:'todos',barrio:'',drv:''},
  cf:{q:'',pl:'',size:'',loc:''},clq:'',pf:{when:'mes',day:TODAY,m:'',st:'',q:''},cp:'mes',bp:'mes',dp:'semana',dsel:null,
  mq:'',mst:{g:true,y:true,r:true},mapView:null,msel:null,mzoom:null,af:{u:'',q:''},navOpen:false,drawer:null,modal:null,dialog:null,editCom:null};
 
 const role=()=>S.user.role;
 const inR=(...r)=>r.includes(role());
 const can={
- createOp:()=>inR('Administrador','Ventas'), com:()=>inR('Administrador','Ventas'), assign:()=>inR('Administrador','Logística'),
- field:()=>inR('Administrador','Logística','Ventas'), pay:()=>inR('Administrador','Ventas'), cont:()=>inR('Administrador','Logística'),
- fuel:()=>inR('Administrador','Logística','Ventas'), cust:()=>inR('Administrador','Ventas'), admin:()=>inR('Administrador')
+ createOp:()=>inR('Administración','Ventas'), com:()=>inR('Administración','Ventas'), assign:()=>inR('Administración','Logística'),
+ field:()=>inR('Administración','Logística','Ventas'), pay:()=>inR('Administración','Ventas'), verify:()=>inR('Administración'), cont:()=>inR('Administración','Logística'),
+ fuel:()=>inR('Administración','Logística','Ventas'), cust:()=>inR('Administración','Ventas'), admin:()=>inR('Administración')
 };
-const ALL=['Administrador','Ventas','Logística','Dueño'];
+const ALL=['Administración','Ventas','Logística'],ADM=['Administración'];
 const NAV=[
  {id:'inicio',l:'Inicio',i:'home',r:ALL},
- {id:'tablero',l:'Tablero del día',i:'truck',r:['Administrador','Logística','Dueño']},
- {id:'agenda',l:'Agenda',i:'cal',r:ALL},
+ {id:'tablero',l:'Tablero del día',i:'truck',r:['Administración','Logística']},
+ {id:'agenda',l:'Agenda',i:'cal',r:['Administración','Ventas']},
  {id:'entregas',l:'Entregas',i:'boxin',r:ALL},
  {id:'retiros',l:'Retiros',i:'clock',r:ALL},
  {id:'choferes',l:'Choferes',i:'wheel',r:ALL},
@@ -1392,11 +1442,15 @@ const NAV=[
  {id:'basurales',l:'Basurales',i:'bin',r:ALL},
  {id:'contenedores',l:'Contenedores',i:'box',r:ALL},
  {id:'mapa',l:'Mapa',i:'map',r:ALL},
- {id:'pagos',l:'Pagos',i:'cash',r:['Administrador','Ventas','Dueño']},
- {id:'clientes',l:'Clientes',i:'users',r:['Administrador','Dueño']},
- {id:'reportes',l:'Reportes',i:'chart',r:['Administrador','Dueño']},
- {id:'usuarios',l:'Usuarios',i:'cog',r:['Administrador','Dueño']},
- {id:'auditoria',l:'Historial de cambios',i:'hist',r:['Administrador','Dueño']}
+ {id:'pagos',l:'Pagos',i:'cash',r:['Administración','Ventas']},
+ {id:'facturacion',l:'Facturación',i:'doc',r:ADM},
+ {id:'chamba',l:'Grupo Chamba',i:'truck',r:ADM},
+ {id:'sueldos',l:'Sueldos',i:'users',r:ADM},
+ {id:'gastos',l:'Gastos',i:'coins',r:ADM},
+ {id:'clientes',l:'Clientes',i:'users',r:ADM},
+ {id:'reportes',l:'Reportes',i:'chart',r:ADM},
+ {id:'usuarios',l:'Usuarios',i:'cog',r:ADM},
+ {id:'auditoria',l:'Historial de cambios',i:'hist',r:ADM}
 ];
 const BO={'Solicitado':'warn','Confirmado':'info','En camino':'acc','Realizado':'ok','Cancelado':'bad'};
 const BP={'Verificado':'ok','Cobrado':'ok','Por verificar':'acc','Pendiente':'warn','Vencido':'bad','Cliente aparte':'off'};
@@ -1433,7 +1487,7 @@ function payTot(a,b){
 function stats(a,b){
  const r={ent:0,rec:0,mov:0,ret:0,facturado:0,cobrado:0,pedidos:0,byDrv:{},byLoc:{},bas:{}};
  DB.drivers.forEach(d=>r.byDrv[d.id]={ent:0,rec:0,mov:0,ret:0});BASURALES.forEach(b=>r.bas[b]=0);
- DB.ops.forEach(o=>{if(o.status==='Cancelado')return;
+ DB.ops.forEach(o=>{if(o.status==='Cancelado'||o.type==='Extensión')return;
   if(inRange(o.reqDay,a,b))r.pedidos++;
   if(inRange(o.delDay,a,b)){const k=o.type==='Recambio'?'rec':o.type==='Movimiento'?'mov':'ent';r[k]++;r.facturado+=o.price;const dd=r.byDrv[o.driverId];if(dd)dd[k]++;const l=addr(o).loc;r.byLoc[l]=(r.byLoc[l]||0)+1}
   if(inRange(o.pickDay,a,b)){if(r.bas[o.basural]!=null)r.bas[o.basural]++;if(!o.closedByRecambio){r.ret++;const dd=r.byDrv[o.pickDriverId];if(dd)dd.ret++}}
@@ -1465,9 +1519,15 @@ function toast(msg){const el=document.createElement('div');el.innerHTML=ic('chec
 function loginView(){
  return `<div class="login">
   <div class="brand"><span class="logo">${LOGO}</span><div><b>Conte Nic</b><small>Soluciones en contenedores · Sierras Chicas</small></div></div>
-  <h1>¿Quién entra?</h1>
-  <p class="lead">Cada perfil ve lo que necesita para su trabajo. Elegí uno para recorrer el sistema. Todos los datos son ficticios.</p>
-  <div class="who">${DB.users.map(u=>`<button class="whoc" data-act="login" data-id="${u.id}"><span class="av">${initials(u.name)}</span><div><b>${esc(u.name)}</b><div>${badge(u.role,{'Administrador':'acc','Ventas':'info','Logística':'ok','Dueño':'rep'})}</div></div><p>${esc(u.desc)}</p><span class="go">Entrar ${ic('arrow')}</span></button>`).join('')}</div>
+  <h1>Ingresar</h1>
+  <form class="loginf" id="loginf" onsubmit="return false">
+   <label class="fld"><span>Usuario</span><input id="lg-user" autocomplete="username" autocapitalize="none" placeholder="Ej.: mili"></label>
+   <label class="fld"><span>Contraseña</span><input id="lg-pass" type="password" autocomplete="current-password"></label>
+   <div id="lg-msg"></div>
+   <button class="btn pri big" data-act="doLogin" type="button">${ic('arrow')}Entrar</button>
+  </form>
+  <div class="demo-users"><p class="lead">Usuarios de prueba (contraseña <b>conte</b>). Tocá uno para completar.</p>
+   <div class="who">${DB.users.map(u=>`<button class="whoc" data-act="fillLogin" data-u="${u.user}" type="button"><span class="av">${initials(u.name)}</span><div><b>${esc(u.name)}</b><div>${badge(u.role,RBADGE)}</div></div><p>${esc(u.desc)}</p><span class="go">usuario: ${esc(u.user)}</span></button>`).join('')}</div></div>
  </div>`;
 }
 function shell(){
@@ -1535,26 +1595,34 @@ function agRange(){
  if(w==='fecha')return[S.ag.day,S.ag.day];
  return[-1e9,1e9];
 }
+const RBADGE={'Administración':'acc','Ventas':'info','Logística':'ok'};
+function lbFilters(pre,loc,bar){
+ const bars=loc?LOCS[loc].barrios.map(b=>[b+'|'+loc,b]):LOC_NAMES.flatMap(l=>LOCS[l].barrios.map(b=>[b+'|'+l,`${b} (${l})`]));
+ return `<select class="sel" id="${pre}-loc" data-f="${pre}.loc" aria-label="Localidad"><option value="">Todas las localidades</option>${LOC_NAMES.map(l=>`<option ${loc===l?'selected':''}>${l}</option>`).join('')}</select><select class="sel" id="${pre}-bar" data-f="${pre}.barrio" aria-label="Barrio"><option value="">Todos los barrios</option>${bars.map(([v,l])=>`<option value="${esc(v)}" ${bar===v?'selected':''}>${esc(l)}</option>`).join('')}</select>`;
+}
+const lbMatch=(o,loc,bar)=>{const a=addr(o);return(!loc||a.loc===loc)&&(!bar||a.barrio+'|'+a.loc===bar)};
 function vAgenda(){
  const[a,b]=agRange(),q=norm(S.ag.q);
- const list=DB.ops.filter(o=>o.reqDay>=a&&o.reqDay<=b&&(!S.ag.drv||(S.ag.drv==='none'?!o.driverId:o.driverId===+S.ag.drv))&&(!q||norm(cust(o).name).includes(q)||norm(aline(addr(o))).includes(q)||norm(addr(o).loc).includes(q)||o.cids.some(c=>norm(c).includes(q))));
+ const inDays=DB.ops.filter(o=>o.reqDay>=a&&o.reqDay<=b&&lbMatch(o,S.ag.loc,S.ag.barrio)&&(!q||norm(cust(o).name).includes(q)||norm(aline(addr(o))).includes(q)||norm(addr(o).loc).includes(q)||o.cids.some(c=>norm(c).includes(q))));
+ const npc=inDays.filter(o=>o.pendConf&&o.status!=='Cancelado').length;
+ const list=inDays.filter(o=>!S.ag.pc||o.pendConf);
  const days={};list.forEach(o=>(days[o.reqDay]=days[o.reqDay]||[]).push(o));
  let keys=Object.keys(days).map(Number).sort((x,y)=>x-y);
  if(S.ag.when==='todas'||S.ag.when==='mes')keys=keys.reverse();
  if(['hoy','manana','fecha'].includes(S.ag.when)&&!keys.length)keys=[a];
  const W=[['hoy','Hoy'],['manana','Mañana'],['semana','Esta semana'],['mes','Este mes'],['todas','Todas las fechas']];
+ const svc=o=>o.type==='Extensión'?`Extensión · +${o.extDays||'?'} días`:`${o.type} · ${o.size} m³`;
  const dayBlock=d=>{const ops=(days[d]||[]).sort((x,y)=>x.min-y.min||x.id-y.id);const act=ops.filter(o=>o.status!=='Cancelado');
   const pend=act.filter(o=>['Pendiente','Vencido'].includes(payStatus(o))).length,sin=act.filter(o=>!o.driverId&&preDel(o)).length;
   return `<section class="day"><div class="dayh"><h2>${ic('cal')}${fLong(d)}${d===TODAY?' · hoy':''}</h2><small>${act.length} pedidos · ${pend} pendiente${pend===1?'':'s'} de pago · ${sin} sin asignar</small></div>
-  <div class="tbl-wrap"><table class="dense"><thead><tr><th>N.º</th><th>Cant.</th><th>Cliente / Servicio</th><th>Dirección</th><th>Horario</th><th>Chofer</th><th>Contenedor</th><th>Pago</th><th>Observaciones</th><th>Estado</th></tr></thead><tbody>
-  ${ops.map((o,i)=>{const ad=addr(o);return `<tr data-act="openOp" data-id="${o.id}" tabindex="0" style="${o.status==='Cancelado'?'opacity:.55':''}"><td class="tnum">${i+1}</td><td class="tnum">${o.qty}</td><td><b>${esc(cust(o).name)}</b><span class="sub">${o.type} · ${o.size} m³</span></td><td><b>${esc(ad.loc)}</b><span class="sub">${esc(aline(ad))}</span>${gmaps(o)}</td><td>${esc(o.slot)}</td><td>${pill(o.driverId)}</td><td>${contCell(o)}</td><td>${payCell(o)}</td><td>${esc(o.obs)||'<span class="muted">—</span>'}${stTag(o)}</td><td>${badge(o.status==='Realizado'&&o.pickDay!=null?'Realizado':o.status,BO)}${o.pickDay!=null&&!o.closedByRecambio?`<span class="sub">Retirado ${fs(o.pickDay)}</span>`:''}${pcTag(o)}</td></tr>`}).join('')||`<tr><td colspan="10" class="empty">No hay pedidos agendados para este día.</td></tr>`}
+  <div class="tbl-wrap"><table class="dense"><thead><tr><th>N.º</th><th>Cliente / Servicio</th><th>Dirección</th><th>Cant.</th><th>Horario</th><th>Pago</th><th>Observaciones</th><th>Estado</th></tr></thead><tbody>
+  ${ops.map((o,i)=>{const ad=addr(o);return `<tr data-act="openOp" data-id="${o.id}" tabindex="0" style="${o.status==='Cancelado'?'opacity:.55':''}"><td class="tnum">${i+1}</td><td><b>${esc(cust(o).name)}</b><span class="sub">${svc(o)}</span></td><td><b>${esc(ad.loc)}</b><span class="sub">${esc(aline(ad))}</span>${gmaps(o)}</td><td class="tnum">${o.qty}</td><td style="white-space:nowrap">${esc(o.slot)}</td><td>${payCell(o)}</td><td>${esc(o.obs)||'<span class="muted">—</span>'}${stTag(o)}</td><td>${badge(o.status,BO)}${o.pickDay!=null&&!o.closedByRecambio?`<span class="sub">Retirado ${fs(o.pickDay)}</span>`:''}${pcTag(o)}</td></tr>`}).join('')||`<tr><td colspan="8" class="empty">No hay pedidos agendados para este día.</td></tr>`}
   </tbody></table>${can.createOp()?`<button class="addrow" data-act="newOp" data-day="${d}">${ic('plus')}Agregar pedido para este día</button>`:''}</div></section>`};
  return pageHead('Agenda de pedidos','Ventas · coordinación con logística',can.createOp()?`<button class="btn pri big" data-act="newOp">${ic('plus')}Agendar pedido</button>`:'')+`
  <div class="filters">${chips('ag.when',W,S.ag.when)}<label class="chip ${S.ag.when==='fecha'?'on':''}" style="gap:8px">${ic('cal')}Elegir fecha<input type="date" id="agd" data-f="agday" value="${dOut(S.ag.day)}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0" aria-label="Elegir fecha"></label></div>
- <div class="filters"><input class="inp grow" id="agq" data-f="ag.q" value="${esc(S.ag.q)}" placeholder="Buscar cliente, dirección o contenedor…" aria-label="Buscar pedido">
-  <select class="sel" id="agdr" data-f="ag.drv" aria-label="Chofer"><option value="">Todos los choferes</option>${DB.drivers.map(d=>`<option value="${d.id}" ${S.ag.drv==d.id?'selected':''}>${esc(d.name)}</option>`).join('')}<option value="none" ${S.ag.drv==='none'?'selected':''}>Sin asignar</option></select></div>
- ${keys.map(dayBlock).join('')||'<p class="empty">No hay pedidos en estas fechas.</p>'}
- <ul class="legend">${DB.drivers.map(d=>`<li><i class="dot ${d.cls}"></i>${esc(d.name)}</li>`).join('')}<li><span class="pc-tag" style="margin:0">Pendiente de confirmación</span> el cliente todavía no confirmó</li></ul>`;
+ <div class="filters"><input class="inp grow" id="agq" data-f="ag.q" value="${esc(S.ag.q)}" placeholder="Buscar cliente, dirección o contenedor…" aria-label="Buscar pedido">${lbFilters('ag',S.ag.loc,S.ag.barrio)}
+  <button class="chip ${S.ag.pc?'on':''}" data-act="set" data-k="ag.pc" data-v="${S.ag.pc?'':'1'}"><i class="dot warn"></i>Pendiente de confirmación <span>${npc}</span></button></div>
+ ${keys.map(dayBlock).join('')||'<p class="empty">No hay pedidos con esos filtros.</p>'}`;
 }
 
 /* ---------- combinar viaje ---------- */
@@ -1625,35 +1693,41 @@ function jcard(o,kind){
   ${acts?`<div class="acts">${acts}</div>`:''}</article>`;
 }
 function vTab(){
- const day=S.lday?nextWork(TODAY+1):TODAY;
- const asig=DB.ops.filter(o=>preDel(o)&&!o.driverId&&o.reqDay<=day).sort((a,b)=>a.reqDay-b.reqDay||a.min-b.min);
- const ret=DB.ops.filter(o=>isActive(o)&&o.plannedPickup<=day).sort((a,b)=>a.plannedPickup-b.plannedPickup);
+ const day=S.lday?nextWork(TODAY+1):TODAY,F=o=>lbMatch(o,S.tb.loc,S.tb.barrio);
+ const asig=DB.ops.filter(o=>preDel(o)&&!o.driverId&&o.reqDay<=day&&F(o)).sort((a,b)=>a.reqDay-b.reqDay||a.min-b.min);
+ const ret=DB.ops.filter(o=>isActive(o)&&o.plannedPickup<=day&&F(o)).sort((a,b)=>a.plannedPickup-b.plannedPickup);
  const ent=DB.ops.filter(o=>preDel(o)&&o.driverId&&o.reqDay<=day).length;
- const done=[];if(!S.lday){DB.ops.forEach(o=>{if(o.delDay===TODAY)done.push({m:o.delMin,t:`${o.type} ${o.cids.join(', ')}`,s:cust(o).name,d:o.driverId,k:'acc'});if(o.pickDay===TODAY&&!o.closedByRecambio)done.push({m:o.pickMin,t:`Retiro ${o.cids.join(', ')} → B. ${o.basural}`,s:cust(o).name,d:o.pickDriverId,k:'info'})});done.sort((a,b)=>b.m-a.m)}
- const col=(t,dot,list,kind,empty)=>`<section class="col"><div class="col-h"><h3><i class="dot ${dot}"></i>${t}</h3><span class="n">${list.length}</span></div>${list.map(o=>jcard(o,kind)).join('')||`<p class="muted" style="padding:8px 4px">${empty}</p>`}</section>`;
+ const tab=S.tb.tab,list=tab==='ret'?ret:asig;
+ const done=[];if(!S.lday){DB.ops.forEach(o=>{if(o.delDay===TODAY&&o.type!=='Extensión')done.push({m:o.delMin,t:`${o.type} ${o.cids.join(', ')}`,s:cust(o).name,d:o.driverId,k:'acc'});if(o.pickDay===TODAY&&!o.closedByRecambio)done.push({m:o.pickMin,t:`Retiro ${o.cids.join(', ')} → B. ${o.basural}`,s:cust(o).name,d:o.pickDriverId,k:'info'})});done.sort((a,b)=>b.m-a.m)}
+ const tb=(k,n,l,warn)=>`<button class="pill tabp ${tab===k?'on':''}" data-act="set" data-k="tb.tab" data-v="${k}" style="${warn&&n?'color:var(--warn)':''}"><b>${n}</b> ${l}</button>`;
  return pageHead('Tablero del día',cap(fLong(day)),`<div class="chips"><button class="chip ${!S.lday?'on':''}" data-act="set" data-k="lday" data-v="0">Hoy</button><button class="chip ${S.lday?'on':''}" data-act="set" data-k="lday" data-v="1">${cap(DIAS[dow(nextWork(TODAY+1))])}</button></div>`)+`
- <div class="sumline"><span class="pill" style="${asig.length?'color:var(--warn)':''}"><b>${asig.length}</b> por asignar</span><span class="pill"><b>${ret.length}</b> retiros</span><button class="pill" style="cursor:pointer" data-act="goView" data-v="entregas"><b>${ent}</b> entregas asignadas →</button>${!S.lday?`<span class="pill"><b>${done.length}</b> hechas hoy</span>`:''}</div>
- <div class="board" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))">
-  ${col('Por asignar','warn',asig,'asig','Todo asignado.')}
-  ${col('Retiros','bad',ret,'ret','No hay retiros pendientes.')}
- </div>
+ <div class="sumline">${tb('asig',asig.length,'por asignar',true)}${tb('ret',ret.length,'retiros')}<button class="pill" style="cursor:pointer" data-act="goView" data-v="entregas"><b>${ent}</b> entregas asignadas →</button>${!S.lday?`<span class="pill"><b>${done.length}</b> hechas hoy</span>`:''}</div>
+ <div class="filters">${lbFilters('tb',S.tb.loc,S.tb.barrio)}</div>
+ <section class="col"><div class="col-h"><h3><i class="dot ${tab==='ret'?'bad':'warn'}"></i>${tab==='ret'?'Retiros':'Por asignar'}</h3><span class="n">${list.length}</span></div>
+  <div class="cardgrid">${list.map(o=>jcard(o,tab)).join('')||`<p class="muted" style="padding:8px 4px">${tab==='ret'?'No hay retiros pendientes con esos filtros.':'Todo asignado.'}</p>`}</div></section>
  ${!S.lday?`<section class="block" style="margin-top:22px"><h2 class="sec">Hechas hoy</h2>${done.length?`<div class="done-list">${done.map(x=>`<div><i class="dot ${x.k}"></i><span><b class="tnum">${fmin(x.m)}</b> · ${esc(x.t)}<br><small class="muted">${esc(x.s)} · ${esc(dname(x.d))}</small></span></div>`).join('')}</div>`:'<p class="muted">Todavía no se registró nada hoy.</p>'}</section>`:''}`;
 }
 
 /* ---------- Choferes ---------- */
 function vChof(){
  const[a,b]=range(S.dp),st=stats(a,b),ft=fuelTot(a,b);
- const max=Math.max(1,...DB.drivers.map(d=>{const x=st.byDrv[d.id]||{ent:0,rec:0,mov:0,ret:0};return x.ent+x.rec+x.mov+x.ret}));
- const sd=S.dsel?drv(S.dsel):null;let svc=[];
- if(sd){DB.ops.forEach(o=>{if(o.status==='Cancelado')return;if(o.driverId===sd.id&&inRange(o.delDay,a,b))svc.push({d:o.delDay,m:o.delMin,t:o.type==='Alquiler'?'Entrega':o.type,o});if(o.pickDriverId===sd.id&&inRange(o.pickDay,a,b)&&!o.closedByRecambio)svc.push({d:o.pickDay,m:o.pickMin,t:'Retiro · B. '+o.basural,o})});svc.sort((x,y)=>(y.d*1440+y.m)-(x.d*1440+x.m))}
- return pageHead('Choferes','Servicios y combustible de cada chofer',`${chips('dp',[['hoy','Hoy'],['semana','Esta semana'],['mes','Este mes']],S.dp)}${can.admin()?`<button class="btn" data-act="newDriver">${ic('plus')}Agregar chofer</button>`:''}`)+`
- <div class="drivers">${DB.drivers.map(d=>{const x=st.byDrv[d.id]||{ent:0,rec:0,mov:0,ret:0},t=x.ent+x.rec+x.mov+x.ret,f=ft[d.id]||{l:0,v:0};return `<button class="drv ${S.dsel===d.id?'on':''}" data-act="dsel" data-id="${d.id}">
+ const svcOf=dId=>{const r=[];DB.ops.forEach(o=>{if(o.status==='Cancelado'||o.type==='Extensión')return;
+  if(o.driverId===dId&&inRange(o.delDay,a,b))r.push({d:o.delDay,m:o.delMin,t:o.type==='Recambio'?'Recambio':o.type==='Movimiento'?'Movimiento':'Entrega',o,lugar:`${aline(addr(o)).split(',')[0]} · ${addr(o).loc}`});
+  if(o.pickDriverId===dId&&inRange(o.pickDay,a,b)){if(!o.closedByRecambio)r.push({d:o.pickDay,m:o.pickMin,t:'Retiro',o,lugar:`${aline(addr(o)).split(',')[0]} · ${addr(o).loc}`});if(o.basural)r.push({d:o.pickDay,m:o.dumpMin!=null?o.dumpMin:o.pickMin+30,t:'Basural',o,lugar:'B. '+o.basural})}});
+  return r.sort((x,y)=>(y.d*1440+y.m)-(x.d*1440+x.m))};
+ const all=Object.fromEntries(DB.drivers.map(d=>[d.id,svcOf(d.id)]));
+ const cntT=(id,t)=>all[id].filter(x=>x.t===t).length;
+ const max=Math.max(1,...DB.drivers.map(d=>all[d.id].filter(x=>x.t!=='Basural').length));
+ const sd=S.dsel?drv(S.dsel):null,TYPES=['Entrega','Retiro','Recambio','Basural'];
+ const svc=sd?all[sd.id].filter(x=>!S.dsvc||x.t===S.dsvc):[];
+ return pageHead('Choferes','Servicios, basurales y combustible de cada chofer',`${chips('dp',[['hoy','Hoy'],['semana','Esta semana'],['mes','Este mes']],S.dp)}${can.admin()?`<button class="btn" data-act="newDriver">${ic('plus')}Agregar chofer</button>`:''}`)+`
+ <div class="drivers">${DB.drivers.map(d=>{const t=all[d.id].filter(x=>x.t!=='Basural').length,f=ft[d.id]||{l:0,v:0};return `<div class="drv ${S.dsel===d.id?'on':''}" data-act="dsel" data-id="${d.id}" data-t="" role="button" tabindex="0">
   <span class="drv-h"><span class="av" style="background:var(--${d.cls})">${initials(d.name)}</span><span><b>${esc(d.name)}</b><span class="muted">${esc(d.phone)} · ${esc(d.plates.join(', ')||'sin patente')}</span></span></span>
   <span class="drv-big"><b>${t}</b><span class="muted">servicios ${PLBL[S.dp]}</span></span>
   <span class="hb-t" style="height:10px"><i style="width:${t/max*100}%"></i></span>
-  <span class="drv-br"><div><b>${x.ent}</b><span>Entregas</span></div><div><b>${x.ret}</b><span>Retiros</span></div><div><b>${x.rec}</b><span>Recambios</span></div></span>
-  <span class="muted">${ic('fuel')} ${num(f.l,0)} L · ${money(f.v)}</span></button>`}).join('')}</div>
- ${sd?`<section class="block"><h2 class="sec">Servicios de ${esc(sd.name)} ${PLBL[S.dp]}</h2><div class="tbl-wrap"><table><thead><tr><th>Fecha</th><th>Servicio</th><th>Pedido</th><th>Contenedor</th><th>Cliente</th><th>Barrio</th></tr></thead><tbody>${svc.map(x=>`<tr data-act="openOp" data-id="${x.o.id}" tabindex="0"><td class="tnum">${fs(x.d)} ${fmin(x.m)}</td><td>${x.t}</td><td class="code">${opn(x.o.id)}</td><td class="cname">${x.o.cids.join(', ')||'—'}</td><td>${esc(cust(x.o).name)}</td><td>${esc(aline(addr(x.o)).split(',')[0])} · ${esc(addr(x.o).loc)}</td></tr>`).join('')||`<tr><td colspan="6" class="empty">Sin servicios en este período.</td></tr>`}</tbody></table></div></section>`:`<p class="note">Tocá un chofer para ver el detalle de sus servicios.</p>`}`;
+  <span class="drv-br four">${TYPES.map(T=>`<button class="dbtn ${S.dsel===d.id&&S.dsvc===T?'on':''}" data-act="dsel" data-id="${d.id}" data-t="${T}" type="button"><b>${cntT(d.id,T)}</b><span>${T==='Basural'?'Basurales':T==='Recambio'?'Recambios':T+'s'}</span></button>`).join('')}</span>
+  <span class="muted">${ic('fuel')} ${num(f.l,0)} L · ${money(f.v)}</span></div>`}).join('')}</div>
+ ${sd?`<section class="block"><div class="sechead"><h2 class="sec">Servicios de ${esc(sd.name)} ${PLBL[S.dp]}</h2>${chips('dsvc',[['','Todos'],...TYPES.map(T=>[T,T])],S.dsvc)}</div><div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Hora</th><th>Servicio</th><th>Pedido</th><th>Contenedor</th><th>Cliente</th><th>Lugar</th></tr></thead><tbody>${svc.map(x=>`<tr data-act="openOp" data-id="${x.o.id}" tabindex="0"><td class="tnum">${fs(x.d)}</td><td class="tnum">${fmin(x.m)}</td><td>${x.t==='Basural'?badge('Basural',{Basural:'rep'}):x.t}</td><td class="code">${opn(x.o.id)}</td><td class="cname">${(x.o.type==='Movimiento'?(O(x.o.replacesOpId)||{cids:[]}).cids:x.o.cids).join(', ')||'—'}</td><td>${esc(cust(x.o).name)}</td><td>${x.t==='Basural'?`<b>${esc(x.lugar)}</b>`:esc(x.lugar)}</td></tr>`).join('')||`<tr><td colspan="7" class="empty">Sin servicios de este tipo en el período.</td></tr>`}</tbody></table></div><p class="note">En los basurales, la hora es la que se anotó al llegar al basural. El retiro muestra la hora en que se levantó el contenedor.</p></section>`:`<p class="note">Tocá un chofer, o una de sus cifras (entregas, retiros, recambios, basurales), para ver el detalle.</p>`}`;
 }
 
 /* ---------- Combustible / cuenta YPF ---------- */
@@ -1675,8 +1749,8 @@ function vBas(){
  const c={};BASURALES.forEach(x=>c[x]=0);trips.forEach(o=>c[o.basural]+=o.cids.length);
  return pageHead('Basurales','Cada retiro termina en un basural. Lo anota logística o ventas cuando avisa el chofer.',chips('bp',[['hoy','Hoy'],['semana','Esta semana'],['mes','Este mes'],['todas','Todo']],S.bp))+`
  <div class="tiles tiles4 block">${BASURALES.map(bn=>tile('bin','B. '+bn,c[bn],'viajes '+PLBL[S.bp],'',false,true)).join('')}</div>
- <div class="tbl-wrap"><table><thead><tr><th>Fecha</th><th>Basural</th><th>Chofer</th><th>Contenedor</th><th>Cliente</th><th>De dónde</th></tr></thead><tbody>
- ${trips.slice(0,200).map(o=>`<tr data-act="openOp" data-id="${o.id}" tabindex="0"><td class="tnum">${fs(o.pickDay)} ${fmin(o.pickMin)}</td><td><b>B. ${esc(o.basural)}</b></td><td>${pill(o.pickDriverId)}</td><td class="cname">${o.cids.join(', ')}</td><td>${esc(cust(o).name)}${o.closedByRecambio?' <span class="muted">(recambio)</span>':''}</td><td>${esc(aline(addr(o)))} · ${esc(addr(o).loc)}</td></tr>`).join('')||`<tr><td colspan="6" class="empty">Sin viajes a basurales en este período.</td></tr>`}
+ <div class="tbl-wrap"><table><thead><tr><th>Fecha</th><th>Retiro</th><th>Llegó al basural</th><th>Basural</th><th>Chofer</th><th>Contenedor</th><th>Cliente</th><th>De dónde</th></tr></thead><tbody>
+ ${trips.slice(0,200).map(o=>`<tr data-act="openOp" data-id="${o.id}" tabindex="0"><td class="tnum">${fs(o.pickDay)}</td><td class="tnum">${fmin(o.pickMin)}</td><td class="tnum">${o.dumpMin!=null?fmin(o.dumpMin):'—'}</td><td><b>B. ${esc(o.basural)}</b></td><td>${pill(o.pickDriverId)}</td><td class="cname">${o.cids.join(', ')}</td><td>${esc(cust(o).name)}${o.closedByRecambio?' <span class="muted">(recambio)</span>':''}</td><td>${esc(aline(addr(o)))} · ${esc(addr(o).loc)}</td></tr>`).join('')||`<tr><td colspan="8" class="empty">Sin viajes a basurales en este período.</td></tr>`}
  </tbody></table></div><p class="note">Pendiente de definir con el cliente qué más mostrar en esta sección (por ejemplo, tipo de material o costo por viaje).</p>`;
 }
 
@@ -1684,17 +1758,18 @@ function vBas(){
 function vCont(){
  const f=S.cf,q=norm(f.q);
  const rows=DB.containers.map(c=>{const op=c.opId?O(c.opId):null;return{c,op,cu:op?cust(op):null,a:op?addr(op):null}});
- const base=rows.filter(r=>(!f.size||r.c.size==f.size)&&(!f.loc||(r.a&&r.a.loc===f.loc&&r.c.place==='En calle'))&&(!q||norm(cname(r.c)).includes(q)||(r.cu&&norm(r.cu.name).includes(q))));
+ const base=rows.filter(r=>(!f.size||r.c.size==f.size)&&(!f.loc||(r.a&&r.a.loc===f.loc&&r.c.place==='En calle'))&&(!f.st||r.c.state===f.st)&&(!q||norm(cname(r.c)).includes(q)||(r.cu&&norm(r.cu.name).includes(q))));
  const n={};base.forEach(r=>n[r.c.place]=(n[r.c.place]||0)+1);
  const list=base.filter(r=>!f.pl||r.c.place===f.pl);
  const chip=(p,l)=>`<button class="chip ${f.pl===p?'on':''}" data-act="set" data-k="cf.pl" data-v="${p}">${l} <span>${p?n[p]||0:base.length}</span></button>`;
- return pageHead('Contenedores',`${DB.containers.length} contenedores · tocá uno para ver su ficha e historial`)+`
+ return pageHead('Contenedores',`${DB.containers.length} contenedores · tocá uno para ver su ficha, cambiar estado o ubicación`,can.cont()?`<button class="btn pri big" data-act="newCont">${ic('plus')}Nuevo contenedor</button>`:'')+`
  <div class="filters"><div class="chips">${chip('','Todos')}${PLACES.map(p=>chip(p,p)).join('')}</div></div>
  <div class="filters"><input class="inp grow" id="cfq" data-f="cf.q" value="${esc(f.q)}" placeholder="Buscar: CN-056, villa blanco, cliente…" aria-label="Buscar contenedor">
+  <select class="sel" id="cfst" data-f="cf.st" aria-label="Estado"><option value="">Todos los estados</option>${CSTATES.map(s=>`<option ${f.st===s?'selected':''}>${s}</option>`).join('')}</select>
   <select class="sel" id="cfs" data-f="cf.size" aria-label="Medida"><option value="">Todas las medidas</option>${[3,5,6].map(s=>`<option value="${s}" ${f.size==s?'selected':''}>${s} m³</option>`).join('')}</select>
   <select class="sel" id="cfl" data-f="cf.loc" aria-label="Localidad"><option value="">Todas las localidades</option>${LOC_NAMES.map(l=>`<option ${f.loc===l?'selected':''}>${l}</option>`).join('')}</select></div>
- <div class="tbl-wrap"><table class="dense"><thead><tr><th>Contenedor</th><th>Ubicación</th><th>Cliente</th><th>Barrio · localidad</th><th>Entrega</th><th>Retiro previsto</th></tr></thead><tbody>
- ${list.map(({c,op,cu,a})=>{const calle=c.place==='En calle';return `<tr data-act="openCont" data-id="${c.id}" tabindex="0"><td><span class="sw" style="background:${colOf(c)}"></span><span class="cname">${cname(c)}</span></td><td>${badge(c.place,BPL)}${c.placeNote?`<span class="sub">${esc(c.placeNote)}</span>`:''}${!calle&&op?`<span class="sub">Reservado ${opn(op.id)}</span>`:''}</td><td>${calle&&cu?esc(cu.name):'<span class="muted">—</span>'}</td><td>${calle&&a?`${esc(a.barrio!=='Centro'?a.barrio:'')}${a.barrio!=='Centro'?' · ':''}${esc(a.loc)}`:'<span class="muted">—</span>'}</td><td class="tnum">${calle&&op?fd(op.delDay):'—'}</td><td class="tnum ${calle&&op&&op.plannedPickup<TODAY?'late':''}">${calle&&op?fd(op.plannedPickup)+(op.plannedPickup<TODAY?' · vencido':''):'—'}</td></tr>`}).join('')||`<tr><td colspan="6" class="empty">No hay contenedores con esos filtros.</td></tr>`}
+ <div class="tbl-wrap"><table class="dense"><thead><tr><th>Contenedor</th><th>Estado</th><th>Ubicación</th><th>Cliente</th><th>Barrio · localidad</th><th>Entrega</th><th>Retiro previsto</th></tr></thead><tbody>
+ ${list.map(({c,op,cu,a})=>{const calle=c.place==='En calle';return `<tr data-act="openCont" data-id="${c.id}" tabindex="0" style="${c.state==='Dado de baja'?'opacity:.55':''}"><td><span class="sw" style="background:${colOf(c)}"></span><span class="cname">${cname(c)}</span></td><td>${badge(c.state,BCS)}</td><td>${badge(c.place,BPL)}${c.placeNote?`<span class="sub">${esc(c.placeNote)}</span>`:''}${!calle&&op?`<span class="sub">Reservado ${opn(op.id)}</span>`:''}</td><td>${calle&&cu?esc(cu.name):'<span class="muted">—</span>'}</td><td>${calle&&a?`${esc(a.barrio!=='Centro'?a.barrio:'')}${a.barrio!=='Centro'?' · ':''}${esc(a.loc)}`:'<span class="muted">—</span>'}</td><td class="tnum">${calle&&op?fd(op.delDay):'—'}</td><td class="tnum ${calle&&op&&op.plannedPickup<TODAY?'late':''}">${calle&&op?fd(op.plannedPickup)+(op.plannedPickup<TODAY?' · vencido':''):'—'}</td></tr>`}).join('')||`<tr><td colspan="7" class="empty">No hay contenedores con esos filtros.</td></tr>`}
  </tbody></table></div>`;
 }
 function photoSvg(c,label){return `<svg viewBox="0 0 160 110" role="img" aria-label="${esc(label)}"><rect width="160" height="110" fill="#A9BDCB"/><rect y="76" width="160" height="34" fill="#8C7B5D"/><path d="M20 46h120l-9 38H29z" fill="${colOf(c)}" stroke="#333" stroke-width="1.5"/><path d="M42 50v30M62 50v30M82 50v30M102 50v30M122 50v30" stroke="rgba(0,0,0,.16)" stroke-width="3"/><rect x="58" y="58" width="44" height="14" rx="2" fill="rgba(255,255,255,.75)"/><text x="80" y="69" text-anchor="middle" font-family="Arial" font-weight="700" font-size="10" fill="#222">${c.id}</text></svg>`}
@@ -1703,9 +1778,15 @@ function dCont(id){
  const c=C(id),op=c.opId?O(c.opId):null,calle=c.place==='En calle',cu=op&&cust(op),a=op&&addr(op);
  const lp=DB.ops.filter(o=>o.cids.includes(id)&&o.pickDay!=null).sort((x,y)=>(y.pickDay*1440+y.pickMin)-(x.pickDay*1440+x.pickMin))[0];
  const hist=DB.moves.filter(m=>m.cid===id).sort((x,y)=>(y.day*1440+y.min)-(x.day*1440+x.min));
- const uses=DB.ops.filter(o=>o.cids.includes(id)&&o.delDay!=null&&o.type!=='Movimiento').length;
- const acts=can.cont()&&!calle?['Lote Paraguay','Simonna','Otro lugar'].filter(s=>s!==c.place).map(s=>`<button class="btn sm" data-act="contPlace" data-id="${id}" data-pl="${s}">Llevar a ${s}</button>`).join(''):'';
- return `<div class="m-head"><div><p class="eyebrow">Ficha del contenedor</p><h2 class="cname" style="font-size:30px;white-space:normal">${cname(c)}</h2><div class="meta">${badge(c.place,BPL)}${c.placeNote?`<span class="muted">${esc(c.placeNote)}</span>`:''}<span class="muted"><span class="sw" style="background:${colOf(c)}"></span>${esc(c.detail)}</span></div></div><button class="x" data-act="closeDrawer" aria-label="Cerrar">${ic('x')}</button></div>
+ const uses=DB.ops.filter(o=>o.cids.includes(id)&&o.delDay!=null&&!['Movimiento','Extensión'].includes(o.type)).length;
+ const edit=can.cont()?`<div class="dsec"><h3>Estado y ubicación</h3><div class="fgrid">
+  <label class="fld"><span>Estado</span><select id="ce-st">${CSTATES.map(s=>`<option ${c.state===s?'selected':''}>${s}</option>`).join('')}</select></label>
+  <label class="fld"><span>Ubicación</span><select id="ce-pl" data-chg="cePl" ${calle?'disabled':''}>${(calle?['En calle']:['Lote Paraguay','Simonna','Otro lugar']).map(s=>`<option ${c.place===s?'selected':''}>${s}</option>`).join('')}</select></label>
+  <label class="fld full" id="ce-note-box" ${c.place==='Otro lugar'?'':'hidden'}><span>¿Dónde?</span><input id="ce-note" value="${esc(c.placeNote)}" placeholder="Ej.: taller de soldadura"></label>
+  <label class="fld full"><span>Observaciones</span><textarea id="c-obs">${esc(c.obs)}</textarea></label>
+  ${calle?'<p class="note full">Está en la calle: la ubicación cambia sola cuando se registra el retiro.</p>':''}
+  <div class="full"><button class="btn sm pri" data-act="saveContEdit" data-id="${id}">${ic('check')}Guardar cambios</button></div></div></div>`:`<div class="dsec"><h3>Observaciones</h3><p>${esc(c.obs)||'<span class="muted">Sin observaciones.</span>'}</p></div>`;
+ return `<div class="m-head"><div><p class="eyebrow">Ficha del contenedor</p><h2 class="cname" style="font-size:30px;white-space:normal">${cname(c)}</h2><div class="meta">${badge(c.state,BCS)}${badge(c.place,BPL)}${c.placeNote?`<span class="muted">${esc(c.placeNote)}</span>`:''}<span class="muted"><span class="sw" style="background:${colOf(c)}"></span>${esc(c.detail)}</span></div></div><button class="x" data-act="closeDrawer" aria-label="Cerrar">${ic('x')}</button></div>
  <div class="m-body">
   <div class="stats"><div class="stat"><b>${uses}</b><span>entregas registradas</span></div><div class="stat"><b>${calle&&op?TODAY-op.delDay:'—'}</b><span>días en el cliente</span></div><div class="stat"><b>${lp?fs(lp.pickDay):'—'}</b><span>último retiro</span></div></div>
   <div class="dsec"><h3>Dónde está ahora</h3><dl class="dl">
@@ -1714,13 +1795,11 @@ function dCont(id){
    <dt>Dirección</dt><dd>${calle&&a?esc(aline(a))+' · '+esc(a.loc)+(a.lat==null?' <span class="b bad">Sin ubicación</span>':''):'—'}</dd>
    <dt>Entrega</dt><dd>${calle&&op?fd(op.delDay)+' '+fmin(op.delMin):'—'}</dd>
    <dt>Retiro previsto</dt><dd class="${calle&&op&&op.plannedPickup<TODAY?'late':''}">${calle&&op?fd(op.plannedPickup):'—'}</dd>
-   <dt>Chofer que entregó</dt><dd>${calle&&op?esc(dname(op.driverId)):'—'}</dd>
-   <dt>Último retiro</dt><dd>${lp?`${esc(dname(lp.pickDriverId))} · ${fd(lp.pickDay)} · B. ${esc(lp.basural)}`:'—'}</dd>
+   <dt>Último retiro</dt><dd>${lp?`${esc(dname(lp.pickDriverId))} · ${fd(lp.pickDay)} ${fmin(lp.pickMin)} · B. ${esc(lp.basural)}${lp.dumpMin!=null?' ('+fmin(lp.dumpMin)+')':''}`:'—'}</dd>
    <dt>Pedido</dt><dd>${op?`<a href="#" data-act="openOp" data-id="${op.id}">${opn(op.id)}</a>${calle?'':' (reservado)'}`:'—'}</dd>
   </dl></div>
   ${calle&&op?`<div class="dsec"><h3>Fotos</h3><div class="photos">${photosOf(op)}</div></div>`:''}
-  <div class="dsec"><h3>Observaciones</h3>${can.cont()?`<textarea class="inp" id="c-obs" rows="2" style="min-height:64px;padding:10px 12px">${esc(c.obs)}</textarea><div><button class="btn sm" data-act="saveContObs" data-id="${id}">Guardar observación</button></div>`:`<p>${esc(c.obs)||'<span class="muted">Sin observaciones.</span>'}</p>`}</div>
-  ${acts&&!op?`<div class="dsec"><h3>Mover</h3><div class="chips">${acts}</div></div>`:''}
+  ${edit}
   <div class="dsec"><h3>Historial de movimientos <span style="text-transform:none;letter-spacing:0;font-weight:500">· más reciente primero</span></h3>
    ${hist.length?`<ul class="tl">${hist.map(m=>`<li class="${m.kind}"><div class="d">${fd(m.day)} · ${fmin(m.min)}</div><div class="t">${esc(m.text)}</div>${m.driverId?`<small>Chofer: ${esc(dname(m.driverId))}</small>`:''}</li>`).join('')}</ul>`:'<p class="muted">Todavía no tiene movimientos.</p>'}</div>
  </div>`;
@@ -1757,49 +1836,65 @@ function dCust(id){
 
 /* ---------- Pedido (modal) ---------- */
 const radios=(name,opts,cur)=>opts.map(o=>{const[v,l]=Array.isArray(o)?o:[o,o];return `<label><input type="radio" name="${name}" value="${v}" ${String(cur)===String(v)?'checked':''}><span>${l}</span></label>`}).join('');
+const cashBlock=(name,cur,show)=>`<div class="fld full" id="${name}-box" ${show?'':'hidden'}><span>¿Quién cobra el efectivo?</span><div class="seg">${radios(name,CASH_OPTS,cur||'Oficina')}</div></div>`;
 const acctBlock=(name,cur,show)=>`<div class="fld full" id="${name}-box" ${show?'':'hidden'}><span>¿A qué cuenta transfirió?</span><div class="seg">${radios(name,ACCTS,cur||'SAS')}</div></div>`;
 function mOp(){
  const o=O(S.modal.id);if(!o)return '';
- const cu=cust(o),a=addr(o),ps=payStatus(o),rep=o.replacesOpId?O(o.replacesOpId):null,editC=S.editCom===o.id&&can.com();
+ const cu=cust(o),a=addr(o),ps=payStatus(o),rep=o.replacesOpId?O(o.replacesOpId):null,editC=S.editCom===o.id&&can.com(),inv=o.inv;
  const com=editC?`<div class="fgrid">
    <label class="fld"><span>Fecha</span><input type="date" id="ec-d" value="${dOut(o.reqDay)}"></label><label class="fld"><span>Horario</span><select id="ec-s">${SLOTS.map(s=>`<option ${o.slot===s?'selected':''}>${s}</option>`).join('')}</select></label>
    <label class="fld"><span>Precio</span><input id="ec-p" inputmode="numeric" value="${o.price}"></label><label class="fld"><span>Forma de pago</span><select id="ec-m" data-chg="ecm">${PAY_METHODS.map(m=>`<option ${o.payMethod===m?'selected':''}>${m}</option>`).join('')}</select></label>
-   ${acctBlock('ec-a',o.payAcct,o.payMethod==='Transferencia')}
-   <label class="fld full"><span>Link de Google Maps</span><input id="ec-maps" inputmode="url" value="${esc(mapsUrl(o))}" placeholder="https://maps.app.goo.gl/…"></label>
+   ${acctBlock('ec-a',o.payAcct,o.payMethod==='Transferencia')}${cashBlock('ec-cash',o.cashAt,o.payMethod==='Efectivo')}
+   <label class="fld"><span>CUIT de quien pide</span><input id="ec-cuit" value="${esc(cu.cuit)}" placeholder="20-12345678-9"></label>
+   <label class="fld"><span>Link de Google Maps</span><input id="ec-maps" inputmode="url" value="${esc(mapsUrl(o))}" placeholder="https://maps.app.goo.gl/…"></label>
+   <p class="full sublbl">Facturación</p>
+   <label class="fld"><span>Tipo de factura</span><select id="ec-it">${INV_TYPES.map(t=>`<option ${(inv?inv.tipo:'Sin factura')===t?'selected':''}>${t}</option>`).join('')}</select></label>
+   <label class="fld"><span>N° de factura</span><input id="ec-in" value="${esc(inv&&inv.num)}" placeholder="0003-00004521"></label>
+   <label class="fld"><span>Razón social</span><input id="ec-ir" value="${esc(inv?inv.rs:cu.name)}"></label>
+   <label class="fld"><span>CUIT de la factura</span><input id="ec-ic" value="${esc(inv?inv.cuit:cu.cuit)}"></label>
    <label class="check full"><input type="checkbox" id="ec-pc" ${o.pendConf?'checked':''}> Pendiente de confirmación del cliente</label>
    <label class="fld full"><span>Observaciones</span><textarea id="ec-o">${esc(o.obs)}</textarea></label>
    <div class="full" style="display:flex;gap:8px"><button class="btn sm pri" data-act="saveCom" data-id="${o.id}">Guardar</button><button class="btn sm ghost" data-act="editCom" data-id="">Cancelar</button></div></div>`
-  :`<dl class="dl"><dt>Cliente</dt><dd>${esc(cu.name)}</dd><dt>Teléfono</dt><dd>${esc(cu.phone)}</dd><dt>Dirección</dt><dd>${esc(aline(a))}</dd><dt>Localidad</dt><dd>${esc(a.loc)}</dd>${mapsUrl(o)?`<dt>Ubicación</dt><dd>${gmaps(o,'Abrir en Google Maps')}</dd>`:''}
-   <dt>Servicio</dt><dd>${o.type} · ${o.qty}× ${o.size} m³</dd>${rep?`<dt>${o.type==='Movimiento'?'Contenedor':'Sale'}</dt><dd>${rep.cids.join(', ')} (${opn(rep.id)})</dd>`:''}
-   <dt>Fecha</dt><dd>${fd(o.reqDay)} · ${esc(o.slot)}</dd><dt>Precio</dt><dd>${money(o.price)}</dd><dt>Forma de pago</dt><dd>${esc(payLabel(o))}</dd><dt>Observaciones</dt><dd>${esc(o.obs)||'—'}</dd><dt>Agendó</dt><dd>${esc(o.createdBy)} · ${fs(o.createdDay)}</dd></dl>`;
+  :`<dl class="dl"><dt>Cliente</dt><dd>${esc(cu.name)}</dd><dt>CUIT</dt><dd>${esc(cu.cuit)||'—'}</dd><dt>Teléfono</dt><dd>${esc(cu.phone)}</dd><dt>Dirección</dt><dd>${esc(aline(a))}</dd><dt>Localidad</dt><dd>${esc(a.loc)}</dd>${mapsUrl(o)?`<dt>Ubicación</dt><dd>${gmaps(o,'Abrir en Google Maps')}</dd>`:''}
+   <dt>Servicio</dt><dd>${o.type==='Extensión'?`Extensión · +${o.extDays||'?'} días`:`${o.type} · ${o.qty}× ${o.size} m³`}</dd>${rep?`<dt>${o.type==='Recambio'?'Sale':'Contenedor'}</dt><dd>${rep.cids.join(', ')} (${opn(rep.id)})</dd>`:''}
+   <dt>Fecha</dt><dd>${fd(o.reqDay)} · ${esc(o.slot)}</dd><dt>Precio</dt><dd>${money(o.price)}</dd><dt>Forma de pago</dt><dd>${esc(payLabel(o))}</dd><dt>Observaciones</dt><dd>${esc(o.obs)||'—'}</dd><dt>Agendó</dt><dd>${esc(o.createdBy)} · ${fs(o.createdDay)}</dd></dl>
+   <div class="subsect"><p class="sublbl">Facturación</p>${inv?`<dl class="dl"><dt>Factura</dt><dd>${inv.tipo} ${esc(inv.num)||'<span class="muted">sin número</span>'}</dd><dt>Razón social</dt><dd>${esc(inv.rs)}</dd><dt>CUIT</dt><dd>${esc(inv.cuit)||'—'}</dd><dt>En banco</dt><dd>${badge(invState(o),BINV)}</dd></dl>`:'<p class="muted">Sin factura.</p>'}</div>`;
+ const rphotos=o.photos.filter(p=>p.kind==='Foto del remito');
+ const remito=o.type==='Extensión'?'':(can.com()&&o.status!=='Cancelado'?`<div class="subsect"><p class="sublbl">Remito</p><div class="fgrid">
+   <label class="fld"><span>N° de remito</span><input id="rm-n" inputmode="numeric" value="${esc(o.remito||'')}" placeholder="${DB.seq.remito+1}"></label><label class="check" style="align-self:end"><input type="checkbox" id="rm-f" ${o.firmado?'checked':''}> Remito firmado</label>
+   <div class="full"><label class="up">${ic('cam')}Foto del remito<input type="file" accept="image/*" data-photo="Foto del remito" data-id="${o.id}"></label></div>
+   <div class="full photos" id="ph-${o.id}">${rphotos.map(p=>`<div class="photo"><img src="${p.url}" alt="Foto del remito"><span>Foto del remito</span></div>`).join('')}</div>
+   <div class="full"><button class="btn sm" data-act="saveRemito" data-id="${o.id}">${ic('check')}Guardar remito</button></div></div></div>`
+  :`<div class="subsect"><p class="sublbl">Remito</p><p>${o.remito?'N° '+o.remito+' '+(o.firmado?badge('Firmado',{Firmado:'ok'}):badge('Sin firmar',{'Sin firmar':'warn'})):'<span class="muted">Sin remito</span>'}</p></div>`);
  let lg;
- if(can.assign()&&preDel(o)&&o.type!=='Movimiento'){
-  const av=DB.containers.filter(c=>DEPOTS.includes(c.place)&&(!c.opId||c.opId===o.id));
+ const cphotos=o.photos.filter(p=>p.kind!=='Foto del remito');
+ if(o.type==='Extensión'){lg=`<p>Extensión de tiempo: el retiro de ${rep?rep.cids.join(', '):'—'} se corrió ${o.extDays||'?'} días. No requiere viaje.</p>`}
+ else if(can.assign()&&preDel(o)&&o.type!=='Movimiento'){
+  const av=DB.containers.filter(c=>DEPOTS.includes(c.place)&&c.state==='Disponible'&&(!c.opId||c.opId===o.id));
   const opt=(c,sel)=>`<option value="${c.id}" ${sel===c.id?'selected':''}>${cname(c)} · ${c.place}</option>`;
   const sel=i=>{const cur=o.cids[i]||'';return `<label class="fld full"><span>Contenedor${o.qty>1?' '+(i+1):''}</span><select id="lg-c${i}"><option value="">A confirmar</option><optgroup label="De ${o.size} m³">${av.filter(c=>c.size===o.size).map(c=>opt(c,cur)).join('')}</optgroup><optgroup label="Otras medidas">${av.filter(c=>c.size!==o.size).map(c=>opt(c,cur)).join('')}</optgroup></select></label>`};
   lg=`<div class="fgrid">${Array.from({length:o.qty},(_,i)=>sel(i)).join('')}
    <div class="fld full"><span>Chofer</span><div class="seg">${DB.drivers.map(d=>`<label><input type="radio" name="lg-drv" value="${d.id}" ${o.driverId===d.id?'checked':''}><span>${esc(d.name)}</span></label>`).join('')}</div></div>
    <label class="fld"><span>Fecha</span><input type="date" id="lg-d" value="${dOut(o.reqDay)}"></label><label class="fld"><span>Horario</span><select id="lg-s">${SLOTS.map(s=>`<option ${o.slot===s?'selected':''}>${s}</option>`).join('')}</select></label>
-   <label class="fld"><span>N° de remito</span><input id="lg-r" inputmode="numeric" value="${o.remito||DB.seq.remito+1}"></label><label class="check" style="align-self:end"><input type="checkbox" id="lg-f" ${o.firmado?'checked':''}> Remito firmado</label>
    <label class="fld full"><span>Observaciones de logística</span><textarea id="lg-o" placeholder="Ej.: no permite ingreso, avisar en guardia">${esc(o.logObs)}</textarea></label>
-   <div class="full" style="display:flex;flex-wrap:wrap;gap:8px"><label class="up">${ic('cam')}Foto del contenedor<input type="file" accept="image/*" data-photo="Foto del contenedor" data-id="${o.id}"></label><label class="up">${ic('cam')}Foto del remito<input type="file" accept="image/*" data-photo="Foto del remito" data-id="${o.id}"></label></div>
-   <div class="full photos" id="ph-${o.id}">${o.photos.map(p=>`<div class="photo"><img src="${p.url}" alt="${esc(p.kind)}"><span>${esc(p.kind)}</span></div>`).join('')}</div>
+   <div class="full"><label class="up">${ic('cam')}Foto del contenedor<input type="file" accept="image/*" data-photo="Foto del contenedor" data-id="${o.id}" data-box="phc-${o.id}"></label></div>
+   <div class="full photos" id="phc-${o.id}">${cphotos.map(p=>`<div class="photo"><img src="${p.url}" alt="${esc(p.kind)}"><span>${esc(p.kind)}</span></div>`).join('')}</div>
    <div class="full" id="lg-err"></div><div class="full"><button class="btn dark" data-act="saveLog" data-id="${o.id}">${ic('check')}Guardar asignación</button></div></div>`;
  }else if(can.assign()&&preDel(o)){
   lg=`<div class="fld"><span>Chofer</span><div class="seg">${DB.drivers.map(d=>`<label><input type="radio" name="lg-drv" value="${d.id}" ${o.driverId===d.id?'checked':''}><span>${esc(d.name)}</span></label>`).join('')}</div></div><div id="lg-err"></div><div><button class="btn dark" data-act="saveLog" data-id="${o.id}">Guardar</button></div>`;
  }else{
   lg=`<dl class="dl"><dt>Contenedor</dt><dd>${o.cids.length?o.cids.map(c=>`<a href="#" data-act="openCont" data-id="${c}">${cname(C(c))}</a>`).join('<br>'):(o.type==='Movimiento'?'—':'Sin asignar')}</dd><dt>Chofer</dt><dd>${o.driverId?esc(dname(o.driverId)):'—'}</dd>
    <dt>Entrega</dt><dd>${o.delDay!=null?fd(o.delDay)+' · '+fmin(o.delMin):'Agendado '+fd(o.reqDay)+' · '+esc(o.slot)}</dd>
-   <dt>Remito</dt><dd>${o.remito?'N° '+o.remito+' '+(o.firmado?badge('Firmado',{Firmado:'ok'}):badge('Sin firmar',{'Sin firmar':'warn'})):'—'}</dd>
    ${o.plannedPickup!=null?`<dt>Retiro previsto</dt><dd class="${o.plannedPickup<TODAY&&isActive(o)?'late':''}">${fd(o.plannedPickup)}${isActive(o)?' · '+esc(o.pickSlot):''}</dd>`:''}
-   ${o.pickDay!=null?`<dt>Retirado</dt><dd>${fd(o.pickDay)} ${fmin(o.pickMin)} · ${esc(dname(o.pickDriverId))}${o.closedByRecambio?' (recambio)':''}</dd><dt>Basural</dt><dd>B. ${esc(o.basural)}</dd><dt>Quedó en</dt><dd>${esc(o.pickPlace)}</dd>`:''}
+   ${o.pickDay!=null?`<dt>Retirado</dt><dd>${fd(o.pickDay)} ${fmin(o.pickMin)} · ${esc(dname(o.pickDriverId))}${o.closedByRecambio?' (recambio)':''}</dd><dt>Basural</dt><dd>B. ${esc(o.basural)}${o.dumpMin!=null?' · llegó '+fmin(o.dumpMin):''}</dd><dt>Quedó en</dt><dd>${esc(o.pickPlace)}</dd>`:''}
    ${o.logObs?`<dt>Obs. logística</dt><dd>${esc(o.logObs)}</dd>`:''}</dl>
    ${o.cids.length&&o.delDay!=null?`<div class="photos">${photosOf(o)}</div>`:''}
-   ${can.field()&&o.remito&&!o.firmado&&o.status!=='Cancelado'?`<div><button class="btn sm" data-act="signRemito" data-id="${o.id}">Marcar remito firmado</button></div>`:''}
    ${can.field()&&isActive(o)?`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end"><label class="fld" style="flex:1 1 150px"><span>Fecha de retiro</span><input type="date" id="pp-d" value="${dOut(o.plannedPickup)}"></label><label class="fld" style="flex:1 1 130px"><span>Horario</span><select id="pp-s">${SLOTS.map(x=>`<option ${o.pickSlot===x?'selected':''}>${x}</option>`).join('')}</select></label><button class="btn sm" data-act="savePP" data-id="${o.id}">Guardar</button></div>`:''}`;
  }
- const pg=`<dl class="dl"><dt>Precio</dt><dd>${money(o.price)}</dd><dt>Forma</dt><dd>${esc(payLabel(o))}</dd><dt>Pagado</dt><dd>${money(o.paid)}</dd><dt>Pendiente</dt><dd class="${ps==='Vencido'?'late':''}">${money(Math.max(0,o.price-o.paid))}</dd><dt>Estado</dt><dd>${o.status==='Cancelado'?'—':badge(ps,BP)}</dd><dt>Fecha de pago</dt><dd>${fd(o.payDay)}</dd><dt>Comprobante</dt><dd>${esc(o.receipt)||'—'}</dd></dl>
-  <div style="display:flex;gap:8px;flex-wrap:wrap">${can.pay()&&ps==='Por verificar'?`<button class="btn sm pri" data-act="verify" data-id="${o.id}">${ic('check')}Verificar transferencia</button>`:''}${can.pay()&&o.status!=='Cancelado'&&['Pendiente','Vencido'].includes(ps)?`<button class="btn sm" data-act="payDlg" data-id="${o.id}">${ic('cash')}Registrar pago</button>`:''}</div>`;
+ const ch=o.chamba?`<dt>Chamba cobró</dt><dd>${money(o.chamba.cobrado)} · ${esc(o.chamba.via)}</dd>`:'';
+ const pg=`<dl class="dl"><dt>Precio</dt><dd>${money(o.price)}</dd><dt>Forma</dt><dd>${esc(payLabel(o))}</dd>${ch}<dt>Pagado</dt><dd>${money(o.paid)}</dd><dt>Pendiente</dt><dd class="${ps==='Vencido'?'late':''}">${money(Math.max(0,o.price-o.paid))}</dd><dt>Estado</dt><dd>${o.status==='Cancelado'?'—':badge(ps,BP)}</dd><dt>Fecha de pago</dt><dd>${fd(o.payDay)}</dd><dt>Comprobante</dt><dd>${esc(o.receipt)||'—'}</dd></dl>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">${can.verify()&&ps==='Por verificar'?`<button class="btn sm pri" data-act="verify" data-id="${o.id}">${ic('check')}Verificar transferencia</button>`:''}${can.pay()&&o.status!=='Cancelado'&&['Pendiente','Vencido'].includes(ps)?`<button class="btn sm" data-act="payDlg" data-id="${o.id}">${ic('cash')}Registrar pago</button>`:''}</div>
+  ${ps==='Por verificar'&&!can.verify()?'<p class="note">Administración verifica que la transferencia haya llegado.</p>':''}`;
  const B=[];
  if(preDel(o)&&(can.com()||can.assign()))B.push(o.pendConf?`<button class="btn" data-act="setConf" data-id="${o.id}" data-v="0">${ic('check')}El cliente confirmó</button>`:`<button class="btn ghost" data-act="setConf" data-id="${o.id}" data-v="1">Marcar pendiente de confirmación</button>`);
  if(can.field()){
@@ -1810,11 +1905,11 @@ function mOp(){
  }
  const cancel=can.com()&&preDel(o)?`<button class="btn danger" data-act="cancelOp" data-id="${o.id}">Cancelar pedido</button>`:'';
  const hist=DB.audit.filter(h=>h.ref===o.id).sort((x,y)=>x.t-y.t);
- return `<div class="m-head"><div><p class="eyebrow">Pedido</p><h2 class="code" style="font-size:34px">${opn(o.id)}</h2><div class="meta">${badge(o.status,BO)}${o.pendConf?'<span class="pc-tag" style="margin:0">Pendiente de confirmación</span>':''}<span>${o.type}</span>${sz(o.size)}<span class="muted">${esc(cu.name)} · ${esc(a.barrio!=='Centro'?a.barrio+', ':'')}${esc(a.loc)}</span></div>${stTag(o)}</div><button class="x" data-act="closeModal" aria-label="Cerrar">${ic('x')}</button></div>
+ return `<div class="m-head"><div><p class="eyebrow">Pedido</p><h2 class="code" style="font-size:34px">${opn(o.id)}</h2><div class="meta">${badge(o.status,BO)}${o.pendConf?'<span class="pc-tag" style="margin:0">Pendiente de confirmación</span>':''}<span>${o.type}</span>${o.type!=='Extensión'?sz(o.size):''}<span class="muted">${esc(cu.name)} · ${esc(a.barrio!=='Centro'?a.barrio+', ':'')}${esc(a.loc)}</span></div>${stTag(o)}</div><button class="x" data-act="closeModal" aria-label="Cerrar">${ic('x')}</button></div>
  <div class="m-body"><div class="op-grid">
-  <section class="sect"><h3>Comercial <span class="who">Ventas</span></h3>${com}${can.com()&&!editC&&o.status!=='Cancelado'?`<div><button class="btn sm ghost" data-act="editCom" data-id="${o.id}">Editar datos comerciales</button></div>`:''}</section>
+  <section class="sect"><h3>Comercial <span class="who">Ventas</span></h3>${com}${remito}${can.com()&&!editC&&o.status!=='Cancelado'?`<div><button class="btn sm ghost" data-act="editCom" data-id="${o.id}">Editar datos comerciales</button></div>`:''}</section>
   <section class="sect lg"><h3>Logística <span class="who">Logística</span></h3>${lg}</section>
-  <section class="sect"><h3>Pago <span class="who">Ventas</span></h3>${pg}</section>
+  <section class="sect"><h3>Pago <span class="who">Ventas y Adm.</span></h3>${pg}</section>
  </div>
  <details class="hist"><summary>Historial de cambios de este pedido (${hist.length})</summary><div class="audit">${hist.map(h=>`<div><time>${fs(Math.floor(h.t/1440))} ${fmin(h.t%1440)}</time><span>${esc(h.text)}</span></div>`).join('')}</div></details></div>
  ${B.length||cancel?`<div class="m-foot">${cancel}<span class="spacer"></span>${B.join('')}</div>`:''}`;
@@ -1833,28 +1928,37 @@ function custBlock(c){
 }
 function recBlock(){
  const t=val('no-type');if(t==='Alquiler')return '';
- const cid=byId('no-cid')&&+byId('no-cid').value;
- if(!cid)return `<div class="warn-box">Para un ${t.toLowerCase()}, primero elegí el cliente.</div>`;
+ const cid=byId('no-cid')&&+byId('no-cid').value,lt=t.toLowerCase();
+ if(!cid)return `<div class="warn-box">Para ${t==='Extensión'?'una extensión':'un '+lt}, primero elegí el cliente.</div>`;
  const act=DB.ops.filter(o=>o.customerId===cid&&isActive(o));
- if(!act.length)return `<div class="warn-box">Este cliente no tiene contenedores en la calle. Un ${t.toLowerCase()} necesita uno.</div>`;
- return `<label class="fld"><span>${t==='Recambio'?'Contenedor que sale':'Contenedor que se mueve'}</span><select id="no-repl">${act.map(o=>`<option value="${o.id}">${o.cids.join(', ')} · entregado ${fs(o.delDay)} · ${esc(aline(addr(o)))}</option>`).join('')}</select></label>`;
+ if(!act.length)return `<div class="warn-box">Este cliente no tiene contenedores en la calle. ${t==='Extensión'?'Una extensión':'Un '+lt} necesita uno.</div>`;
+ return `<div class="fgrid"><label class="fld ${t==='Extensión'?'':'full'}"><span>${t==='Recambio'?'Contenedor que sale':t==='Extensión'?'Contenedor que se queda más tiempo':'Contenedor que se mueve'}</span><select id="no-repl">${act.map(o=>`<option value="${o.id}">${o.cids.join(', ')} · retiro ${fs(o.plannedPickup)} · ${esc(aline(addr(o)))}</option>`).join('')}</select></label>
+  ${t==='Extensión'?`<div class="fld"><span>Días extra</span><div class="seg">${radios('no-ext',['1','2','3','5','7'],'2')}</div></div><p class="note full">El precio de la extensión lo define Ventas.</p>`:''}</div>`;
 }
 function mNewOp(){
- const pre=S.modal.cid?CU(S.modal.cid):null,day=S.modal.day!=null?S.modal.day:TODAY;
+ const pre=S.modal.cid?CU(S.modal.cid):null,day=S.modal.day!=null?S.modal.day:TODAY,isCh=pre&&pre.name==='Grupo Chamba';
  return `<div class="m-head"><div><p class="eyebrow">Ventas</p><h2>Agendar pedido</h2></div><button class="x" data-act="closeModal" aria-label="Cerrar">${ic('x')}</button></div>
  <div class="m-body"><div class="fgrid">
   <div class="fld full"><span>Cliente</span><div id="no-cust">${custBlock(pre)}</div></div>
-  <div class="fld"><span>Servicio</span><div class="seg">${radios('no-type',['Alquiler','Recambio','Movimiento'],'Alquiler')}</div></div>
-  <div class="fld"><span>Cantidad</span><div class="seg">${radios('no-qty',['1','2'],'1')}</div></div>
+  <label class="fld"><span>CUIT de quien pide</span><input id="no-cuit" value="${esc(pre?pre.cuit:'')}" placeholder="20-12345678-9"></label><div></div>
+  <div class="fld"><span>Servicio</span><div class="seg">${radios('no-type',['Alquiler','Recambio','Movimiento','Extensión'],'Alquiler')}</div></div>
+  <div class="fld" id="no-qty-box"><span>Cantidad</span><div class="seg">${radios('no-qty',['1','2'],'1')}</div></div>
   <div id="no-rec" class="full"></div>
-  <div class="fld full"><span>Medida</span><div class="seg">${radios('no-size',[['3','3 m³'],['5','5 m³'],['6','6 m³']],'5')}</div></div>
+  <div class="fld full" id="no-size-box"><span>Medida</span><div class="seg">${radios('no-size',[['3','3 m³'],['5','5 m³'],['6','6 m³']],'5')}</div></div>
   <label class="fld"><span>Fecha</span><input type="date" id="no-date" value="${dOut(day)}"></label>
   <label class="fld"><span>Horario</span><select id="no-slot">${SLOTS.map(s=>`<option>${s}</option>`).join('')}</select></label>
-  <label class="fld"><span>Precio</span><input id="no-price" inputmode="numeric" value="${DEFP[5]}"></label>
-  <div class="fld full"><span>Forma de pago</span><div class="seg">${radios('no-pay',PAY_METHODS,pre&&pre.name==='Grupo Chamba'?'Grupo Chamba':'Transferencia')}</div></div>
-  ${acctBlock('no-acct','SAS',!(pre&&pre.name==='Grupo Chamba'))}
-  <label class="fld full"><span>Link de Google Maps (opcional)</span><input id="no-maps" inputmode="url" placeholder="Pegá el link de ubicación que manda el cliente por WhatsApp"><small class="muted" style="font-weight:500">Si el link trae coordenadas, el pedido aparece en el punto exacto del mapa.</small></label>
-  <label class="check full"><input type="checkbox" id="no-paid"> El cliente ya pagó (queda por verificar si es transferencia)</label>
+  <label class="fld"><span>Precio</span><input id="no-price" inputmode="numeric" value="${DEFP[5]}"></label><div></div>
+  <div class="fld full"><span>Forma de pago</span><div class="seg">${radios('no-pay',PAY_METHODS,isCh?'Grupo Chamba':'Transferencia')}</div></div>
+  ${acctBlock('no-acct','SAS',!isCh)}${cashBlock('no-cash','Oficina',false)}
+  <div class="full fgrid" id="no-ch-box" ${isCh?'':'hidden'} style="grid-column:1/-1"><label class="fld"><span>¿Cuánto cobra Chamba al cliente?</span><input id="no-chc" inputmode="numeric" value="145000"></label><div class="fld"><span>¿Cómo le pagan a Chamba?</span><div class="seg">${radios('no-chv',['Efectivo','Transferencia'],'Efectivo')}</div></div></div>
+  <label class="check full"><input type="checkbox" id="no-paid"> El cliente ya pagó (si es transferencia, queda para que Administración la verifique)</label>
+  <p class="full sublbl">Facturación</p>
+  <div class="fld full"><span>Tipo de factura</span><div class="seg">${radios('no-it',INV_TYPES,'B')}</div></div>
+  <label class="fld"><span>Razón social a facturar</span><input id="no-ir" placeholder="Si queda vacío, va a nombre del cliente"></label>
+  <label class="fld"><span>CUIT de la factura</span><input id="no-ic" placeholder="Si queda vacío, usa el del cliente"></label>
+  <label class="fld"><span>N° de factura (si ya está)</span><input id="no-in" placeholder="0003-00004521"></label>
+  <label class="fld"><span>N° de remito (si ya está)</span><input id="no-rm" inputmode="numeric"></label>
+  <label class="fld full"><span>Link de Google Maps (opcional)</span><input id="no-maps" inputmode="url" placeholder="Pegá el link de ubicación que manda el cliente por WhatsApp"></label>
   <label class="check full"><input type="checkbox" id="no-pc"> Pendiente de confirmación del cliente (lluvia u otro motivo)</label>
   <label class="fld full"><span>Observaciones</span><textarea id="no-obs" placeholder="Ej.: permiten ingreso, llamar antes"></textarea></label>
  </div><div id="no-err"></div></div>
@@ -1869,15 +1973,43 @@ function mNewCust(){
  <div class="m-foot"><button class="btn ghost" data-act="closeModal">Cancelar</button><button class="btn pri big" data-act="saveNewCust">${ic('check')}Guardar cliente</button></div>`;
 }
 function mDriver(){return `<div class="m-head"><div><p class="eyebrow">Choferes</p><h2>Agregar chofer</h2></div><button class="x" data-act="closeModal" aria-label="Cerrar">${ic('x')}</button></div><div class="m-body"><div class="fgrid"><label class="fld"><span>Nombre</span><input id="nd-n"></label><label class="fld"><span>Teléfono</span><input id="nd-p" inputmode="tel"></label><label class="fld full"><span>Patente</span><input id="nd-o" placeholder="Ej.: AB 123 CD"></label></div><div id="nd-err"></div></div><div class="m-foot"><button class="btn ghost" data-act="closeModal">Cancelar</button><button class="btn pri" data-act="saveDriver">Guardar chofer</button></div>`}
-function mUser(){return `<div class="m-head"><div><p class="eyebrow">Usuarios</p><h2>Nuevo usuario</h2></div><button class="x" data-act="closeModal" aria-label="Cerrar">${ic('x')}</button></div><div class="m-body"><div class="fgrid"><label class="fld full"><span>Nombre</span><input id="nu-n"></label><div class="fld full"><span>Rol</span><div class="seg">${radios('nu-r',ALL,'Ventas')}</div></div></div><div id="nu-err"></div></div><div class="m-foot"><button class="btn ghost" data-act="closeModal">Cancelar</button><button class="btn pri" data-act="saveUser">Crear usuario</button></div>`}
-const MODALS={op:mOp,newop:mNewOp,newcust:mNewCust,driver:mDriver,user:mUser};
+function mUser(){return `<div class="m-head"><div><p class="eyebrow">Usuarios</p><h2>Nuevo usuario</h2></div><button class="x" data-act="closeModal" aria-label="Cerrar">${ic('x')}</button></div><div class="m-body"><div class="fgrid"><label class="fld full"><span>Nombre</span><input id="nu-n"></label><label class="fld"><span>Usuario</span><input id="nu-u" autocapitalize="none" placeholder="Ej.: camilo"></label><label class="fld"><span>Contraseña</span><input id="nu-p" type="password" placeholder="Inicial: conte"></label><div class="fld full"><span>Rol</span><div class="seg">${radios('nu-r',ALL,'Ventas')}</div></div></div><div id="nu-err"></div></div><div class="m-foot"><button class="btn ghost" data-act="closeModal">Cancelar</button><button class="btn pri" data-act="saveUser">Crear usuario</button></div>`}
+function mNewCont(){
+ const next='CN-'+String(DB.containers.length+1).padStart(3,'0');
+ return `<div class="m-head"><div><p class="eyebrow">Contenedores</p><h2>Nuevo contenedor</h2></div><button class="x" data-act="closeModal" aria-label="Cerrar">${ic('x')}</button></div>
+ <div class="m-body"><div class="fgrid"><label class="fld"><span>Código</span><input id="nk-c" value="${next}"></label><label class="fld"><span>Detalle</span><input id="nk-d" placeholder="Ej.: VILLA BLANCO" list="nk-dl"><datalist id="nk-dl">${DET.map(x=>`<option>${x}</option>`).join('')}</datalist></label>
+  <div class="fld full"><span>Medida</span><div class="seg">${radios('nk-s',[['3','3 m³'],['5','5 m³'],['6','6 m³']],'5')}</div></div>
+  <div class="fld full"><span>Ubicación</span><div class="seg">${radios('nk-p',['Lote Paraguay','Simonna','Otro lugar'],'Lote Paraguay')}</div></div>
+  <label class="fld"><span>Estado</span><select id="nk-st">${CSTATES.map(s=>`<option>${s}</option>`).join('')}</select></label><label class="fld"><span>Observaciones</span><input id="nk-o"></label>
+ </div><div id="nk-err"></div><p class="note">Se va a ver como <b id="nk-prev" class="cname">${next} | DETALLE | 5m3</b></p></div>
+ <div class="m-foot"><button class="btn ghost" data-act="closeModal">Cancelar</button><button class="btn pri big" data-act="saveNewCont">${ic('check')}Agregar contenedor</button></div>`;
+}
+const MODALS={newcont:mNewCont,op:mOp,newop:mNewOp,newcust:mNewCust,driver:mDriver,user:mUser};
 
 const DIALOGS={
+ inv:()=>{const o=O(S.dialog.id),i=o.inv||{tipo:'B',num:'',rs:cust(o).name,cuit:cust(o).cuit||''};return `<div class="m-head"><div><p class="eyebrow">${opn(o.id)} · pidió ${esc(cust(o).name)}</p><h2>${o.inv?'Editar factura':'Facturar pedido'}</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><div class="fld full"><span>Tipo</span><div class="seg">${radios('iv-t',['A','B','C'],i.tipo)}</div></div><label class="fld"><span>N° de factura</span><input id="iv-n" value="${esc(i.num)}" placeholder="0003-${String(DB.seq.inv+1).padStart(8,'0')}"></label><label class="fld"><span>Monto</span><b style="padding-top:10px;font:600 22px var(--f-cond)">${money(o.price)}</b></label>
+  <label class="fld"><span>Razón social</span><input id="iv-r" value="${esc(i.rs)}"></label><label class="fld"><span>CUIT</span><input id="iv-c" value="${esc(i.cuit)}"></label></div><div id="iv-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="saveInv">${ic('check')}Guardar</button></div>`},
+ sal:()=>{const D=S.dialog;return `<div class="m-head"><div><p class="eyebrow">Sueldos</p><h2>Registrar pago</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><label class="fld"><span>Empleado</span><select id="sl-e">${DB.emps.map(e=>`<option value="${e.id}" ${D.emp==e.id?'selected':''}>${esc(e.name)} · ${e.area}</option>`).join('')}</select></label><label class="fld"><span>Fecha</span><input type="date" id="sl-d" value="${dOut(TODAY)}"></label>
+  <div class="fld full"><span>Tipo</span><div class="seg">${radios('sl-t',['Sueldo','Adelanto'],D.type||'Sueldo')}</div></div>
+  <label class="fld"><span>En efectivo</span><input id="sl-c" inputmode="numeric" placeholder="0"></label><label class="fld"><span>Por transferencia</span><input id="sl-tr" inputmode="numeric" placeholder="0"></label>
+  <div class="fld full"><span>Comprobante de transferencia</span><label class="up">${ic('cam')}<span id="sl-fn">Adjuntar foto o PDF</span><input type="file" id="sl-f" accept="image/*,application/pdf" data-chg="salFile"></label></div>
+  <label class="fld full"><span>Nota</span><input id="sl-n" placeholder="Opcional"></label></div><div id="sl-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="saveSal">${ic('check')}Guardar</button></div>`},
+ exp:()=>{const c0=Object.keys(CATS)[0];return `<div class="m-head"><div><p class="eyebrow">Gastos</p><h2>Nuevo gasto</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><label class="fld"><span>Fecha</span><input type="date" id="gx-d" value="${dOut(TODAY)}"></label><label class="fld"><span>Monto</span><input id="gx-a" inputmode="numeric" placeholder="Ej.: 45000"></label>
+  <label class="fld"><span>Categoría</span><select id="gx-c" data-chg="gxCat">${Object.keys(CATS).map(c=>`<option>${esc(c)}</option>`).join('')}</select></label><label class="fld"><span>Subcategoría</span><select id="gx-s">${CATS[c0].map(s=>`<option>${esc(s)}</option>`).join('')}</select></label>
+  <label class="fld full"><span>Medio de pago</span><select id="gx-m">${PAYOUT.map(m=>`<option>${m}</option>`).join('')}</select></label>
+  <label class="fld full"><span>Descripción</span><input id="gx-t" placeholder="Ej.: cambio de aceite RXB 892"></label>
+  <div class="fld full"><span>Comprobante</span><label class="up">${ic('cam')}<span id="gx-fn">Adjuntar foto o PDF</span><input type="file" id="gx-f" accept="image/*,application/pdf" data-chg="gxFile"></label></div></div><div id="gx-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="saveExp">${ic('check')}Guardar gasto</button></div>`},
  confirm:()=>`<div class="m-head"><div><h2>${esc(S.dialog.title)}</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div><div class="m-body"><p>${esc(S.dialog.text)}</p>${S.dialog.extra||''}</div><div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn ${S.dialog.danger?'danger':'pri'}" data-act="confirmYes">${esc(S.dialog.ok)}</button></div>`,
  deliver:()=>{const o=O(S.dialog.id),a=addr(o);return `<div class="m-head"><div><p class="eyebrow">${opn(o.id)}</p><h2>Registrar ${o.type==='Movimiento'?'movimiento':'entrega'}</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
   <div class="m-body"><p><b class="cname">${o.type==='Movimiento'?(O(o.replacesOpId)||{cids:[]}).cids.join(', '):o.cids.join(', ')}</b> · <b>${esc(cust(o).name)}</b>, ${esc(aline(a))} (${esc(a.loc)}). Chofer: ${esc(dname(o.driverId))}.</p>
   ${o.type==='Movimiento'?'':`<div class="fld"><span>¿Por cuántos días es el alquiler?</span><div class="seg">${[3,4,5,7].map(p=>`<label><input type="radio" name="dl-p" value="${p}" ${p===4?'checked':''}><span>${p} días · retiro ${DC[dow(nextWork(TODAY+p))]} ${fs(nextWork(TODAY+p))}</span></label>`).join('')}</div></div>
-  <label class="check"><input type="checkbox" id="dl-f" ${o.firmado?'checked':''}> El cliente firmó el remito N° ${o.remito}</label>`}
+  `}
   ${o.type==='Recambio'&&o.replacesOpId?`<div class="ok-box">Al confirmar también se registra el retiro de <b>${O(o.replacesOpId).cids.join(', ')}</b> (basural ${basFor(a.loc)}, queda en Lote Paraguay).</div>`:''}</div>
   <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="confirmDeliver">${ic('check')}Confirmar</button></div>`},
  pickup:()=>{const o=O(S.dialog.id),a=addr(o);return `<div class="m-head"><div><p class="eyebrow">${opn(o.id)}</p><h2>Registrar retiro</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
@@ -1885,6 +2017,7 @@ const DIALOGS={
   <div class="fld"><span>Chofer que retira</span><div class="seg">${DB.drivers.map(d=>`<label><input type="radio" name="pk-d" value="${d.id}" ${(o.pickDriverPlan||o.driverId)===d.id?'checked':''}><span>${esc(d.name)}</span></label>`).join('')}</div></div>
   <div class="fgrid"><label class="fld"><span>Hora del retiro</span><input type="time" id="pk-h" value="${fmin(nowMin())}"></label><div class="fld"><span>Horario acordado</span><b style="padding-top:10px">${esc(o.pickSlot)}</b></div></div>
   <div class="fld"><span>¿A qué basural lo llevó?</span><div class="seg">${radios('pk-b',BASURALES.map(b=>[b,'B. '+b]),basFor(a.loc))}</div></div>
+  <label class="fld"><span>Hora en que lo dejó en el basural</span><input type="time" id="pk-dh" value="${fmin(Math.min(nowMin()+30,23*60+59))}"></label>
   <div class="fld"><span>¿Dónde queda el contenedor?</span><div class="seg">${radios('pk-r',['Lote Paraguay','Simonna','Otro lugar'],'Lote Paraguay')}</div></div>
   <label class="fld"><span>Observaciones (opcional)</span><input id="pk-o" placeholder="Ej.: golpe en el lateral, va al taller"></label></div>
   <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="confirmPickup">${ic('check')}Confirmar retiro</button></div>`},
@@ -1892,7 +2025,7 @@ const DIALOGS={
   <div class="m-body"><div class="fgrid"><label class="fld"><span>Monto</span><input id="py-a" inputmode="numeric" value="${o.price-o.paid}"></label><div class="fld"><span>Saldo actual</span><b style="font:600 26px var(--f-cond);padding-top:6px">${money(o.price-o.paid)}</b></div>
   <div class="fld full"><span>Forma de pago</span><div class="seg">${radios('py-m',['Efectivo','Transferencia','Grupo Chamba'],o.payMethod==='Cliente aparte'?'Efectivo':o.payMethod)}</div></div>
   ${acctBlock('py-acct',o.payAcct,o.payMethod==='Transferencia')}
-  <label class="check full"><input type="checkbox" id="py-v" checked> Ya verifiqué que la transferencia llegó</label>
+  ${cashBlock('py-cash',o.cashAt,o.payMethod==='Efectivo')}${can.verify()?'<label class="check full"><input type="checkbox" id="py-v" checked> Ya verifiqué que la transferencia llegó</label>':'<p class="note full">Si es transferencia, queda para que Administración la verifique.</p>'}
   <div class="fld full"><span>Comprobante (opcional)</span><label class="up">${ic('cam')}<span id="py-fn">Adjuntar foto o PDF</span><input type="file" id="py-f" accept="image/*,application/pdf" data-chg="payFile"></label></div></div><div id="py-err"></div></div>
   <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="confirmPay">${ic('check')}Guardar pago</button></div>`},
  fuel:()=>`<div class="m-head"><div><p class="eyebrow">Cuenta YPF</p><h2>Registrar carga de combustible</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
@@ -1976,19 +2109,20 @@ const PMETH=['Efectivo','Transf SAS','Transf YPF','Transf Otro','Chamba','Client
 function pfRange(){const w=S.pf.when;if(w==='fecha')return[S.pf.day,S.pf.day];return range(w)}
 function vPagos(){
  const f=S.pf,q=norm(f.q),[a,b]=pfRange();
- const base=DB.ops.filter(o=>o.status!=='Cancelado'&&(o.delDay!=null||o.paid>0)&&(f.st==='deud'||inRange(o.payDay!=null?o.payDay:(o.delDay!=null?o.delDay:o.reqDay),a,b))&&(!f.m||payLabel(o)===f.m)&&(!q||norm(cust(o).name).includes(q)||String(o.id).includes(q)));
+ const base=DB.ops.filter(o=>o.status!=='Cancelado'&&(o.delDay!=null||o.paid>0)&&(f.st==='deud'||inRange(o.payDay!=null?o.payDay:(o.delDay!=null?o.delDay:o.reqDay),a,b))&&(!f.m||payLabel(o).startsWith(f.m))&&(!q||norm(cust(o).name).includes(q)||String(o.id).includes(q)));
  const cnt={};base.forEach(o=>{const s=payStatus(o);cnt[s]=(cnt[s]||0)+1});cnt.deud=base.filter(o=>owed(o)>0).length;
  const list=base.filter(o=>!f.st||(f.st==='deud'?owed(o)>0:payStatus(o)===f.st)).sort((x,y)=>(y.payDay||y.delDay||0)-(x.payDay||x.delDay||0)||y.id-x.id);
  const pt=payTot(a,b);
  const chip=(s,l)=>`<button class="chip ${f.st===s?'on':''}" data-act="set" data-k="pf.st" data-v="${s}">${l} <span>${s?cnt[s]||0:base.length}</span></button>`;
  return pageHead('Pagos','Cobros por pedido: efectivo, transferencias SAS, YPF u otra cuenta, y Chamba')+`
  <div class="filters">${chips('pf.when',[['hoy','Hoy'],['semana','Esta semana'],['mes','Este mes'],['todas','Todas']],f.when)}<label class="chip ${f.when==='fecha'?'on':''}" style="gap:8px">${ic('cal')}Día<input type="date" id="pfd" data-f="pfday" value="${dOut(f.day)}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0" aria-label="Elegir día"></label></div>
+ ${can.verify()?netoBlock(...pfRange()):''}
  <div class="tiles tiles7 block">${[['Transf SAS',pt.SAS],['Transf YPF',pt.YPF],['Transf Otro',pt.Otro],['Efectivo',pt.Efectivo],['Chamba',pt.Chamba]].map(([l,x])=>`<button class="tile sm ${f.m===l?'dark':''}" data-act="set" data-k="pf.m" data-v="${f.m===l?'':l}"><span class="tl-l">${ico(l==='Efectivo'?'coins':l==='Chamba'?'truck':'swap')}${l}</span><span class="tl-n">${compact(x.v)}</span><small>${x.n} ${l==='Chamba'?'pedidos':'pagos'}</small></button>`).join('')}
   <button class="tile sm ${f.st==='deud'?'dark':''}" data-act="set" data-k="pf.st" data-v="${f.st==='deud'?'':'deud'}"><span class="tl-l">${ico('users')}Deudores</span><span class="tl-n">${pt.deud.n}</span><small>${compact(pt.deud.v)} a hoy</small></button></div>
  <div class="filters"><div class="chips">${chip('','Todos')}${chip('Por verificar','Por verificar')}${chip('Verificado','Verificado')}${chip('Cobrado','Cobrado')}${chip('Pendiente','Pendiente')}${chip('Vencido','Vencido')}</div></div>
  <div class="filters"><input class="inp grow" id="pfq" data-f="pf.q" value="${esc(f.q)}" placeholder="Buscar por cliente o número" aria-label="Buscar pago"><select class="sel" id="pfm" data-f="pf.m" aria-label="Forma de pago"><option value="">Todas las formas de pago</option>${PMETH.map(m=>`<option ${f.m===m?'selected':''}>${m}</option>`).join('')}</select></div>
  <div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>N°</th><th>Cliente</th><th>Forma</th><th class="r">Precio</th><th class="r">Pagado</th><th class="r">Saldo</th><th>Estado</th><th>Comprobante</th>${can.pay()?'<th></th>':''}</tr></thead><tbody>
- ${list.slice(0,200).map(o=>{const ps=payStatus(o);return `<tr><td class="tnum">${fs(o.payDay||o.delDay||o.reqDay)}</td><td><a href="#" class="code" data-act="openOp" data-id="${o.id}">${opn(o.id)}</a></td><td>${esc(cust(o).name)}</td><td><b>${esc(payLabel(o))}</b></td><td class="r tnum">${money(o.price)}</td><td class="r tnum">${money(o.paid)}</td><td class="r tnum ${ps==='Vencido'?'late':''}">${o.price-o.paid>0&&o.payMethod!=='Cliente aparte'?money(o.price-o.paid):'—'}</td><td>${badge(ps,BP)}</td><td>${o.receipt?`<span class="muted">${esc(o.receipt)}</span>`:'—'}</td>${can.pay()?`<td>${ps==='Por verificar'?`<button class="btn sm pri" data-act="verify" data-id="${o.id}">Verificar</button>`:['Pendiente','Vencido'].includes(ps)?`<button class="btn sm" data-act="payDlg" data-id="${o.id}">Registrar pago</button>`:''}</td>`:''}</tr>`}).join('')||`<tr><td colspan="10" class="empty">No hay pagos con esos filtros.</td></tr>`}
+ ${list.slice(0,200).map(o=>{const ps=payStatus(o);return `<tr><td class="tnum">${fs(o.payDay||o.delDay||o.reqDay)}</td><td><a href="#" class="code" data-act="openOp" data-id="${o.id}">${opn(o.id)}</a></td><td>${esc(cust(o).name)}</td><td><b>${esc(payLabel(o))}</b></td><td class="r tnum">${money(o.price)}</td><td class="r tnum">${money(o.paid)}</td><td class="r tnum ${ps==='Vencido'?'late':''}">${o.price-o.paid>0&&o.payMethod!=='Cliente aparte'?money(o.price-o.paid):'—'}</td><td>${badge(ps,BP)}</td><td>${o.receipt?`<span class="muted">${esc(o.receipt)}</span>`:'—'}</td>${can.pay()?`<td>${ps==='Por verificar'&&can.verify()?`<button class="btn sm pri" data-act="verify" data-id="${o.id}">Verificar</button>`:['Pendiente','Vencido'].includes(ps)?`<button class="btn sm" data-act="payDlg" data-id="${o.id}">Registrar pago</button>`:''}</td>`:''}</tr>`}).join('')||`<tr><td colspan="10" class="empty">No hay pagos con esos filtros.</td></tr>`}
  </tbody></table></div>${list.length>200?`<p class="note">Mostrando 200 de ${list.length}.</p>`:''}<p class="note">“Deudores” muestra todo lo que se debe a hoy, sin importar la fecha elegida. Chamba: funcionamiento a definir con el cliente.</p>`;
 }
 
@@ -2020,14 +2154,14 @@ function vRep(){
  </div>`;
 }
 function vUsers(){
- const rows=[['Ver Inicio, Agenda, Entregas, Retiros, Choferes, Combustible, Basurales, Contenedores y Mapa',[1,1,1,1]],['Agendar pedidos y editar datos comerciales',[1,1,0,0]],['Asignar contenedor y chofer, combinar viajes',[1,0,1,0]],['Registrar entregas, retiros y basural',[1,1,1,0]],['Ver Pagos, registrar y verificar transferencias',[1,1,0,1]],['Registrar cargas de combustible',[1,1,1,0]],['Mover contenedores entre depósitos',[1,0,1,0]],['Clientes, Reportes, Usuarios e Historial',[1,0,0,1]]];
- const RB={'Administrador':'acc','Ventas':'info','Logística':'ok','Dueño':'rep'};
+ const rows=[['Inicio, Entregas, Retiros, Choferes, Combustible, Basurales, Contenedores y Mapa',[1,1,1]],['Agenda: agendar pedidos, facturar y cargar remitos',[1,1,0]],['Tablero del día: asignar contenedor y chofer, combinar viajes',[1,0,1]],['Registrar entregas, retiros y basural',[1,1,1]],['Pagos: registrar cobros',[1,1,0]],['Verificar transferencias',[1,0,0]],['Contenedores: alta, estado y ubicación',[1,0,1]],['Facturación, Grupo Chamba, Sueldos y Gastos',[1,0,0]],['Clientes, Reportes, Usuarios e Historial',[1,0,0]]];
+ const RB=RBADGE;
  return pageHead('Usuarios','Quién usa el sistema y qué puede hacer cada rol',can.admin()?`<button class="btn pri" data-act="newUser">${ic('plus')}Nuevo usuario</button>`:'')+`
  <div class="tbl-wrap block"><table><thead><tr><th>Usuario</th><th>Rol</th><th>Qué hace</th><th>Último ingreso</th><th></th></tr></thead><tbody>
- ${DB.users.map(u=>`<tr><td><b>${esc(u.name)}</b></td><td>${badge(u.role,RB)}</td><td class="muted">${esc(u.desc)}</td><td class="tnum">${u.last===TODAY?'Hoy':fd(u.last)}</td><td>${u.id!==S.user.id?`<button class="btn sm" data-act="login" data-id="${u.id}">Entrar como ${esc(u.name)}</button>`:'<span class="muted">Sesión actual</span>'}</td></tr>`).join('')}
+ ${DB.users.map(u=>`<tr><td><b>${esc(u.name)}</b><span class="sub">usuario: ${esc(u.user)}</span></td><td>${badge(u.role,RB)}</td><td class="muted">${esc(u.desc)}</td><td class="tnum">${u.last===TODAY?'Hoy':fd(u.last)}</td><td>${u.id!==S.user.id?`<button class="btn sm" data-act="login" data-id="${u.id}">Entrar como ${esc(u.name)}</button>`:'<span class="muted">Sesión actual</span>'}</td></tr>`).join('')}
  </tbody></table></div><h2 class="sec">Permisos por rol</h2>
  <div class="tbl-wrap"><table class="matrix"><thead><tr><th>Permiso</th>${ALL.map(r=>`<th>${r}</th>`).join('')}</tr></thead><tbody>${rows.map(([l,p])=>`<tr><td>${l}</td>${p.map(x=>`<td>${x?ic('check'):'<span class="no">—</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
- <p class="note">El dueño ve todo en modo consulta. Nadie puede borrar definitivamente pedidos, clientes ni contenedores: se cancelan y queda registrado.</p>`;
+ <p class="note">Administración (Mili y Camilo) ve todo. Nadie puede borrar definitivamente pedidos, clientes ni contenedores: se cancelan y queda registrado.</p>`;
 }
 function vAud(){
  const q=norm(S.af.q),list=DB.audit.filter(h=>(!S.af.u||h.user===S.af.u)&&(!q||norm(h.text).includes(q))).sort((a,b)=>b.t-a.t),users=[...new Set(DB.audit.map(h=>h.user))];
@@ -2037,10 +2171,83 @@ function vAud(){
  ${list.slice(0,200).map(h=>`<tr ${typeof h.ref==='number'?`data-act="openOp" data-id="${h.ref}" tabindex="0"`:typeof h.ref==='string'?`data-act="openCont" data-id="${h.ref}" tabindex="0"`:''}><td class="tnum">${fd(Math.floor(h.t/1440))}</td><td class="tnum">${fmin(h.t%1440)}</td><td><b>${esc(h.user)}</b></td><td>${esc(h.text)}</td></tr>`).join('')||`<tr><td colspan="4" class="empty">Sin registros.</td></tr>`}
  </tbody></table></div>${list.length>200?`<p class="note">Mostrando los 200 más recientes de ${list.length}.</p>`:''}`;
 }
-const VIEWS={inicio:vInicio,tablero:vTab,agenda:vAgenda,entregas:vEnt,retiros:vRet,choferes:vChof,combustible:vComb,basurales:vBas,contenedores:vCont,mapa:vMapa,pagos:vPagos,clientes:vClientes,reportes:vRep,usuarios:vUsers,auditoria:vAud};
+function factRange(){return range(S.fc.when)}
+function vFact(){
+ const[a,b]=factRange(),q=norm(S.fc.q);
+ const base=DB.ops.filter(o=>o.status!=='Cancelado'&&o.type&&inRange(o.reqDay,a,b)&&(!q||norm(cust(o).name).includes(q)||(o.inv&&(norm(o.inv.rs).includes(q)||norm(o.inv.cuit).includes(q)||norm(o.inv.num).includes(q)))||String(o.id).includes(q)));
+ const n={};base.forEach(o=>{const s=invState(o);n[s]=(n[s]||0)+1});
+ const list=base.filter(o=>!S.fc.st||invState(o)===S.fc.st).sort((x,y)=>y.reqDay-x.reqDay||y.id-x.id);
+ const tot=list.filter(o=>o.inv).reduce((s,o)=>s+o.price,0);
+ const chip=(s,l)=>`<button class="chip ${S.fc.st===s?'on':''}" data-act="set" data-k="fc.st" data-v="${s}">${s?`<i class="dot ${BINV[s]}"></i>`:''}${l} <span>${s?n[s]||0:base.length}</span></button>`;
+ let body;
+ if(S.fc.by==='cliente'){
+  const g={};list.filter(o=>o.inv).forEach(o=>{const k=o.customerId;(g[k]=g[k]||{c:cust(o),n:0,t:0,v:0,p:0,rs:new Set()});g[k].n++;g[k].t+=o.price;g[k].rs.add(o.inv.rs);o.inv.verified?g[k].v++:g[k].p++});
+  const rows=Object.values(g).sort((x,y)=>y.t-x.t);
+  body=`<div class="tbl-wrap"><table class="dense"><thead><tr><th>Cliente (quien pidió)</th><th>Razones sociales facturadas</th><th class="r">Facturas</th><th class="r">Total facturado</th><th class="r">Verificadas</th><th class="r">Por verificar</th></tr></thead><tbody>
+  ${rows.map(r=>`<tr data-act="set" data-k="fc.q" data-v="${esc(r.c.name)}" tabindex="0"><td><b>${esc(r.c.name)}</b><span class="sub">${esc(r.c.cuit)||'sin CUIT'}</span></td><td>${[...r.rs].map(esc).join('<br>')}</td><td class="r tnum">${r.n}</td><td class="r tnum">${money(r.t)}</td><td class="r tnum">${r.v}</td><td class="r tnum ${r.p?'late':''}">${r.p}</td></tr>`).join('')||'<tr><td colspan="6" class="empty">Sin facturas en el período.</td></tr>'}</tbody></table></div><p class="note">Tocá un cliente para ver sus facturas una por una.</p>`;
+ }else body=`<div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Factura</th><th>Razón social · CUIT</th><th>Pidió</th><th>Pedido</th><th class="r">Monto</th><th>Cobro</th><th>En banco</th><th></th></tr></thead><tbody>
+  ${list.slice(0,250).map(o=>{const s=invState(o),i=o.inv;return `<tr><td class="tnum">${fs(o.reqDay)}</td><td>${i?`<b>${i.tipo}</b> ${esc(i.num)||'<span class="muted">sin número</span>'}`:'<span class="muted">Sin factura</span>'}</td><td>${i?`<b>${esc(i.rs)}</b><span class="sub">${esc(i.cuit)||'sin CUIT'}</span>`:'—'}${i&&i.rs!==cust(o).name?'<span class="st-tag">Distinta de quien pidió</span>':''}</td><td>${esc(cust(o).name)}</td><td><a href="#" class="code" data-act="openOp" data-id="${o.id}">${opn(o.id)}</a></td><td class="r tnum">${money(o.price)}</td><td><b>${esc(payLabel(o))}</b><div>${badge(payStatus(o),BP)}</div></td><td>${badge(s,BINV)}${i&&i.verified&&i.vby?`<span class="sub">por ${esc(i.vby)}</span>`:''}</td>
+  <td style="white-space:nowrap">${s==='Por verificar'?`<button class="btn sm pri" data-act="verifyInv" data-id="${o.id}">Verificar en banco</button>`:''} <button class="btn sm ghost" data-act="invDlg" data-id="${o.id}">${i?'Editar':'Facturar'}</button></td></tr>`}).join('')||'<tr><td colspan="9" class="empty">Sin pedidos con esos filtros.</td></tr>'}</tbody></table></div>${list.length>250?`<p class="note">Mostrando 250 de ${list.length}.</p>`:''}`;
+ return pageHead('Facturación','Se factura al tomar el pedido. Mili compara cada factura con la razón social que aparece en el banco.')+`
+ <div class="filters">${chips('fc.when',[['hoy','Hoy'],['semana','Esta semana'],['mes','Este mes'],['todas','Todas']],S.fc.when)}${chips('fc.by',[['lista','Una por una'],['cliente','Por cliente']],S.fc.by)}</div>
+ <div class="cards4"><div class="fig"><span>Facturado</span><b>${compact(tot)}</b><small>${list.filter(o=>o.inv).length} facturas</small></div><div class="fig"><span><i class="dot acc"></i>Por verificar en banco</span><b>${n['Por verificar']||0}</b></div><div class="fig"><span><i class="dot warn"></i>Sin número cargado</span><b>${n['Sin número']||0}</b></div><div class="fig"><span><i class="dot ok"></i>Verificadas</span><b>${n['Verificada']||0}</b></div></div>
+ <div class="filters"><div class="chips">${chip('','Todos')}${['Por verificar','Sin número','Verificada','Sin factura'].map(s=>chip(s,s)).join('')}</div></div>
+ <div class="filters"><input class="inp grow" id="fcq" data-f="fc.q" value="${esc(S.fc.q)}" placeholder="Buscar por cliente, razón social, CUIT o N° de factura" aria-label="Buscar factura">${S.fc.q?`<button class="btn sm ghost" data-act="set" data-k="fc.q" data-v="">Limpiar búsqueda</button>`:''}</div>
+ ${body}<p class="note">Listado de ejemplo. Se ajusta con el Excel de facturas del cliente.</p>`;
+}
+function vChamba(){
+ const a=Math.min(S.ch.from,S.ch.to),b=Math.max(S.ch.from,S.ch.to),P=DB.cfg.chambaPrice;
+ const list=DB.ops.filter(o=>o.payMethod==='Grupo Chamba'&&o.status!=='Cancelado'&&inRange(o.reqDay,a,b)).sort((x,y)=>x.reqDay-y.reqDay||x.id-y.id);
+ let acc=0;const rows=list.map(o=>{acc+=o.price;const dev=o.chamba&&o.chamba.via==='Efectivo'?Math.max(0,o.chamba.cobrado-o.price):0;return{o,acc,dev}});
+ const tot=acc,cob=list.reduce((s,o)=>s+(o.chamba?o.chamba.cobrado:0),0),devP=rows.filter(r=>r.dev&&!r.o.chamba.devuelto).reduce((s,r)=>s+r.dev,0),devD=rows.filter(r=>r.dev&&r.o.chamba.devuelto).reduce((s,r)=>s+r.dev,0);
+ return pageHead('Grupo Chamba','Contenedores de Grupo Chamba y lo que hay que devolver cuando cobran en efectivo',`<div class="rng"><input type="date" id="chf" data-f="chfrom" value="${dOut(a)}" aria-label="Desde"><span>a</span><input type="date" id="cht" data-f="chto" value="${dOut(b)}" aria-label="Hasta"></div>`)+`
+ <div class="panel block" style="display:flex;flex-wrap:wrap;gap:12px;align-items:end;justify-content:space-between"><div><h3 style="margin:0">Valor del contenedor para Chamba</h3><p class="muted">Lo que le corresponde a Conte Nic por cada contenedor. Puede cambiar.</p></div>
+  <div style="display:flex;gap:8px;align-items:end"><label class="fld"><span>Valor actual</span><input class="inp" id="chp" inputmode="numeric" value="${P}" style="width:160px"></label><button class="btn" data-act="saveChamba">Guardar valor</button></div></div>
+ <div class="cards4"><div class="fig"><span>Contenedores</span><b>${list.length}</b><small>${fs(a)} al ${fs(b)}</small></div><div class="fig"><span>Le corresponde a Conte Nic</span><b>${compact(tot)}</b></div><div class="fig"><span>Cobró Chamba a los clientes</span><b>${compact(cob)}</b></div><div class="fig"><span><i class="dot warn"></i>A devolver a Chamba</span><b style="color:var(--warn)">${money(devP)}</b><small>ya devuelto ${money(devD)}</small></div></div>
+ <div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Descripción</th><th class="r">Monto</th><th class="r">Saldo acumulado</th><th class="r">Cobró Chamba</th><th>Cómo</th><th class="r">A devolver</th><th>Comprobante</th><th></th></tr></thead><tbody>
+ ${rows.map(({o,acc,dev})=>{const ad=addr(o);return `<tr><td class="tnum">${fs(o.reqDay)}</td><td><a href="#" data-act="openOp" data-id="${o.id}"><b>CONTENEDOR ${o.size}M3</b></a> · ${esc(aline(ad)).toUpperCase()} ${esc(ad.loc).toUpperCase()}</td><td class="r tnum">${money(o.price)}</td><td class="r tnum">${money(acc)}</td><td class="r tnum">${o.chamba?money(o.chamba.cobrado):'—'}</td><td>${o.chamba?esc(o.chamba.via):'—'}</td><td class="r tnum">${dev?money(dev):'—'}</td><td>${o.receipt?`<span class="muted">${esc(o.receipt)}</span>`:'—'}</td><td>${dev?(o.chamba.devuelto?badge('Devuelto',{Devuelto:'ok'}):`<button class="btn sm" data-act="chambaDev" data-id="${o.id}">Marcar devuelto</button>`):''}</td></tr>`}).join('')||'<tr><td colspan="9" class="empty">Sin contenedores de Chamba en estas fechas.</td></tr>'}
+ </tbody></table></div><p class="note">Regla de ejemplo: si Chamba cobró en efectivo, se devuelve lo cobrado menos el valor del contenedor (hoy ${money(P)}). La regla se va a ajustar con el cliente.</p>`;
+}
+function vSueldos(){
+ const w=S.su.week,we=w+6,inW=d=>d>=w&&d<=we;
+ const rows=DB.emps.map(e=>{const ps=DB.pay.filter(p=>p.empId===e.id&&inW(p.day));const adv=ps.filter(p=>p.type==='Adelanto').reduce((s,p)=>s+p.cash+p.transfer,0),cash=ps.reduce((s,p)=>s+p.cash,0),tr=ps.reduce((s,p)=>s+p.transfer,0);return{e,adv,cash,tr,saldo:e.weekly-cash-tr}});
+ const movs=DB.pay.filter(p=>inW(p.day)).sort((x,y)=>y.day-x.day||y.id-x.id);
+ const T=k=>rows.reduce((s,r)=>s+r[k],0);
+ return pageHead('Sueldos','Pagos semanales a choferes y oficina, con adelantos',`<button class="btn" data-act="set" data-k="su.week" data-v="${w-7}">← Semana anterior</button><span class="pill"><b>${fs(w)}</b> al <b>${fs(we)}</b></span>${w<weekStart(TODAY)?`<button class="btn" data-act="set" data-k="su.week" data-v="${w+7}">Semana siguiente →</button>`:''}<button class="btn pri" data-act="salDlg">${ic('plus')}Registrar pago</button>`)+`
+ <div class="cards4"><div class="fig"><span>Sueldos de la semana</span><b>${compact(DB.emps.reduce((s,e)=>s+e.weekly,0))}</b></div><div class="fig"><span>${ic('coins')}Pagado en efectivo</span><b>${compact(T('cash'))}</b></div><div class="fig"><span>${ic('swap')}Pagado por transferencia</span><b>${compact(T('tr'))}</b></div><div class="fig"><span><i class="dot warn"></i>Falta pagar</span><b>${compact(Math.max(0,T('saldo')))}</b></div></div>
+ <div class="tbl-wrap block"><table class="dense"><thead><tr><th>Empleado</th><th>Área</th><th class="r">Sueldo semanal</th><th class="r">Adelantos</th><th class="r">Efectivo</th><th class="r">Transferencia</th><th class="r">Falta pagar</th><th></th></tr></thead><tbody>
+ ${rows.map(r=>`<tr><td><b>${esc(r.e.name)}</b></td><td>${badge(r.e.area,{Chofer:'info',Oficina:'rep'})}</td><td class="r tnum">${money(r.e.weekly)}</td><td class="r tnum">${r.adv?money(r.adv):'—'}</td><td class="r tnum">${money(r.cash)}</td><td class="r tnum">${money(r.tr)}</td><td class="r tnum ${r.saldo>0?'late':''}">${r.saldo>0?money(r.saldo):'Pagado'}</td><td style="white-space:nowrap"><button class="btn sm" data-act="salDlg" data-emp="${r.e.id}" data-type="Adelanto">Adelanto</button> ${r.saldo>0?`<button class="btn sm pri" data-act="salDlg" data-emp="${r.e.id}" data-type="Sueldo">Pagar</button>`:''}</td></tr>`).join('')}
+ </tbody></table></div>
+ <h2 class="sec">Movimientos de la semana</h2>
+ <div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Empleado</th><th>Tipo</th><th class="r">Efectivo</th><th class="r">Transferencia</th><th>Comprobante</th><th>Cargó</th></tr></thead><tbody>
+ ${movs.map(p=>`<tr><td class="tnum">${fs(p.day)}</td><td><b>${esc(DB.emps.find(e=>e.id===p.empId).name)}</b></td><td>${badge(p.type,{Sueldo:'ok',Adelanto:'acc'})}${p.note?`<span class="sub">${esc(p.note)}</span>`:''}</td><td class="r tnum">${p.cash?money(p.cash):'—'}</td><td class="r tnum">${p.transfer?money(p.transfer):'—'}</td><td>${p.receipt?`<span class="muted">${esc(p.receipt)}</span>`:'—'}</td><td>${esc(p.user)}</td></tr>`).join('')||'<tr><td colspan="7" class="empty">Sin pagos registrados esta semana.</td></tr>'}
+ </tbody></table></div><p class="note">Montos de ejemplo. La semana va de lunes a domingo y el sueldo se paga el sábado.</p>`;
+}
+function vGastos(){
+ const[a,b]=range(S.gx.when),q=norm(S.gx.q);
+ const list=DB.exp.filter(x=>inRange(x.day,a,b)&&(!S.gx.cat||x.cat===S.gx.cat)&&(!q||norm(x.desc+' '+x.sub).includes(q))).sort((x,y)=>y.day-x.day||y.id-x.id);
+ const byCat={};DB.exp.filter(x=>inRange(x.day,a,b)).forEach(x=>byCat[x.cat]=(byCat[x.cat]||0)+x.amount);
+ const tot=list.reduce((s,x)=>s+x.amount,0);
+ return pageHead('Gastos','Lo que se paga para que la empresa funcione',`${chips('gx.when',[['semana','Esta semana'],['mes','Este mes'],['todas','Todo']],S.gx.when)}<button class="btn pri big" data-act="expDlg">${ic('plus')}Nuevo gasto</button>`)+`
+ <div class="grid2"><section class="panel"><h3>Por categoría <small>${PLBL[S.gx.when]}</small></h3>${hbars(Object.entries(byCat).sort((x,y)=>y[1]-x[1]).map(([l,v])=>({l:esc(l),v})),compact)||'<p class="muted">Sin gastos.</p>'}</section>
+ <section class="panel"><h3>Total ${S.gx.cat?esc(S.gx.cat):''}</h3><p style="font:600 44px/1 var(--f-cond)">${money(tot)}</p><p class="muted">${list.length} gastos ${PLBL[S.gx.when]}</p></section></div>
+ <div class="filters"><div class="chips"><button class="chip ${!S.gx.cat?'on':''}" data-act="set" data-k="gx.cat" data-v="">Todas</button>${Object.keys(CATS).map(c=>`<button class="chip ${S.gx.cat===c?'on':''}" data-act="set" data-k="gx.cat" data-v="${esc(c)}">${esc(c)}</button>`).join('')}</div></div>
+ <div class="filters"><input class="inp grow" id="gxq" data-f="gx.q" value="${esc(S.gx.q)}" placeholder="Buscar en la descripción" aria-label="Buscar gasto"></div>
+ <div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Categoría</th><th>Subcategoría</th><th>Descripción</th><th>Medio de pago</th><th class="r">Monto</th><th>Comprobante</th></tr></thead><tbody>
+ ${list.map(x=>`<tr><td class="tnum">${fs(x.day)}</td><td><b>${esc(x.cat)}</b></td><td>${esc(x.sub)}</td><td>${esc(x.desc)}</td><td>${esc(x.medio)}</td><td class="r tnum">${money(x.amount)}</td><td>${x.receipt?`<span class="muted">${esc(x.receipt)}</span>`:'—'}</td></tr>`).join('')||'<tr><td colspan="7" class="empty">Sin gastos con esos filtros.</td></tr>'}
+ </tbody></table></div><p class="note">Categorías y subcategorías de ejemplo, a confirmar con el cliente.</p>`;
+}
+function netoBlock(a,b){
+ const cob=DB.ops.filter(o=>o.paid>0&&inRange(o.payDay,a,b)).reduce((s,o)=>s+o.paid,0),gx=DB.exp.filter(x=>inRange(x.day,a,b)).reduce((s,x)=>s+x.amount,0),su=DB.pay.filter(p=>inRange(p.day,a,b)).reduce((s,p)=>s+p.cash+p.transfer,0),net=cob-gx-su;
+ return `<section class="panel block"><h3>Queda en limpio <small>cobrado − gastos − sueldos del período</small></h3><div class="cards4" style="margin:0"><div class="fig"><span>Cobrado</span><b>${compact(cob)}</b></div><div class="fig"><span>Gastos</span><b>− ${compact(gx)}</b></div><div class="fig"><span>Sueldos</span><b>− ${compact(su)}</b></div><div class="fig" style="background:var(--ink);color:var(--bg);border-color:var(--ink)"><span style="color:inherit;opacity:.8">Queda en limpio</span><b style="color:${net<0?'#F2837A':'inherit'}">${net<0?'− ':''}${compact(Math.abs(net))}</b></div></div></section>`;
+}
+const VIEWS={facturacion:vFact,chamba:vChamba,sueldos:vSueldos,gastos:vGastos,inicio:vInicio,tablero:vTab,agenda:vAgenda,entregas:vEnt,retiros:vRet,choferes:vChof,combustible:vComb,basurales:vBas,contenedores:vCont,mapa:vMapa,pagos:vPagos,clientes:vClientes,reportes:vRep,usuarios:vUsers,auditoria:vAud};
 
 /* ============ acciones ============ */
 function setF(path,v){
+ if(path==='su.week'){S.su.week=+v;return}
+ if(path==='chfrom'||path==='chto'){const d=dIn(v);if(d!=null)S.ch[path==='chfrom'?'from':'to']=d;return}
+ if(path.endsWith('.loc')){const k=path.split('.')[0];S[k].loc=v;S[k].barrio='';return}
  if(path==='from'||path==='to'){const d=dIn(v);if(d!=null)S[path]=d;return}
  if(path==='agday'){const d=dIn(v);if(d!=null){S.ag.day=d;S.ag.when='fecha'}return}
  if(path==='pfday'){const d=dIn(v);if(d!=null){S.pf.day=d;S.pf.when='fecha'}return}
@@ -2051,7 +2258,57 @@ function setF(path,v){
 function findDup(name,phone,exceptId){const n=norm(name),p=digits(phone);return DB.customers.find(c=>c.id!==exceptId&&((p.length>=7&&digits(c.phone).slice(-7)===p.slice(-7))||(n.length>3&&norm(c.name)===n)))}
 function confirmDlg(title,text,ok,run,danger,extra){S.dialog={t:'confirm',title,text,ok,run,danger,extra};renderLayers()}
 function setPay(o,paid){if(paid){o.paid=o.price;o.payDay=TODAY;o.verified=o.payMethod!=='Transferencia'}}
+function saveOpImpl(d){
+ const err=m=>{byId('no-err').innerHTML=`<p class="err">${esc(m)}</p>`};
+ let cu=byId('no-cid')?CU(byId('no-cid').value):null,addrId;const type=val('no-type'),size=+val('no-size'),qty=+val('no-qty');
+ if(!cu){const name=byId('no-q').value.trim(),phone=byId('no-phone').value.trim(),street=byId('no-street').value.trim(),loc=byId('no-loc').value,bar=byId('no-bar').value;
+  if(!name)return err('Escribí el nombre del cliente o elegilo de la lista.');if(type!=='Alquiler')return err(`${type} es para un cliente que ya tiene un contenedor. Elegilo de la lista.`);if(!street)return err('Falta la dirección.');
+  const dup=findDup(name,phone);if(dup&&!d.force){byId('no-err').innerHTML=`<div class="warn-box">${ic('alert')}<span>Ya existe <b>${esc(dup.name)}</b> (${esc(dup.phone)}). ¿Es el mismo cliente?</span><button type="button" class="btn sm" data-act="pickCust" data-id="${dup.id}">Sí, usar ${esc(dup.name)}</button><button type="button" class="btn sm ghost" data-act="saveOp" data-force="1">No, es otro cliente</button></div>`;return}
+  cu={id:++DB.seq.cust,name,phone,email:'',obs:'',cuit:'',addrs:[mkAddr(loc,street,bar,true)],company:false};DB.customers.push(cu);addrId=cu.addrs[0].id;audNow(`${S.user.name} creó el cliente ${name}`)}
+ else{const sel=byId('no-addr').value;if(sel==='__new'){const street=byId('no-street2').value.trim();if(!street)return err('Escribí la nueva dirección.');const a=mkAddr(byId('no-loc2').value,street,byId('no-bar2').value,true);cu.addrs.push(a);addrId=a.id}else addrId=+sel}
+ const cuit=byId('no-cuit').value.trim();if(cuit)cu.cuit=cuit;
+ let repl=null;if(type!=='Alquiler'){const r=byId('no-repl');if(!r||!r.value)return err(`Para ${type==='Extensión'?'una extensión':'un '+type.toLowerCase()} elegí el contenedor.`);repl=+r.value}
+ const day=dIn(byId('no-date').value);if(day==null)return err('Elegí la fecha.');const price=+digits(byId('no-price').value);if(!price)return err(type==='Extensión'?'Poné el precio de la extensión.':'Poné el precio.');
+ {const mu=byId('no-maps').value.trim();if(mu&&!/^https?:\/\//i.test(mu)&&!parseMaps(mu))return err('El link de Google Maps tiene que empezar con https://')}
+ const pm=val('no-pay'),slot=byId('no-slot').value,old=repl?O(repl):null;
+ const op=newOp({type,qty:old?old.qty:qty,size:old?old.size:size,customerId:cu.id,addrId:old?old.addrId:addrId,reqDay:day,slot,min:SLOTMIN[slot],price,payMethod:pm,payAcct:pm==='Transferencia'?val('no-acct'):null,cashAt:pm==='Efectivo'?val('no-cash'):null,obs:byId('no-obs').value.trim(),pendConf:byId('no-pc').checked,replacesOpId:repl,createdBy:S.user.name,createdDay:TODAY});
+ if(pm==='Grupo Chamba')op.chamba={cobrado:+digits(byId('no-chc').value)||0,via:val('no-chv'),devuelto:false};
+ const rm=+digits(byId('no-rm').value);if(rm)op.remito=rm;
+ const it=val('no-it');if(it!=='Sin factura')op.inv={tipo:it,num:byId('no-in').value.trim(),rs:byId('no-ir').value.trim()||cu.name,cuit:byId('no-ic').value.trim()||cu.cuit||'',day:TODAY,verified:false,vby:null};
+ const mu=byId('no-maps').value.trim();if(mu){const a=addr(op);op.mapsUrl=/^https?:/i.test(mu)?mu:`https://www.google.com/maps?q=${mu.replace(/\s/g,'')}`;a.mapsUrl=op.mapsUrl;const ll=parseMaps(mu);if(ll){a.lat=ll[0];a.lng=ll[1];a.approx=false}}
+ setPay(op,byId('no-paid').checked);
+ if(type==='Extensión'){const n=+val('no-ext');op.extDays=n;op.cids=old.cids.slice();op.status='Realizado';op.delDay=TODAY;op.delMin=nowMin();old.plannedPickup=nextWork(Math.max(old.plannedPickup,TODAY)+n);
+  audNow(`${S.user.name} extendió ${n} días el alquiler de ${old.cids.join(', ')} (nuevo retiro ${fd(old.plannedPickup)}) · pedido ${opn(op.id)}`,op.id);S.modal=null;render();toast(`Extensión registrada: ${old.cids.join(', ')} se retira el ${fs(old.plannedPickup)}.`);return}
+ audNow(`${S.user.name} agendó el pedido ${opn(op.id)} (${cu.name})${op.pendConf?' · pendiente de confirmación':''}`,op.id);
+ S.modal=null;render();toast(`Pedido ${opn(op.id)} agendado para el ${fs(day)}.`);
+}
 const ACT={
+ doLogin:()=>{const u=norm(byId('lg-user').value),p=byId('lg-pass').value,us=DB.users.find(x=>x.user===u&&x.pass===p);if(!us){byId('lg-msg').innerHTML='<p class="err">Usuario o contraseña incorrectos.</p>';return}ACT.login({id:us.id})},
+ fillLogin:d=>{byId('lg-user').value=d.u;byId('lg-pass').value='conte';byId('lg-pass').focus()},
+ saveRemito:d=>{const o=O(d.id),n=+digits(byId('rm-n').value);o.remito=n||null;if(n>DB.seq.remito)DB.seq.remito=n;o.firmado=byId('rm-f').checked;audNow(`${S.user.name} cargó el remito ${n?'N° '+n:''}${o.firmado?' (firmado)':''} del pedido ${opn(o.id)}`,o.id);renderLayers();toast('Remito guardado.')},
+ invDlg:d=>{S.dialog={t:'inv',id:+d.id};renderLayers()},
+ saveInv:()=>{const o=O(S.dialog.id),rs=byId('iv-r').value.trim();if(!rs){byId('iv-err').innerHTML='<p class="err">Falta la razón social.</p>';return}
+  const was=o.inv&&o.inv.verified;o.inv={tipo:val('iv-t'),num:byId('iv-n').value.trim(),rs,cuit:byId('iv-c').value.trim(),day:o.inv?o.inv.day:TODAY,verified:!!was,vby:o.inv?o.inv.vby:null};
+  audNow(`${S.user.name} cargó la factura ${o.inv.tipo} ${o.inv.num||'(sin número)'} del pedido ${opn(o.id)} a ${rs}`,o.id);S.dialog=null;render();toast('Factura guardada.')},
+ verifyInv:d=>{const o=O(d.id);confirmDlg('¿Verificada en el banco?',`Factura ${o.inv.tipo} ${o.inv.num} a ${o.inv.rs} (${o.inv.cuit||'sin CUIT'}) por ${money(o.price)}.`,'Sí, está verificada',()=>{o.inv.verified=true;o.inv.vby=S.user.name;audNow(`${S.user.name} verificó en el banco la factura ${o.inv.num} (${o.inv.rs})`,o.id);toast('Factura verificada.')})},
+ saveChamba:()=>{const v=+digits(byId('chp').value);if(!v)return toast('Poné un valor.');DB.cfg.chambaPrice=v;audNow(`${S.user.name} cambió el valor del contenedor para Chamba a ${money(v)}`);render();toast(`Valor para Chamba: ${money(v)}. Se aplica a los pedidos nuevos.`)},
+ chambaDev:d=>{const o=O(d.id);o.chamba.devuelto=true;audNow(`${S.user.name} marcó devuelto a Chamba ${money(o.chamba.cobrado-o.price)} del pedido ${opn(o.id)}`,o.id);render();toast('Marcado como devuelto.')},
+ salDlg:d=>{S.dialog={t:'sal',emp:d.emp?+d.emp:null,type:d.type||null};renderLayers()},
+ saveSal:()=>{const c=+digits(byId('sl-c').value),t=+digits(byId('sl-tr').value),day=dIn(byId('sl-d').value);if(!c&&!t){byId('sl-err').innerHTML='<p class="err">Poné cuánto se pagó en efectivo y/o transferencia.</p>';return}
+  const f=byId('sl-f').files[0],e=DB.emps.find(x=>x.id===+byId('sl-e').value);DB.pay.push({id:++DB.seq.pay,empId:e.id,day,type:val('sl-t'),cash:c,transfer:t,receipt:f?f.name:'',note:byId('sl-n').value.trim(),user:S.user.name});
+  const ty=val('sl-t');audNow(`${S.user.name} registró ${ty.toLowerCase()} a ${e.name}: ${money(c+t)}`);S.dialog=null;render();toast(`${ty} de ${e.name} registrado.`)},
+ expDlg:()=>{S.dialog={t:'exp'};renderLayers()},
+ saveExp:()=>{const amt=+digits(byId('gx-a').value),day=dIn(byId('gx-d').value),desc=byId('gx-t').value.trim();if(!amt||day==null){byId('gx-err').innerHTML='<p class="err">Completá fecha y monto.</p>';return}
+  const f=byId('gx-f').files[0];DB.exp.push({id:++DB.seq.exp,day,cat:byId('gx-c').value,sub:byId('gx-s').value,medio:byId('gx-m').value,amount:amt,desc:desc||byId('gx-s').value,receipt:f?f.name:'',user:S.user.name});
+  audNow(`${S.user.name} cargó un gasto de ${money(amt)} (${byId('gx-c').value} · ${byId('gx-s').value})`);S.dialog=null;render();toast('Gasto guardado.')},
+ newCont:()=>{S.modal={t:'newcont'};renderLayers()},
+ saveNewCont:()=>{const code=byId('nk-c').value.trim().toUpperCase(),det=byId('nk-d').value.trim().toUpperCase();if(!/^CN-\d{3,}$/.test(code)){byId('nk-err').innerHTML='<p class="err">El código tiene que ser como CN-128.</p>';return}if(C(code)){byId('nk-err').innerHTML='<p class="err">Ya existe '+code+'.</p>';return}if(!det){byId('nk-err').innerHTML='<p class="err">Falta el detalle (ej.: VILLA BLANCO).</p>';return}
+  const c={id:code,size:+val('nk-s'),detail:det,place:val('nk-p'),placeNote:'',opId:null,obs:byId('nk-o').value.trim(),state:byId('nk-st').value};DB.containers.push(c);mv(TODAY,nowMin(),code,`Alta del contenedor en ${c.place}`,'disponible');audNow(`${S.user.name} dio de alta ${cname(c)}`,code);S.modal=null;S.drawer={t:'cont',id:code};render();toast(`${code} agregado.`)},
+ saveContEdit:d=>{const c=C(d.id),st=byId('ce-st').value,pl=byId('ce-pl').value,note=byId('ce-note')?byId('ce-note').value.trim():'',obs=byId('c-obs').value.trim(),ch=[];
+  if(st!==c.state){ch.push('estado: '+st);mv(TODAY,nowMin(),c.id,`Estado: ${st}`,st==='Disponible'?'disponible':'reparacion');c.state=st}
+  if(c.place!=='En calle'&&(pl!==c.place||(pl==='Otro lugar'&&note!==c.placeNote))){ch.push('ubicación: '+pl);c.place=pl;c.placeNote=pl==='Otro lugar'?(note||'A definir'):'';mv(TODAY,nowMin(),c.id,`Llevado a ${pl}${c.placeNote?': '+c.placeNote:''}`,'disponible')}
+  if(obs!==c.obs){c.obs=obs;ch.push('observaciones')}
+  if(ch.length)audNow(`${S.user.name} cambió ${c.id} (${ch.join(', ')})`,c.id);render();toast(ch.length?`${c.id} actualizado.`:'Sin cambios.')},
  login:d=>{S.user=DB.users.find(u=>u.id===d.id);S.user.last=TODAY;S.view='inicio';S.drawer=S.modal=S.dialog=null;S.navOpen=false;render();window.scrollTo(0,0)},
  logout:()=>{S.user=null;S.drawer=S.modal=S.dialog=null;render()},
  nav:d=>{if(!NAV.find(n=>n.id===d.v).r.includes(role())){toast('Tu perfil no tiene acceso a esa sección.');return}S.view=d.v;S.navOpen=false;S.drawer=null;render();window.scrollTo(0,0)},
@@ -2067,24 +2324,8 @@ const ACT={
  newOp:d=>{S.modal={t:'newop',cid:d.cid?+d.cid:null,day:d.day!=null?+d.day:null};S.drawer=null;renderLayers();setTimeout(()=>{const q=byId('no-q');if(q)q.focus()},30)},
  pickCust:d=>{const c=CU(d.id);byId('no-cust').innerHTML=custBlock(c);byId('no-rec').innerHTML=recBlock();byId('no-err').innerHTML='';if(c.name==='Grupo Chamba'){const r=document.querySelector('input[name="no-pay"][value="Grupo Chamba"]');if(r){r.checked=true;byId('no-acct-box').hidden=true}}},
  noClear:()=>{byId('no-cust').innerHTML=custBlock(null);byId('no-rec').innerHTML=recBlock()},
- saveOp:d=>{
-  const err=m=>{byId('no-err').innerHTML=`<p class="err">${esc(m)}</p>`};
-  let cu=byId('no-cid')?CU(byId('no-cid').value):null,addrId;const type=val('no-type'),size=+val('no-size'),qty=+val('no-qty');
-  if(!cu){const name=byId('no-q').value.trim(),phone=byId('no-phone').value.trim(),street=byId('no-street').value.trim(),loc=byId('no-loc').value,bar=byId('no-bar').value;
-   if(!name)return err('Escribí el nombre del cliente o elegilo de la lista.');if(type!=='Alquiler')return err(`Un ${type.toLowerCase()} es para un cliente que ya tiene un contenedor. Elegilo de la lista.`);if(!street)return err('Falta la dirección.');
-   const dup=findDup(name,phone);if(dup&&!d.force){byId('no-err').innerHTML=`<div class="warn-box">${ic('alert')}<span>Ya existe <b>${esc(dup.name)}</b> (${esc(dup.phone)}). ¿Es el mismo cliente?</span><button type="button" class="btn sm" data-act="pickCust" data-id="${dup.id}">Sí, usar ${esc(dup.name)}</button><button type="button" class="btn sm ghost" data-act="saveOp" data-force="1">No, es otro cliente</button></div>`;return}
-   cu={id:++DB.seq.cust,name,phone,email:'',obs:'',addrs:[mkAddr(loc,street,bar,true)],company:false};DB.customers.push(cu);addrId=cu.addrs[0].id;audNow(`${S.user.name} creó el cliente ${name}`)}
-  else{const sel=byId('no-addr').value;if(sel==='__new'){const street=byId('no-street2').value.trim();if(!street)return err('Escribí la nueva dirección.');const a=mkAddr(byId('no-loc2').value,street,byId('no-bar2').value,true);cu.addrs.push(a);addrId=a.id}else addrId=+sel}
-  let repl=null;if(type!=='Alquiler'){const r=byId('no-repl');if(!r||!r.value)return err(`Para un ${type.toLowerCase()} elegí el contenedor.`);repl=+r.value}
-  const day=dIn(byId('no-date').value);if(day==null)return err('Elegí la fecha.');const price=+digits(byId('no-price').value);if(!price)return err('Poné el precio.');
-  {const mu=byId('no-maps').value.trim();if(mu&&!/^https?:\/\//i.test(mu)&&!parseMaps(mu))return err('El link de Google Maps tiene que empezar con https://')}
-  const pm=val('no-pay'),slot=byId('no-slot').value;
-  const op=newOp({type,qty:type==='Alquiler'?qty:(O(repl)||{qty:1}).qty,size:repl?O(repl).size:size,customerId:cu.id,addrId:repl?O(repl).addrId:addrId,reqDay:day,slot,min:SLOTMIN[slot],price,payMethod:pm,payAcct:pm==='Transferencia'?val('no-acct'):null,obs:byId('no-obs').value.trim(),pendConf:byId('no-pc').checked,replacesOpId:repl,createdBy:S.user.name,createdDay:TODAY});
-  const mu=byId('no-maps').value.trim();if(mu){if(!/^https?:\/\//i.test(mu)&&!parseMaps(mu))return err('El link de Google Maps tiene que empezar con https://');const a=addr(op);op.mapsUrl=/^https?:/i.test(mu)?mu:`https://www.google.com/maps?q=${mu.replace(/\s/g,'')}`;a.mapsUrl=op.mapsUrl;const ll=parseMaps(mu);if(ll){a.lat=ll[0];a.lng=ll[1];a.approx=false}}
-  setPay(op,byId('no-paid').checked);
-  audNow(`${S.user.name} agendó el pedido ${opn(op.id)} (${cu.name})${op.pendConf?' · pendiente de confirmación':''}`,op.id);
-  S.modal=null;render();toast(`Pedido ${opn(op.id)} agendado para el ${fs(day)}.`);
- },
+ saveOp:d=>saveOpImpl(d),
+
  newCust:()=>{S.modal={t:'newcust'};renderLayers()},
  saveNewCust:d=>{const name=byId('nc-n').value.trim(),phone=byId('nc-p').value.trim(),street=byId('nc-s').value.trim();
   if(!name||!phone||!street){byId('nc-dup').innerHTML='<p class="err">Completá nombre, teléfono y dirección.</p>';return}
@@ -2096,21 +2337,21 @@ const ACT={
  addClaim:d=>{const t=byId('cl-new').value.trim();if(!t)return;DB.claims.push({id:DB.claims.length+1,customerId:+d.id,day:TODAY,text:t,status:'Abierto'});audNow(`${S.user.name} registró un reclamo de ${CU(d.id).name}`);renderLayers();toast('Reclamo registrado.')},
  resolveClaim:d=>{const k=DB.claims.find(x=>x.id===+d.id);k.status='Resuelto';audNow(`${S.user.name} marcó resuelto un reclamo de ${CU(k.customerId).name}`);renderLayers()},
  editCom:d=>{S.editCom=d.id?+d.id:null;renderLayers()},
- saveCom:d=>{const o=O(d.id),day=dIn(byId('ec-d').value);if(day!=null)o.reqDay=day;o.slot=byId('ec-s').value;o.min=SLOTMIN[o.slot];const p=+digits(byId('ec-p').value);if(p)o.price=p;o.payMethod=byId('ec-m').value;o.payAcct=o.payMethod==='Transferencia'?val('ec-a'):null;o.pendConf=byId('ec-pc').checked;o.obs=byId('ec-o').value.trim();{const mu=byId('ec-maps').value.trim(),a=addr(o);if(mu!==mapsUrl(o)){o.mapsUrl=mu;a.mapsUrl=mu;const ll=mu&&parseMaps(mu);if(ll){a.lat=ll[0];a.lng=ll[1];a.approx=false}}}
+ saveCom:d=>{const o=O(d.id),day=dIn(byId('ec-d').value);if(day!=null)o.reqDay=day;o.slot=byId('ec-s').value;o.min=SLOTMIN[o.slot];const p=+digits(byId('ec-p').value);if(p)o.price=p;o.payMethod=byId('ec-m').value;o.payAcct=o.payMethod==='Transferencia'?val('ec-a'):null;o.cashAt=o.payMethod==='Efectivo'?val('ec-cash'):null;{const cu=cust(o);cu.cuit=byId('ec-cuit').value.trim();const it=byId('ec-it').value;if(it==='Sin factura')o.inv=null;else o.inv={tipo:it,num:byId('ec-in').value.trim(),rs:byId('ec-ir').value.trim()||cu.name,cuit:byId('ec-ic').value.trim(),day:o.inv?o.inv.day:TODAY,verified:o.inv?o.inv.verified:false,vby:o.inv?o.inv.vby:null}}o.pendConf=byId('ec-pc').checked;o.obs=byId('ec-o').value.trim();{const mu=byId('ec-maps').value.trim(),a=addr(o);if(mu!==mapsUrl(o)){o.mapsUrl=mu;a.mapsUrl=mu;const ll=mu&&parseMaps(mu);if(ll){a.lat=ll[0];a.lng=ll[1];a.approx=false}}}
   S.editCom=null;audNow(`${S.user.name} modificó los datos comerciales del pedido ${opn(o.id)}`,o.id);render();toast('Cambios guardados.')},
  saveLog:d=>{const o=O(d.id),e=m=>byId('lg-err').innerHTML=`<p class="err">${esc(m)}</p>`,dr=+val('lg-drv');
   if(o.type==='Movimiento'){if(!dr)return e('Elegí el chofer.');o.driverId=dr;if(o.status==='Solicitado')o.status='Confirmado';audNow(`${S.user.name} asignó a ${dname(dr)} al pedido ${opn(o.id)}`,o.id);render();toast('Chofer asignado.');return}
   const cids=Array.from({length:o.qty},(_,i)=>byId('lg-c'+i).value).filter(Boolean);
   if(new Set(cids).size!==cids.length)return e('Elegiste el mismo contenedor dos veces.');if(!dr&&!cids.length)return e('Elegí al menos el chofer o el contenedor.');
-  const day=dIn(byId('lg-d').value);if(day!=null)o.reqDay=day;o.slot=byId('lg-s').value;o.min=SLOTMIN[o.slot];o.firmado=byId('lg-f').checked;o.logObs=byId('lg-o').value.trim();
-  doAssign(o,cids,dr||null,TODAY,nowMin(),S.user.name,true);const r=+digits(byId('lg-r').value);if(r&&dr){o.remito=r;if(r>DB.seq.remito)DB.seq.remito=r}
+  const day=dIn(byId('lg-d').value);if(day!=null)o.reqDay=day;o.slot=byId('lg-s').value;o.min=SLOTMIN[o.slot];o.logObs=byId('lg-o').value.trim();
+  doAssign(o,cids,dr||null,TODAY,nowMin(),S.user.name,true);
   render();toast(`${opn(o.id)}: ${cids.join(' y ')||'contenedor a confirmar'}${dr?' con '+dname(dr):''}.`)},
  setConf:d=>{const o=O(d.id);o.pendConf=d.v==='1';audNow(`${S.user.name} ${o.pendConf?'marcó pendiente de confirmación':'registró la confirmación del cliente en'} el pedido ${opn(o.id)}`,o.id);render();toast(o.pendConf?'Marcado como pendiente de confirmación.':'Pedido confirmado por el cliente.')},
  enCamino:d=>{const o=O(d.id);o.status='En camino';audNow(`${S.user.name} marcó “en camino” el pedido ${opn(o.id)}`,o.id);render();toast(`Salió hacia ${cust(o).name}.`)},
  delDlg:d=>{S.dialog={t:'deliver',id:+d.id};renderLayers()},
  confirmDeliver:()=>{const o=O(S.dialog.id);if(byId('dl-f'))o.firmado=byId('dl-f').checked;const old=o.type==='Recambio'&&o.replacesOpId?O(o.replacesOpId):null;doDeliver(o,TODAY,nowMin(),S.user.name,+(val('dl-p')||4));S.dialog=null;render();toast(`${o.type==='Movimiento'?'Movimiento':'Entrega'} registrada.${old?' '+old.cids.join(', ')+' retirado por recambio.':''}`)},
  pickDlg:d=>{S.dialog={t:'pickup',id:+d.id};renderLayers()},
- confirmPickup:()=>{const o=O(S.dialog.id),pl=val('pk-r'),obs=byId('pk-o').value.trim();const hm=(byId('pk-h').value||fmin(nowMin())).split(':').map(Number);doPickup(o,TODAY,hm[0]*60+hm[1],+val('pk-d'),val('pk-b'),pl,S.user.name,false);
+ confirmPickup:()=>{const o=O(S.dialog.id),pl=val('pk-r'),obs=byId('pk-o').value.trim();const hm=(byId('pk-h').value||fmin(nowMin())).split(':').map(Number);doPickup(o,TODAY,hm[0]*60+hm[1],+val('pk-d'),val('pk-b'),pl,S.user.name,false);{const v=byId('pk-dh').value;if(v){const q=v.split(':').map(Number);o.dumpMin=q[0]*60+q[1]}}
   if(pl==='Otro lugar')o.cids.forEach(id=>C(id).placeNote=obs||'A definir');if(obs){o.cids.forEach(id=>C(id).obs=obs);o.logObs=(o.logObs?o.logObs+' · ':'')+obs}
   if(o.sameTrip){const x=O(o.sameTrip);if(x)x.sameTrip=null;o.sameTrip=null}
   S.dialog=null;render();toast(`Retiro registrado a las ${fmin(o.pickMin)}: B. ${o.basural}, queda en ${pl}.`)},
@@ -2121,7 +2362,7 @@ const ACT={
   if(o.sameTrip){const x=O(o.sameTrip);if(x)x.sameTrip=null;o.sameTrip=null}o.status='Cancelado';audNow(`${S.user.name} canceló el pedido ${opn(o.id)}`,o.id);toast(`Pedido ${opn(o.id)} cancelado.`)},true)},
  payDlg:d=>{S.dialog={t:'pay',id:+d.id};renderLayers()},
  confirmPay:()=>{const o=O(S.dialog.id),a=+digits(byId('py-a').value);if(!a){byId('py-err').innerHTML='<p class="err">Poné el monto.</p>';return}
-  const f=byId('py-f').files[0];o.paid=Math.min(o.price,o.paid+a);o.payMethod=val('py-m');o.payAcct=o.payMethod==='Transferencia'?val('py-acct'):null;o.verified=o.payMethod!=='Transferencia'||byId('py-v').checked;o.payDay=TODAY;if(f)o.receipt=f.name;
+  const f=byId('py-f').files[0];o.paid=Math.min(o.price,o.paid+a);o.payMethod=val('py-m');o.payAcct=o.payMethod==='Transferencia'?val('py-acct'):null;o.cashAt=o.payMethod==='Efectivo'?val('py-cash'):null;o.verified=o.payMethod!=='Transferencia'||(can.verify()&&!!byId('py-v')&&byId('py-v').checked);o.payDay=TODAY;if(f)o.receipt=f.name;
   audNow(`${S.user.name} registró un pago de ${money(a)} (${payLabel(o)}) en el pedido ${opn(o.id)}`,o.id);S.dialog=null;render();toast(`Pago de ${money(a)} registrado.`)},
  verify:d=>{const o=O(d.id);o.verified=true;audNow(`${S.user.name} verificó la transferencia (${payLabel(o)}) del pedido ${opn(o.id)}`,o.id);render();toast(`Transferencia de ${money(o.paid)} verificada.`)},
  uncombine:d=>{const o=O(d.id),x=O(o.sameTrip);if(x)x.sameTrip=null;o.sameTrip=null;audNow(`${S.user.name} separó el viaje combinado del pedido ${opn(o.id)}`,o.id);render()},
@@ -2129,7 +2370,7 @@ const ACT={
   c.place=d.pl;c.placeNote=d.pl==='Otro lugar'?(byId('cp-note')&&byId('cp-note').value.trim()||'A definir'):'';mv(TODAY,nowMin(),c.id,`Llevado a ${d.pl}${c.placeNote?': '+c.placeNote:''}`,'disponible');audNow(`${S.user.name} llevó ${c.id} a ${d.pl}`,c.id);toast(`${c.id}: ${d.pl}.`)},false,d.pl==='Otro lugar'?'<label class="fld" style="margin-top:12px"><span>¿Dónde?</span><input id="cp-note" placeholder="Ej.: taller de soldadura"></label>':'')},
  saveContObs:d=>{const c=C(d.id);c.obs=byId('c-obs').value.trim();audNow(`${S.user.name} actualizó la observación de ${c.id}`,c.id);toast('Observación guardada.')},
  mapSel:d=>{S.msel=+d.id;render()},mapZoom:d=>{S.mzoom=d.loc||null;S.mapView=null;render()},mst:d=>{S.mst[d.k]=!S.mst[d.k];render()},
- dsel:d=>{S.dsel=S.dsel===+d.id?null:+d.id;render()},
+ dsel:d=>{const id=+d.id;if(d.t){S.dsel=id;S.dsvc=d.t}else{S.dsel=S.dsel===id&&!S.dsvc?null:id;S.dsvc=''}render()},
  fuelDlg:()=>{S.dialog={t:'fuel'};renderLayers()},
  saveFuel:()=>{const l=+String(byId('fu-l').value).replace(',','.'),v=+digits(byId('fu-v').value),day=dIn(byId('fu-d').value),dr=+val('fu-dr');
   if(!l||!v||day==null){byId('fu-err').innerHTML='<p class="err">Completá fecha, litros e importe.</p>';return}
@@ -2138,8 +2379,8 @@ const ACT={
  newDriver:()=>{S.modal={t:'driver'};renderLayers()},
  saveDriver:()=>{const n=byId('nd-n').value.trim();if(!n){byId('nd-err').innerHTML='<p class="err">Escribí el nombre.</p>';return}DB.drivers.push({id:DB.drivers.length+1,name:n,phone:byId('nd-p').value.trim(),status:'Activo',plates:byId('nd-o').value.trim()?[byId('nd-o').value.trim().toUpperCase()]:[],cls:'acc'});audNow(`${S.user.name} agregó al chofer ${n}`);S.modal=null;render();toast(`Chofer ${n} agregado.`)},
  newUser:()=>{S.modal={t:'user'};renderLayers()},
- saveUser:()=>{const n=byId('nu-n').value.trim(),r=val('nu-r');if(!n){byId('nu-err').innerHTML='<p class="err">Escribí el nombre.</p>';return}DB.users.push({id:'u'+Date.now(),name:n,role:r,desc:{'Administrador':'Acceso total.','Ventas':'Agenda pedidos y verifica pagos.','Logística':'Entregas, retiros y combustible.','Dueño':'Ve todo el sistema.'}[r],last:null});audNow(`${S.user.name} creó el usuario ${n} (${r})`);S.modal=null;render();toast(`Usuario ${n} creado.`)},
- gqGo:d=>{byId('gq').value='';byId('gq-res').hidden=true;if(d.k==='cont')ACT.openCont(d);else if(d.k==='op')ACT.openOp(d);else if(can.cust()||inR('Dueño'))ACT.openCust(d);else{S.view='agenda';S.ag.when='todas';S.ag.q=CU(d.id).name;render()}}
+ saveUser:()=>{const n=byId('nu-n').value.trim(),r=val('nu-r');if(!n){byId('nu-err').innerHTML='<p class="err">Escribí el nombre.</p>';return}const un=norm(byId('nu-u').value)||norm(n).split(' ')[0],pw=byId('nu-p').value||'conte';if(DB.users.some(x=>x.user===un)){byId('nu-err').innerHTML='<p class="err">Ese usuario ya existe.</p>';return}DB.users.push({id:'u'+Date.now(),user:un,pass:pw,name:n,role:r,desc:{'Administración':'Ve todo el sistema.','Ventas':'Agenda pedidos y registra pagos.','Logística':'Entregas, retiros y combustible.'}[r],last:null});audNow(`${S.user.name} creó el usuario ${n} (${r})`);S.modal=null;render();toast(`Usuario ${n} creado.`)},
+ gqGo:d=>{byId('gq').value='';byId('gq-res').hidden=true;if(d.k==='cont')ACT.openCont(d);else if(d.k==='op')ACT.openOp(d);else if(can.cust())ACT.openCust(d);else{S.view='agenda';S.ag.when='todas';S.ag.q=CU(d.id).name;render()}}
 };
 const LIVE={
  gq:t=>{const q=norm(t.value),box=byId('gq-res');if(q.length<2){box.hidden=true;box.innerHTML='';return}
@@ -2153,7 +2394,11 @@ const LIVE={
  ncdup:()=>{const dup=findDup(byId('nc-n').value,byId('nc-p').value);byId('nc-dup').innerHTML=dup?`<div class="warn-box">${ic('alert')}<span>Parecido a un cliente existente: <b>${esc(dup.name)}</b> (${esc(dup.phone)}).</span><button class="btn sm" data-act="openCust" data-id="${dup.id}">Ver cliente</button></div>`:''},
  noAddr:t=>{byId('no-newaddr').hidden=t.value!=='__new'},
  locB:t=>{const b=byId(t.dataset.b);if(b)b.innerHTML=barrioOpts(t.value)},
- ecm:t=>{byId('ec-a-box').hidden=t.value!=='Transferencia'},
+ ecm:t=>{byId('ec-a-box').hidden=t.value!=='Transferencia';byId('ec-cash-box').hidden=t.value!=='Efectivo'},
+ cePl:t=>{byId('ce-note-box').hidden=t.value!=='Otro lugar'},
+ gxCat:t=>{byId('gx-s').innerHTML=CATS[t.value].map(x=>`<option>${esc(x)}</option>`).join('')},
+ salFile:t=>{const f=t.files[0];byId('sl-fn').textContent=f?f.name:'Adjuntar foto o PDF'},
+ gxFile:t=>{const f=t.files[0];byId('gx-fn').textContent=f?f.name:'Adjuntar foto o PDF'},
  pslot:t=>{const o=O(t.dataset.id);o.pickSlot=t.value;audNow(`${S.user.name} fijó el horario de retiro de ${o.cids.join(', ')}: ${t.value}`,o.id);toast(`Retiro de ${o.cids.join(', ')}: ${t.value}.`)},
  pdrv:t=>{const o=O(t.dataset.id);o.pickDriverPlan=+t.value;audNow(`${S.user.name} asignó a ${dname(+t.value)} el retiro de ${o.cids.join(', ')}`,o.id);toast(`Retiro de ${o.cids.join(', ')}: ${dname(+t.value)}.`)},
  combine:t=>{if(!t.value)return;const o=O(t.dataset.id),x=O(t.value);const ret=isActive(o)?o:x,ent=ret===o?x:o;
@@ -2166,18 +2411,19 @@ const LIVE={
 document.addEventListener('click',e=>{if(e.target.closest('a[target="_blank"]'))return;const t=e.target.closest('[data-act]');if(!t||t.tagName==='INPUT'||t.tagName==='SELECT')return;const fn=ACT[t.dataset.act];if(fn){e.preventDefault();fn(t.dataset,t,e)}});
 document.addEventListener('keydown',e=>{
  if(e.key==='Escape'){if(S.dialog)ACT.closeDialog();else if(S.modal)ACT.closeModal();else if(S.drawer)ACT.closeDrawer();else if(byId('gq-res'))byId('gq-res').hidden=true;return}
+ if(e.key==='Enter'&&(e.target.id==='lg-user'||e.target.id==='lg-pass')){ACT.doLogin();return}
  if(e.key==='Enter'){const t=e.target;if(t.matches&&t.matches('tr[data-act],g[data-act]')){e.preventDefault();t.click()}if(t.id==='gq'){const b=document.querySelector('#gq-res button');if(b)b.click()}}
 });
 document.addEventListener('input',e=>{const t=e.target;if(t.dataset.f){setF(t.dataset.f,t.value);render();return}if(t.dataset.live&&LIVE[t.dataset.live])LIVE[t.dataset.live](t)});
 document.addEventListener('change',e=>{const t=e.target;
  if(t.dataset.chg&&LIVE[t.dataset.chg])LIVE[t.dataset.chg](t);
- if(t.name==='no-type')byId('no-rec').innerHTML=recBlock();
+ if(t.name==='no-type'){byId('no-rec').innerHTML=recBlock();const ex=t.value==='Extensión',mv=t.value!=='Alquiler';byId('no-qty-box').hidden=mv;byId('no-size-box').hidden=mv;if(ex)byId('no-price').value='';else if(!byId('no-price').value)byId('no-price').value=DEFP[val('no-size')]}
  if(t.name==='no-size'){const q=+(val('no-qty')||1);byId('no-price').value=DEFP[t.value]*q}
  if(t.name==='no-qty'){byId('no-price').value=DEFP[val('no-size')]*+t.value}
- if(t.name==='no-pay')byId('no-acct-box').hidden=t.value!=='Transferencia';
- if(t.name==='py-m')byId('py-acct-box').hidden=t.value!=='Transferencia';
+ if(t.name==='no-pay'){byId('no-acct-box').hidden=t.value!=='Transferencia';byId('no-cash-box').hidden=t.value!=='Efectivo';byId('no-ch-box').hidden=t.value!=='Grupo Chamba'}
+ if(t.name==='py-m'){byId('py-acct-box').hidden=t.value!=='Transferencia';byId('py-cash-box').hidden=t.value!=='Efectivo'}
  if(t.name==='fu-dr'){const d=drv(t.value);if(d&&d.plates[0])byId('fu-p').value=d.plates[0];else byId('fu-p').value='BIDÓN'}
- if(t.dataset.photo&&t.files[0]){const f=t.files[0],o=O(t.dataset.id),r=new FileReader();r.onload=()=>{o.photos.push({kind:t.dataset.photo,url:r.result});audNow(`${S.user.name} subió “${t.dataset.photo}” al pedido ${opn(o.id)}`,o.id);const box=byId('ph-'+o.id);if(box)box.innerHTML=o.photos.map(p=>`<div class="photo"><img src="${p.url}" alt="${esc(p.kind)}"><span>${esc(p.kind)}</span></div>`).join('');toast('Foto cargada.')};r.readAsDataURL(f)}
+ if(t.dataset.photo&&t.files[0]){const f=t.files[0],o=O(t.dataset.id),r=new FileReader();r.onload=()=>{o.photos.push({kind:t.dataset.photo,url:r.result});audNow(`${S.user.name} subió “${t.dataset.photo}” al pedido ${opn(o.id)}`,o.id);const bid=t.dataset.box||('ph-'+o.id),box=byId(bid);if(box)box.innerHTML=o.photos.filter(p=>(p.kind==='Foto del remito')===(t.dataset.photo==='Foto del remito')).map(p=>`<div class="photo"><img src="${p.url}" alt="${esc(p.kind)}"><span>${esc(p.kind)}</span></div>`).join('');toast('Foto cargada.')};r.readAsDataURL(f)}
 });
 document.addEventListener('focusout',e=>{if(e.target.id==='gq')setTimeout(()=>{const b=byId('gq-res');if(b&&!b.contains(document.activeElement))b.hidden=true},180)});
 render();

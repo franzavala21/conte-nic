@@ -1,4 +1,4 @@
-// Conte Nic · modelo de datos (borrador v1)
+// Conte Nic · modelo de datos (borrador v2 · modificaciones 06/10)
 // PostgreSQL + Prisma. Los nombres de tablas y campos van en inglés (convención de código);
 // cada uno tiene su explicación en castellano.
 //
@@ -20,10 +20,9 @@ datasource db {
 // ─────────────────────────────── Tipos fijos ───────────────────────────────
 
 enum Role {
-  ADMIN
+  ADMINISTRACION // Mili y Camilo: ven todo
   VENTAS
   LOGISTICA
-  DUENO
 }
 
 enum CustomerType {
@@ -36,7 +35,7 @@ enum OrderType {
   RECAMBIO
   MOVIMIENTO
   VIAJE
-  EXTENSION
+  EXTENSION // extensión de tiempo: corre la fecha de retiro, precio lo pone Ventas
 }
 
 enum OrderStatus {
@@ -53,6 +52,29 @@ enum PlacementStatus {
   EN_CALLE // entregado al cliente
   RETIRADO // ya volvió
   CANCELADO
+}
+
+enum ContainerState {
+  DISPONIBLE
+  EN_REPARACION
+  FUERA_DE_SERVICIO
+  DADO_DE_BAJA
+}
+
+enum InvoiceType {
+  A
+  B
+  C
+}
+
+enum EmployeeArea {
+  CHOFER
+  OFICINA
+}
+
+enum SalaryType {
+  SUELDO
+  ADELANTO
 }
 
 enum LocationKind {
@@ -88,6 +110,8 @@ enum AttachmentKind {
   FOTO_REMITO
   COMPROBANTE_PAGO
   FACTURA
+  COMPROBANTE_SUELDO
+  COMPROBANTE_GASTO
   OTRO
 }
 
@@ -96,6 +120,7 @@ enum AttachmentKind {
 /// Personas que usan el sistema
 model User {
   id           Int       @id @default(autoincrement())
+  username     String    @unique // usuario para ingresar
   name         String
   email        String    @unique
   passwordHash String
@@ -112,6 +137,9 @@ model User {
   movements        ContainerMovement[]
   attachments      Attachment[]
   auditLogs        AuditLog[]
+  invoicesVerified Invoice[]           @relation("InvoiceVerifiedBy")
+  salaryPayments   SalaryPayment[]
+  expenses         Expense[]
 }
 
 /// Historial de cambios: quién hizo qué y cuándo
@@ -218,29 +246,33 @@ model Claim {
 
 /// Pedido de la Agenda: lo carga Ventas una sola vez
 model Order {
-  id                  Int           @id @default(autoincrement()) // número de pedido: #000582
+  id                  Int            @id @default(autoincrement()) // número de pedido: #000582
   type                OrderType
-  status              OrderStatus   @default(SOLICITADO)
+  status              OrderStatus    @default(SOLICITADO)
   customerId          Int
   addressId           Int
-  quantity            Int           @default(1)
+  quantity            Int            @default(1)
   sizeM3              Int // 3, 5 o 6
-  scheduledDate       DateTime      @db.Date
+  scheduledDate       DateTime       @db.Date
   timeSlot            String? // "Mañana", "10 – 12 h", "A coordinar"
-  price               Decimal       @db.Decimal(12, 2)
+  price               Decimal        @db.Decimal(12, 2)
   paymentMethod       PaymentMethod
   paymentAccountId    Int? // SAS / YPF / Otro si es transferencia
-  pendingConfirmation Boolean       @default(false) // el cliente todavía no confirmó
+  pendingConfirmation Boolean        @default(false) // el cliente todavía no confirmó
   notes               String?
   logisticsNotes      String?
   driverId            Int? // chofer de la entrega
   tripId              Int? // viaje (para combinar con retiros)
-  remitoNumber        Int?          @unique
-  remitoSigned        Boolean       @default(false)
-  replacesOrderId     Int? // recambio / movimiento: pedido cuyo contenedor se reemplaza o se mueve
+  remitoNumber        Int?           @unique
+  remitoSigned        Boolean        @default(false)
+  replacesOrderId     Int? // recambio / movimiento / extensión: pedido cuyo contenedor se reemplaza, se mueve o se extiende
+  extensionDays       Int? // solo para EXTENSION
+  chambaCharged       Decimal?       @db.Decimal(12, 2) // lo que Grupo Chamba le cobró al cliente
+  chambaPaidVia       PaymentMethod? // cómo le pagaron a Chamba
+  chambaRefundedAt    DateTime? // cuándo se le devolvió la diferencia a Chamba
   createdById         Int
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
   cancelledAt         DateTime?
   cancelReason        String?
 
@@ -255,6 +287,7 @@ model Order {
 
   placements  Placement[]
   payments    Payment[]
+  invoice     Invoice?
   attachments Attachment[]
   claims      Claim[]
   movements   ContainerMovement[]
@@ -279,6 +312,7 @@ model Placement {
   pickupTripId      Int?
   pickedUpAt        DateTime? // hora real del retiro
   landfillId        Int? // basural donde se vació
+  dumpedAt          DateTime? // hora en que lo dejó en el basural (se carga a mano)
   returnLocationId  Int? // dónde quedó: Lote Paraguay, Simonna...
   byRecambio        Boolean         @default(false)
 
@@ -302,27 +336,34 @@ model Attachment {
   orderId      Int?
   containerId  Int?
   paymentId    Int?
+  invoiceId    Int?
+  salaryId     Int?
+  expenseId    Int?
   uploadedById Int
   createdAt    DateTime       @default(now())
 
-  order      Order?     @relation(fields: [orderId], references: [id])
-  container  Container? @relation(fields: [containerId], references: [id])
-  payment    Payment?   @relation(fields: [paymentId], references: [id])
-  uploadedBy User       @relation(fields: [uploadedById], references: [id])
+  order      Order?         @relation(fields: [orderId], references: [id])
+  container  Container?     @relation(fields: [containerId], references: [id])
+  payment    Payment?       @relation(fields: [paymentId], references: [id])
+  invoice    Invoice?       @relation(fields: [invoiceId], references: [id])
+  salary     SalaryPayment? @relation(fields: [salaryId], references: [id])
+  expense    Expense?       @relation(fields: [expenseId], references: [id])
+  uploadedBy User           @relation(fields: [uploadedById], references: [id])
 }
 
 // ─────────────────────────────── Contenedores ───────────────────────────────
 
 /// CN-056 | VILLA BLANCO | 5m3
 model Container {
-  id         Int       @id @default(autoincrement())
-  code       String    @unique // CN-056
+  id         Int            @id @default(autoincrement())
+  code       String         @unique // CN-056
   detail     String // VILLA BLANCO, SE AMARILLO...
   sizeM3     Int
+  state      ContainerState @default(DISPONIBLE)
   locationId Int? // depósito donde está; vacío si está en la calle
-  active     Boolean   @default(true)
+  active     Boolean        @default(true)
   notes      String?
-  createdAt  DateTime  @default(now())
+  createdAt  DateTime       @default(now())
   deletedAt  DateTime?
 
   location    Location?           @relation(fields: [locationId], references: [id])
@@ -386,6 +427,7 @@ model Driver {
   pickups    Placement[]         @relation("PickupDriver")
   fuelLoads  FuelLoad[]
   movements  ContainerMovement[]
+  employee   Employee?
 }
 
 model Truck {
@@ -398,6 +440,8 @@ model Truck {
   defaultDriver Driver?    @relation(fields: [defaultDriverId], references: [id])
   trips         Trip[]
   fuelLoads     FuelLoad[]
+  cashPayments  Payment[]
+  cashExpenses  Expense[]
 }
 
 /// Viaje de un camión: agrupa entregas y retiros hechos juntos ("mismo viaje")
@@ -436,6 +480,8 @@ model PaymentAccount {
   orders    Order[]
   payments  Payment[]
   fuelLoads FuelLoad[]
+  salaries  SalaryPayment[]
+  expenses  Expense[]
 }
 
 model Payment {
@@ -444,8 +490,9 @@ model Payment {
   amount       Decimal       @db.Decimal(12, 2)
   method       PaymentMethod
   accountId    Int? // SAS / YPF / Otro
+  cashTruckId  Int? // efectivo: quién lo cobró (FWU010, EPK581, RXB892); vacío = Oficina
   paidAt       DateTime
-  verified     Boolean       @default(false) // Ventas confirmó que la transferencia llegó
+  verified     Boolean       @default(false) // Administración confirmó que la transferencia llegó
   verifiedAt   DateTime?
   verifiedById Int?
   note         String?
@@ -454,6 +501,7 @@ model Payment {
 
   order       Order           @relation(fields: [orderId], references: [id])
   account     PaymentAccount? @relation(fields: [accountId], references: [id])
+  cashTruck   Truck?          @relation(fields: [cashTruckId], references: [id])
   verifiedBy  User?           @relation("PaymentVerifiedBy", fields: [verifiedById], references: [id])
   createdBy   User            @relation("PaymentCreatedBy", fields: [createdById], references: [id])
   attachments Attachment[]
@@ -482,4 +530,103 @@ model FuelLoad {
   user    User           @relation(fields: [userId], references: [id])
 
   @@index([loadedAt])
+}
+
+// ─────────────────────────────── Administración ───────────────────────────────
+
+/// Factura de un pedido. Se emite al tomar el pedido; la razón social puede ser distinta de quien pidió.
+model Invoice {
+  id             Int         @id @default(autoincrement())
+  orderId        Int         @unique
+  type           InvoiceType
+  number         String? // 0003-00004521 (se puede cargar después)
+  businessName   String // razón social a la que se factura
+  taxId          String? // CUIT de la factura
+  issuedAt       DateTime    @default(now())
+  amount         Decimal     @db.Decimal(12, 2)
+  verifiedInBank Boolean     @default(false) // Mili la comparó con el banco
+  verifiedAt     DateTime?
+  verifiedById   Int?
+
+  order       Order        @relation(fields: [orderId], references: [id])
+  verifiedBy  User?        @relation("InvoiceVerifiedBy", fields: [verifiedById], references: [id])
+  attachments Attachment[]
+
+  @@index([businessName])
+  @@index([taxId])
+}
+
+/// Choferes y personal de oficina que cobran sueldo semanal
+model Employee {
+  id           Int          @id @default(autoincrement())
+  name         String
+  area         EmployeeArea
+  weeklySalary Decimal      @db.Decimal(12, 2)
+  active       Boolean      @default(true)
+  driverId     Int?         @unique // si es chofer
+
+  driver   Driver?         @relation(fields: [driverId], references: [id])
+  payments SalaryPayment[]
+}
+
+/// Pago de sueldo semanal o adelanto
+model SalaryPayment {
+  id             Int        @id @default(autoincrement())
+  employeeId     Int
+  paidAt         DateTime   @db.Date
+  type           SalaryType
+  cashAmount     Decimal    @default(0) @db.Decimal(12, 2)
+  transferAmount Decimal    @default(0) @db.Decimal(12, 2)
+  accountId      Int? // cuenta desde la que se transfirió
+  note           String?
+  createdById    Int
+  createdAt      DateTime   @default(now())
+
+  employee    Employee        @relation(fields: [employeeId], references: [id])
+  account     PaymentAccount? @relation(fields: [accountId], references: [id])
+  createdBy   User            @relation(fields: [createdById], references: [id])
+  attachments Attachment[]
+
+  @@index([paidAt])
+}
+
+/// Categorías y subcategorías de gastos (una subcategoría tiene parentId)
+model ExpenseCategory {
+  id       Int    @id @default(autoincrement())
+  name     String
+  parentId Int?
+
+  parent   ExpenseCategory?  @relation("SubCategories", fields: [parentId], references: [id])
+  children ExpenseCategory[] @relation("SubCategories")
+  expenses Expense[]
+
+  @@unique([parentId, name])
+}
+
+model Expense {
+  id            Int           @id @default(autoincrement())
+  date          DateTime      @db.Date
+  categoryId    Int // subcategoría
+  amount        Decimal       @db.Decimal(12, 2)
+  paymentMethod PaymentMethod
+  accountId     Int? // si fue transferencia
+  cashTruckId   Int? // si fue efectivo de un camión; vacío = Oficina
+  description   String?
+  createdById   Int
+  createdAt     DateTime      @default(now())
+
+  category    ExpenseCategory @relation(fields: [categoryId], references: [id])
+  account     PaymentAccount? @relation(fields: [accountId], references: [id])
+  cashTruck   Truck?          @relation(fields: [cashTruckId], references: [id])
+  createdBy   User            @relation(fields: [createdById], references: [id])
+  attachments Attachment[]
+
+  @@index([date])
+}
+
+/// Valores que cambian con el tiempo: valor del contenedor para Grupo Chamba, etc.
+model Setting {
+  key       String   @id // "chamba_container_price"
+  value     String
+  updatedAt DateTime @updatedAt
 }
