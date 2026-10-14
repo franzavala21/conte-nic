@@ -18,6 +18,16 @@ También se puede publicar con **GitHub Pages** (Settings → Pages → Deploy f
 - `docs/modelo-de-datos.html`: diagrama interactivo de las tablas y sus relaciones, recorrido de un pedido, datos que se calculan y cómo se importa el Excel.
 - `db/schema.prisma`: el mismo modelo en Prisma (PostgreSQL), validado. La conexión va en `prisma.config.ts` (variable `DATABASE_URL` en un `.env`).
 
+## Versión 4 · notas del 10/10
+
+- **Servicios nuevos** además de contenedores: Agua, Obradores, Minicargadora, Retroexcavadora y Rolloff, cada uno con su color. En la Agenda hay filtros por servicio arriba de las fechas y una sección **Servicios** (entre Agenda y Entregas). Cómo se carga cada servicio (litros, días, horas, m³) queda a revisar.
+- **Ventas**: accede a Caja, Gastos y Clientes; ya no ve Entregas.
+- **Clientes**: al tocar un cliente se ve su estado de cuenta (entrega, localidad, factura, monto, estado, fecha y forma de pago), con descarga en PDF y Excel, y un PDF de **detalle de venta** por pedido para mandar al cliente.
+- **Caja diaria** (todo efectivo): cobros con estado de rendición, selección para confirmar rendición o marcar como no rendido, pendiente por chofer, resumen, gastos en efectivo, historial de rendiciones, cierre del día con saldo que pasa al día siguiente y descarga Excel/PDF por rango de fechas.
+- **Sueldos**: por semana o por mes; Gustavo y Nico a comisión por contenedor entregado ($10.000, editable), Chucky y Alambre carga manual, oficina fijo. Actividad del chofer como base. Los adelantos se cargan desde **Gastos** y se descuentan solos el sábado; si son en efectivo salen de la caja.
+- Modelo de datos v3: `Service`, `CashHandover` (rendición), `CashClosing` (cierre), modalidad de sueldo en `Employee`, adelantos en `Expense.employeeId`.
+- Las descargas usan jsPDF y SheetJS desde cdnjs: necesitan internet.
+
 ## Versión 3 · modificaciones del 06/10
 
 - **Ingreso con usuario y contraseña**. Tres perfiles: Administración (Mili y Camilo, ven todo), Ventas y Logística. Usuarios de prueba: `mili`, `camilo`, `belen`, `lucia`, contraseña `conte`.

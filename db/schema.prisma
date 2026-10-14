@@ -1,4 +1,4 @@
-// Conte Nic · modelo de datos (borrador v2.1 · modificaciones 06/10 + planilla de facturación)
+// Conte Nic · modelo de datos (borrador v3 · notas 10/10: servicios, caja, sueldos por modalidad)
 // PostgreSQL + Prisma. Los nombres de tablas y campos van en inglés (convención de código);
 // cada uno tiene su explicación en castellano.
 //
@@ -36,6 +36,7 @@ enum OrderType {
   MOVIMIENTO
   VIAJE
   EXTENSION // extensión de tiempo: corre la fecha de retiro, precio lo pone Ventas
+  SERVICIO // agua, obradores, minicargadora, retroexcavadora, rolloff (ver Service)
 }
 
 enum OrderStatus {
@@ -81,7 +82,14 @@ enum EmployeeArea {
 
 enum SalaryType {
   SUELDO
-  ADELANTO
+  ADELANTO // los adelantos se cargan como Gasto (Expense.employeeId); queda por compatibilidad
+}
+
+/// Cómo se calcula el sueldo semanal
+enum PayMode {
+  COMISION // por contenedor entregado (Nico, Gustavo)
+  MANUAL // se carga a mano al pagar (Chucky, Alambre)
+  FIJO // oficina
 }
 
 enum LocationKind {
@@ -150,6 +158,8 @@ model User {
   invoicePayments  InvoicePayment[]
   salaryPayments   SalaryPayment[]
   expenses         Expense[]
+  cashHandovers    CashHandover[]
+  cashClosings     CashClosing[]
 }
 
 /// Historial de cambios: quién hizo qué y cuándo
@@ -263,7 +273,9 @@ model Order {
   customerId          Int
   addressId           Int
   quantity            Int            @default(1)
-  sizeM3              Int // 3, 5 o 6
+  sizeM3              Int? // 3, 5 o 6 (vacío si es un servicio)
+  serviceId           Int? // si type = SERVICIO
+  serviceQuantity     Decimal?       @db.Decimal(12, 2) // litros, días, horas o m³ según el servicio
   scheduledDate       DateTime       @db.Date
   timeSlot            String? // "Mañana", "10 – 12 h", "A coordinar"
   price               Decimal        @db.Decimal(12, 2)
@@ -295,6 +307,7 @@ model Order {
   replacesOrder  Order?          @relation("Replaces", fields: [replacesOrderId], references: [id])
   replacedBy     Order[]         @relation("Replaces")
   createdBy      User            @relation("OrderCreatedBy", fields: [createdById], references: [id])
+  service        Service?        @relation(fields: [serviceId], references: [id])
 
   placements  Placement[]
   payments    Payment[]
@@ -439,6 +452,7 @@ model Driver {
   fuelLoads  FuelLoad[]
   movements  ContainerMovement[]
   employee   Employee?
+  handovers  CashHandover[]
 }
 
 model Truck {
@@ -503,6 +517,7 @@ model Payment {
   method       PaymentMethod
   accountId    Int? // SAS / YPF / Otro
   cashTruckId  Int? // efectivo: quién lo cobró (FWU010, EPK581, RXB892); vacío = Oficina
+  cashHandoverId Int? // efectivo: en qué rendición lo trajo a la oficina; vacío = sin rendir
   paidAt       DateTime
   verified     Boolean       @default(false) // Administración confirmó que la transferencia llegó
   verifiedAt   DateTime?
@@ -514,6 +529,7 @@ model Payment {
   order       Order           @relation(fields: [orderId], references: [id])
   account     PaymentAccount? @relation(fields: [accountId], references: [id])
   cashTruck   Truck?          @relation(fields: [cashTruckId], references: [id])
+  cashHandover CashHandover?  @relation(fields: [cashHandoverId], references: [id])
   verifiedBy  User?           @relation("PaymentVerifiedBy", fields: [verifiedById], references: [id])
   createdBy   User            @relation("PaymentCreatedBy", fields: [createdById], references: [id])
   attachments Attachment[]
@@ -623,20 +639,26 @@ model Employee {
   id           Int          @id @default(autoincrement())
   name         String
   area         EmployeeArea
-  weeklySalary Decimal      @db.Decimal(12, 2)
+  payMode      PayMode
+  ratePerContainer Decimal? @db.Decimal(12, 2) // COMISION: $10.000 por contenedor entregado, puede cambiar
+  weeklySalary Decimal?     @db.Decimal(12, 2) // FIJO
   active       Boolean      @default(true)
-  driverId     Int?         @unique // si es chofer
+  driverId     Int?         @unique // si es chofer: su actividad es la base del sueldo
 
   driver   Driver?         @relation(fields: [driverId], references: [id])
   payments SalaryPayment[]
+  advances Expense[]
 }
 
-/// Pago de sueldo semanal o adelanto
+/// Pago de sueldo semanal (se paga el sábado). Los adelantos de la semana se descuentan.
 model SalaryPayment {
   id             Int        @id @default(autoincrement())
   employeeId     Int
   paidAt         DateTime   @db.Date
-  type           SalaryType
+  weekStart      DateTime   @db.Date // lunes de la semana que se paga
+  type           SalaryType @default(SUELDO)
+  grossAmount    Decimal    @db.Decimal(12, 2) // sueldo de la semana (comisión, fijo o carga manual)
+  advancesAmount Decimal    @default(0) @db.Decimal(12, 2) // adelantos descontados
   cashAmount     Decimal    @default(0) @db.Decimal(12, 2)
   transferAmount Decimal    @default(0) @db.Decimal(12, 2)
   accountId      Int? // cuenta desde la que se transfirió
@@ -650,6 +672,7 @@ model SalaryPayment {
   attachments Attachment[]
 
   @@index([paidAt])
+  @@unique([employeeId, weekStart])
 }
 
 /// Categorías y subcategorías de gastos (una subcategoría tiene parentId)
@@ -673,6 +696,7 @@ model Expense {
   paymentMethod PaymentMethod
   accountId     Int? // si fue transferencia
   cashTruckId   Int? // si fue efectivo de un camión; vacío = Oficina
+  employeeId    Int? // adelanto de sueldo: a quién (lo carga Ventas o Administración)
   description   String?
   createdById   Int
   createdAt     DateTime      @default(now())
@@ -680,6 +704,7 @@ model Expense {
   category    ExpenseCategory @relation(fields: [categoryId], references: [id])
   account     PaymentAccount? @relation(fields: [accountId], references: [id])
   cashTruck   Truck?          @relation(fields: [cashTruckId], references: [id])
+  employee    Employee?       @relation(fields: [employeeId], references: [id])
   createdBy   User            @relation(fields: [createdById], references: [id])
   attachments Attachment[]
 
@@ -691,4 +716,48 @@ model Setting {
   key       String   @id // "chamba_container_price"
   value     String
   updatedAt DateTime @updatedAt
+}
+
+// ─────────────────────────────── Servicios y caja (notas 10/10) ───────────────────────────────
+
+/// Servicios además de contenedores, cada uno con su color en la Agenda. Cómo se carga cada uno queda a revisar.
+model Service {
+  id           Int      @id @default(autoincrement())
+  name         String   @unique // Agua, Obradores, Minicargadora, Retroexcavadora, Rolloff
+  color        String // "#2F80ED"
+  unit         String // "L", "días", "h", "m³"
+  defaultPrice Decimal? @db.Decimal(12, 2)
+  active       Boolean  @default(true)
+
+  orders Order[]
+}
+
+/// Rendición: cuando un chofer trae a la oficina el efectivo que cobró. Agrupa uno o varios pagos.
+model CashHandover {
+  id          Int      @id @default(autoincrement())
+  at          DateTime // fecha y hora en que lo trajo
+  driverId    Int? // vacío = cobrado directamente en la oficina
+  amount      Decimal  @db.Decimal(12, 2)
+  createdById Int // quién lo recibió y registró (Belén, Mili…)
+
+  driver    Driver?   @relation(fields: [driverId], references: [id])
+  createdBy User      @relation(fields: [createdById], references: [id])
+  payments  Payment[]
+
+  @@index([at])
+}
+
+/// Cierre de caja diario. El saldo final pasa como saldo inicial del día siguiente.
+model CashClosing {
+  date           DateTime @id @db.Date
+  openingBalance Decimal  @db.Decimal(12, 2) // saldo del día anterior
+  received       Decimal  @db.Decimal(12, 2) // rendido en la oficina
+  expenses       Decimal  @db.Decimal(12, 2) // gastos, adelantos y sueldos en efectivo
+  withdrawn      Decimal  @default(0) @db.Decimal(12, 2) // depositado en banco o retirado
+  closingBalance Decimal  @db.Decimal(12, 2)
+  note           String?
+  closedById     Int
+  closedAt       DateTime @default(now())
+
+  closedBy User @relation(fields: [closedById], references: [id])
 }
