@@ -2367,22 +2367,24 @@ function mapSvg(list){
  list.forEach(o=>{const a=addr(o);if(a.lat==null)return;const[x,y]=px(a.lat,a.lng),sel=S.msel===o.id;s+=`<g data-act="mapSel" data-id="${o.id}"><title>${o.cids.join(', ')} · ${esc(cust(o).name)}</title>${sel?`<circle class="m-sel" cx="${x}" cy="${y}" r="${16*k}" stroke-width="${2.5*k}"/>`:''}<circle class="m-mk ${mkClass(o)}" cx="${x}" cy="${y}" r="${(sel?11:9)*k}" stroke-width="${2*k}"/></g>`});
  return s+'</svg>';
 }
-let LMAP=null,MAPMODE=typeof L!=='undefined'?'try':'schem',TILE_OK=false;
+let LMAP=null,MAPMODE=typeof L!=='undefined'?'try':'schem',TILE_OK=false,OSM_FB=false;
 function killMap(){if(LMAP){try{S.mapView={c:LMAP.getCenter(),z:LMAP.getZoom()};LMAP.remove()}catch(e){}LMAP=null}}
 function mapFail(){if(MAPMODE!=='try')return;MAPMODE='schem';killMap();if(S.view==='mapa'&&S.user)render()}
 function initMap(){
  const el=byId('lmap');if(!el||MAPMODE==='schem')return;
  const m=L.map(el,{zoomControl:true});LMAP=m;
  const web=location.protocol==='http:'||location.protocol==='https:';
- const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
+ const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,referrerPolicy:'strict-origin-when-cross-origin',attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
  const esriSt=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Mapa © Esri, OpenStreetMap'});
  const esriSat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Imágenes © Esri'});
- const calles=web&&!/github\.io$/.test(location.hostname)?esriSt:(web?osm:esriSt);
- const base={'Calles':calles,'Satélite':esriSat};S.mapBase=S.mapBase||'Calles';
+ const base={'OpenStreetMap':osm,'Satélite':esriSat};S.mapBase=base[S.mapBase]?S.mapBase:'OpenStreetMap';
  const t=base[S.mapBase].addTo(m);L.control.layers(base,null,{collapsed:false}).addTo(m);
  m.on('baselayerchange',e=>{S.mapBase=e.name});
- t.on('tileload',()=>{TILE_OK=true;if(MAPMODE==='try')MAPMODE='ok'});
- t.on('tileerror',()=>{if(!TILE_OK)setTimeout(()=>{if(!TILE_OK)mapFail()},600)});
+ const ok=()=>{TILE_OK=true;if(MAPMODE==='try')MAPMODE='ok'};
+ [osm,esriSat,esriSt].forEach(l=>l.on('tileload',ok));
+ // Mapa base: OpenStreetMap. Si el visor bloquea sus mosaicos, se usa el respaldo para no dejar el mapa vacío.
+ osm.on('tileerror',()=>{if(TILE_OK||OSM_FB)return;OSM_FB=true;m.removeLayer(osm);esriSt.addTo(m);{const n=document.querySelector('.mapwrap .note');if(n)n.textContent='Este visor bloquea los mosaicos de OpenStreetMap, así que se muestra un mapa de respaldo. Abriendo la demo desde GitHub o desde el archivo se ve OpenStreetMap. Las ubicaciones son de ejemplo.'}esriSt.on('tileerror',()=>{if(!TILE_OK)setTimeout(()=>{if(!TILE_OK)mapFail()},600)})});
+ esriSat.on('tileerror',()=>{if(!TILE_OK)setTimeout(()=>{if(!TILE_OK)mapFail()},600)});
  if(MAPMODE==='try')setTimeout(()=>{if(!TILE_OK)mapFail()},5000);
  if(S.mzoom&&LOCS[S.mzoom])m.setView([LOCS[S.mzoom].lat,LOCS[S.mzoom].lng],14);
  else if(S.mapView)m.setView(S.mapView.c,S.mapView.z);
@@ -2408,7 +2410,7 @@ function vMapa(){
   </div><div>
    ${MAPMODE==='schem'?`<div class="mapbox">${mapSvg(list)}${S.mzoom?`<div class="zoom"><button class="btn sm" data-act="mapZoom" data-loc="">Ver toda la zona</button></div>`:''}</div>`:`<div class="mapbox" id="lmap" role="region" aria-label="Mapa de contenedores en calle"></div>`}
    <ul class="legend"><li><i class="dot g"></i>En cliente (faltan más de 2 días)</li><li><i class="dot y"></i>Por vencer (hoy a 2 días)</li><li><i class="dot r"></i>Vencido</li><li><i class="dot" style="background:#17212B;border-radius:2px"></i>Lote Paraguay y Simonna</li></ul>
-   <p class="note">${MAPMODE==='schem'?'No se pudo cargar el mapa real desde acá, así que se muestra un esquema de la zona. Abriendo la demo desde GitHub o desde el archivo se ve el mapa de OpenStreetMap.':'Mapa gratuito (OpenStreetMap / Esri), sin clave. Arriba a la derecha podés cambiar a vista satelital. Las ubicaciones son de ejemplo.'}</p></div></div>`;
+   <p class="note">${MAPMODE==='schem'?'No se pudo cargar el mapa real desde acá, así que se muestra un esquema de la zona. Abriendo la demo desde GitHub o desde el archivo se ve el mapa de OpenStreetMap.':(OSM_FB?'Este visor bloquea los mosaicos de OpenStreetMap, así que se muestra un mapa de respaldo. Abriendo la demo desde GitHub o desde el archivo se ve OpenStreetMap.':'Mapa de OpenStreetMap, gratuito y sin clave. Arriba a la derecha podés cambiar a vista satelital.')+' Las ubicaciones son de ejemplo.'}</p></div></div>`;
 }
 
 /* ---------- Pagos ---------- */
