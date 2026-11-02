@@ -1160,6 +1160,108 @@ tr.sel>td{background:color-mix(in srgb,var(--accent) 8%,transparent)}
 .su-vals{display:flex;flex-wrap:wrap;gap:12px}.su-vals .fld{flex:1 1 180px}
 .svseg label span{white-space:nowrap}
 @media (max-width:1150px){.cj-grid{grid-template-columns:minmax(0,1fr)}}
+.nav button.grp .chev{margin-left:auto;width:16px;height:16px;transition:transform .15s}.nav button.grp.open .chev{transform:rotate(180deg)}
+.nav button.grp .cnt{margin-left:auto}.nav button.grp .cnt+.chev{margin-left:6px}
+.nav-kids{display:flex;flex-direction:column;gap:2px;margin:0 0 4px 21px;padding-left:10px;border-left:1px solid var(--side-hi)}
+.nav button.sub{min-height:36px;font-size:14px}.nav button.sub .ic{width:17px;height:17px}
+/* ---- v6 ---- */
+.mpanel.wide{width:min(1120px,calc(100vw - 32px));max-width:none}
+.agnav{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:0 0 14px}
+.agnav-l{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.aglabel{font:600 17px var(--f-body);margin-left:4px}
+.agf .inp.grow{min-width:220px}
+.ag-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:start}
+.ag-grid.with{grid-template-columns:minmax(0,1fr) 360px}
+.ag-main{min-width:0}
+.agday{margin-bottom:22px}
+.agdh{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between;margin:0 0 8px}
+.agdh h2{font:600 22px/1.2 var(--f-cond);margin:0}.agdh h2 span{color:var(--muted);font-weight:500}
+.agdh small{color:var(--muted);font-size:13px}
+table.agt td{vertical-align:top}
+tr[data-act]{cursor:pointer}
+tr.canc>td{opacity:.6}
+.sub.obs{display:flex;gap:5px;align-items:flex-start}.sub.obs .ic{width:14px;height:14px;flex:none;margin-top:2px}
+.plate{display:inline-block;font:600 12.5px var(--f-mono);padding:3px 8px;border-radius:6px;border:1px solid var(--line);background:var(--surface2);white-space:nowrap}
+.agp{position:sticky;top:12px;padding:0;overflow:hidden}
+.agp-h{display:flex;justify-content:space-between;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.agp-h h3{margin:2px 0 0;font:600 22px/1.15 var(--f-cond)}
+.agp .eyebrow{margin:0}
+.agp-s{padding:12px 18px;border-bottom:1px solid var(--line2)}
+.agp-s h4{display:flex;align-items:center;gap:7px;margin:0 0 6px;font:700 12px var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.agp-s h4 .ic{width:15px;height:15px}
+.agp-s p{margin:0 0 6px;line-height:1.5}
+.agp-b{display:flex;flex-wrap:wrap;gap:8px;padding:10px 18px 0}
+.agp-s .agp-b{padding:6px 0 0}
+.agp-f{display:flex;gap:8px;padding:14px 18px}.agp-f .btn{flex:1;justify-content:center}
+.agp .cj-sum{margin:0 0 6px}
+.btn.wa{color:#0E7A43;border-color:color-mix(in srgb,#25D366 55%,var(--line));background:color-mix(in srgb,#25D366 10%,var(--surface))}
+.btn.wa.icon{padding:0 10px;min-width:0}
+.rtv{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.rtv.k-bad b{color:var(--bad)}.rtv.k-warn b{color:color-mix(in srgb,var(--warn) 70%,var(--ink))}.rtv.k-acc b{color:var(--accent)}
+.dot.acc{background:var(--accent)}
+.info-box{display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:10px;background:var(--surface2);border:1px solid var(--line);font-size:14px;margin:6px 0}
+.info-box .ic{flex:none;color:var(--muted)}
+/* agendar pedido */
+.np{display:flex;flex-direction:column;gap:12px;background:var(--surface2)}
+.nps{border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.nps-h{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:10px;width:100%;padding:12px 16px;cursor:default}
+button.nps-h{cursor:pointer}button.nps-h .chev{margin-left:auto;width:18px;height:18px;transition:transform .15s}.nps.open button.nps-h .chev{transform:rotate(180deg)}
+.nps-h b{font:600 17px var(--f-body)}
+.nps-n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font:700 13px var(--f-body);flex:none}
+.nps.opt:not(.open) .nps-n{background:var(--muted)}
+.nps-b{padding:0 16px 16px;display:flex;flex-direction:column;gap:12px}
+.npg{display:grid;gap:12px;align-items:end}
+.npg.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.npg.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.npg.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.npg.g3x{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) minmax(0,.9fr);align-items:start}
+.npg .span2{grid-column:span 2}.npg .span4{grid-column:1/-1}
+.npg .fld{min-width:0}
+.inrow{display:flex;gap:8px;align-items:center}.inrow>.inp,.inrow>select{flex:1;min-width:0}
+.np-q{position:relative;display:flex;align-items:center}.np-q>.ic{position:absolute;left:12px;width:17px;height:17px;color:var(--muted)}.np-q .inp{padding-left:38px;width:100%}
+.np-q .sug{position:absolute;top:100%;left:0;right:0;z-index:5}
+.sug button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left}
+.selcard.sm{padding:8px 12px;min-height:44px}
+.seg2{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.seg2 button{flex:1 1 auto;min-height:42px;padding:0 14px;border:0;border-right:1px solid var(--line);background:transparent;color:inherit;font:600 14px var(--f-body);cursor:pointer;white-space:nowrap}
+.seg2 button:last-child{border-right:0}.seg2 button.on{background:var(--accent);color:#fff}
+.seg2 button:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.seg2.st{border:0;gap:10px;overflow:visible;background:transparent}.seg2.st button{border:1px solid var(--line);border-radius:10px;display:inline-flex;align-items:center;gap:8px;flex:0 1 auto}
+.seg2.st button.on.pend{background:color-mix(in srgb,var(--warn) 16%,var(--surface));color:inherit;border-color:var(--warn)}
+.seg2.st button.on.canc{background:color-mix(in srgb,var(--bad) 14%,var(--surface));color:inherit;border-color:var(--bad)}
+.seg2 .radio{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;opacity:.6}.seg2 .on .radio{background:currentColor;box-shadow:inset 0 0 0 2px var(--surface)}
+.stp{display:flex;align-items:center;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;width:max-content;background:var(--surface)}
+.stp button{width:42px;min-height:42px;border:0;background:transparent;font:600 18px var(--f-body);color:inherit;cursor:pointer}.stp button:hover{background:var(--surface2)}
+.stp b{min-width:44px;text-align:center;font:600 16px var(--f-body);border-left:1px solid var(--line);border-right:1px solid var(--line);line-height:42px}.stp .muted{padding:0 12px}
+.np-tot{font:600 26px/1.2 var(--f-cond);padding:6px 0}
+.np-sub{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin:0;padding:10px 12px;border-radius:10px;background:var(--surface2);font-size:13.5px}.np-sub dt{color:var(--muted)}.np-sub dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+.paybox{padding:12px;border-radius:10px;border:1px dashed var(--line);background:var(--surface2)}
+.up.sm{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 12px;border:1px dashed var(--line);border-radius:10px;cursor:pointer;font-size:14px;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.up.sm input{display:none}
+.np-more{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-weight:600;flex-wrap:wrap}.np-more small{font-weight:400}
+.np-foot{flex-wrap:wrap}.np-sum{display:flex;flex-direction:column;gap:2px;font-size:13.5px}.np-sum b{font:600 18px var(--f-body)}
+.sublbl{display:flex;align-items:center;gap:8px}
+/* flota */
+.vtabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.vtabs button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;align-items:center;padding:9px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.vtabs button span{display:flex;flex-direction:column}.vtabs button small{color:var(--muted);font-size:12px}
+.vtabs button.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
+.vtabs button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.vhead{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin:0 0 10px}
+.vhead h2{margin:0;font:600 26px var(--f-cond);display:flex;gap:10px;align-items:center}.vhead p{margin:4px 0 0}
+.cards3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:8px 0}
+.cards3>div{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:10px;background:var(--surface2)}.cards3 b{font:600 20px var(--f-cond)}.cards3 small{color:var(--muted);font-size:12.5px}
+.cards3.calc>div.ok{background:color-mix(in srgb,var(--ok) 12%,var(--surface))}
+.cards3x{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0 0 18px}
+.rv{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line2)}.rv>span:not(.b){display:flex;flex-direction:column;flex:1}.rv small{color:var(--muted)}.rv .ic{flex:none;color:var(--muted)}
+.ctl{display:flex;align-items:center;gap:10px;min-width:150px}.ctl .cj-tr{flex:1}
+tr.warnrow>td{background:color-mix(in srgb,var(--warn) 12%,transparent)}
+tr.efrow>td{background:color-mix(in srgb,var(--ok) 7%,transparent)}
+.fgrid1{display:flex;flex-direction:column;gap:8px}
+.inp.sm{min-height:34px;padding:4px 8px}.inp.r{text-align:right}
+@media (max-width:1100px){.ag-grid.with{grid-template-columns:minmax(0,1fr)}.agp{position:static}}
+@media (max-width:820px){.npg.g3,.npg.g4,.npg.g3x{grid-template-columns:repeat(2,minmax(0,1fr))}.cards3x{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.npg.g2,.npg.g3,.npg.g4,.npg.g3x{grid-template-columns:minmax(0,1fr)}.npg .span2{grid-column:auto}.seg2 button{flex:1 1 40%}}
+
+.acts-col{display:flex;flex-direction:column;gap:4px;align-items:flex-start}.acts-col>span{display:flex;gap:4px}
 </style></head><body>
 
 <div id="app"></div>
@@ -1211,6 +1313,10 @@ const wpick=(items,w)=>{let s=w.reduce((a,b)=>a+b,0),r=R()*s;for(let i=0;i<items
 
 const ICONS={
  home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
+ cart:'M3 4h2l2.4 11h11l2-8H6.3M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM18 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2z',
+ wa:'M4 20l1.3-3.9A8 8 0 1 1 8 19zM9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 1c-1.2-.5-2.5-1.8-3-3l1-1-1-2z',
+ up:'M12 16V4M7 9l5-5 5 5M4 20h16',
+ chevl:'M15 6l-6 6 6 6',chevr:'M9 6l6 6-6 6',
  grid:'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',
  truck:'M2 6h12v10H2zM14 9h4l3 3v4h-7M7 19.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17 19.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
  cal:'M4 5h16v16H4zM4 10h16M8 3v4M16 3v4',
@@ -1241,18 +1347,25 @@ const LOGO=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18v10H3z" 
 
 /* ============ datos base ============ */
 const LOCS={
- 'Villa Allende':{lat:-31.294,lng:-64.296,streets:['Av. Goycoechea','Río de Janeiro','Gorriti','San Martín','Melilla','Granada'],barrios:['Comarca de Allende','San Isidro','Cóndor Alto','La Paloma','Chacras de la Villa','Lomas Este']},
- 'Mendiolaza':{lat:-31.266,lng:-64.302,streets:['Av. Argentina','Juncal','Los Algarrobos','Tissera','Calle 2'],barrios:['El Terrón','La Cercanía','San Alfonso del Talar','Estancia Q2','Talar del Este']},
- 'Unquillo':{lat:-31.231,lng:-64.317,streets:['Belgrano','Los Talas','Cabana','Pasaje San Lorenzo','Güemes'],barrios:['Corral de Barrancas','Las Corzuelas','Alto Alegre','Soles Serranos']},
- 'Río Ceballos':{lat:-31.166,lng:-64.322,streets:['Av. San Martín','Paraguay','Los Plátanos','Sarmiento'],barrios:['Villa Catalina','Altos de la Catalina','Cuatro Hojas','Estancia Miguel']},
- 'Salsipuedes':{lat:-31.137,lng:-64.296,streets:['Lavalle','Av. Maipú','Los Pinos'],barrios:['El Pueblito','Villa Silvina']},
- 'Agua de Oro':{lat:-31.066,lng:-64.300,streets:['Ruta E-53','Los Nogales'],barrios:['Villa Los Altos']},
- 'La Granja':{lat:-31.010,lng:-64.262,streets:['Ruta E-53','Las Moras'],barrios:['Los Molles']}
+ 'Ascochinga':{lat:-30.957,lng:-64.274,streets:['Av. Los Paraísos','Ruta E-66','San Martín'],barrios:[]},
+ 'La Granja':{lat:-31.010,lng:-64.262,streets:['Ruta E-53','Las Moras','Los Cerezos'],barrios:[]},
+ 'Agua de Oro':{lat:-31.066,lng:-64.300,streets:['Ruta E-53','Los Nogales','Av. Belgrano'],barrios:[]},
+ 'El Manzano':{lat:-31.084,lng:-64.296,streets:['Ruta E-53','Los Espinillos'],barrios:[]},
+ 'El Pueblito':{lat:-31.112,lng:-64.289,streets:['Ruta E-53','Los Aromos'],barrios:[]},
+ 'Salsipuedes':{lat:-31.137,lng:-64.296,streets:['Lavalle','Av. Maipú','Los Pinos'],barrios:['Estancia San Miguel']},
+ 'Río Ceballos':{lat:-31.166,lng:-64.322,streets:['Av. San Martín','Paraguay','Los Plátanos','Sarmiento'],barrios:['Bela Vista','Villa Catalina','Lomas del Chañar']},
+ 'Unquillo':{lat:-31.231,lng:-64.317,streets:['Belgrano','Los Talas','Pasaje San Lorenzo','Güemes'],barrios:['Aires del Nordeste','Las Corzuelas','San Francisco','Soles Serranos','La Adela','Lomas del Cigarral','Corral de Barrancas']},
+ 'Cabana':{lat:-31.216,lng:-64.355,streets:['Camino a Cabana','Los Molles'],barrios:[]},
+ 'Mendiolaza':{lat:-31.266,lng:-64.302,streets:['Av. Argentina','Juncal','Los Algarrobos','Tissera'],barrios:['San Alfonso del Talar','La Cercanía','Talar del Este','Fincas del Sol','Molinos de Viento','Estancia El Terrón','Country 4 Hojas','Estancia Q2','Sierra Nueva','La Serena']},
+ 'Villa Allende':{lat:-31.294,lng:-64.296,streets:['Av. Goycoechea','Río de Janeiro','Gorriti','San Martín','Melilla','Granada'],barrios:['Chacras de la Villa','San Isidro','La Morada','Antigua Estancia','Comarca de Allende','La Herradura','La Paloma','Cumbres del Golf','Terrazas de la Villa','Las Marías','Solares de San Alfonso','San Alfonso de Villa Allende','Prados de la Villa','La Catalina']},
+ 'Saldán':{lat:-31.302,lng:-64.315,streets:['Av. Vélez Sarsfield','Rivadavia'],barrios:[]},
+ 'Barrio Norte':{lat:-31.312,lng:-64.282,streets:['Av. Padre Luchesse','Los Robles'],barrios:[]},
+ 'Argüello Norte':{lat:-31.334,lng:-64.258,streets:['Av. Rafael Núñez','Gauss'],barrios:[]}
 };
 const LOC_NAMES=Object.keys(LOCS);
-const LOC_W=[35,30,11,18,4,1.5,1];
+const LOC_W=[1,1,1.5,1,1.5,4,18,11,2,30,35,3,2,2];
 const BASURALES=['Villa Allende','Unquillo','Río Ceballos','Salsipuedes'];
-const basFor=loc=>({'Villa Allende':'Villa Allende','Mendiolaza':'Villa Allende','Unquillo':'Unquillo','Río Ceballos':'Río Ceballos'}[loc]||'Salsipuedes');
+const basFor=loc=>({'Villa Allende':'Villa Allende','Mendiolaza':'Villa Allende','Saldán':'Villa Allende','Barrio Norte':'Villa Allende','Argüello Norte':'Villa Allende','Unquillo':'Unquillo','Cabana':'Unquillo','Río Ceballos':'Río Ceballos'}[loc]||'Salsipuedes');
 const PLACES=['En calle','Simonna','Lote Paraguay','Otro lugar'];
 const DEPOTS=['Lote Paraguay','Simonna'];
 const BPL={'En calle':'info','Simonna':'acc','Lote Paraguay':'ok','Otro lugar':'rep'};
@@ -1260,8 +1373,10 @@ const PAY_METHODS=['Efectivo','Transferencia','Grupo Chamba','Cliente aparte'];
 const ACCTS=['SAS','YPF','Otro'];
 const PRICES={3:[90000,95000],5:[110000,120000,135000,140000],6:[160000,169400]};
 const DEFP={3:95000,5:135000,6:160000};
-const SLOTS=['Mañana','Tarde','A coordinar','8 – 10 h','10 – 12 h','12 – 14 h','14 – 16 h','16 – 18 h'];
-const SLOTMIN={'Mañana':9*60,'Tarde':15*60,'A coordinar':17*60,'8 – 10 h':8*60,'10 – 12 h':10*60,'12 – 14 h':12*60,'14 – 16 h':14*60,'16 – 18 h':16*60};
+const SLOTS=['Por la mañana','Por la tarde','A coordinar','08:30 h','10:00 h','11:30 h','14:00 h','16:30 h'];
+const SLOT_BASE=['Por la mañana','Por la tarde','Hora exacta','A coordinar'];
+const SLOTMIN={'Por la mañana':9*60,'Por la tarde':15*60,'A coordinar':17*60,'08:30 h':8*60+30,'10:00 h':10*60,'11:30 h':11*60+30,'14:00 h':14*60,'16:30 h':16*60+30};
+const slotMin=s=>SLOTMIN[s]??(/^(\d\d):(\d\d)/.test(s)?+s.slice(0,2)*60+ +s.slice(3,5):17*60);
 const DET=['VILLA BLANCO','VILLA AMARILLO','SE AMARILLO','TOP AMARILLO','CONTIENE AMARILLO','NIC ROSA','AMARILLO','TOP BLANCO','SE AZUL','CONTIENE BLANCO','NIC AMARILLO','VILLA VERDE'];
 const COLHEX={AMARILLO:'#E3B23C',BLANCO:'#E9E6DC',ROSA:'#E59BB0',AZUL:'#4D7FB8',VERDE:'#5E9E6A'};
 const colOf=c=>COLHEX[c.detail.split(' ').pop()]||'#E3B23C';
@@ -1269,20 +1384,24 @@ const cname=c=>`${c.id} | ${c.detail} | ${c.size}m3`;
 const CASH_OPTS=['FWU 010','EPK 581','RXB 892','Oficina'];
 /* servicios (10/10): además de contenedores. Cómo se carga cada uno queda a revisar con el cliente. */
 const SVCS={
- 'Contenedor':{c:'#E0702A',u:'',d:0,p:0,lbl:''},
- 'Agua':{c:'#2F80ED',u:'L',d:10000,p:70000,lbl:'Litros'},
- 'Obradores':{c:'#8B5CF6',u:'días',d:30,p:260000,lbl:'Días de alquiler'},
- 'Minicargadora':{c:'#C99A06',u:'h',d:4,p:180000,lbl:'Horas'},
- 'Retroexcavadora':{c:'#E5484D',u:'h',d:4,p:260000,lbl:'Horas'},
- 'Rolloff':{c:'#12A594',u:'m³',d:20,p:320000,lbl:'Medida (m³)'}
+ 'Contenedor':{c:'#E0702A',u:'',lbl:'Contenedor'},
+ 'Obrador':{c:'#8B5CF6',u:'mes',lbl:'Obrador',p:280000},
+ 'Viaje de agua':{c:'#2F80ED',u:'viaje',lbl:'Viaje de agua',p:70000},
+ 'Viaje de tierra':{c:'#9A6B3F',u:'viaje',lbl:'Viaje de tierra',p:95000},
+ 'Minicargadora':{c:'#C99A06',u:'h',lbl:'Alquiler minicargadora',p:45000},
+ 'Retroexcavadora':{c:'#E5484D',u:'h',lbl:'Alquiler retroexcavadora',p:65000},
+ 'Roll-Off':{c:'#12A594',u:'viaje',lbl:'Alquiler Roll-Off',p:320000}
 };
 const SVC_NAMES=Object.keys(SVCS).slice(1);
 const rubro=o=>o.type==='Servicio'?o.svc:'Contenedor';
-const svcTag=k=>`<span class="svt" style="--sc:${SVCS[k].c}">${esc(k)}</span>`;
-const svcQty=o=>`${num(o.sq)} ${SVCS[o.svc].u}`;
-const svcLine=o=>o.type==='Servicio'?svcQty(o):o.type==='Extensión'?`Extensión · +${o.extDays||'?'} días`:`${o.type} · ${o.size} m³`;
+const svcTag=k=>`<span class="svt" style="--sc:${(SVCS[k]||SVCS.Contenedor).c}">${esc(k)}</span>`;
+const pl=(n,a,b)=>`${num(n)} ${n==1?a:b}`;
+const svcQty=o=>o.svc==='Viaje de agua'?`${pl(o.sq,'viaje','viajes')}${o.lit?' · '+num(o.lit)+' L':''}${o.hose?' · '+o.hose+' m manguera':''}`
+ :o.svc==='Obrador'?`${o.qty>1?o.qty+' obradores · ':''}${pl(o.sq,'mes','meses')}${o.obrTo!=null?' · vence '+fs(o.obrTo):''}`
+ :o.svc==='Viaje de tierra'||o.svc==='Roll-Off'?pl(o.sq,'viaje','viajes'):`${pl(o.sq,'hora','horas')}`;
+const svcLine=o=>o.type==='Servicio'?svcQty(o):o.type==='Extensión'?`Extensión · +${o.extDays||'?'} días`:`${o.type} · ${o.size} m³${o.qty>1?' · Cant. '+o.qty:''}`;
 const noCont=o=>o.type==='Movimiento'||o.type==='Servicio';
-const svcPrice=(k,q)=>k==='Agua'?Math.round(q/10000*SVCS[k].p/1000)*1000:k==='Obradores'?Math.round(SVCS[k].p*q/30/1000)*1000:k==='Rolloff'?Math.round(SVCS[k].p*q/20/1000)*1000:Math.round(SVCS[k].p*q/4/1000)*1000;
+const svcPrice=(k,q)=>(SVCS[k].p||0)*(q||1);
 const COMPANY={name:'CONTE NIC S.A.S',addr:'Av. San Martín 4544 - 5111 - Río Ceballos - Córdoba',tel:'3543539930',mail:'contenic66@gmail.com',web:'www.contenic.com.ar'};
 
 const INV_TYPES=['A','B','C','Sin factura'];
@@ -1335,7 +1454,7 @@ const USERS=[
  {id:'lucia',user:'lucia',pass:'conte',name:'Lucía',role:'Logística',desc:'Asigna contenedor y chofer, entregas, retiros y basurales.',last:TODAY}
 ];
 const DB={containers:[],customers:[],ops:[],moves:[],audit:[],claims:[],fuel:[],users:USERS,
- drivers:[{id:4,name:'Alambre',phone:'351 590-2218',status:'Activo',plates:['FWU 010'],cls:'acc'},{id:1,name:'Gustavo',phone:'351 612-4480',status:'Activo',plates:['RXB 892','AHT 471'],cls:'info'},{id:2,name:'Nico',phone:'351 745-2031',status:'Activo',plates:['FWU 010','KLF 269'],cls:'ok'},{id:3,name:'Chucky',phone:'3543 58-1907',status:'Activo',plates:['EPK 581'],cls:'rep'}],
+ drivers:[{id:4,name:'Alambre',phone:'351 590-2218',status:'Activo',plates:['FEO 193'],cls:'acc'},{id:1,name:'Gustavo',phone:'351 612-4480',status:'Activo',plates:['RXB 892','AHT 471'],cls:'info'},{id:2,name:'Nico',phone:'351 745-2031',status:'Activo',plates:['FWU 010','KLF 269'],cls:'ok'},{id:3,name:'Chucky',phone:'3543 58-1907',status:'Activo',plates:['EPK 581'],cls:'rep'}],
  seq:{op:400,remito:5400,cust:0,addr:0},ypfOpen:480000,ypfOpenDay:TODAY-42};
 
 const C=id=>DB.containers.find(c=>c.id===id);
@@ -1368,7 +1487,7 @@ function audNow(text,ref){aud(TODAY,nowMin(),S.user.name,text,ref)}
 
 function mkAddr(loc,street,barrio,approx){
  const L=LOCS[loc];
- if(!street){if(R()<.7){barrio=pick(L.barrios);street=`Mz ${ri(1,300)} L ${ri(1,40)}`}else{barrio='Centro';street=`${pick(L.streets)} ${ri(100,2400)}`}}
+ if(!street){if(L.barrios.length&&R()<.7){barrio=pick(L.barrios);street=`Mz ${ri(1,300)} L ${ri(1,40)}`}else{barrio='Centro';street=`${pick(L.streets)} ${ri(100,2400)}`}}
  return {id:++DB.seq.addr,street,barrio:barrio||'Centro',loc,lat:L.lat+(R()-.5)*.024,lng:L.lng+(R()-.5)*.028,approx:!!approx};
 }
 function randPhone(){return R()<.5?`3543 ${ri(40,69)}-${ri(1000,9999)}`:`351 ${ri(500,799)}-${ri(1000,9999)}`}
@@ -1503,14 +1622,16 @@ function makeOp(d,{assign=true,creator='Belén',createdDay=d,log=false,slot=null
 })();
 
 (function seedServices(){
- const W={Agua:30,Obradores:10,Minicargadora:25,Retroexcavadora:15,Rolloff:20},end=nextWork(nextWork(TODAY+1)+1);
+ const W={'Viaje de agua':30,'Obrador':10,'Viaje de tierra':12,'Minicargadora':18,'Retroexcavadora':12,'Roll-Off':10},end=nextWork(nextWork(TODAY+1)+1);
  for(let d=TODAY-42;d<=end;d++){if(dow(d)===0)continue;
   const n=d===TODAY?3:d>TODAY?ri(1,2):ri(0,dow(d)===6?1:3);
   for(let i=0;i<n;i++){
    const k=wpick(Object.keys(W),Object.values(W)),cu=pickCustomer();if(cu.name==='Grupo Chamba')continue;
-   const sq=k==='Agua'?pick([5000,10000,10000,20000]):k==='Obradores'?pick([15,30,30,60]):k==='Rolloff'?pick([15,20,20,30]):pick([2,3,4,4,6,8]);
-   const slot=wpick(SLOTS,[30,20,12,8,10,6,8,6]);
+   const sq=k==='Viaje de agua'?pick([1,1,1,2]):k==='Obrador'?pick([1,1,2,3]):k==='Viaje de tierra'||k==='Roll-Off'?pick([1,1,2]):pick([2,3,4,4,6,8]);
+   const slot=wpick(SLOTS,[34,22,14,6,8,6,6,4]);
    const op=newOp({type:'Servicio',svc:k,sq,qty:1,size:null,customerId:cu.id,addrId:pick(cu.addrs).id,reqDay:d,slot,min:SLOTMIN[slot]+ri(0,30),price:svcPrice(k,sq),createdBy:'Belén',createdDay:Math.min(d-ri(0,2),TODAY)});
+   if(k==='Viaje de agua'){op.lit=pick([8000,9000,10000]);op.hose=pick([20,30,50])}
+   if(k==='Obrador'){op.obrFrom=d;op.obrTo=d+30*sq;op.contract=R()<.7?`contrato_obrador_${op.id}.pdf`:''}
    op.payMethod=wpick(['Transferencia','Efectivo'],[60,40]);if(op.payMethod==='Transferencia')op.payAcct=wpick(ACCTS,[66,20,14]);
    if(d<=TODAY||R()<.6){op.driverId=drvPick();op.status='Confirmado';op.remito=++DB.seq.remito}
    if(d<TODAY||(d===TODAY&&i===0)){op.status='Realizado';op.delDay=d;op.delMin=Math.min(op.min+ri(0,30),d===TODAY?SIMNOW-20:op.min+30);op.firmado=R()<.8;simPay(op)}
@@ -1543,9 +1664,9 @@ function makeOp(d,{assign=true,creator='Belén',createdDay=d,log=false,slot=null
 
 /* ============ estado de la interfaz ============ */
 const S={user:null,view:'inicio',period:'hoy',from:TODAY-13,to:TODAY,
- ag:{when:'semana',day:TODAY,q:'',loc:'',barrio:'',pc:'',svc:''},sv:{k:'',when:'prox',q:''},cj:{when:'dia',day:TODAY,from:TODAY-6,to:TODAY,who:'',st:'',q:'',sel:[]},ec:{id:null,when:'todo',st:''},tb:{tab:'asig',loc:'',barrio:''},fc:{tab:'fact',when:'mes',st:'',q:'',tipo:''},ch:{from:TODAY-13,to:TODAY},su:{view:'semana',week:weekStart(TODAY),month:monthStart(TODAY),open:null},gx:{when:'mes',cat:'',q:''},dsvc:'',en:{when:'todas',barrio:'',drv:''},rt:{f:'todos',barrio:'',drv:''},
+ ag:{when:'dia',day:TODAY,q:'',loc:'',barrio:'',st:'',svc:'',sel:null},fl:{plate:'FWU 010',tab:'res',per:'mes',from:TODAY-30,to:TODAY,int:null},sk:{tab:'stock',q:'',cat:'',st:'',from:TODAY-30,to:TODAY,pid:'',drv:'',plate:''},cp2:{when:'mes',plate:'',q:''},rm:{tab:'tal',drv:'',st:'',al:'',q:'',open:null,nf:'',day:TODAY-1},cq:{tab:'venc',cuenta:'',tipo:'',st:'Pendiente',q:'',from:null,to:null},chb:{open:null,tab:'svc',st:''},sv:{k:'',when:'prox',q:''},cj:{when:'dia',day:TODAY,from:TODAY-6,to:TODAY,who:'',st:'',q:'',sel:[]},ec:{id:null,when:'todo',st:''},tb:{tab:'asig',loc:'',barrio:''},fc:{tab:'fact',when:'mes',st:'',q:'',tipo:''},ch:{from:TODAY-13,to:TODAY},su:{view:'semana',week:weekStart(TODAY),month:monthStart(TODAY),open:null},gx:{when:'mes',cat:'',q:''},dsvc:'',en:{when:'todas',barrio:'',drv:''},rt:{f:'todos',q:'',loc:'',barrio:'',from:null,to:null,sel:null,drv:''},
  cf:{q:'',pl:'',size:'',loc:''},clq:'',pf:{when:'mes',day:TODAY,m:'',st:'',q:''},cp:'mes',bp:'mes',dp:'semana',dsel:null,
- mq:'',mst:{g:true,y:true,r:true},mapView:null,msel:null,mzoom:null,af:{u:'',q:''},navOpen:false,drawer:null,modal:null,dialog:null,editCom:null};
+ mq:'',mst:{g:true,y:true,r:true},mapView:null,msel:null,mzoom:null,af:{u:'',q:''},navOpen:false,navG:{},drawer:null,modal:null,dialog:null,editCom:null};
 
 const role=()=>S.user.role;
 const inR=(...r)=>r.includes(role());
@@ -1559,25 +1680,40 @@ const NAV=[
  {id:'inicio',l:'Inicio',i:'home',r:ALL},
  {id:'tablero',l:'Tablero del día',i:'truck',r:['Administración','Logística']},
  {id:'agenda',l:'Agenda',i:'cal',r:['Administración','Ventas']},
- {id:'servicios',l:'Servicios',i:'grid',r:ALL},
- {id:'entregas',l:'Entregas',i:'boxin',r:['Administración','Logística']},
- {id:'retiros',l:'Retiros',i:'clock',r:ALL},
- {id:'choferes',l:'Choferes',i:'wheel',r:ALL},
- {id:'combustible',l:'Combustible',i:'fuel',r:ALL},
- {id:'basurales',l:'Basurales',i:'bin',r:ALL},
- {id:'contenedores',l:'Contenedores',i:'box',r:ALL},
- {id:'mapa',l:'Mapa',i:'map',r:ALL},
- {id:'pagos',l:'Pagos',i:'cash',r:['Administración','Ventas']},
+ {id:'servicios',l:'Servicios',i:'grid',r:ALL,g:'Operaciones'},
+ {id:'entregas',l:'Entregas',i:'boxin',r:['Administración','Logística'],g:'Operaciones'},
+ {id:'retiros',l:'Retiros',i:'clock',r:ALL,g:'Operaciones'},
  {id:'caja',l:'Caja',i:'coins',r:['Administración','Ventas']},
- {id:'facturacion',l:'Facturación',i:'doc',r:ADM},
- {id:'chamba',l:'Grupo Chamba',i:'truck',r:ADM},
- {id:'sueldos',l:'Sueldos',i:'users',r:ADM},
- {id:'gastos',l:'Gastos',i:'card',r:['Administración','Ventas']},
- {id:'clientes',l:'Clientes',i:'users',r:['Administración','Ventas']},
- {id:'reportes',l:'Reportes',i:'chart',r:ADM},
- {id:'usuarios',l:'Usuarios',i:'cog',r:ADM},
- {id:'auditoria',l:'Historial de cambios',i:'hist',r:ADM}
+ {id:'contenedores',l:'Contenedores',i:'box',r:ALL,g:'Logística'},
+ {id:'mapa',l:'Mapa',i:'map',r:ALL,g:'Logística'},
+ {id:'flota',l:'Control de flota',i:'truck',r:ADM,g:'Camiones'},
+ {id:'choferes',l:'Choferes',i:'wheel',r:ALL,g:'Camiones'},
+ {id:'combustible',l:'Combustible',i:'fuel',r:ALL,g:'Camiones'},
+ {id:'basurales',l:'Basurales',i:'bin',r:ALL,g:'Camiones'},
+ {id:'pagos',l:'Pagos',i:'cash',r:['Administración','Ventas'],g:'Administración'},
+ {id:'gastos',l:'Gastos',i:'card',r:['Administración','Ventas'],g:'Administración'},
+ {id:'compras',l:'Compras',i:'cart',r:['Administración','Ventas'],g:'Administración'},
+ {id:'stock',l:'Stock de oficina',i:'box',r:ADM,g:'Administración'},
+ {id:'remitos',l:'Control de remitos',i:'doc',r:ADM,g:'Administración'},
+ {id:'cheques',l:'Cheques',i:'card',r:ADM,g:'Administración'},
+ {id:'facturacion',l:'Facturación',i:'doc',r:ADM,g:'Administración'},
+ {id:'chamba',l:'Grupo Chamba',i:'truck',r:ADM,g:'Administración'},
+ {id:'sueldos',l:'Sueldos',i:'users',r:ADM,g:'Administración'},
+ {id:'reportes',l:'Reportes',i:'chart',r:ADM,g:'Administración'},
+ {id:'usuarios',l:'Usuarios',i:'cog',r:ADM,g:'Administración'},
+ {id:'auditoria',l:'Historial de cambios',i:'hist',r:ADM,g:'Administración'},
+ {id:'clientes',l:'Clientes',i:'users',r:['Administración','Ventas']}
 ];
+const NAVG={'Operaciones':'grid','Logística':'map','Camiones':'wheel','Administración':'cog'};
+function navHtml(c){
+ const items=NAV.filter(n=>n.r.includes(role())),out=[],seen=new Set();
+ const btn=(n,sub)=>`<button class="${S.view===n.id?'on':''}${sub?' sub':''}" data-act="nav" data-v="${n.id}" ${S.view===n.id?'aria-current="page"':''}>${ic(n.i)}<span>${n.l}</span>${c[n.id]||''}</button>`;
+ items.forEach(n=>{if(!n.g){out.push(btn(n));return}if(seen.has(n.g))return;seen.add(n.g);
+  const kids=items.filter(x=>x.g===n.g),open=S.navG[n.g]??kids.some(x=>x.id===S.view),cnt=kids.map(x=>c[x.id]||'').join('');
+  out.push(`<button class="grp ${open?'open':''}" data-act="navG" data-v="${n.g}" aria-expanded="${open}">${ic(NAVG[n.g])}<span>${n.g}</span>${open?'':cnt}<svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>`);
+  if(open)out.push(`<div class="nav-kids">${kids.map(x=>btn(x,true)).join('')}</div>`)});
+ return out.join('');
+}
 const BO={'Solicitado':'warn','Confirmado':'info','En camino':'acc','Realizado':'ok','Cancelado':'bad'};
 const BP={'Verificado':'ok','Cobrado':'ok','Por verificar':'acc','Pendiente':'warn','Vencido':'bad','Cliente aparte':'off'};
 const badge=(t,m)=>`<span class="b ${m[t]||'off'}">${esc(t)}</span>`;
@@ -1638,7 +1774,7 @@ function render(){
 }
 function renderLayers(){
  $('#drawer').innerHTML=S.drawer&&S.user?`<div class="layer dr"><div class="backdrop" data-act="closeDrawer"></div><aside class="dpanel" role="dialog" aria-modal="true">${S.drawer.t==='cont'?dCont(S.drawer.id):dCust(S.drawer.id)}</aside></div>`:'';
- $('#modal').innerHTML=S.modal&&S.user?`<div class="layer"><div class="backdrop" data-act="closeModal"></div><div class="mpanel ${S.modal.t==='op'?'':'narrow'}" role="dialog" aria-modal="true">${MODALS[S.modal.t]()}</div></div>`:'';
+ $('#modal').innerHTML=S.modal&&S.user?`<div class="layer"><div class="backdrop" data-act="closeModal"></div><div class="mpanel ${S.modal.t==='op'?'':S.modal.t==='newop'?'wide':'narrow'}" role="dialog" aria-modal="true">${MODALS[S.modal.t]()}</div></div>`:'';
  $('#dialog').innerHTML=S.dialog&&S.user?`<div class="layer dg"><div class="backdrop" data-act="closeDialog"></div><div class="mpanel narrow" role="dialog" aria-modal="true">${DIALOGS[S.dialog.t]()}</div></div>`:'';
 }
 function toast(msg){const el=document.createElement('div');el.innerHTML=ic('check')+`<span>${esc(msg)}</span>`;const T=$('#toast');T.appendChild(el);while(T.children.length>3)T.firstChild.remove();setTimeout(()=>el.remove(),3600)}
@@ -1665,7 +1801,7 @@ function shell(){
  ${S.navOpen?'<div class="sb-back" data-act="navToggle"></div>':''}
  <aside class="side ${S.navOpen?'open':''}">
   <div class="brand"><span class="logo">${LOGO}</span><div><b>Conte Nic</b><small>Soluciones en contenedores</small></div></div>
-  <nav class="nav" aria-label="Secciones">${NAV.filter(n=>n.r.includes(role())).map(n=>`<button class="${S.view===n.id?'on':''}" data-act="nav" data-v="${n.id}" ${S.view===n.id?'aria-current="page"':''}>${ic(n.i)}<span>${n.l}</span>${c[n.id]||''}</button>`).join('')}</nav>
+  <nav class="nav" aria-label="Secciones">${navHtml(c)}</nav>
   <div class="me"><div class="me-row"><span class="av">${initials(S.user.name)}</span><div><b>${esc(S.user.name)}</b><small>${esc(S.user.role)}</small></div></div><button data-act="logout">Cambiar de usuario</button></div>
  </aside>
  <main class="main">
@@ -1714,46 +1850,12 @@ function vInicio(){
 }
 
 /* ---------- Agenda (foto 2) ---------- */
-function agRange(){
- const w=S.ag.when,t1=nextWork(TODAY+1);
- if(w==='hoy')return[TODAY,TODAY];if(w==='manana')return[t1,t1];
- if(w==='semana')return[weekStart(TODAY),weekStart(TODAY)+6];
- if(w==='mes')return[monthStart(TODAY),monthEnd(TODAY)];
- if(w==='fecha')return[S.ag.day,S.ag.day];
- return[-1e9,1e9];
-}
 const RBADGE={'Administración':'acc','Ventas':'info','Logística':'ok'};
 function lbFilters(pre,loc,bar){
  const bars=loc?LOCS[loc].barrios.map(b=>[b+'|'+loc,b]):LOC_NAMES.flatMap(l=>LOCS[l].barrios.map(b=>[b+'|'+l,`${b} (${l})`]));
  return `<select class="sel" id="${pre}-loc" data-f="${pre}.loc" aria-label="Localidad"><option value="">Todas las localidades</option>${LOC_NAMES.map(l=>`<option ${loc===l?'selected':''}>${l}</option>`).join('')}</select><select class="sel" id="${pre}-bar" data-f="${pre}.barrio" aria-label="Barrio"><option value="">Todos los barrios</option>${bars.map(([v,l])=>`<option value="${esc(v)}" ${bar===v?'selected':''}>${esc(l)}</option>`).join('')}</select>`;
 }
 const lbMatch=(o,loc,bar)=>{const a=addr(o);return(!loc||a.loc===loc)&&(!bar||a.barrio+'|'+a.loc===bar)};
-function vAgenda(){
- const[a,b]=agRange(),q=norm(S.ag.q);
- const inDays0=DB.ops.filter(o=>o.reqDay>=a&&o.reqDay<=b&&lbMatch(o,S.ag.loc,S.ag.barrio)&&(!q||norm(cust(o).name).includes(q)||norm(aline(addr(o))).includes(q)||norm(addr(o).loc).includes(q)||o.cids.some(c=>norm(c).includes(q))));
- const inDays=inDays0.filter(o=>!S.ag.svc||rubro(o)===S.ag.svc);
- const npc=inDays.filter(o=>o.pendConf&&o.status!=='Cancelado').length;
- const list=inDays.filter(o=>!S.ag.pc||o.pendConf);
- const days={};list.forEach(o=>(days[o.reqDay]=days[o.reqDay]||[]).push(o));
- let keys=Object.keys(days).map(Number).sort((x,y)=>x-y);
- if(S.ag.when==='todas'||S.ag.when==='mes')keys=keys.reverse();
- if(['hoy','manana','fecha'].includes(S.ag.when)&&!keys.length)keys=[a];
- const W=[['hoy','Hoy'],['manana','Mañana'],['semana','Esta semana'],['mes','Este mes'],['todas','Todas las fechas']];
- const svc=o=>`${svcTag(rubro(o))}<span>${esc(svcLine(o))}</span>`;
- const dayBlock=d=>{const ops=(days[d]||[]).sort((x,y)=>x.min-y.min||x.id-y.id);const act=ops.filter(o=>o.status!=='Cancelado');
-  const pend=act.filter(o=>['Pendiente','Vencido'].includes(payStatus(o))).length,sin=act.filter(o=>!o.driverId&&preDel(o)).length;
-  return `<section class="day"><div class="dayh"><h2>${ic('cal')}${fLong(d)}${d===TODAY?' · hoy':''}</h2><small>${act.length} pedidos · ${pend} pendiente${pend===1?'':'s'} de pago · ${sin} sin asignar</small></div>
-  <div class="tbl-wrap"><table class="dense"><thead><tr><th>N.º</th><th>Cliente / Servicio</th><th>Dirección</th><th>Cant.</th><th>Horario</th><th>Pago</th><th>Observaciones</th><th>Estado</th></tr></thead><tbody>
-  ${ops.map((o,i)=>{const ad=addr(o);return `<tr data-act="openOp" data-id="${o.id}" tabindex="0" style="${o.status==='Cancelado'?'opacity:.55':''}"><td class="tnum">${i+1}</td><td><b>${esc(cust(o).name)}</b><div class="svl">${svc(o)}</div></td><td><b>${esc(ad.loc)}</b><span class="sub">${esc(aline(ad))}</span>${gmaps(o)}</td><td class="tnum">${o.type==='Servicio'?svcQty(o):o.qty}</td><td style="white-space:nowrap">${esc(o.slot)}</td><td>${payCell(o)}</td><td>${esc(o.obs)||'<span class="muted">—</span>'}${stTag(o)}</td><td>${badge(o.status,BO)}${o.pickDay!=null&&!o.closedByRecambio?`<span class="sub">Retirado ${fs(o.pickDay)}</span>`:''}${pcTag(o)}</td></tr>`}).join('')||`<tr><td colspan="8" class="empty">No hay pedidos agendados para este día.</td></tr>`}
-  </tbody></table>${can.createOp()?`<button class="addrow" data-act="newOp" data-day="${d}">${ic('plus')}Agregar pedido para este día</button>`:''}</div></section>`};
- return pageHead('Agenda de pedidos','Ventas · coordinación con logística',can.createOp()?`<button class="btn pri big" data-act="newOp">${ic('plus')}Agendar pedido</button>`:'')+`
- <div class="filters">${svChips('ag.svc',S.ag.svc,inDays0)}</div>
- <div class="filters">${chips('ag.when',W,S.ag.when)}<label class="chip ${S.ag.when==='fecha'?'on':''}" style="gap:8px">${ic('cal')}Elegir fecha<input type="date" id="agd" data-f="agday" value="${dOut(S.ag.day)}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0" aria-label="Elegir fecha"></label></div>
- <div class="filters"><input class="inp grow" id="agq" data-f="ag.q" value="${esc(S.ag.q)}" placeholder="Buscar cliente, dirección o contenedor…" aria-label="Buscar pedido">${lbFilters('ag',S.ag.loc,S.ag.barrio)}
-  <button class="chip ${S.ag.pc?'on':''}" data-act="set" data-k="ag.pc" data-v="${S.ag.pc?'':'1'}"><i class="dot warn"></i>Pendiente de confirmación <span>${npc}</span></button></div>
- ${keys.map(dayBlock).join('')||'<p class="empty">No hay pedidos con esos filtros.</p>'}`;
-}
-
 /* ---------- combinar viaje ---------- */
 const sameBarrio=(o,x)=>{const a=addr(o),b=addr(x);return a.loc===b.loc&&a.barrio===b.barrio&&a.barrio!=='Centro'};
 function combineSelect(o,kind){
@@ -1789,26 +1891,6 @@ function vEnt(){
 
 /* ---------- Retiros ---------- */
 function sem(o){const d=o.plannedPickup-TODAY;if(d<0)return['bad',`Vencido hace ${-d} ${d===-1?'día':'días'}`];if(d===0)return['warn','Hoy'];if(d<=2)return['warn',d===1?'Mañana':'En 2 días'];return['ok',`Faltan ${d} días`]}
-function vRet(){
- const act=DB.ops.filter(isActive).sort((a,b)=>a.plannedPickup-b.plannedPickup);
- const g={venc:act.filter(o=>o.plannedPickup<TODAY),prox:act.filter(o=>o.plannedPickup>=TODAY&&o.plannedPickup<=TODAY+2),ok:act.filter(o=>o.plannedPickup>TODAY+2)};
- const base=S.rt.f==='todos'?act:g[S.rt.f];
- const list=base.filter(o=>inBarrio(o,S.rt.barrio)&&(!S.rt.drv||(o.pickDriverPlan||o.driverId)===+S.rt.drv));
- const otherEnt=S.rt.barrio?DB.ops.filter(o=>preDel(o)&&inBarrio(o,S.rt.barrio)).length:0;
- const chip=(k,l,n,dot)=>`<button class="chip ${S.rt.f===k?'on':''}" data-act="set" data-k="rt.f" data-v="${k}">${dot?`<i class="dot ${dot}"></i>`:''}${l} <span>${n}</span></button>`;
- return pageHead('Retiros pendientes',`${act.length} contenedores en calle · filtrá por barrio para aprovechar el ingreso`)+`
- <div class="filters"><div class="chips">${chip('todos','Todos',act.length)}${chip('venc','Vencidos',g.venc.length,'bad')}${chip('prox','Hoy y próximos 2 días',g.prox.length,'warn')}${chip('ok','En plazo',g.ok.length,'ok')}</div></div>
- <div class="filters"><select class="sel" id="rtb" data-f="rt.barrio" aria-label="Barrio">${barrioOptions(base,S.rt.barrio)}</select>
-  <select class="sel" id="rtd" data-f="rt.drv" aria-label="Chofer"><option value="">Todos los choferes</option>${DB.drivers.map(d=>`<option value="${d.id}" ${S.rt.drv==d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select></div>
- ${S.rt.barrio?`<div class="warn-box" style="margin-bottom:14px;background:var(--info-bg)">${ic('link')}<span>En <b>${esc(S.rt.barrio.split('|')[0])}</b> hay <b>${otherEnt}</b> entrega${otherEnt===1?'':'s'} pendiente${otherEnt===1?'':'s'}. Combinalas en el mismo viaje: el camión deja el contenedor nuevo y retira el usado.</span><button class="btn sm" data-act="goView" data-v="entregas" data-k="en.barrio" data-val="${esc(S.rt.barrio)}">Ver entregas del barrio</button></div>`:''}
- <div class="tbl-wrap"><table class="dense"><thead><tr><th>Plazo</th><th>Cliente</th><th>Dirección</th><th>Contenedor</th><th>Entregado</th><th>Retiro previsto</th><th>Horario de retiro</th><th>Chofer asignado</th><th>Mismo viaje</th>${can.field()?'<th></th>':''}</tr></thead><tbody>
- ${list.map(o=>{const[k,t]=sem(o),a=addr(o);return `<tr><td><span class="b ${k}">${t}</span></td><td><a href="#" data-act="openOp" data-id="${o.id}"><b>${esc(cust(o).name)}</b></a><span class="sub">${esc(cust(o).phone)}</span></td><td><b>${esc(a.barrio!=='Centro'?a.barrio:a.loc)}</b><span class="sub">${esc(a.street)} · ${esc(a.loc)}</span>${gmaps(o)}</td><td>${o.cids.map(c=>`<a href="#" class="cname" data-act="openCont" data-id="${c}">${c}</a>`).join('<br>')}</td><td class="tnum">${fs(o.delDay)}</td><td class="tnum ${k==='bad'?'late':''}">${fd(o.plannedPickup)}</td>
- <td>${can.assign()?`<select class="sel sm" id="ps-${o.id}" data-chg="pslot" data-id="${o.id}" aria-label="Horario de retiro">${SLOTS.map(x=>`<option ${o.pickSlot===x?'selected':''}>${x}</option>`).join('')}</select>`:esc(o.pickSlot)}</td>
- <td>${can.assign()?`<select class="sel sm" id="pd-${o.id}" data-chg="pdrv" data-id="${o.id}" aria-label="Chofer para el retiro">${DB.drivers.map(d=>`<option value="${d.id}" ${(o.pickDriverPlan||o.driverId)===d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select>`:pill(o.pickDriverPlan||o.driverId)}</td>
- <td>${combineSelect(o,'ret')}</td>${can.field()?`<td><button class="btn sm pri" data-act="pickDlg" data-id="${o.id}">Retirado</button></td>`:''}</tr>`}).join('')||`<tr><td colspan="10" class="empty">No hay retiros con esos filtros.</td></tr>`}
- </tbody></table></div>`;
-}
-
 /* ---------- Tablero del día ---------- */
 function jcard(o,kind){
  const cu=cust(o),a=addr(o);let acts='';
@@ -2061,37 +2143,6 @@ function recBlock(){
  return `<div class="fgrid"><label class="fld ${t==='Extensión'?'':'full'}"><span>${t==='Recambio'?'Contenedor que sale':t==='Extensión'?'Contenedor que se queda más tiempo':'Contenedor que se mueve'}</span><select id="no-repl">${act.map(o=>`<option value="${o.id}">${o.cids.join(', ')} · retiro ${fs(o.plannedPickup)} · ${esc(aline(addr(o)))}</option>`).join('')}</select></label>
   ${t==='Extensión'?`<div class="fld"><span>Días extra</span><div class="seg">${radios('no-ext',['1','2','3','5','7'],'2')}</div></div><p class="note full">El precio de la extensión lo define Ventas.</p>`:''}</div>`;
 }
-function mNewOp(){
- const pre=S.modal.cid?CU(S.modal.cid):null,day=S.modal.day!=null?S.modal.day:TODAY,isCh=pre&&pre.name==='Grupo Chamba';
- return `<div class="m-head"><div><p class="eyebrow">Ventas</p><h2>Agendar pedido</h2></div><button class="x" data-act="closeModal" aria-label="Cerrar">${ic('x')}</button></div>
- <div class="m-body"><div class="fgrid">
-  <div class="fld full"><span>Cliente</span><div id="no-cust">${custBlock(pre)}</div></div>
-  <label class="fld"><span>CUIT de quien pide</span><input id="no-cuit" value="${esc(pre?pre.cuit:'')}" placeholder="20-12345678-9"></label><div></div>
-  <div class="fld full"><span>Rubro</span><div class="seg svseg">${radios('no-svc',Object.keys(SVCS),S.modal.svc||'Contenedor')}</div></div>
-  <div class="full fgrid" id="no-sv-box" hidden style="grid-column:1/-1"><label class="fld"><span id="no-sq-l">Cantidad</span><input id="no-sq" inputmode="numeric" data-live="noSq"></label><p class="note" style="align-self:end;margin:0">Cómo se carga cada servicio queda a revisar con el cliente.</p></div>
-  <div class="fld" id="no-type-box"><span>Tipo</span><div class="seg">${radios('no-type',['Alquiler','Recambio','Movimiento','Extensión'],'Alquiler')}</div></div>
-  <div class="fld" id="no-qty-box"><span>Cantidad</span><div class="seg">${radios('no-qty',['1','2'],'1')}</div></div>
-  <div id="no-rec" class="full"></div>
-  <div class="fld full" id="no-size-box"><span>Medida</span><div class="seg">${radios('no-size',[['3','3 m³'],['5','5 m³'],['6','6 m³']],'5')}</div></div>
-  <label class="fld"><span>Fecha</span><input type="date" id="no-date" value="${dOut(day)}"></label>
-  <label class="fld"><span>Horario</span><select id="no-slot">${SLOTS.map(s=>`<option>${s}</option>`).join('')}</select></label>
-  <label class="fld"><span>Precio</span><input id="no-price" inputmode="numeric" value="${DEFP[5]}"></label><div></div>
-  <div class="fld full"><span>Forma de pago</span><div class="seg">${radios('no-pay',PAY_METHODS,isCh?'Grupo Chamba':'Transferencia')}</div></div>
-  ${acctBlock('no-acct','SAS',!isCh)}${cashBlock('no-cash','Oficina',false)}
-  <div class="full fgrid" id="no-ch-box" ${isCh?'':'hidden'} style="grid-column:1/-1"><label class="fld"><span>¿Cuánto cobra Chamba al cliente?</span><input id="no-chc" inputmode="numeric" value="145000"></label><div class="fld"><span>¿Cómo le pagan a Chamba?</span><div class="seg">${radios('no-chv',['Efectivo','Transferencia'],'Efectivo')}</div></div></div>
-  <label class="check full"><input type="checkbox" id="no-paid"> El cliente ya pagó (si es transferencia, queda para que Administración la verifique)</label>
-  <p class="full sublbl">Facturación</p>
-  <div class="fld full"><span>Tipo de factura</span><div class="seg">${radios('no-it',INV_TYPES,'B')}</div></div>
-  <label class="fld"><span>Razón social a facturar</span><input id="no-ir" placeholder="Si queda vacío, va a nombre del cliente"></label>
-  <label class="fld"><span>CUIT de la factura</span><input id="no-ic" placeholder="Si queda vacío, usa el del cliente"></label>
-  <label class="fld"><span>N° de factura (si queda vacío, el siguiente)</span><input id="no-in" inputmode="numeric" placeholder="${DB.invSeq['00030']+1}"></label>
-  <label class="fld"><span>N° de remito (si ya está)</span><input id="no-rm" inputmode="numeric"></label>
-  <label class="fld full"><span>Link de Google Maps (opcional)</span><input id="no-maps" inputmode="url" placeholder="Pegá el link de ubicación que manda el cliente por WhatsApp"></label>
-  <label class="check full"><input type="checkbox" id="no-pc"> Pendiente de confirmación del cliente (lluvia u otro motivo)</label>
-  <label class="fld full"><span>Observaciones</span><textarea id="no-obs" placeholder="Ej.: permiten ingreso, llamar antes"></textarea></label>
- </div><div id="no-err"></div></div>
- <div class="m-foot"><button class="btn ghost" data-act="closeModal">Cancelar</button><button class="btn pri big" data-act="saveOp">${ic('check')}Agendar pedido</button></div>`;
-}
 function mNewCust(){
  return `<div class="m-head"><div><p class="eyebrow">Clientes</p><h2>Nuevo cliente</h2></div><button class="x" data-act="closeModal" aria-label="Cerrar">${ic('x')}</button></div>
  <div class="m-body"><div class="fgrid"><label class="fld full"><span>Nombre</span><input id="nc-n" data-live="ncdup" autocomplete="off"></label>
@@ -2119,6 +2170,87 @@ function noSvcSync(reset){const k=val('no-svc')||'Contenedor',isC=k==='Contenedo
 const MODALS={newcont:mNewCont,op:mOp,newop:mNewOp,newcust:mNewCust,driver:mDriver,user:mUser};
 
 const DIALOGS={
+ km:()=>{const p=S.dialog.plate,days=[];for(let d=TODAY-1;d>=TODAY-14&&days.length<8;d--){if(dow(d)===0)continue;days.push(d)}
+  return `<div class="m-head"><div><p class="eyebrow">Control de flota · Warrior</p><h2>Cargar kilómetros</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><label class="fld"><span>Vehículo</span><select class="sel" id="km-p" data-chg="kmPlate">${VEH.filter(v=>!v.machine).map(v=>`<option ${v.plate===p?'selected':''}>${v.plate}</option>`).join('')}</select></label>
+  <div class="tbl-wrap" style="margin-top:12px"><table class="dense"><thead><tr><th>Día</th><th class="r">Km del día (Warrior)</th></tr></thead><tbody>${days.map(d=>{const k=DB.kms.find(x=>x.plate===p&&x.day===d);return `<tr><td>${cap(DC[dow(d)])} ${fd(d)}${k?'':' <span class="b warn">sin cargar</span>'}</td><td class="r"><input class="inp sm r" style="max-width:120px" inputmode="numeric" id="km-${d}" value="${k?k.km:''}" placeholder="km"></td></tr>`}).join('')}</tbody></table></div>
+  <p class="note">Los km salen del satelital (Warrior). Con ellos se calcula el consumo entre cargas.</p></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="saveKm">${ic('check')}Guardar</button></div>`},
+ vdoc:()=>`<div class="m-head"><div><p class="eyebrow">Control de flota · ${S.fl.plate}</p><h2>Cargar documento</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><label class="fld"><span>Documento</span><select class="sel" id="vd-t">${DOC_TYPES.map(x=>`<option>${x}</option>`).join('')}</select></label><label class="fld"><span>Vencimiento (si tiene)</span><input type="date" class="inp" id="vd-v"></label>
+  <div class="fld full"><span>Archivo</span><label class="up">${ic('cam')}<span id="vd-fn">Adjuntar PDF o foto</span><input type="file" id="vd-f" accept="image/*,application/pdf" data-chg="fileName" data-out="vd-fn"></label></div><label class="fld full"><span>Observaciones</span><input class="inp" id="vd-o" placeholder="Ej.: póliza N.º, compañía"></label></div><div id="vd-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="saveVdoc">${ic('check')}Guardar</button></div>`,
+ skin:()=>{const D=S.dialog,p=D.newP?null:prodOf(D.pid)||DB.products[0],unit=D.newP?D.unit:p.unit,pres=PRESENT[unit]||PRESENT['un.'],pr=pres.find(x=>x[0]===D.pres)||pres[0],tot=pr[1]*(D.count||1),cur=p?stockOf(p.id):0;
+  return `<div class="m-head"><div><p class="eyebrow">Stock de oficina</p><h2>Registrar ingreso de stock</h2><p class="muted">Registrá lo que recibiste y está físicamente en la oficina.</p></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><p class="sublbl"><span class="nps-n">1</span> Producto</p>
+  ${D.newP?`<div class="fgrid"><label class="fld"><span>Nombre *</span><input class="inp" id="sk-n" placeholder="Ej.: Aceite hidráulico"></label><label class="fld"><span>Categoría</span><select class="sel" id="sk-c">${STOCK_CATS.map(c=>`<option>${c}</option>`).join('')}</select></label><label class="fld"><span>Marca</span><input class="inp" id="sk-b"></label><label class="fld"><span>Especificación / código</span><input class="inp" id="sk-s" placeholder="ISO VG 68"></label><label class="fld"><span>Unidad</span><select class="sel" data-chg="skUnit">${Object.keys(PRESENT).map(u=>`<option ${unit===u?'selected':''}>${u}</option>`).join('')}</select></label><label class="fld"><span>Mínimo (aviso)</span><input class="inp" id="sk-m" inputmode="numeric" value="${unit==='L'?10:1}"></label></div><button class="btn sm ghost" data-act="skInSet" data-k="newP" data-v="">Elegir uno existente</button>`
+  :`<div class="fgrid"><label class="fld"><span>Producto *</span><select class="sel" data-chg="skPid">${DB.products.map(x=>`<option value="${x.id}" ${x.id===p.id?'selected':''}>${esc(x.name)} · ${esc(x.brand)} · ${esc(x.spec)}</option>`).join('')}</select><small class="muted">Si ya existe, seleccionalo para evitar duplicados.</small></label><div class="fld"><span>&nbsp;</span><button class="btn" data-act="skInSet" data-k="newP" data-v="1">${ic('plus')}Nuevo producto</button></div>
+   <label class="fld"><span>Categoría</span><input class="inp" value="${esc(p.cat)}" disabled></label><label class="fld"><span>Marca · especificación</span><input class="inp" value="${esc(p.brand+' · '+p.spec)}" disabled></label></div>`}
+  <p class="sublbl"><span class="nps-n">2</span> Cantidad recibida</p><div class="fgrid"><label class="fld"><span>Presentación *</span><select class="sel" data-chg="skPres">${pres.map(x=>`<option ${x[0]===pr[0]?'selected':''}>${x[0]}</option>`).join('')}</select></label><label class="fld"><span>Cantidad de ${pr[0].split(' ')[0].toLowerCase()}s *</span><input class="inp" id="sk-q" inputmode="numeric" value="${D.count||1}" data-live="skCount"></label></div>
+  <div class="cards3 calc"><div><small>Stock actual</small><b>${qtyTxt(cur,unit)}</b></div><div><small>Ingreso</small><b id="sk-tot">${qtyTxt(tot,unit)}</b></div><div class="ok"><small>Nuevo stock</small><b id="sk-new">${qtyTxt(cur+tot,unit)}</b></div></div>
+  <p class="sublbl"><span class="nps-n">3</span> Datos del ingreso</p><div class="fgrid"><label class="fld"><span>Fecha de recepción *</span><input type="date" class="inp" id="sk-d" value="${dOut(TODAY)}"></label><label class="fld"><span>Tipo de ingreso *</span><select class="sel" id="sk-t"><option>Compra</option><option>Stock inicial</option><option>Devolución</option></select></label>
+  <label class="fld"><span>Proveedor</span><input class="inp" id="sk-pv" list="sk-provs" placeholder="Seleccionar o escribir"><datalist id="sk-provs">${[...new Set(DB.compras.map(c=>c.prov))].map(x=>`<option>${esc(x)}</option>`).join('')}</datalist></label><label class="fld"><span>Ubicación *</span><input class="inp" id="sk-u" value="${esc(p?p.loc:'Oficina · Estante 1')}"></label>
+  <label class="fld full"><span>Compra vinculada (opcional)</span><select class="sel" id="sk-cp"><option value="">Buscar una compra registrada</option>${DB.compras.slice().reverse().map(c=>`<option value="${c.id}">#${c.id} · ${fs(c.day)} · ${esc(c.detalle)} · ${money(c.amount)}</option>`).join('')}</select><small class="muted">Vincular una compra evita duplicar la carga y el costo.</small></label>
+  <label class="fld"><span>N.º de comprobante (opcional)</span><input class="inp" id="sk-nc" placeholder="Factura o remito"></label><div class="fld"><span>Adjuntar factura o remito</span><label class="up">${ic('link')}<span id="sk-fn">PDF o imagen</span><input type="file" accept="image/*,application/pdf" data-chg="fileName" data-out="sk-fn"></label></div>
+  <label class="fld full"><span>Observaciones (opcional)</span><input class="inp" id="sk-o" placeholder="Ej.: se recibieron 2 tarros de 20 L"></label></div>
+  <div class="info-box">${ic('alert')}<span>Este ingreso queda disponible en oficina. El vehículo se indica al registrar la salida.</span></div><div id="sk-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Cancelar</button><button class="btn pri big" data-act="saveSkIn">${ic('check')}Guardar ingreso</button></div>`},
+ skout:()=>{const D=S.dialog,p=prodOf(D.pid)||DB.products[0],cur=stockOf(p.id),q=D.q||0;
+  return `<div class="m-head"><div><p class="eyebrow">Stock de oficina</p><h2>Registrar salida</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><label class="fld full"><span>Producto *</span><select class="sel" data-chg="skOutPid">${DB.products.map(x=>`<option value="${x.id}" ${x.id===p.id?'selected':''}>${esc(x.name)} · ${esc(x.spec)} (${qtyTxt(stockOf(x.id),x.unit)})</option>`).join('')}</select><small class="muted">Disponible en oficina: ${qtyTxt(cur,p.unit)}</small></label>
+  <label class="fld"><span>Cantidad * (${p.unit})</span><input class="inp" id="so-q" inputmode="decimal" value="${q||''}" data-live="soQ"></label><label class="fld"><span>Retira *</span><select class="sel" id="so-d">${DB.drivers.map(d=>`<option value="${d.id}">${esc(d.name)}</option>`).join('')}</select></label>
+  <label class="fld"><span>Destino *</span><select class="sel" id="so-v">${VEH.map(v=>`<option>${v.plate}</option>`).join('')}</select><small class="muted">Camión o máquina</small></label><label class="fld"><span>Fecha *</span><input type="date" class="inp" id="so-f" value="${dOut(TODAY)}"></label>
+  <label class="fld"><span>Motivo *</span><select class="sel" id="so-m">${SALIDA_MOT.map(x=>`<option>${x}</option>`).join('')}</select></label><label class="fld"><span>Observaciones</span><input class="inp" id="so-o" placeholder="Para reposición del sistema hidráulico"></label>
+  <label class="check full"><input type="checkbox" id="so-i"> Confirmar utilizado / instalado</label></div>
+  <div class="cards3 calc"><div><small>Stock actual</small><b>${qtyTxt(cur,p.unit)}</b></div><div><small>Salida</small><b id="so-s">${qtyTxt(q,p.unit)}</b></div><div><small>Quedarán</small><b id="so-r" data-cur="${cur}" data-u="${p.unit}">${qtyTxt(cur-q,p.unit)}</b></div></div><div id="so-err"></div>
+  <p class="note">Se descontará del stock y aparecerá en el Control de flota del vehículo.</p></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Cancelar</button><button class="btn pri big" data-act="saveSkOut">${ic('check')}Guardar salida</button></div>`},
+ skadj:()=>`<div class="m-head"><div><p class="eyebrow">Stock de oficina</p><h2>Ajuste por conteo</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><label class="fld full"><span>Producto</span><select class="sel" id="sa-p">${DB.products.map(x=>`<option value="${x.id}">${esc(x.name)} · sistema: ${qtyTxt(stockOf(x.id),x.unit)}</option>`).join('')}</select></label><label class="fld"><span>Cantidad contada</span><input class="inp" id="sa-q" inputmode="decimal"></label><label class="fld"><span>Motivo *</span><input class="inp" id="sa-m" placeholder="Ej.: diferencia en el conteo mensual"></label></div><div id="sa-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="saveSkAdj">${ic('check')}Ajustar</button></div>`,
+ cp:()=>`<div class="m-head"><div><p class="eyebrow">Administración</p><h2>Nueva compra</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><label class="fld"><span>Fecha</span><input type="date" class="inp" id="cp-d" value="${dOut(TODAY)}"></label><label class="fld"><span>Categoría</span><select class="sel" id="cp-c">${COMPRA_CATS.map(x=>`<option>${x}</option>`).join('')}</select></label>
+  <label class="fld full"><span>Detalle *</span><input class="inp" id="cp-t" placeholder="Ej.: 2 cubiertas delanteras"></label><label class="fld"><span>Proveedor</span><input class="inp" id="cp-p" list="sk-provs2"><datalist id="sk-provs2">${[...new Set(DB.compras.map(c=>c.prov))].map(x=>`<option>${esc(x)}</option>`).join('')}</datalist></label><label class="fld"><span>Monto *</span><input class="inp" id="cp-a" inputmode="numeric"></label>
+  <label class="fld"><span>Medio de pago</span><select class="sel" id="cp-m">${['Efectivo · Oficina','Transf SAS','Transf YPF','Cheque','Cuenta corriente'].map(x=>`<option>${x}</option>`).join('')}</select></label><label class="fld"><span>Vehículo (si ya se sabe)</span><select class="sel" id="cp-v"><option value="">Sin asignar todavía</option>${VPLATES.map(x=>`<option>${x}</option>`).join('')}</select></label>
+  <div class="fld full"><span>Comprobante</span><label class="up">${ic('link')}<span id="cp-fn">Adjuntar factura</span><input type="file" accept="image/*,application/pdf" data-chg="fileName" data-out="cp-fn"></label></div><label class="check full"><input type="checkbox" id="cp-veh" checked> Es para un camión o máquina</label></div>
+  <p class="note">Si se paga con cheque, después registralo en Cheques vinculándolo a esta compra.</p><div id="cp-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="saveCp">${ic('check')}Guardar compra</button></div>`,
+ tal:()=>{const last=Math.max(1099,...DB.talonarios.map(t=>t.to)),ln=Math.max(0,...DB.talonarios.map(t=>t.n));return `<div class="m-head"><div><p class="eyebrow">Control de remitos</p><h2>Cargar talonarios</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><label class="fld"><span>Primer número de talonario</span><input class="inp" id="tl-n" inputmode="numeric" value="${ln+1}"></label><label class="fld"><span>Cantidad de talonarios</span><input class="inp" id="tl-c" inputmode="numeric" value="1" data-live="talPrev"></label>
+  <label class="fld"><span>Numeración desde</span><input class="inp" id="tl-f" inputmode="numeric" value="${last+1}" data-live="talPrev"></label><div class="fld"><span>Hasta (automático)</span><b id="tl-h" style="padding-top:10px">${last+50}</b></div>
+  <label class="fld"><span>Chofer al que se reserva</span><select class="sel" id="tl-d"><option value="">Sin asignar</option>${DB.drivers.map(d=>`<option value="${d.id}">${esc(d.name)}</option>`).join('')}</select></label><label class="fld"><span>Fecha de entrega al chofer</span><input type="date" class="inp" id="tl-e"><small class="muted">Vacío = reservado, sigue en la oficina</small></label>
+  <label class="fld full"><span>Observaciones</span><input class="inp" id="tl-o"></label></div><p class="note">Cada talonario tiene 50 remitos: el sistema genera los números solo y no deja cargar rangos superpuestos.</p><div id="tl-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="saveTal">${ic('check')}Cargar</button></div>`},
+ talas:()=>{const t=DB.talonarios.find(x=>x.id===S.dialog.id);return `<div class="m-head"><div><p class="eyebrow">Talonario ${t.n} · ${t.from}–${t.to}</p><h2>Asignación</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><label class="fld"><span>Chofer</span><select class="sel" id="ta-d"><option value="">Sin asignar</option>${DB.drivers.map(d=>`<option value="${d.id}" ${t.drv===d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select></label><label class="fld"><span>Fecha de entrega</span><input type="date" class="inp" id="ta-e" value="${t.deliv!=null?dOut(t.deliv):''}"></label><label class="fld full"><span>Observaciones</span><input class="inp" id="ta-o" value="${esc(t.obs)}"></label></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri" data-act="saveTalAs">${ic('check')}Guardar</button></div>`},
+ remanul:()=>`<div class="m-head"><div><p class="eyebrow">Control de remitos</p><h2>Anular remito ${S.dialog.n}</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><label class="fld full"><span>Motivo *</span><input class="inp" id="ra-m" placeholder="Ej.: error al completar el comprobante"></label><div class="fld full"><span>Foto del comprobante (respaldo)</span><label class="up">${ic('cam')}<span id="ra-fn">Adjuntar foto</span><input type="file" accept="image/*" data-chg="fileName" data-out="ra-fn"></label></div></div><p class="note">Un número anulado no se borra ni se libera.</p><div id="ra-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn danger" data-act="saveRemAnul">Anular número</button></div>`,
+ cq:()=>{const D=S.dialog,ch=DB.chequeras.find(x=>x.id===+D.ch)||DB.chequeras[0];return `<div class="m-head"><div><p class="eyebrow">Cheques</p><h2>Registrar cheque</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><div class="fld"><span>Tipo</span>${seg('tipo',['Físico','eCheq'],D.tipo,'cqSet')}</div>${D.tipo==='Físico'?`<label class="fld"><span>Chequera</span><select class="sel" data-chg="cqCh">${DB.chequeras.map(x=>`<option value="${x.id}" ${x.id===ch.id?'selected':''}>${esc(x.cuenta)} · N.º ${x.n} (${x.from}–${x.to})</option>`).join('')}</select></label>`:`<label class="fld"><span>Cuenta</span><select class="sel" id="cq-cu">${[...new Set(DB.chequeras.map(x=>x.cuenta))].map(x=>`<option>${x}</option>`).join('')}</select></label>`}
+  <label class="fld"><span>Número *</span><input class="inp" id="cq-n" value="${D.tipo==='Físico'?(chqNext(ch)||''):''}" placeholder="${D.tipo==='eCheq'?'EC-000127':''}"></label><label class="fld"><span>Monto *</span><input class="inp" id="cq-m" inputmode="numeric"></label>
+  <label class="fld"><span>Fecha de emisión</span><input type="date" class="inp" id="cq-e" value="${dOut(TODAY)}"></label><label class="fld"><span>Fecha de cobro *</span><input type="date" class="inp" id="cq-c" value="${dOut(TODAY+30)}"></label>
+  <label class="fld"><span>Beneficiario *</span><input class="inp" id="cq-b" list="cq-bs"><datalist id="cq-bs">${[...new Set(DB.cheques.map(c=>c.benef))].map(x=>`<option>${esc(x)}</option>`).join('')}</datalist></label><label class="fld"><span>Concepto</span><input class="inp" id="cq-k"></label>
+  <label class="fld full"><span>Vincular con una compra o gasto (opcional)</span><select class="sel" id="cq-l"><option value="">Sin vincular</option>${DB.compras.slice().reverse().map(c=>`<option value="c${c.id}">Compra #${c.id} · ${esc(c.detalle)} · ${money(c.amount)}</option>`).join('')}${DB.exp.slice(-15).reverse().map(x=>`<option value="g${x.id}">Gasto · ${fs(x.day)} · ${esc(x.desc)} · ${money(x.amount)}</option>`).join('')}</select><small class="muted">Así no se carga dos veces.</small></label>
+  <div class="fld full"><span>Foto o comprobante</span><label class="up">${ic('cam')}<span id="cq-fn">Adjuntar</span><input type="file" accept="image/*,application/pdf" data-chg="fileName" data-out="cq-fn"></label></div></div><div id="cq-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="saveCq">${ic('check')}Registrar</button></div>`},
+ cqmulti:()=>`<div class="m-head"><div><p class="eyebrow">Cheques</p><h2>Una compra en varios cheques</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><label class="fld"><span>Beneficiario *</span><input class="inp" id="cm-b"></label><label class="fld"><span>Concepto</span><input class="inp" id="cm-k"></label><label class="fld"><span>Chequera</span><select class="sel" id="cm-ch">${DB.chequeras.map(x=>`<option value="${x.id}">${esc(x.cuenta)} · N.º ${x.n} · próximo ${chqNext(x)}</option>`).join('')}</select></label><label class="fld"><span>Compra vinculada</span><select class="sel" id="cm-l"><option value="">Sin vincular</option>${DB.compras.slice().reverse().map(c=>`<option value="${c.id}">#${c.id} · ${esc(c.detalle)}</option>`).join('')}</select></label></div>
+  <div class="tbl-wrap" style="margin-top:12px"><table class="dense"><thead><tr><th>Cheque</th><th>Fecha de cobro</th><th class="r">Monto</th></tr></thead><tbody>${[1,2,3].map(i=>`<tr><td>${i}</td><td><input type="date" class="inp sm" id="cm-d${i}" value="${dOut(TODAY+30*i)}"></td><td class="r"><input class="inp sm r" id="cm-m${i}" inputmode="numeric" placeholder="0" style="max-width:130px"></td></tr>`).join('')}</tbody></table></div><p class="note">Los números se toman en orden de la chequera. Dejá en blanco los que no uses.</p><div id="cm-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="saveCqMulti">${ic('check')}Registrar cheques</button></div>`,
+ cqbook:()=>`<div class="m-head"><div><p class="eyebrow">Cheques</p><h2>Nueva chequera</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="fgrid"><label class="fld"><span>Banco</span><input class="inp" id="cb-b" value="Banco de Córdoba"></label><label class="fld"><span>Cuenta</span><input class="inp" id="cb-c" value="SAS"></label><label class="fld"><span>Numeración desde</span><input class="inp" id="cb-f" inputmode="numeric" data-live="cbPrev"></label><div class="fld"><span>Hasta (50 cheques)</span><b id="cb-h" style="padding-top:10px">—</b></div></div><div id="cb-err"></div></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri" data-act="saveCqBook">${ic('check')}Cargar chequera</button></div>`,
+ cqcobr:()=>{const c=DB.cheques.find(x=>x.id===S.dialog.id);return `<div class="m-head"><div><p class="eyebrow">Cheque ${chqLabel(c)} · ${money(c.monto)}</p><h2>Confirmar débito</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><label class="fld"><span>Fecha real de débito</span><input type="date" class="inp" id="cc2-d" value="${dOut(Math.min(TODAY,Math.max(c.cobro,c.emision)))}"></label></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri" data-act="saveCqCobr">${ic('check')}Confirmar</button></div>`},
+ chpay:()=>{const cl=DB.chCierres.find(x=>x.id===S.dialog.id),k=chCalc(cl),D=S.dialog;return `<div class="m-head"><div><p class="eyebrow">Grupo Chamba · ${qLabel(cl)}</p><h2>Registrar pago</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="m-body"><div class="cj-disp" style="margin-bottom:12px"><span>Saldo pendiente</span><b>${money(k.saldo)}</b></div><div class="fgrid"><label class="fld"><span>Fecha del pago</span><input type="date" class="inp" id="chp-d" value="${dOut(TODAY)}"></label><label class="fld"><span>Monto recibido</span><input class="inp" id="chp-m" inputmode="numeric" value="${k.saldo}" data-live="chpPrev" data-saldo="${k.saldo}"></label>
+  <div class="fld full"><span>Medio de pago</span>${seg('medio',['Efectivo','Transferencia'],D.medio,'chpSet')}</div>${D.medio==='Transferencia'?`<label class="fld"><span>Cuenta de destino</span><select class="sel" id="chp-w">${ACCTS.map(x=>`<option value="${ACCT_L[x]}">${ACCT_L[x]}</option>`).join('')}</select></label>`:`<label class="fld"><span>¿Dónde se recibió?</span><select class="sel" id="chp-w">${CASH_AT.map(x=>`<option>${x}</option>`).join('')}</select></label>`}
+  <div class="fld"><span>Comprobante</span><label class="up">${ic('link')}<span id="chp-fn">Adjuntar imagen o PDF</span><input type="file" accept="image/*,application/pdf" data-chg="fileName" data-out="chp-fn"></label></div><label class="fld full"><span>Observaciones</span><input class="inp" id="chp-o" placeholder="Referencia o aclaración del pago"></label></div>
+  <div class="ok-box" id="chp-prev">Saldo luego de guardar: <b>$ 0</b> · el cierre quedará Pagado.</div><p class="note">Podés registrar pagos parciales o combinar medios cargando un pago por cada medio.</p></div>
+  <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Cancelar</button><button class="btn pri big" data-act="saveChPay">${ic('check')}Guardar pago</button></div>`},
  inv:()=>{const D=S.dialog,ed=D.inv?DB.invs[D.inv-1]:null,src=ed||(D.repl?DB.invs[D.repl-1]:null);
   const ops=(ed?ed.opIds:D.ops||[]).map(O).filter(Boolean),cid=ed?ed.cid:D.cid??(ops[0]?ops[0].customerId:null),cu=cid?DB.customers.find(c=>c.id===cid):null;
   const tipo=src?src.tipo:cu&&cu.company?'A':'B',pv=src?src.pv:'00030',num=ed?ed.num:(DB.invSeq[pv]||0)+1;
@@ -2395,19 +2527,6 @@ function vFact(){
  </tbody></table></div>${list.length>250?`<p class="note">Mostrando 250 de ${list.length}.</p>`:''}`;
 }
 function factFilters(){return `<div class="filters">${chips('fc.when',[['mes','Este mes'],['ant','Mes pasado'],['todas','Todas']],S.fc.when)}<select class="sel" data-chg="fcTipo" aria-label="Tipo de factura"><option value="">Todos los tipos</option>${['A','B','C'].map(t=>`<option value="${t}" ${S.fc.tipo===t?'selected':''}>Factura ${t}</option>`).join('')}</select><input class="inp grow" id="fcq" data-f="fc.q" value="${esc(S.fc.q)}" placeholder="Buscar por razón social, CUIT, N° de factura o cliente" aria-label="Buscar factura">${S.fc.q?`<button class="btn sm ghost" data-act="set" data-k="fc.q" data-v="">Limpiar</button>`:''}</div>`}
-function vChamba(){
- const a=Math.min(S.ch.from,S.ch.to),b=Math.max(S.ch.from,S.ch.to),P=DB.cfg.chambaPrice;
- const list=DB.ops.filter(o=>o.payMethod==='Grupo Chamba'&&o.status!=='Cancelado'&&inRange(o.reqDay,a,b)).sort((x,y)=>x.reqDay-y.reqDay||x.id-y.id);
- let acc=0;const rows=list.map(o=>{acc+=o.price;const dev=o.chamba&&o.chamba.via==='Efectivo'?Math.max(0,o.chamba.cobrado-o.price):0;return{o,acc,dev}});
- const tot=acc,cob=list.reduce((s,o)=>s+(o.chamba?o.chamba.cobrado:0),0),devP=rows.filter(r=>r.dev&&!r.o.chamba.devuelto).reduce((s,r)=>s+r.dev,0),devD=rows.filter(r=>r.dev&&r.o.chamba.devuelto).reduce((s,r)=>s+r.dev,0);
- return pageHead('Grupo Chamba','Contenedores de Grupo Chamba y lo que hay que devolver cuando cobran en efectivo',`<div class="rng"><input type="date" id="chf" data-f="chfrom" value="${dOut(a)}" aria-label="Desde"><span>a</span><input type="date" id="cht" data-f="chto" value="${dOut(b)}" aria-label="Hasta"></div>`)+`
- <div class="panel block" style="display:flex;flex-wrap:wrap;gap:12px;align-items:end;justify-content:space-between"><div><h3 style="margin:0">Valor del contenedor para Chamba</h3><p class="muted">Lo que le corresponde a Conte Nic por cada contenedor. Puede cambiar.</p></div>
-  <div style="display:flex;gap:8px;align-items:end"><label class="fld"><span>Valor actual</span><input class="inp" id="chp" inputmode="numeric" value="${P}" style="width:160px"></label><button class="btn" data-act="saveChamba">Guardar valor</button></div></div>
- <div class="cards4"><div class="fig"><span>Contenedores</span><b>${list.length}</b><small>${fs(a)} al ${fs(b)}</small></div><div class="fig"><span>Le corresponde a Conte Nic</span><b>${compact(tot)}</b></div><div class="fig"><span>Cobró Chamba a los clientes</span><b>${compact(cob)}</b></div><div class="fig"><span><i class="dot warn"></i>A devolver a Chamba</span><b style="color:var(--warn)">${money(devP)}</b><small>ya devuelto ${money(devD)}</small></div></div>
- <div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Descripción</th><th class="r">Monto</th><th class="r">Saldo acumulado</th><th class="r">Cobró Chamba</th><th>Cómo</th><th class="r">A devolver</th><th>Comprobante</th><th></th></tr></thead><tbody>
- ${rows.map(({o,acc,dev})=>{const ad=addr(o);return `<tr><td class="tnum">${fs(o.reqDay)}</td><td><a href="#" data-act="openOp" data-id="${o.id}"><b>CONTENEDOR ${o.size}M3</b></a> · ${esc(aline(ad)).toUpperCase()} ${esc(ad.loc).toUpperCase()}</td><td class="r tnum">${money(o.price)}</td><td class="r tnum">${money(acc)}</td><td class="r tnum">${o.chamba?money(o.chamba.cobrado):'—'}</td><td>${o.chamba?esc(o.chamba.via):'—'}</td><td class="r tnum">${dev?money(dev):'—'}</td><td>${o.receipt?`<span class="muted">${esc(o.receipt)}</span>`:'—'}</td><td>${dev?(o.chamba.devuelto?badge('Devuelto',{Devuelto:'ok'}):`<button class="btn sm" data-act="chambaDev" data-id="${o.id}">Marcar devuelto</button>`):''}</td></tr>`}).join('')||'<tr><td colspan="9" class="empty">Sin contenedores de Chamba en estas fechas.</td></tr>'}
- </tbody></table></div><p class="note">Regla de ejemplo: si Chamba cobró en efectivo, se devuelve lo cobrado menos el valor del contenedor (hoy ${money(P)}). La regla se va a ajustar con el cliente.</p>`;
-}
 function vGastos(){
  const[a,b]=range(S.gx.when),q=norm(S.gx.q);
  const list=DB.exp.filter(x=>inRange(x.day,a,b)&&(!S.gx.cat||x.cat===S.gx.cat)&&(!q||norm(x.desc+' '+x.sub).includes(q))).sort((x,y)=>y.day-x.day||y.id-x.id);
@@ -2529,7 +2648,7 @@ function vEstado(){
 /* ---------- Caja diaria ---------- */
 const isCashOp=o=>o.payMethod==='Efectivo'&&o.paid>0&&o.payDay!=null&&o.status!=='Cancelado';
 const cajaWho=o=>!o.cashAt||o.cashAt==='Oficina'?'Oficina':o.driverId?dname(o.driverId):((DB.drivers.find(d=>d.plates.includes(o.cashAt))||{}).name||o.cashAt);
-const cajaOut=d=>[...DB.exp.filter(x=>x.day===d&&x.medio==='Efectivo · Oficina').map(x=>({day:d,t:x.desc||x.sub,k:x.sub,v:x.amount})),...DB.pay.filter(p=>p.day===d&&p.cash).map(p=>({day:d,t:`Sueldo ${DB.emps.find(e=>e.id===p.empId).name}`,k:'Sueldo',v:p.cash}))];
+const cajaOut=d=>[...DB.exp.filter(x=>x.day===d&&x.medio==='Efectivo · Oficina').map(x=>({day:d,t:x.desc||x.sub,k:x.sub,v:x.amount})),...(DB.compras||[]).filter(x=>x.day===d&&x.medio==='Efectivo · Oficina').map(x=>({day:d,t:'Compra: '+x.detalle,k:'Compra',v:x.amount})),...DB.pay.filter(p=>p.day===d&&p.cash).map(p=>({day:d,t:`Sueldo ${DB.emps.find(e=>e.id===p.empId).name}`,k:'Sueldo',v:p.cash}))];
 const cajaEgr=d=>cajaOut(d).reduce((s,x)=>s+x.v,0);
 const cajaRend=d=>DB.rends.filter(r=>r.day===d).reduce((s,r)=>s+r.amount,0);
 const cajaDep=d=>DB.cierres[d]?DB.cierres[d].dep:0;
@@ -2637,6 +2756,479 @@ function salActivity(e,a,b){const l=actOf(e,a,b).sort((x,y)=>x.delDay-y.delDay||
  ${l.map(o=>`<tr data-act="openOp" data-id="${o.id}" tabindex="0"><td class="tnum">${cap(DC[dow(o.delDay)])} ${fs(o.delDay)}</td><td class="tnum">${fmin(o.delMin)}</td><td class="code">${opn(o.id)}</td><td>${esc(cust(o).name)}</td><td>${esc(addr(o).loc)}</td><td class="cname">${o.cids.join(', ')}</td><td>${o.type}</td><td class="r tnum">${o.qty}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">Sin entregas en la semana.</td></tr>'}
  </tbody></table></div><p class="note">También hizo ${DB.ops.filter(o=>o.pickDriverId===e.driverId&&inRange(o.pickDay,a,b)).length} retiros y ${DB.ops.filter(o=>o.type==='Servicio'&&o.driverId===e.driverId&&inRange(o.delDay,a,b)).length} servicios (no suman al sueldo por ahora).</p></section>`}
 
+/* ============ v6 · Agenda, Retiros (diseño 02/11) ============ */
+const waUrl=ph=>{const d=digits(ph);return d.length>=8?`https://wa.me/549${d.replace(/^0/,'').replace(/^549?/,'')}`:''};
+const waBtn=(ph,label='WhatsApp',cls='btn sm wa')=>{const u=waUrl(ph);return u?`<a class="${cls}" href="${u}" target="_blank" rel="noopener">${ic('wa')}${label}</a>`:''};
+const opPlate=o=>o.plate||(o.driverId&&drv(o.driverId)?drv(o.driverId).plates[0]:null);
+const payBadge=o=>o.status==='Cancelado'?'<span class="muted">—</span>':badge(payStatus(o),BP);
+function agDays(){const A=S.ag;if(A.when==='semana'){const w=weekStart(A.day);return[0,1,2,3,4,5].map(i=>w+i)}return[A.day]}
+const AGST={'':o=>o.status!=='Cancelado',conf:o=>o.status!=='Cancelado'&&o.pendConf,sin:o=>preDel(o)&&!o.driverId,real:o=>o.status==='Realizado',canc:o=>o.status==='Cancelado'};
+function vAgenda(){
+ const A=S.ag,q=norm(A.q),days=agDays();
+ const inDays0=DB.ops.filter(o=>days.includes(o.reqDay)&&lbMatch(o,A.loc,A.barrio)&&(!q||norm(cust(o).name).includes(q)||norm(aline(addr(o))).includes(q)||norm(addr(o).loc).includes(q)||o.cids.some(c=>norm(c).includes(q))||String(o.id).includes(q)));
+ const base=inDays0.filter(o=>!A.svc||rubro(o)===A.svc),n={};Object.keys(AGST).forEach(k=>n[k]=base.filter(AGST[k]).length);
+ const list=base.filter(AGST[A.st]||AGST['']);
+ const sel=A.sel&&O(A.sel);
+ const chip=(k,l,d)=>`<button class="chip ${A.st===k?'on':''}" data-act="set" data-k="ag.st" data-v="${k}">${d?`<i class="dot ${d}"></i>`:''}${l} <span>${n[k]}</span></button>`;
+ const tog=(k,l,d)=>`<button class="chip ${A.st===k?'on':''}" data-act="set" data-k="ag.st" data-v="${A.st===k?'':k}">${d?`<i class="dot ${d}"></i>`:''}${l} <span>${n[k]}</span></button>`;
+ const svcSel=`<select class="sel" data-f="ag.svc" aria-label="Servicio"><option value="">Servicio: todos</option>${Object.keys(SVCS).map(k=>`<option value="${esc(k)}" ${A.svc===k?'selected':''}>${esc(SVCS[k].lbl)}</option>`).join('')}</select>`;
+ const row=o=>{const a=addr(o),pl=opPlate(o),sal=Math.max(0,o.price-o.paid);return `<tr class="${A.sel===o.id?'sel':''}${o.status==='Cancelado'?' canc':''}" data-act="agSel" data-id="${o.id}" tabindex="0">
+  <td style="white-space:nowrap"><b>${esc(o.slot)}</b><div style="margin-top:4px">${badge(o.status==='Realizado'?'Realizado':o.status==='Cancelado'?'Cancelado':o.pendConf?'Por confirmar':'Agendado',{Realizado:'ok',Cancelado:'bad','Por confirmar':'warn',Agendado:'info'})}</div></td>
+  <td><b>${esc(cust(o).name)}</b> <span class="muted tnum">${opn(o.id)}</span><div class="svl">${svcTag(rubro(o))}<span>${esc(svcLine(o))}</span></div>${o.obs?`<span class="sub obs">${ic('doc')}${esc(o.obs)}</span>`:''}${o.status==='Cancelado'&&o.cancelReason?`<span class="sub late">Motivo: ${esc(o.cancelReason)}</span>`:''}${o.pendConf&&o.pendReason?`<span class="sub">Motivo: ${esc(o.pendReason)}</span>`:''}</td>
+  <td><b>${esc(a.loc)}</b><span class="sub">${esc(aline(a))}</span></td>
+  <td>${pl?`<span class="plate">${esc(pl)}</span>`:o.status==='Cancelado'?'—':'<span class="b warn">Sin asignar</span>'}</td>
+  <td>${payBadge(o)}${o.status!=='Cancelado'&&o.paid>0&&sal>0?`<span class="sub">Saldo ${money(sal)}</span>`:''}</td></tr>`};
+ const block=d=>{const l=list.filter(o=>o.reqDay===d).sort((x,y)=>x.min-y.min||x.id-y.id);if(A.when==='semana'&&!l.length)return '';
+  const all=base.filter(o=>o.reqDay===d&&o.status!=='Cancelado');
+  return `<section class="agday"><div class="agdh"><h2>${cap(DIAS[dow(d)])} ${Dt(d).getUTCDate()}${d===TODAY?' · hoy':''} <span>· ${all.length} pedido${all.length===1?'':'s'}</span></h2><small>${all.filter(AGST.conf).length} por confirmar · ${all.filter(AGST.sin).length} sin asignar · ${all.filter(AGST.real).length} realizados</small></div>
+  <div class="tbl-wrap"><table class="dense agt"><thead><tr><th>Hora</th><th>Cliente / servicio</th><th>Entrega</th><th>Camión</th><th>Pago</th></tr></thead><tbody>${l.map(row).join('')||'<tr><td colspan="5" class="empty">No hay pedidos con esos filtros para este día.</td></tr>'}</tbody></table>
+  ${can.createOp()?`<button class="addrow" data-act="newOp" data-day="${d}">${ic('plus')}Agendar pedido para este día</button>`:''}</div></section>`};
+ const label=A.when==='semana'?`Semana del ${fs(days[0])} al ${fs(days[5])}`:`${cap(DIAS[dow(A.day)])} ${Dt(A.day).getUTCDate()} de ${MESES[Dt(A.day).getUTCMonth()]} de ${Dt(A.day).getUTCFullYear()}`;
+ return pageHead('Agenda de pedidos','Ventas · coordinación con logística',can.createOp()?`<button class="btn pri big" data-act="newOp">${ic('plus')}Agendar pedido</button>`:'')+`
+ <div class="agnav"><div class="agnav-l"><button class="btn sm" data-act="agMove" data-v="-1" aria-label="Anterior">${ic('chevl')}</button><button class="btn sm" data-act="agToday">Hoy</button><button class="btn sm" data-act="agMove" data-v="1" aria-label="Siguiente">${ic('chevr')}</button>
+  <label class="chip" style="gap:8px">${ic('cal')}<input type="date" data-f="agday" value="${dOut(A.day)}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0" aria-label="Elegir fecha"></label><b class="aglabel">${label}</b></div>
+  ${chips('ag.when',[['dia','Día'],['semana','Semana']],A.when)}</div>
+ <div class="filters">${svChips('ag.svc',A.svc,inDays0)}</div>
+ <div class="filters">${chip('','Agendados','info')}${chip('conf','Por confirmar','warn')}${chip('sin','Sin asignar','acc')}${chip('real','Realizados','ok')}</div>
+ <div class="filters agf"><input class="inp grow" id="agq" data-f="ag.q" value="${esc(A.q)}" placeholder="Buscar cliente, dirección o contenedor…" aria-label="Buscar pedido">${lbFilters('ag',A.loc,A.barrio)}${tog('conf','Pendientes de confirmación','warn')}${tog('canc','Cancelados','bad')}${svcSel}</div>
+ <div class="ag-grid ${sel?'with':''}"><div class="ag-main">${days.map(block).join('')||'<p class="empty">No hay pedidos con esos filtros esta semana.</p>'}</div>${sel?agPanel(sel):''}</div>`;
+}
+function agPanel(o){
+ const cu=cust(o),a=addr(o),pl=opPlate(o),sal=Math.max(0,o.price-o.paid),inv=o.inv&&o.inv.cond!=='Anulada'?o.inv:null;
+ const st=o.status==='Realizado'?'Realizado':o.status==='Cancelado'?'Cancelado':o.pendConf?'Por confirmar':'Agendado';
+ return `<aside class="agp panel"><div class="agp-h"><div><p class="eyebrow">Pedido ${opn(o.id)}</p><h3>${esc(cu.name)}</h3></div><div style="display:flex;gap:8px;align-items:start">${badge(st,{Realizado:'ok',Cancelado:'bad','Por confirmar':'warn',Agendado:'info'})}<button class="x" data-act="agSel" data-id="" aria-label="Cerrar">${ic('x')}</button></div></div>
+  <div class="agp-s"><h4>${ic('pin')}Entrega</h4><p><b>${o.reqDay===TODAY?'Hoy':cap(DC[dow(o.reqDay)])+' '+fs(o.reqDay)} · ${esc(o.slot)}</b><br>${esc(aline(a))}<br>${esc(a.loc)}</p>
+   <div class="agp-b">${mapsUrl(o)?`<a class="btn sm" href="${esc(mapsUrl(o))}" target="_blank" rel="noopener">${ic('pin')}Ver mapa</a>`:`<button class="btn sm" data-act="nav" data-v="mapa">${ic('map')}Ver mapa</button>`}${waBtn(cu.phone)}</div></div>
+  <div class="agp-s"><h4>${ic('box')}Servicio</h4><p>${svcTag(rubro(o))} ${esc(o.type==='Servicio'?'':o.type)}<br>${esc(svcLine(o))}</p><p>Camión: ${pl?`<span class="plate">${esc(pl)}</span>`:'<b class="late">Sin asignar</b>'}</p>${!pl&&preDel(o)?`<div class="warn-box">${ic('alert')}<span>Confirmar asignación con logística</span></div>`:''}</div>
+  <div class="agp-s"><h4>${ic('cash')}Pago</h4><dl class="cj-sum"><dt>Total</dt><dd>${money(o.price)}</dd><dt>Cobrado</dt><dd>${money(o.paid)}</dd><dt>Saldo</dt><dd class="${sal?'late':''}">${money(sal)}</dd></dl><p>${esc(payLabel(o))} ${payBadge(o)}</p>${o.receipt?`<p class="muted">${ic('doc')}${esc(o.receipt)}</p>`:''}</div>
+  <div class="agp-s"><h4>${ic('doc')}Observaciones</h4><p>${esc(o.obs)||'<span class="muted">Sin observaciones</span>'}${o.pendConf&&o.pendReason?`<br><b>Pendiente:</b> ${esc(o.pendReason)}`:''}${o.status==='Cancelado'?`<br><b class="late">Cancelado:</b> ${esc(o.cancelReason||'sin motivo')}`:''}</p></div>
+  <div class="agp-s"><h4>${ic('link')}Documentos</h4><p>${inv?`<a href="#" data-act="ventaPdf" data-id="${o.id}">Factura ${inv.tipo} ${ivn(inv)}</a>`:'<span class="muted">Sin factura</span>'} · ${o.remito?`Remito ${o.remito}${o.firmado?' (firmado)':''}`:'Remito: sin cargar'}${o.contract?`<br>Contrato: ${esc(o.contract)}`:''}</p></div>
+  <div class="agp-f"><button class="btn pri" data-act="openOp" data-id="${o.id}">Abrir pedido</button>${can.com()&&o.status!=='Cancelado'?`<button class="btn" data-act="editOp" data-id="${o.id}">${ic('doc')}Editar</button>`:''}</div></aside>`;
+}
+
+/* ---------- Retiros ---------- */
+function rtTxt(o){const d=o.plannedPickup-TODAY;return d<0?['bad',`Venció hace ${-d} ${d===-1?'día':'días'}`]:d===0?['warn','Vence hoy']:d<=2?['acc',d===1?'Vence mañana':'Vence en 2 días']:['ok',`Vence en ${d} días`]}
+const RTG={todos:o=>true,venc:o=>o.plannedPickup<TODAY,hoy:o=>o.plannedPickup===TODAY,prox:o=>o.plannedPickup>TODAY&&o.plannedPickup<=TODAY+2,ok:o=>o.plannedPickup>TODAY+2};
+function vRet(){
+ const R0=S.rt,q=norm(R0.q);
+ const act=DB.ops.filter(isActive).filter(o=>lbMatch(o,R0.loc,R0.barrio)&&(R0.from==null||o.plannedPickup>=R0.from)&&(R0.to==null||o.plannedPickup<=R0.to)&&(!q||norm(cust(o).name).includes(q)||norm(aline(addr(o))).includes(q)||o.cids.some(c=>norm(c).includes(q)))).sort((a,b)=>a.plannedPickup-b.plannedPickup);
+ const list=act.filter(RTG[R0.f]||RTG.todos),sel=R0.sel&&O(R0.sel)&&isActive(O(R0.sel))?O(R0.sel):null;
+ const chip=(k,l,d)=>`<button class="chip ${R0.f===k?'on':''}" data-act="set" data-k="rt.f" data-v="${k}">${d?`<i class="dot ${d}"></i>`:''}${l} <span>${act.filter(RTG[k]).length}</span></button>`;
+ return pageHead('Retiros','Vencimientos de los contenedores en la calle')+`
+ <div class="filters"><input class="inp grow" data-f="rt.q" value="${esc(R0.q)}" placeholder="Buscar cliente, dirección o contenedor…" aria-label="Buscar">${lbFilters('rt',R0.loc,R0.barrio)}</div>
+ <div class="filters"><span class="muted">Vencimiento:</span><label class="chip" style="gap:6px">Desde<input type="date" data-f="rtfrom" value="${R0.from!=null?dOut(R0.from):''}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0" aria-label="Desde"></label><label class="chip" style="gap:6px">Hasta<input type="date" data-f="rtto" value="${R0.to!=null?dOut(R0.to):''}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0" aria-label="Hasta"></label>${R0.from!=null||R0.to!=null||R0.q||R0.loc?`<button class="btn sm ghost" data-act="rtClear">Limpiar filtros</button>`:''}
+  <span class="spacer"></span>${chip('todos','Todos')}${chip('venc','Vencidos','bad')}${chip('hoy','Vencen hoy','warn')}${chip('prox','Próximos a vencer','acc')}${chip('ok','En plazo','ok')}</div>
+ <div class="ag-grid ${sel?'with':''}"><div class="ag-main"><div class="tbl-wrap"><table class="dense"><thead><tr><th>Vencimiento</th><th>Cliente / ubicación</th><th>Contenedor</th><th>Se llevó</th><th></th></tr></thead><tbody>
+ ${list.map(o=>{const[k,t]=rtTxt(o),a=addr(o),cu=cust(o);return `<tr class="${R0.sel===o.id?'sel':''}" data-act="rtSel" data-id="${o.id}" tabindex="0"><td><span class="rtv k-${k}"><i class="dot ${k}"></i><b>${t}</b></span><span class="sub tnum">${fd(o.plannedPickup)}</span></td>
+  <td><b>${esc(cu.name)}</b> <span class="muted tnum">${opn(o.id)}</span><span class="sub">${esc(a.loc)}${a.barrio!=='Centro'?' · '+esc(a.barrio):''}</span><span class="sub">${esc(a.street)}</span></td>
+  <td><span class="cname">${o.cids.join(', ')}</span><span class="sub">${o.size} m³</span></td><td class="tnum">${fd(o.delDay)}<span class="sub">hace ${TODAY-o.delDay} ${TODAY-o.delDay===1?'día':'días'}</span></td>
+  <td>${waBtn(cu.phone,'WhatsApp','btn sm wa')}</td></tr>`}).join('')||'<tr><td colspan="5" class="empty">No hay retiros con esos filtros.</td></tr>'}
+ </tbody></table></div><p class="note">${list.length} contenedores · ordenados por vencimiento.</p></div>${sel?rtPanel(sel):''}</div>`;
+}
+function rtPanel(o){
+ const cu=cust(o),a=addr(o),[k,t]=rtTxt(o),others=DB.ops.filter(x=>x.customerId===cu.id&&isActive(x)&&x.id!==o.id),inv=o.inv&&o.inv.cond!=='Anulada'?o.inv:null;
+ return `<aside class="agp panel"><div class="agp-h"><div><p class="eyebrow">${opn(o.id)} · <span class="cname">${o.cids.join(', ')}</span></p><h3>${esc(cu.name)}</h3></div><button class="x" data-act="rtSel" data-id="" aria-label="Cerrar">${ic('x')}</button></div>
+  <div class="agp-b">${waBtn(cu.phone)}<button class="btn sm" data-act="openOp" data-id="${o.id}">Ver pedido</button></div>
+  <div class="agp-s"><h4>${ic('clock')}Vencimiento</h4><p><span class="rtv k-${k}"><i class="dot ${k}"></i><b>${t}</b></span><br>Se llevó el ${fd(o.delDay)} · retiro previsto ${fd(o.plannedPickup)}</p></div>
+  <div class="agp-s"><h4>${ic('pin')}Ubicación</h4><p>${esc(aline(a))}<br>${esc(a.loc)}</p>${gmaps(o,'Abrir en Google Maps')}</div>
+  <div class="agp-s"><h4>${ic('cash')}Pago</h4><dl class="cj-sum"><dt>Total</dt><dd>${money(o.price)}</dd><dt>Cobrado</dt><dd>${money(o.paid)}</dd></dl><p>${esc(payLabel(o))} ${payBadge(o)}</p><p class="muted">Comprobante: ${o.receipt?esc(o.receipt):inv?`factura ${inv.tipo} ${ivn(inv)}`:'—'}</p></div>
+  ${others.length?`<div class="agp-s"><h4>${ic('box')}Otros contenedores del cliente</h4><p>${others.map(x=>`<a href="#" data-act="rtSel" data-id="${x.id}" class="cname">${x.cids.join(', ')}</a> · vence ${fs(x.plannedPickup)}`).join('<br>')}</p></div>`:''}
+  ${can.assign()||can.field()?`<div class="agp-s"><h4>${ic('truck')}Logística</h4>${can.assign()?`<div class="fgrid"><label class="fld"><span>Horario de retiro</span><select class="sel sm" data-chg="pslot" data-id="${o.id}">${[...SLOT_BASE.filter(x=>x!=='Hora exacta'),...SLOTS.slice(3)].map(x=>`<option ${o.pickSlot===x?'selected':''}>${x}</option>`).join('')}</select></label><label class="fld"><span>Chofer</span><select class="sel sm" data-chg="pdrv" data-id="${o.id}">${DB.drivers.map(d=>`<option value="${d.id}" ${(o.pickDriverPlan||o.driverId)===d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select></label></div><div style="margin-top:8px">${combineSelect(o,'ret')}</div>`:''}
+   ${can.field()?`<div class="agp-b" style="margin-top:10px"><button class="btn pri" data-act="pickDlg" data-id="${o.id}">${ic('truck')}Registrar retiro</button><button class="btn" data-act="newOp" data-ext="${o.id}">Registrar extensión</button></div>`:''}</div>`:''}
+ </aside>`;
+}
+
+/* ============ v6 · Agendar pedido en 5 partes ============ */
+const IVAS=[['0','No agregar IVA',0],['2.5','IVA 2,5 %',2.5],['5','IVA 5 %',5],['10.5','IVA 10,5 %',10.5],['21','IVA 21 %',21],['27','IVA 27 %',27],['ex','Exento',0],['ng','No gravado',0]];
+const ivaPct=k=>(IVAS.find(x=>x[0]===k)||IVAS[0])[2];
+const CASH_AT=['Oficina','FWU 010','RXB 892','EPK 581'];
+const ACCT_L={SAS:'Banco SAS',YPF:'YPF',Otro:'Otro'};
+const isChamba=c=>c&&c.name==='Grupo Chamba';
+function monthsBetween(a,b){const A=Dt(a),B=Dt(b);let m=(B.getUTCFullYear()-A.getUTCFullYear())*12+B.getUTCMonth()-A.getUTCMonth();if(B.getUTCDate()<A.getUTCDate())m--;return m}
+function addMonths(d,m){const A=Dt(d);return Math.floor(Date.UTC(A.getUTCFullYear(),A.getUTCMonth()+m,A.getUTCDate())/MS)}
+function npInit(o={}){
+ const c=o.cid?CU(o.cid):null,day=o.day!=null?o.day:TODAY,ext=o.ext?O(o.ext):null,cc=ext?cust(ext):c;
+ return {cid:cc?cc.id:null,q:'',phone:cc?cc.phone:'',addrId:cc?(ext?ext.addrId:cc.addrs[0].id):null,na:null,loc:'Villa Allende',barrio:'',street:'',maps:'',
+  svc:o.svc&&SVCS[o.svc]?o.svc:'Contenedor',type:ext?'Extensión':'Alquiler',size:5,qty:1,repl:ext?ext.id:null,ext:2,date:day,slotB:'Por la mañana',hour:'09:00',
+  lit:'',hose:'',sq:1,obrFrom:day,obrTo:addMonths(day,1),contract:'',
+  unit:ext?'':DEFP[5],iva:'21',payM:isChamba(cc)?'Grupo Chamba':'Efectivo',paySt:'Pendiente',cashAt:'Oficina',payDay:TODAY,acct:'SAS',receipt:'',paidAmt:'',
+  fac:{open:false,cuit:cc&&cc.cuit||'',rs:'',cond:'',dom:'',tipo:'A',pv:'00001',num:'',pdf:'',ncOpen:false,nc:{num:'',day:TODAY,amount:'',motivo:'',pdf:''}},
+  rem:{open:false,num:'',img:'',firm:''},obs:'',st:'',motivo:''};
+}
+const npD=()=>S.modal.d;
+function npBill(D){if(D.svc==='Contenedor')return D.type==='Alquiler'?D.qty:1;if(D.svc==='Obrador')return D.qty*Math.max(1,monthsBetween(D.obrFrom,D.obrTo));return D.sq||1}
+function npCalc(D){const u=+digits(D.unit)||0,q=npBill(D),sub=u*q,iva=Math.round(sub*ivaPct(D.iva)/100);return{u,q,sub,iva,tot:sub+iva}}
+function npSummary(D){const day=fs(D.date),sl=D.slotB==='Hora exacta'?D.hour+' h':D.slotB;
+ const what=D.svc==='Contenedor'?(D.type==='Alquiler'?`${D.qty} contenedor${D.qty>1?'es':''} · ${D.size} m³`:`${D.type} de contenedor`):D.svc==='Viaje de agua'?`${pl(D.sq,'viaje','viajes')} de agua`:D.svc==='Obrador'?`${D.qty} obrador · ${pl(Math.max(0,monthsBetween(D.obrFrom,D.obrTo)),'mes','meses')}`:`${SVCS[D.svc].lbl} · ${D.svc==='Minicargadora'||D.svc==='Retroexcavadora'?pl(D.sq,'hora','horas'):pl(D.sq,'viaje','viajes')}`;
+ return `${what} · ${D.svc==='Obrador'?fs(D.obrFrom):day} · ${esc(sl)}`}
+const seg=(k,opts,cur,act='npSet')=>`<div class="seg2" role="group">${opts.map(o=>{const[v,l]=Array.isArray(o)?o:[o,o];return `<button type="button" class="${String(cur)===String(v)?'on':''}" data-act="${act}" data-k="${k}" data-v="${esc(v)}">${l}</button>`}).join('')}</div>`;
+const npIn=(k,v,ph='',extra='')=>`<input class="inp" data-live="np" data-k="${k}" value="${esc(v)}" placeholder="${esc(ph)}" ${extra}>`;
+const stepper=(k,v,unit)=>`<div class="stp"><button type="button" data-act="npStep" data-k="${k}" data-v="-1" aria-label="Menos">−</button><b>${v}</b><button type="button" data-act="npStep" data-k="${k}" data-v="1" aria-label="Más">+</button>${unit?`<span class="muted">${unit}</span>`:''}</div>`;
+const fileBtn=(k,v,label,accept='image/*,application/pdf')=>`<label class="up sm">${ic('link')}<span>${v?esc(v):label}</span><input type="file" accept="${accept}" data-chg="npFile" data-k="${k}"></label>`;
+const dateIn=(k,v)=>`<input type="date" class="inp" data-chg="npDate" data-k="${k}" value="${dOut(v)}">`;
+function npSec(n,title,body,opt){const D=npD(),open=opt?D[opt].open:true;
+ return `<section class="nps ${opt?'opt':''} ${open?'open':''}"><${opt?'button type="button" data-act="npTog" data-k="'+opt+'"':'div'} class="nps-h"><span class="nps-n">${n}</span><b>${title}</b>${opt?`<small class="muted">Opcional</small><svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`:''}</${opt?'button':'div'}>${open?`<div class="nps-b">${body}</div>`:''}</section>`}
+function npPart1(D){const c=D.cid?CU(D.cid):null;
+ if(c){const a=D.na?null:c.addrs.find(x=>x.id===D.addrId)||c.addrs[0];
+  return `<div class="npg g3"><div class="fld"><span>Cliente</span><div class="selcard sm"><span><b>${esc(c.name)}</b>${c.cuit?`<small class="muted"> · CUIT ${esc(c.cuit)}</small>`:''}</span><button type="button" class="btn sm ghost" data-act="npSet" data-k="cid" data-v="">Cambiar</button></div></div>
+   <div class="fld"><span>Teléfono registrado</span><div class="inrow">${npIn('phone',D.phone,'351 123-4567','inputmode="tel"')}${waBtn(D.phone,'','btn sm wa icon')}</div></div>
+   <div class="fld"><span>&nbsp;</span><button type="button" class="btn sm ghost" data-act="editCust" data-id="${c.id}">${ic('doc')}Editar datos del cliente</button></div></div>
+   <div class="npg g3" style="margin-top:12px"><div class="fld span2"><span>Obra / dirección${c.addrs.length>1?` <small class="muted">(${c.addrs.length} guardadas)</small>`:''}</span>${D.na?'<div class="muted" style="padding:10px 0">Nueva dirección (abajo)</div>':`<select class="sel" data-chg="npAddr">${c.addrs.map(x=>`<option value="${x.id}" ${x.id===a.id?'selected':''}>${esc(aline(x))} · ${esc(x.loc)}</option>`).join('')}</select>`}</div>
+   <div class="fld"><span>&nbsp;</span><div class="inrow">${D.na?`<button type="button" class="btn sm" data-act="npSet" data-k="na" data-v="">Usar una guardada</button>`:`<button type="button" class="btn sm" data-act="npSet" data-k="na" data-v="1">${ic('plus')}Nueva dirección</button>`}${!D.na&&a.mapsUrl?`<a class="btn sm" href="${esc(a.mapsUrl)}" target="_blank" rel="noopener">${ic('pin')}Ubicación</a>`:''}</div></div></div>
+   ${D.na?npAddrFields(D):''}`}
+ return `<div class="npg g2"><div class="fld"><span>Cliente</span><div class="np-q">${ic('search')}<input id="np-q" class="inp" data-live="npq" autocomplete="off" value="${esc(D.q)}" placeholder="Buscar o ingresar cliente"><div id="np-sug" class="sug"></div></div></div>
+  <div class="fld"><span>Teléfono</span><div class="inrow">${npIn('phone',D.phone,'Ej.: 351 123-4567','inputmode="tel"')}${waBtn(D.phone,'','btn sm wa icon')}</div></div></div>${npAddrFields(D)}`}
+function npAddrFields(D){return `<div class="npg g2" style="margin-top:12px"><label class="fld"><span>Localidad</span><select class="sel" data-chg="npLoc">${LOC_NAMES.map(l=>`<option ${D.loc===l?'selected':''}>${l}</option>`).join('')}</select></label>
+  <label class="fld"><span>Barrio</span><select class="sel" data-chg="npField" data-k="barrio"><option value="">${LOCS[D.loc].barrios.length?'Seleccionar barrio':'Sin barrios privados'}</option>${LOCS[D.loc].barrios.map(b=>`<option ${D.barrio===b?'selected':''}>${esc(b)}</option>`).join('')}<option value="Centro" ${D.barrio==='Centro'?'selected':''}>Otro / calle abierta</option></select></label>
+  <label class="fld"><span>Calle / Mz / Lote</span>${npIn('street',D.street,'Ej.: Los Pinos 120 o Mz. 12 L. 4')}</label>
+  <label class="fld"><span>Ubicación</span>${npIn('maps',D.maps,'Pegá el link de Google Maps')}</label></div>`}
+function npPart2(D){
+ const svcSel=`<label class="fld"><span>Servicio</span><select class="sel" data-chg="npSvc">${Object.keys(SVCS).map(k=>`<option value="${esc(k)}" ${D.svc===k?'selected':''}>${esc(SVCS[k].lbl)}</option>`).join('')}</select></label>`;
+ const when=`<label class="fld"><span>Fecha</span>${dateIn('date',D.date)}</label><label class="fld"><span>Horario</span><div class="inrow"><select class="sel" data-chg="npField" data-k="slotB">${SLOT_BASE.map(x=>`<option ${D.slotB===x?'selected':''}>${x}</option>`).join('')}</select>${D.slotB==='Hora exacta'?`<input type="time" class="inp" data-live="np" data-k="hour" value="${esc(D.hour)}" style="max-width:120px">`:''}</div></label>`;
+ if(D.svc==='Contenedor'){
+  const c=D.cid?CU(D.cid):null,act=c?DB.ops.filter(o=>o.customerId===c.id&&isActive(o)):[];
+  const rep=D.type==='Alquiler'?'':!c?`<div class="warn-box">${ic('alert')}<span>Para ${D.type.toLowerCase()} primero elegí el cliente.</span></div>`:!act.length?`<div class="warn-box">${ic('alert')}<span>Este cliente no tiene contenedores en la calle.</span></div>`
+   :`<div class="npg g2"><label class="fld"><span>${D.type==='Recambio'?'Contenedor que sale':D.type==='Extensión'?'Contenedor que se queda más tiempo':'Contenedor que se mueve'}</span><select class="sel" data-chg="npField" data-k="repl" data-num="1">${act.map(o=>`<option value="${o.id}" ${D.repl===o.id?'selected':''}>${o.cids.join(', ')} · ${o.size} m³ · vence ${fs(o.plannedPickup)} · ${esc(aline(addr(o)))}</option>`).join('')}</select></label>${D.type==='Extensión'?`<div class="fld"><span>Días extra</span>${seg('ext',[1,2,3,5,7],D.ext)}</div>`:''}</div>`;
+  return `<div class="npg g2">${svcSel}<div class="fld"><span>Tipo</span>${seg('type',['Alquiler','Recambio','Movimiento','Extensión'],D.type)}</div></div>
+   ${D.type==='Alquiler'?`<div class="npg g4"><div class="fld"><span>Medida</span>${seg('size',[[3,'3 m³'],[5,'5 m³'],[6,'6 m³']],D.size)}</div><div class="fld"><span>Cantidad</span>${stepper('qty',D.qty)}</div>${when}</div>`:`${rep}<div class="npg g2">${when}</div>`}`}
+ if(D.svc==='Viaje de agua')return `<div class="npg g2">${svcSel}<div></div></div><div class="npg g2"><label class="fld"><span>Cantidad de litros</span><div class="inrow">${npIn('lit',D.lit,'Ej.: 10000','inputmode="numeric"')}<span class="muted">L</span></div></label><label class="fld"><span>Metros de manguera</span><div class="inrow">${npIn('hose',D.hose,'Ej.: 30','inputmode="numeric"')}<span class="muted">m</span></div></label></div>
+  <div class="npg g3"><div class="fld"><span>Cantidad</span>${stepper('sq',D.sq,'viajes')}</div>${when}</div><p class="note">Se cobra por viaje. Entre 8.000 y 10.000 litros por viaje según la zona y el estado del camino.</p>`;
+ if(D.svc==='Obrador'){const m=monthsBetween(D.obrFrom,D.obrTo),ok=m>=1;
+  return `<div class="npg g3">${svcSel}<div class="fld"><span>Cantidad</span>${stepper('qty',D.qty)}</div><label class="fld"><span>Horario de entrega</span><div class="inrow"><select class="sel" data-chg="npField" data-k="slotB">${SLOT_BASE.map(x=>`<option ${D.slotB===x?'selected':''}>${x}</option>`).join('')}</select>${D.slotB==='Hora exacta'?`<input type="time" class="inp" data-live="np" data-k="hour" value="${esc(D.hour)}" style="max-width:120px">`:''}</div></label></div>
+  <p class="sublbl">Período de alquiler</p><div class="npg g3"><label class="fld"><span>Fecha de entrega</span>${dateIn('obrFrom',D.obrFrom)}</label><label class="fld"><span>Fecha de vencimiento</span>${dateIn('obrTo',D.obrTo)}</label><div class="fld"><span>&nbsp;</span><span class="b ${ok?'acc':'bad'}" style="align-self:start">${ok?`Período seleccionado: ${pl(m,'mes','meses')}${addMonths(D.obrFrom,m)!==D.obrTo?` y ${D.obrTo-addMonths(D.obrFrom,m)} días`:''}`:'Mínimo 1 mes'}</span></div></div>
+  <div class="npg g2"><div class="fld"><span>Contrato (PDF)</span>${fileBtn('contract',D.contract,'Adjuntar contrato','application/pdf')}</div><p class="note" style="align-self:end;margin:0">En el contrato: estado de devolución, llaves entregadas, plazo y forma de pago.</p></div>`}
+ const horas=D.svc==='Minicargadora'||D.svc==='Retroexcavadora';
+ return `<div class="npg g3">${svcSel}<div class="fld"><span>${horas?'Horas':'Cantidad de viajes'}</span>${stepper('sq',D.sq,horas?'horas':'viajes')}</div><div></div></div><div class="npg g2">${when}</div><p class="note">Datos de este servicio a confirmar con el cliente (ver preguntas).</p>`;
+}
+function npPart3(D){const k=npCalc(D),c=D.cid?CU(D.cid):null,ch=isChamba(c);
+ const medios=ch?[['Grupo Chamba','Cuenta Chamba'],'Efectivo','Transferencia']:['Efectivo','Transferencia'];
+ const paid=D.paySt==='Pagado'&&D.payM!=='Grupo Chamba';
+ return `<div class="npg g3x"><label class="fld"><span>Precio unitario sin IVA</span>${npIn('unit',D.unit===''?'':money(+digits(D.unit)).replace('$ ',''),'135.000','inputmode="numeric" data-money="1"')}<small class="muted">Ingreso manual</small></label>
+  <label class="fld"><span>IVA</span><select class="sel" data-chg="npField" data-k="iva">${IVAS.map(([v,l])=>`<option value="${v}" ${D.iva===v?'selected':''}>${l}</option>`).join('')}</select></label>
+  <div class="fld"><span>Total del pedido</span><b class="np-tot" id="np-tot">${money(k.tot)}</b><small class="muted">Cálculo automático</small></div>
+  <dl class="np-sub" id="np-sub"><dt>Subtotal${k.q>1?` (× ${k.q})`:''}</dt><dd>${money(k.sub)}</dd><dt>IVA ${ivaPct(D.iva)} %</dt><dd>${money(k.iva)}</dd></dl></div>
+  <div class="npg g2"><div class="fld"><span>Medio de pago</span>${seg('payM',medios,D.payM)}</div>${D.payM==='Grupo Chamba'?`<div class="fld"><span>&nbsp;</span><p class="note" style="margin:0">Se liquida en el cierre quincenal de Grupo Chamba.</p></div>`:`<div class="fld"><span>Estado del pago</span>${seg('paySt',['Pendiente','Pagado'],D.paySt)}</div>`}</div>
+  ${D.payM!=='Grupo Chamba'&&!paid?`<div class="info-box">${ic('alert')}<span>Pendiente: no requiere oficina ni camión. No suma a la caja disponible.</span></div>`:''}
+  ${paid&&D.payM==='Efectivo'?`<div class="npg g4 paybox"><label class="fld"><span>¿Dónde se cobró?</span><select class="sel" data-chg="npField" data-k="cashAt">${CASH_AT.map(x=>`<option ${D.cashAt===x?'selected':''}>${x}</option>`).join('')}</select></label><label class="fld"><span>Fecha del cobro</span>${dateIn('payDay',D.payDay)}</label><label class="fld"><span>Monto cobrado</span>${npIn('paidAmt',D.paidAmt,money(k.tot),'inputmode="numeric"')}</label>
+   <div class="fld"><span>&nbsp;</span>${D.cashAt==='Oficina'?'<span class="b ok">Ingresa directamente a caja</span>':'<span class="b warn">Pendiente de rendir</span>'}</div></div>${ch?'<p class="note">Si Chamba cobró más (ej. $145.000), cargá lo que entró en efectivo: la diferencia se ajusta en el cierre de Chamba.</p>':''}`:''}
+  ${paid&&D.payM==='Transferencia'?`<div class="npg g4 paybox"><label class="fld"><span>Cuenta destino</span><select class="sel" data-chg="npField" data-k="acct">${ACCTS.map(x=>`<option value="${x}" ${D.acct===x?'selected':''}>${ACCT_L[x]}</option>`).join('')}</select></label><label class="fld"><span>Fecha del cobro</span>${dateIn('payDay',D.payDay)}</label><label class="fld"><span>Monto</span>${npIn('paidAmt',D.paidAmt,money(k.tot),'inputmode="numeric"')}</label>
+   <div class="fld"><span>Comprobante</span>${fileBtn('receipt',D.receipt,'Adjuntar comprobante')}</div></div><p class="note"><span class="b warn">Pendiente de verificación</span> Administración verifica; Ventas ve “Verificado”.</p>`:''}`}
+function npPart4(D){const f=D.fac;
+ return `<p class="sublbl">Datos de facturación</p><div class="npg g3"><label class="fld"><span>CUIT</span>${npIn('fac.cuit',f.cuit,'Ingresar CUIT','inputmode="numeric"')}</label><div class="fld"><span>&nbsp;</span><button type="button" class="btn" data-act="npArca">${ic('search')}Buscar en ARCA</button></div><div></div></div>
+  <div class="npg g3"><label class="fld"><span>Razón social</span>${npIn('fac.rs',f.rs,'Se completa con la búsqueda')}</label><label class="fld"><span>Condición frente al IVA</span>${npIn('fac.cond',f.cond,'Se completa con la búsqueda')}</label><label class="fld"><span>Domicilio fiscal</span>${npIn('fac.dom',f.dom,'Se completa con la búsqueda')}</label></div>
+  <p class="note" style="margin-top:0">Consulta sujeta a integración con ARCA · carga manual disponible.</p>
+  <div class="npg g4"><div class="fld"><span>Tipo de factura</span>${seg('fac.tipo',['A','B'],f.tipo)}</div><label class="fld"><span>Punto de venta</span>${npIn('fac.pv',f.pv,'00001')}</label><label class="fld"><span>N.º de factura</span>${npIn('fac.num',f.num,'000001','inputmode="numeric" maxlength="6"')}</label><div class="fld"><span>PDF</span>${fileBtn('fac.pdf',f.pdf,'Adjuntar PDF de factura','application/pdf')}</div></div>
+  <button type="button" class="np-more" data-act="npTog" data-k="fac.nc">${ic(f.ncOpen?'x':'plus')}${f.ncOpen?'Quitar nota de crédito':'Agregar nota de crédito'} <small class="muted">vinculada a la factura: número, fecha, importe, motivo y PDF</small></button>
+  ${f.ncOpen?`<div class="npg g4"><label class="fld"><span>N.º nota de crédito</span>${npIn('fac.nc.num',f.nc.num,'000001')}</label><label class="fld"><span>Fecha</span>${dateIn('fac.nc.day',f.nc.day)}</label><label class="fld"><span>Importe</span>${npIn('fac.nc.amount',f.nc.amount,'0','inputmode="numeric"')}</label><div class="fld"><span>PDF</span>${fileBtn('fac.nc.pdf',f.nc.pdf,'Adjuntar PDF','application/pdf')}</div><label class="fld span4"><span>Motivo</span>${npIn('fac.nc.motivo',f.nc.motivo,'Ej.: factura con monto equivocado')}</label></div>`:''}`}
+function npPart5(D){const r=D.rem,t=r.num?talOf(+digits(r.num)):null;
+ return `<div class="npg g3"><label class="fld"><span>Número de remito</span>${npIn('rem.num',r.num,'Ingresar número','inputmode="numeric"')}<small id="np-tal" class="muted">${talHint(t,r.num)}</small></label><div class="fld"><span>Imagen del remito</span>${fileBtn('rem.img',r.img,'Adjuntar imagen del remito','image/*')}</div><div class="fld"><span>¿Está firmado?</span>${seg('rem.firm',['Sí','No'],r.firm)}</div></div>`}
+function talHint(t,num){if(!num)return 'El sistema busca el talonario solo.';if(!t)return '⚠ Ese número no está en ningún talonario cargado.';return `Talonario ${t.n} (${t.from}–${t.to})${t.drv?' · '+esc(dname(t.drv)):''}`}
+function npFinal(D){return `<label class="fld"><span>Observaciones</span><textarea class="inp" data-live="np" data-k="obs" rows="2" placeholder="Portón cerrado, llamar antes, indicaciones para la entrega…">${esc(D.obs)}</textarea></label>
+  <div class="npg g2" style="align-items:start"><div class="fld"><span>Estado del pedido</span><div class="seg2 st">${[['pend','Pendiente de confirmación'],['canc','Cancelado']].map(([v,l])=>`<button type="button" class="${D.st===v?'on '+v:''}" data-act="npSet" data-k="st" data-v="${D.st===v?'':v}"><i class="radio"></i>${l}</button>`).join('')}</div></div>
+  ${D.st?`<label class="fld"><span>Motivo *</span>${npIn('motivo',D.motivo,D.st==='pend'?'Ej.: el cliente confirma mañana si continúa la obra':'Ej.: llovió, el cliente reprograma')}</label>`:''}</div>`}
+function mNewOp(){const D=npD(),k=npCalc(D);
+ return `<div class="m-head"><div><p class="eyebrow">Ventas</p><h2>Agendar pedido</h2></div><button class="x" data-act="closeModal" aria-label="Cerrar">${ic('x')}</button></div>
+ <div class="m-body np">${npSec(1,'Cliente y entrega',npPart1(D))}${npSec(2,'Pedido',npPart2(D))}${npSec(3,'Precio y pago',npPart3(D))}${npSec(4,'Datos adicionales',npPart4(D),'fac')}${npSec(5,'Remitos',npPart5(D),'rem')}
+  <section class="nps open"><div class="nps-b">${npFinal(D)}</div></section><p class="note">Facturación y remitos quedan plegados hasta que los necesites.</p><div id="no-err"></div></div>
+ <div class="m-foot np-foot"><div class="np-sum"><span id="np-sum">${npSummary(D)}</span><b id="np-sum-t">Total: ${money(k.tot)}</b></div><span class="spacer"></span><button class="btn ghost" data-act="closeModal">Cancelar</button><button class="btn pri big" data-act="npSave">${ic('check')}Agendar pedido</button></div>`;
+}
+function npRender(){const b=document.querySelector('#modal .m-body'),st=b?b.scrollTop:0;renderLayers();const nb=document.querySelector('#modal .m-body');if(nb)nb.scrollTop=st}
+function npSetPath(D,k,v){const ps=k.split('.');let o=D;for(let i=0;i<ps.length-1;i++)o=o[ps[i]];o[ps[ps.length-1]]=v}
+function npGetPath(D,k){return k.split('.').reduce((o,p)=>o==null?o:o[p],D)}
+function npTotals(){const D=npD(),k=npCalc(D);const t=byId('np-tot');if(t)t.textContent=money(k.tot);const s=byId('np-sub');if(s)s.innerHTML=`<dt>Subtotal${k.q>1?` (× ${k.q})`:''}</dt><dd>${money(k.sub)}</dd><dt>IVA ${ivaPct(D.iva)} %</dt><dd>${money(k.iva)}</dd>`;const f=byId('np-sum-t');if(f)f.textContent='Total: '+money(k.tot)}
+function npSave(force){
+ const D=npD(),err=m=>{byId('no-err').innerHTML=`<p class="err">${esc(m)}</p>`;const b=document.querySelector('#modal .m-body');b.scrollTop=b.scrollHeight};
+ const k0=npCalc(D);if(D.st&&!D.motivo.trim())return err('Escribí el motivo.');if(!k0.u&&D.st!=='canc')return err('Poné el precio unitario sin IVA.');if(D.svc==='Obrador'&&monthsBetween(D.obrFrom,D.obrTo)<1)return err('El obrador se alquila por un mínimo de 1 mes.');
+ let cu=D.cid?CU(D.cid):null,addrId;
+ if(!cu){const name=D.q.trim();if(!name)return err('Escribí el nombre del cliente o elegilo de la lista.');if(!D.street.trim())return err('Falta la calle / Mz / lote.');
+  const dup=findDup(name,D.phone);if(dup&&!force){byId('no-err').innerHTML=`<div class="warn-box">${ic('alert')}<span>Ya existe <b>${esc(dup.name)}</b> (${esc(dup.phone)}). ¿Es el mismo cliente?</span><button type="button" class="btn sm" data-act="npPick" data-id="${dup.id}">Sí, usar ${esc(dup.name)}</button><button type="button" class="btn sm ghost" data-act="npSave" data-force="1">No, es otro</button></div>`;return}
+  if(D.svc==='Contenedor'&&D.type!=='Alquiler')return err(`${D.type} es para un cliente que ya tiene un contenedor. Elegilo de la lista.`);
+  cu={id:++DB.seq.cust,name,phone:D.phone.trim(),email:'',obs:'',cuit:D.fac.cuit||'',addrs:[],company:/S\.?A\.?|SRL|S\.R\.L|SAS/i.test(name)};DB.customers.push(cu);audNow(`${S.user.name} creó el cliente ${name}`)}
+ else if(D.phone.trim()&&D.phone.trim()!==cu.phone)cu.phone=D.phone.trim();
+ if(!D.cid||D.na){if(!D.street.trim())return err('Falta la calle / Mz / lote de la nueva dirección.');const a=mkAddr(D.loc,D.street.trim(),D.barrio||'Centro',true);if(D.maps.trim()){a.mapsUrl=/^https?:/i.test(D.maps)?D.maps.trim():`https://www.google.com/maps?q=${D.maps.replace(/\s/g,'')}`;const ll=parseMaps(D.maps);if(ll){a.lat=ll[0];a.lng=ll[1];a.approx=false}}cu.addrs.push(a);addrId=a.id}
+ else addrId=D.addrId||cu.addrs[0].id;
+ const k=npCalc(D);let type=D.svc==='Contenedor'?D.type:'Servicio',old=null;
+ if(type!=='Alquiler'&&type!=='Servicio'){old=O(D.repl)||DB.ops.find(o=>o.customerId===cu.id&&isActive(o));if(!old)return err(`Para ${type.toLowerCase()} elegí el contenedor del cliente.`)}
+ const day=D.svc==='Obrador'?D.obrFrom:D.date,slot=D.slotB==='Hora exacta'?`${D.hour} h`:D.slotB;
+ const op=newOp({type,qty:old?old.qty:(D.svc==='Contenedor'&&D.type==='Alquiler'?D.qty:(D.svc==='Obrador'?D.qty:1)),size:old?old.size:(D.svc==='Contenedor'?D.size:null),customerId:cu.id,addrId:old?old.addrId:addrId,reqDay:day,slot,min:slotMin(slot),price:k.tot,unitPrice:k.u,iva:D.iva,
+  payMethod:D.payM,payAcct:D.payM==='Transferencia'?D.acct:null,cashAt:D.payM==='Efectivo'?D.cashAt:null,obs:D.obs.trim(),pendConf:D.st==='pend',pendReason:D.st==='pend'?D.motivo.trim():'',replacesOpId:old?old.id:null,createdBy:S.user.name,createdDay:TODAY});
+ if(type==='Servicio'){op.svc=D.svc;op.sq=D.svc==='Obrador'?monthsBetween(D.obrFrom,D.obrTo):D.sq;if(D.svc==='Viaje de agua'){op.lit=+digits(D.lit)||null;op.hose=+digits(D.hose)||null}if(D.svc==='Obrador'){op.obrFrom=D.obrFrom;op.obrTo=D.obrTo;op.contract=D.contract}}
+ if(D.paySt==='Pagado'&&D.payM!=='Grupo Chamba'){op.paid=+digits(D.paidAmt)||k.tot;op.payDay=D.payDay;op.payMin=nowMin();if(D.payM==='Transferencia'){op.receipt=D.receipt||'';op.verified=false}}
+ if(D.rem.num){const n=+digits(D.rem.num);op.remito=n;if(n>DB.seq.remito)DB.seq.remito=n}op.firmado=D.rem.firm==='Sí';op.remitoImg=D.rem.img;
+ const f=D.fac;if(f.open&&(f.num||f.rs)){const num=+digits(f.num)||0;const i=mkInv({ops:[op],pv:f.pv||'00001',num,tipo:f.tipo,day:TODAY,venc:TODAY,pd:day,ph:day,rs:f.rs||cu.name,cuit:f.cuit||cu.cuit||'',det:invDet(op),neto:k.sub,by:S.user.name});i.total=k.tot;i.ivaRate=D.iva;i.condIva=f.cond;i.domFiscal=f.dom;i.pdf=f.pdf;if(f.ncOpen&&f.nc.num)i.nc={num:f.nc.num,day:f.nc.day,amount:+digits(f.nc.amount)||0,motivo:f.nc.motivo,pdf:f.nc.pdf};if(f.cuit)cu.cuit=f.cuit}
+ if(D.st==='canc'){op.status='Cancelado';op.cancelReason=D.motivo.trim();audNow(`${S.user.name} cargó el pedido ${opn(op.id)} como cancelado: ${op.cancelReason}`,op.id);S.modal=null;render();toast(`Pedido ${opn(op.id)} guardado como cancelado.`);return}
+ if(type==='Extensión'){op.extDays=+D.ext;op.cids=old.cids.slice();op.status='Realizado';op.delDay=TODAY;op.delMin=nowMin();old.plannedPickup=nextWork(Math.max(old.plannedPickup,TODAY)+(+D.ext));
+  audNow(`${S.user.name} extendió ${D.ext} días el alquiler de ${old.cids.join(', ')} (nuevo retiro ${fd(old.plannedPickup)}) · pedido ${opn(op.id)}`,op.id);S.modal=null;render();toast(`Extensión registrada: ${old.cids.join(', ')} se retira el ${fs(old.plannedPickup)}.`);return}
+ audNow(`${S.user.name} agendó el pedido ${opn(op.id)} (${cu.name})${op.pendConf?' · pendiente de confirmación':''}`,op.id);
+ S.modal=null;S.ag.day=day;S.ag.sel=op.id;render();toast(`Pedido ${opn(op.id)} agendado para el ${fs(day)}.`);
+}
+
+/* ============ v6 · Control de flota, Stock de oficina, Compras ============ */
+const VEH=[{plate:'FWU 010',type:'Camión porta volquetes',drv:2},{plate:'EPK 581',type:'Camión porta volquetes',drv:3},{plate:'RXB 892',type:'Camión porta volquetes',drv:1},{plate:'FEO 193',type:'Roll-Off / camión de agua',drv:4},{plate:'CASE',type:'Minicargadora',drv:null,machine:true},{plate:'JCB',type:'Retroexcavadora',drv:null,machine:true}];
+const VPLATES=VEH.map(v=>v.plate);
+const DOC_TYPES=['Seguro','Revisión técnica','Título','Tarjeta verde','Habilitación'];
+const PRESENT={'L':[['Tarro de 20 L',20],['Bidón de 4 L',4],['Litro suelto',1]],'un.':[['Unidad',1],['Caja x 4',4]],'kg':[['Balde de 5 kg',5],['Kilo',1]]};
+const STOCK_CATS=['Aceites','Filtros','Repuestos','Grasas','Refrigerantes','Otros'];
+const COMPRA_CATS=['Cubiertas','Repuestos','Aceites y filtros','Accesorios','Herramientas','Oficina','Otros'];
+const SALIDA_MOT=['Reposición','Cambio programado','Reparación','Otro'];
+const vehOf=p=>VEH.find(v=>v.plate===p);
+const prodOf=id=>DB.products.find(p=>p.id===+id);
+const stockOf=pid=>DB.stockMoves.filter(m=>m.pid===pid).reduce((s,m)=>s+m.qty,0);
+const stockSt=p=>{const q=stockOf(p.id);return q<=0?'Sin stock':q<=p.min?'Bajo stock':'Disponible'};
+const BSTK={'Disponible':'ok','Bajo stock':'warn','Sin stock':'bad'};
+const qtyTxt=(q,u)=>`${num(q,Number.isInteger(q)?0:1)} ${u}`;
+function flRange(){const f=S.fl;return f.per==='dia'?[TODAY,TODAY]:f.per==='semana'?[TODAY-6,TODAY]:f.per==='anio'?[TODAY-364,TODAY]:f.per==='pers'?[Math.min(f.from,f.to),Math.max(f.from,f.to)]:[TODAY-29,TODAY]}
+const fuelOf=(p,a,b)=>DB.fuel.filter(x=>x.plate===p&&inRange(x.day,a,b));
+const kmOf=(p,a,b)=>DB.kms.filter(x=>x.plate===p&&inRange(x.day,a,b));
+function vehOps(p,a,b){const v=vehOf(p),drvIds=DB.drivers.filter(d=>d.plates[0]===p||v.drv===d.id).map(d=>d.id);
+ const done=DB.ops.filter(o=>o.status==='Realizado'&&o.delDay!=null&&inRange(o.delDay,a,b)&&(opPlate(o)===p||(v.machine&&o.type==='Servicio'&&o.svc===(v.plate==='CASE'?'Minicargadora':'Retroexcavadora'))));
+ const pick=DB.ops.filter(o=>o.pickDay!=null&&!o.closedByRecambio&&inRange(o.pickDay,a,b)&&drvIds.includes(o.pickDriverId)&&!v.machine);
+ return{ent:done.filter(o=>o.type==='Alquiler'),rec:done.filter(o=>o.type==='Recambio'),otros:done.filter(o=>o.type!=='Alquiler'&&o.type!=='Recambio'),ret:pick,all:done}}
+function intervals(p){const l=DB.fuel.filter(x=>x.plate===p).sort((x,y)=>x.day-y.day||x.min-y.min),out=[];
+ for(let i=1;i<l.length;i++){const a=l[i-1],b=l[i],km=DB.kms.filter(k=>k.plate===p&&k.day>=a.day&&k.day<b.day).reduce((s,k)=>s+k.km,0),miss=[];for(let d=a.day;d<b.day;d++)if(dow(d)!==0&&!DB.kms.some(k=>k.plate===p&&k.day===d))miss.push(d);
+  out.push({a,b,lit:b.liters,km,miss,lkm:km?b.liters/km:null})}return out.reverse()}
+function vehMoves(p,a,b){
+ const r=[];
+ DB.stockMoves.filter(m=>m.plate===p&&inRange(m.day,a,b)).forEach(m=>{const pr=prodOf(m.pid);r.push({day:m.day,o:'Stock',t:`${m.type==='Salida'?'Retiro':m.type} de ${qtyTxt(Math.abs(m.qty),pr.unit)} de ${pr.name}${m.driverId?' · '+dname(m.driverId):''}`,st:m.type==='Salida'?(m.installed?'Instalado':'Entregado al chofer'):'Devuelto',v:Math.abs(m.qty)*(pr.cost||0)})});
+ DB.exp.filter(x=>x.plate===p&&inRange(x.day,a,b)).forEach(x=>r.push({day:x.day,o:'Gastos',t:`${x.desc} (${x.sub})`,st:'Realizado',v:x.amount}));
+ DB.compras.filter(x=>x.plate===p&&inRange(x.day,a,b)).forEach(x=>r.push({day:x.day,o:'Compras',t:`${x.detalle} · ${x.prov}`,st:x.installed?'Instalado':'Pendiente de instalar',v:x.amount}));
+ DB.fuel.filter(x=>x.plate===p&&inRange(x.day,a,b)).forEach(x=>r.push({day:x.day,o:'Combustible',t:`Carga de ${num(x.liters,1)} L${x.driverId?' · '+dname(x.driverId):''}`,st:'Cargado',v:x.amount}));
+ return r.sort((x,y)=>y.day-x.day)}
+const ORIG_C={Stock:'info',Gastos:'rep',Compras:'acc',Combustible:'ok',Mantenimiento:'warn'};
+function docState(d){if(d.venc==null)return['ok','Vigente'];const x=d.venc-TODAY;return x<0?['bad','Vencido']:x<=30?['warn','Por vencer']:['ok','Vigente']}
+function vFlota(){
+ const f=S.fl,p=f.plate,v=vehOf(p),[a,b]=flRange(),fu=fuelOf(p,a,b),km=kmOf(p,a,b),act=vehOps(p,a,b);
+ const workDays=(()=>{let n=0;for(let d=a;d<=b;d++)if(dow(d)!==0)n++;return n})();
+ const mant=vehMoves(p,a,b).filter(m=>m.o!=='Combustible').reduce((s,m)=>s+m.v,0),ints=intervals(p),last=ints[0],docs=DB.vdocs.filter(d=>d.plate===p);
+ const kmPend=(()=>{let n=0;for(let d=TODAY-1;d>=TODAY-10;d--){if(dow(d)===0)continue;if(DB.kms.some(k=>k.plate===p&&k.day===d))break;n++}return n})();
+ const locs={};[...act.ent,...act.rec].forEach(o=>{const l=addr(o).loc;locs[l]=(locs[l]||0)+o.qty});const top=Object.entries(locs).sort((x,y)=>y[1]-x[1]).slice(0,5);
+ const tabs=[['res','Resumen'],['cons','Consumo entre cargas'],['hist','Historial y mantenimiento'],['neu','Neumáticos'],['doc','Documentación']];
+ const head=pageHead('Control de flota','Historial y actividad de cada vehículo',`<button class="btn" data-act="kmDlg">${ic('up')}Cargar km Warrior</button><button class="btn" data-act="flExp" data-fmt="xlsx">${ic('chart')}Excel</button><button class="btn" data-act="flExp" data-fmt="pdf">${ic('doc')}PDF</button>`)
+  +`<div class="vtabs">${VEH.map(x=>`<button class="${x.plate===p?'on':''}" data-act="set" data-k="fl.plate" data-v="${x.plate}">${ic(x.machine?'grid':'truck')}<span><b>${x.plate}</b><small>${x.type}</small></span></button>`).join('')}</div>
+  <div class="vhead"><div><h2>${p} <span class="b ok">Disponible</span></h2><p class="muted">${v.type}${v.drv?` · Chofer actual: <b>${esc(dname(v.drv))}</b>`:''}</p></div></div>
+  <div class="filters">${chips('fl.tab',tabs,f.tab)}</div>
+  <div class="filters"><span class="muted">Actividad del período</span>${chips('fl.per',[['dia','Hoy'],['semana','7 días'],['mes','30 días'],['anio','Año'],['pers','Personalizado']],f.per)}${f.per==='pers'?`<label class="chip" style="gap:6px">Desde<input type="date" data-f="flfrom" value="${dOut(f.from)}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0"></label><label class="chip" style="gap:6px">Hasta<input type="date" data-f="flto" value="${dOut(f.to)}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0"></label>`:''}<span class="muted">${fd(a)} al ${fd(b)}</span></div>`;
+ if(f.tab==='cons'){const l=ints.filter(x=>inRange(x.b.day,a,b)),selI=f.int!=null?ints.find(x=>x.b.day*1440+x.b.min===f.int):null;
+  return head+`${v.machine?'<div class="info-box">'+ic('alert')+'<span>Las máquinas no tienen kilómetros de Warrior: el consumo se mide por horas de trabajo (a confirmar).</span></div>':''}
+  <div class="tbl-wrap block"><table class="dense"><thead><tr><th>Inicio</th><th>Fin</th><th class="r">Litros repuestos</th><th class="r">Km Warrior</th><th class="r">Consumo</th><th class="r">Entregas</th><th class="r">Retiros</th><th class="r">Recambios</th><th class="r">Otros</th><th></th></tr></thead><tbody>
+  ${l.map(x=>{const ac=vehOps(p,x.a.day,x.b.day);return `<tr class="${selI===x?'sel':''}" data-act="set" data-k="fl.int" data-v="${x.b.day*1440+x.b.min}" tabindex="0"><td class="tnum">${fs(x.a.day)} ${fmin(x.a.min)}</td><td class="tnum">${fs(x.b.day)} ${fmin(x.b.min)}</td><td class="r tnum">${num(x.lit,1)} L</td><td class="r tnum">${x.km?num(x.km)+' km':'—'}${x.miss.length?`<span class="sub late">${x.miss.length} día${x.miss.length>1?'s':''} sin cargar</span>`:''}</td><td class="r tnum"><b>${x.lkm?num(x.lkm,2)+' L/km':'—'}</b></td><td class="r tnum">${ac.ent.length}</td><td class="r tnum">${ac.ret.length}</td><td class="r tnum">${ac.rec.length}</td><td class="r tnum">${ac.otros.length}</td><td>›</td></tr>`}).join('')||'<tr><td colspan="10" class="empty">Sin cargas en el período.</td></tr>'}
+  </tbody></table></div>${selI?flInterval(p,selI):'<p class="note">Tocá un intervalo para ver el detalle y el gráfico por localidad.</p>'}
+  <p class="note">Consumo = litros repuestos en la carga ÷ km recorridos desde la carga anterior (Warrior). Las cargas salen de Combustible; los km se cargan a mano.</p>`}
+ if(f.tab==='hist'||f.tab==='neu'){const ms=vehMoves(p,a,b).filter(m=>f.tab==='hist'||/cubierta|neum|goma|parche/i.test(m.t));
+  return head+`<div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Origen</th><th>Detalle</th><th>Estado</th><th class="r">Importe</th></tr></thead><tbody>${ms.map(m=>`<tr><td class="tnum">${fs(m.day)}</td><td>${badge(m.o,ORIG_C)}</td><td>${esc(m.t)}</td><td>${esc(m.st)}</td><td class="r tnum">${m.v?money(m.v):'—'}</td></tr>`).join('')||`<tr><td colspan="5" class="empty">${f.tab==='neu'?'Sin movimientos de neumáticos en el período.':'Sin movimientos.'}</td></tr>`}</tbody></table></div>
+  <p class="note">Combustible, compras, gastos y stock se vinculan solos por patente.</p>`}
+ if(f.tab==='doc')return head+`<div class="filters"><button class="btn pri" data-act="vdocDlg">${ic('plus')}Cargar documento</button></div><div class="tbl-wrap"><table class="dense"><thead><tr><th>Documento</th><th>Vencimiento</th><th>Estado</th><th>Archivo</th><th>Cargó</th></tr></thead><tbody>${docs.map(d=>{const[k,t]=docState(d);return `<tr><td><b>${esc(d.doc)}</b>${d.obs?`<span class="sub">${esc(d.obs)}</span>`:''}</td><td class="tnum">${d.venc!=null?fd(d.venc):'—'}</td><td>${badge(t,{[t]:k})}</td><td>${d.file?`<span class="muted">${ic('doc')}${esc(d.file)}</span>`:'—'}</td><td>${esc(d.user)}</td></tr>`}).join('')||'<tr><td colspan="5" class="empty">Sin documentos cargados.</td></tr>'}</tbody></table></div><p class="note">Seguros, título, tarjeta verde y revisión técnica: a mano, sirven para denunciar un siniestro al seguro.</p>`;
+ const revisar=[...docs.filter(d=>docState(d)[0]!=='ok').map(d=>`<div class="rv">${ic('doc')}<span><b>${esc(d.doc)}</b><small>${docState(d)[1]} · ${fd(d.venc)}</small></span><button class="btn sm ghost" data-act="set" data-k="fl.tab" data-v="doc">Ver</button></div>`),...(kmPend&&!v.machine?[`<div class="rv">${ic('clock')}<span><b>Kilómetros pendientes</b><small>${pl(kmPend,'día','días')} sin cargar</small></span><button class="btn sm ghost" data-act="kmDlg">Completar</button></div>`]:[])];
+ return head+`<div class="cards4"><div class="fig"><span>Km registrados · Warrior</span><b>${v.machine?'—':num(km.reduce((s,k)=>s+k.km,0))+' km'}</b><small>${v.machine?'Máquina: sin Warrior':`${km.length} de ${workDays} días cargados`}</small></div><div class="fig"><span>${ic('fuel')}Combustible cargado</span><b>${num(fu.reduce((s,x)=>s+x.liters,0))} L</b><small>${fu.length} cargas</small></div><div class="fig"><span>Gasto en combustible</span><b>${compact(fu.reduce((s,x)=>s+x.amount,0))}</b></div><div class="fig"><span>Mantenimiento y repuestos</span><b>${compact(mant)}</b><small>stock, compras y gastos</small></div></div>
+ <div class="grid2"><section class="panel"><h3>Último intervalo entre cargas</h3>${last?`<p class="muted">${fs(last.a.day)} ${fmin(last.a.min)} → ${fs(last.b.day)} ${fmin(last.b.min)}</p><div class="cards3"><div><b>${num(last.lit,1)} L</b><small>repuestos</small></div><div><b>${last.km?num(last.km)+' km':'—'}</b><small>Warrior</small></div><div><b>${last.lkm?num(last.lkm,2)+' L/km':'—'}</b><small>${last.lkm?num(last.lkm*100,0)+' L/100 km':'faltan km'}</small></div></div>${last.miss.length?`<p class="note late">${pl(last.miss.length,'día','días')} sin km cargados en el intervalo.</p>`:''}<button class="btn sm" data-act="set" data-k="fl.tab" data-v="cons">Ver análisis →</button>`:'<p class="muted">Todavía no hay dos cargas para comparar.</p>'}</section>
+  <section class="panel"><h3>Para revisar</h3>${revisar.join('')||'<p class="muted">Nada pendiente.</p>'}</section></div>
+ <div class="grid2"><section class="panel"><h3>Actividad por localidad <small>top 5 por contenedores entregados</small></h3>${hbars(top.map(([l,n])=>({l:esc(l),v:n})))||'<p class="muted">Sin servicios en el período.</p>'}<p class="note">${act.all.length+act.ret.length} servicios · Entregas ${act.ent.length} · Retiros ${act.ret.length} · Recambios ${act.rec.length} · Otros ${act.otros.length}</p></section>
+  <section class="panel"><h3>Documentación</h3>${docs.map(d=>{const[k,t]=docState(d);return `<div class="rv"><span><b>${esc(d.doc)}</b><small>${d.venc!=null?'vence '+fd(d.venc):'sin vencimiento'}</small></span>${badge(t,{[t]:k})}</div>`}).join('')||'<p class="muted">Sin documentos.</p>'}<button class="btn sm ghost" data-act="set" data-k="fl.tab" data-v="doc">Ver todos los documentos →</button></section></div>
+ <section class="panel block"><h3>Últimos movimientos del vehículo</h3><div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Origen</th><th>Detalle</th><th>Estado</th></tr></thead><tbody>${vehMoves(p,a,b).slice(0,8).map(m=>`<tr><td class="tnum">${fs(m.day)}</td><td>${badge(m.o,ORIG_C)}</td><td>${esc(m.t)}</td><td>${esc(m.st)}</td></tr>`).join('')||'<tr><td colspan="4" class="empty">Sin movimientos.</td></tr>'}</tbody></table></div><button class="btn sm ghost" data-act="set" data-k="fl.tab" data-v="hist">Ver historial completo →</button></section>`;
+}
+function flInterval(p,x){const ac=vehOps(p,x.a.day,x.b.day),locs={};[...ac.ent,...ac.rec].forEach(o=>{const l=addr(o).loc;locs[l]=(locs[l]||0)+o.qty});
+ return `<section class="panel block"><h3>Intervalo ${fs(x.a.day)} ${fmin(x.a.min)} → ${fs(x.b.day)} ${fmin(x.b.min)}</h3><div class="cards4" style="margin:0 0 12px"><div class="fig"><span>Litros consumidos</span><b>${num(x.lit,1)} L</b></div><div class="fig"><span>Km de Warrior</span><b>${num(x.km)} km</b></div><div class="fig"><span>Consumo</span><b>${x.lkm?num(x.lkm,2)+' L/km':'—'}</b></div><div class="fig"><span>Servicios</span><b>${ac.all.length+ac.ret.length}</b><small>${ac.ent.length} entregas · ${ac.ret.length} retiros · ${ac.rec.length} recambios · ${ac.otros.length} otros</small></div></div>
+ ${hbars(Object.entries(locs).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([l,n])=>({l:esc(l),v:n})))||'<p class="muted">Sin servicios en el intervalo.</p>'}</section>`}
+
+/* ---------- Stock de oficina ---------- */
+function vStock(){
+ const s=S.sk,q=norm(s.q),list=DB.products.filter(p=>(!s.cat||p.cat===s.cat)&&(!s.st||stockSt(p)===s.st)&&(!q||norm(p.name+' '+p.brand+' '+p.spec).includes(q)));
+ const low=DB.products.filter(p=>stockSt(p)!=='Disponible').length;
+ const head=pageHead('Stock de oficina','Insumos y repuestos para camiones y máquinas',`<button class="btn" data-act="skIn">${ic('plus')}Registrar ingreso</button><button class="btn pri" data-act="skOut">${ic('truck')}Registrar salida</button>`)+`<div class="filters">${chips('sk.tab',[['stock','Stock actual'],['mov','Movimientos']],s.tab)}</div>`;
+ if(s.tab==='mov'){const[a,b]=[s.from,s.to],ms=DB.stockMoves.filter(m=>inRange(m.day,Math.min(a,b),Math.max(a,b))&&(!s.pid||m.pid===+s.pid)&&(!s.drv||m.driverId===+s.drv)&&(!s.plate||m.plate===s.plate)).sort((x,y)=>y.day-x.day||y.id-x.id);
+  return head+`<div class="filters"><label class="chip" style="gap:6px">Desde<input type="date" data-f="skfrom" value="${dOut(s.from)}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0"></label><label class="chip" style="gap:6px">Hasta<input type="date" data-f="skto" value="${dOut(s.to)}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0"></label>
+   <select class="sel" data-f="sk.pid"><option value="">Todos los productos</option>${DB.products.map(p=>`<option value="${p.id}" ${+s.pid===p.id?'selected':''}>${esc(p.name)}</option>`).join('')}</select><select class="sel" data-f="sk.drv"><option value="">Todos los choferes</option>${DB.drivers.map(d=>`<option value="${d.id}" ${+s.drv===d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select><select class="sel" data-f="sk.plate"><option value="">Todos los vehículos</option>${VPLATES.map(x=>`<option ${s.plate===x?'selected':''}>${x}</option>`).join('')}</select>
+   <span class="spacer"></span><button class="btn sm" data-act="skAdj">Ajuste por conteo</button><button class="btn sm" data-act="skExp" data-fmt="xlsx">${ic('chart')}Excel</button><button class="btn sm" data-act="skExp" data-fmt="pdf">${ic('doc')}PDF</button></div>
+  <div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Tipo</th><th>Producto</th><th class="r">Cantidad</th><th>Retiró / destino</th><th>Detalle</th><th>Cargó</th><th></th></tr></thead><tbody>
+  ${ms.map(m=>{const p=prodOf(m.pid);return `<tr><td class="tnum">${fs(m.day)}${m.min!=null?' '+fmin(m.min):''}</td><td>${badge(m.type,{Ingreso:'ok',Salida:'acc',Devolución:'info',Ajuste:'warn','Stock inicial':'off'})}</td><td><b>${esc(p.name)}</b><span class="sub">${esc(p.brand)} · ${esc(p.spec)}</span></td><td class="r tnum ${m.qty<0?'late':''}">${m.qty>0?'+':''}${qtyTxt(m.qty,p.unit)}</td><td>${m.type==='Salida'||m.type==='Devolución'?`${esc(dname(m.driverId))} · ${esc(m.plate||'—')}`:esc(m.prov||'')}</td><td>${esc(m.motivo||m.obs||'')}${m.type==='Salida'?`<span class="sub">${m.installed?'Instalado':'Entregado, sin confirmar instalación'}</span>`:''}${m.compraId?`<span class="sub">Compra vinculada #${m.compraId}</span>`:''}</td><td>${esc(m.user)}</td>
+   <td style="white-space:nowrap">${m.type==='Salida'&&!m.installed?`<button class="btn sm" data-act="skInst" data-id="${m.id}">Marcar instalado</button>`:''}${m.type==='Salida'&&!m.returned?` <button class="btn sm ghost" data-act="skRet" data-id="${m.id}">Devolución</button>`:''}</td></tr>`}).join('')||'<tr><td colspan="8" class="empty">Sin movimientos con esos filtros.</td></tr>'}
+  </tbody></table></div>`}
+ return head+`<div class="filters"><input class="inp grow" data-f="sk.q" value="${esc(s.q)}" placeholder="Buscar producto, marca o código" aria-label="Buscar producto"><select class="sel" data-f="sk.cat"><option value="">Categoría: todas</option>${STOCK_CATS.map(c=>`<option ${s.cat===c?'selected':''}>${c}</option>`).join('')}</select><select class="sel" data-f="sk.st"><option value="">Estado: todos</option>${Object.keys(BSTK).map(c=>`<option ${s.st===c?'selected':''}>${c}</option>`).join('')}</select>${low?`<button class="chip ${s.st==='Bajo stock'?'on':''}" data-act="set" data-k="sk.st" data-v="${s.st==='Bajo stock'?'':'Bajo stock'}"><i class="dot warn"></i>Bajo stock <span>${low}</span></button>`:''}</div>
+ <div class="tbl-wrap"><table class="dense"><thead><tr><th>Producto / identificación</th><th>Categoría</th><th class="r">Disponible</th><th class="r">Mínimo</th><th>Ubicación</th><th>Estado</th></tr></thead><tbody>
+ ${list.map(p=>{const st=stockSt(p);return `<tr data-act="skOut" data-pid="${p.id}" tabindex="0"><td><b>${esc(p.name)}</b><span class="sub">${esc(p.brand)} · ${esc(p.spec)}</span></td><td>${esc(p.cat)}</td><td class="r tnum"><b>${qtyTxt(stockOf(p.id),p.unit)}</b></td><td class="r tnum">${qtyTxt(p.min,p.unit)}</td><td>${esc(p.loc)}</td><td>${badge(st,BSTK)}</td></tr>`}).join('')||'<tr><td colspan="6" class="empty">Sin productos.</td></tr>'}
+ </tbody></table></div><button class="btn sm ghost" style="margin-top:10px" data-act="skIn" data-new="1">${ic('plus')}Agregar producto</button>
+ <h2 class="sec">Últimos movimientos</h2><div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Producto</th><th class="r">Cantidad</th><th>Retiró / destino</th></tr></thead><tbody>${DB.stockMoves.slice().sort((x,y)=>y.day-x.day||y.id-x.id).slice(0,6).map(m=>{const p=prodOf(m.pid);return `<tr><td class="tnum">${fs(m.day)}</td><td>${esc(p.name)}</td><td class="r tnum ${m.qty<0?'late':''}">${m.qty>0?'+':''}${qtyTxt(m.qty,p.unit)}</td><td>${m.type==='Ingreso'?'Compra recibida':m.plate?esc(dname(m.driverId))+' · '+m.plate:esc(m.type)}</td></tr>`}).join('')}</tbody></table></div>
+ <p class="note">Las salidas descuentan el stock y aparecen en el Control de flota del vehículo. Se distingue lo retirado de la oficina de lo efectivamente instalado.</p>`;
+}
+
+/* ---------- Compras ---------- */
+function vCompras(){
+ const c=S.cp2,q=norm(c.q),[a,b]=c.when==='mes'?[monthStart(TODAY),TODAY]:c.when==='ant'?[monthStart(monthStart(TODAY)-1),monthStart(TODAY)-1]:[-1e9,1e9];
+ const list=DB.compras.filter(x=>inRange(x.day,a,b)&&(!c.plate||(c.plate==='sin'?!x.plate:x.plate===c.plate))&&(!q||norm(x.detalle+' '+x.prov).includes(q))).sort((x,y)=>y.day-x.day||y.id-x.id);
+ const sin=DB.compras.filter(x=>!x.plate&&x.forVeh).length;
+ return pageHead('Compras','Gomas, repuestos, accesorios y todo lo que se compra',`<button class="btn pri big" data-act="cpDlg">${ic('plus')}Nueva compra</button>`)+`
+ <div class="cards4"><div class="fig"><span>Total del período</span><b>${compact(list.reduce((s,x)=>s+x.amount,0))}</b><small>${list.length} compras</small></div><div class="fig"><span><i class="dot warn"></i>Sin vehículo asignado</span><b>${sin}</b><small>se asignan cuando se usan</small></div><div class="fig"><span>Ingresadas a stock</span><b>${DB.compras.filter(x=>x.stocked).length}</b></div><div class="fig"><span>Pagadas con cheque</span><b>${DB.compras.filter(x=>x.medio==='Cheque').length}</b></div></div>
+ <div class="filters">${chips('cp2.when',[['mes','Este mes'],['ant','Mes pasado'],['todas','Todas']],c.when)}<select class="sel" data-f="cp2.plate"><option value="">Todos los vehículos</option><option value="sin" ${c.plate==='sin'?'selected':''}>Sin asignar</option>${VPLATES.map(x=>`<option ${c.plate===x?'selected':''}>${x}</option>`).join('')}</select><input class="inp grow" data-f="cp2.q" value="${esc(c.q)}" placeholder="Buscar detalle o proveedor"></div>
+ <div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Detalle</th><th>Proveedor</th><th>Categoría</th><th>Medio de pago</th><th class="r">Monto</th><th>Vehículo</th><th>Comprobante</th></tr></thead><tbody>
+ ${list.map(x=>`<tr><td class="tnum">${fs(x.day)}</td><td><b>${esc(x.detalle)}</b>${x.stocked?'<span class="sub">Ingresada a stock</span>':''}</td><td>${esc(x.prov)}</td><td>${esc(x.cat)}</td><td>${esc(x.medio)}</td><td class="r tnum">${money(x.amount)}</td>
+  <td>${x.forVeh||x.plate?`<select class="sel sm" data-chg="cpPlate" data-id="${x.id}" aria-label="Vehículo"><option value="">Sin asignar</option>${VPLATES.map(p=>`<option ${x.plate===p?'selected':''}>${p}</option>`).join('')}</select>`:'<span class="muted">—</span>'}</td><td>${x.file?`<span class="muted">${esc(x.file)}</span>`:'—'}</td></tr>`).join('')||'<tr><td colspan="8" class="empty">Sin compras.</td></tr>'}
+ </tbody></table></div><p class="note">Si cuando comprás todavía no sabés a qué camión va, queda “Sin asignar” y lo elegís después: ahí aparece en el Control de flota.</p>`;
+}
+
+/* ============ v6 · Control de remitos, Cheques, Grupo Chamba ============ */
+function talOf(n){return n?DB.talonarios.find(t=>n>=t.from&&n<=t.to):null}
+function remNum(t,n){const op=DB.ops.find(o=>o.remito===n&&o.status!=='Cancelado'),an=DB.remAnul[n];
+ if(op)return{st:'Cargado',op};if(an)return{st:'Anulado',an};
+ const later=DB.ops.some(o=>o.remito>n&&o.remito<=t.to&&o.status!=='Cancelado')||Object.keys(DB.remAnul).some(k=>+k>n&&+k<=t.to);
+ return{st:later?'Salto a revisar':'Disponible'}}
+function talInfo(t){const nums=[];for(let n=t.from;n<=t.to;n++)nums.push({n,...remNum(t,n)});const c={};nums.forEach(x=>c[x.st]=(c[x.st]||0)+1);
+ const ctrl=(c['Cargado']||0)+(c['Anulado']||0),st=!t.drv?'Sin asignar':!t.deliv?'En oficina':ctrl>=50?'Completado':ctrl?'En uso':'Entregado';return{nums,c,ctrl,st}}
+const BTAL={'En uso':'info','En oficina':'off','Completado':'ok','Entregado':'acc','Sin asignar':'off'};
+const BREM={'Cargado':'ok','Salto a revisar':'warn','Anulado':'bad','Disponible':'off'};
+function vRemitos(){
+ const r=S.rm,q=digits(r.q),all=DB.talonarios.map(t=>({t,...talInfo(t)}));
+ const head=pageHead('Control de remitos','Talonarios, numeración y servicios realizados',`<button class="btn" data-act="rmExp" data-fmt="xlsx">${ic('up')}Exportar</button><button class="btn pri big" data-act="talDlg">${ic('plus')}Cargar talonarios</button>`)+`<div class="filters">${chips('rm.tab',[['tal','Talonarios'],['dia','Control diario']],r.tab)}</div>`;
+ if(r.tab==='dia'){const d=r.day,dr=+r.drv||DB.drivers[0].id,ops=DB.ops.filter(o=>o.driverId===dr&&o.delDay===d&&o.status==='Realizado'&&o.type!=='Extensión'),con=ops.filter(o=>o.remito);
+  return head+`<div class="filters"><select class="sel" data-f="rm.drv">${DB.drivers.map(x=>`<option value="${x.id}" ${dr===x.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select><label class="chip" style="gap:8px">${ic('cal')}<input type="date" data-f="rmday" value="${dOut(d)}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0"></label></div>
+  <div class="cards4"><div class="fig"><span>Servicios realizados</span><b>${ops.length}</b></div><div class="fig"><span><i class="dot ok"></i>Con remito</span><b>${con.length}</b></div><div class="fig"><span><i class="dot bad"></i>Sin remito</span><b class="${ops.length-con.length?'late':''}">${ops.length-con.length}</b></div><div class="fig"><span>Talonario en uso</span><b>${(()=>{const t=DB.talonarios.find(t=>t.drv===dr&&t.deliv&&talInfo(t).st==='En uso');return t?'N.º '+t.n:'—'})()}</b></div></div>
+  <div class="tbl-wrap"><table class="dense"><thead><tr><th>Hora</th><th>Pedido</th><th>Cliente / dirección</th><th>Servicio</th><th>Remito</th><th></th></tr></thead><tbody>${ops.sort((a,b)=>a.delMin-b.delMin).map(o=>`<tr><td class="tnum">${fmin(o.delMin)}</td><td class="code">${opn(o.id)}</td><td><b>${esc(cust(o).name)}</b><span class="sub">${esc(aline(addr(o)))}</span></td><td>${esc(rubro(o)==='Contenedor'?o.type:o.svc)}</td><td>${o.remito?`<b class="tnum">${o.remito}</b> ${o.firmado?badge('Firmado',{Firmado:'ok'}):badge('Sin firmar',{'Sin firmar':'warn'})}`:badge('Sin remito',{'Sin remito':'bad'})}</td><td>${o.remito?'':`<button class="btn sm pri" data-act="openOp" data-id="${o.id}">Cargar remito</button>`}</td></tr>`).join('')||'<tr><td colspan="6" class="empty">Ese chofer no tiene servicios realizados ese día.</td></tr>'}</tbody></table></div>
+  <p class="note">Se compara con lo que Logística marcó como realizado. Al final del día los choferes presentan los remitos.</p>`}
+ if(r.open){const t=DB.talonarios.find(x=>x.id===r.open);if(t){const I=talInfo(t),f=r.nf,nums=I.nums.filter(x=>!f||x.st===f);
+  return head+`<button class="btn ghost sm" data-act="set" data-k="rm.open" data-v="">← Todos los talonarios</button>
+  <div class="vhead"><div><h2>Talonario ${t.n} ${badge(I.st,BTAL)}</h2><p class="muted">Numeración ${t.from}–${t.to} · 50 remitos · ${t.drv?`${t.deliv?'Entregado a':'Reservado para'} <b>${esc(dname(t.drv))}</b>${t.deliv?' el '+fd(t.deliv):''}`:'Sin asignar'}${t.obs?' · '+esc(t.obs):''}</p></div><div class="ph-r">${t.drv&&!t.deliv?`<button class="btn" data-act="talDeliv" data-id="${t.id}">${ic('check')}Registrar entrega al chofer</button>`:''}<button class="btn" data-act="talAssign" data-id="${t.id}">Ver / cambiar asignación</button></div></div>
+  <div class="cards4"><div class="fig"><span><i class="dot ok"></i>Cargados</span><b>${I.c['Cargado']||0}</b></div><div class="fig"><span><i class="dot warn"></i>Salto a revisar</span><b class="${I.c['Salto a revisar']?'late':''}">${I.c['Salto a revisar']||0}</b></div><div class="fig"><span><i class="dot bad"></i>Anulados</span><b>${I.c['Anulado']||0}</b></div><div class="fig"><span>Disponibles</span><b>${I.c['Disponible']||0}</b></div></div>
+  <div class="filters">${chips('rm.nf',[['','Todos'],['Salto a revisar',`A revisar (${I.c['Salto a revisar']||0})`],['Cargado','Cargados'],['Anulado','Anulados'],['Disponible','Disponibles']],f)}</div>
+  <div class="tbl-wrap"><table class="dense"><thead><tr><th>N.º remito</th><th>Fecha del servicio</th><th>Cliente / dirección</th><th>Servicio</th><th>Estado</th><th>Archivo</th><th></th></tr></thead><tbody>
+  ${nums.map(x=>`<tr class="${x.st==='Salto a revisar'?'warnrow':''}"><td class="tnum"><b>${x.n}</b></td><td class="tnum">${x.op?fd(x.op.delDay??x.op.reqDay):x.an?fd(x.an.day):'—'}</td><td>${x.op?`<a href="#" data-act="openOp" data-id="${x.op.id}"><b>${esc(cust(x.op).name)}</b></a><span class="sub">${esc(aline(addr(x.op)))}</span>`:x.an?`Anulado: ${esc(x.an.motivo)}`:x.st==='Salto a revisar'?'Sin remito cargado':'Número aún sin utilizar'}</td><td>${x.op?esc(rubro(x.op)==='Contenedor'?x.op.type:x.op.svc):'—'}</td><td>${badge(x.st,BREM)}</td><td>${x.op?(x.op.firmado?'<span class="muted">'+ic('doc')+'Ver remito</span>':'<span class="muted">Sin firmar</span>'):x.an?`<span class="muted">${ic('doc')}${esc(x.an.file||'Ver respaldo')}</span>`:x.st==='Salto a revisar'?'<span class="late">Revisar</span>':'—'}</td>
+   <td>${!x.op&&!x.an?`<button class="btn sm ghost" data-act="remAnulDlg" data-n="${x.n}">Anular</button>`:''}</td></tr>`).join('')}
+  </tbody></table></div>${I.c['Salto a revisar']?`<div class="warn-box" style="margin-top:12px">${ic('alert')}<span>Hay números salteados con números posteriores ya cargados: puede ser una entrega pendiente de documentación o un remito anulado sin registrar.</span></div>`:''}
+  <p class="note">Los números todavía no usados no cuentan como faltantes. Un número anulado no se borra ni se libera.</p>`}}
+ const fl=all.filter(x=>(!r.drv||(r.drv==='sin'?!x.t.drv:x.t.drv===+r.drv))&&(!r.st||x.st===r.st)&&(!r.al||(r.al==='salto'?x.c['Salto a revisar']:!x.c['Salto a revisar']))&&(!q||String(x.t.n)===q||(+q>=x.t.from&&+q<=x.t.to)));
+ const per=DB.drivers.map(d=>({d,n:DB.talonarios.filter(t=>t.drv===d.id).length})).filter(x=>x.n);
+ return head+`<div class="filters"><span class="muted">Filtrar por chofer</span>${chips('rm.drv',[['','Todos'],...DB.drivers.map(d=>[String(d.id),d.name]),['sin','Sin asignar']],r.drv)}</div>
+ <div class="cards4"><div class="fig"><span>Talonarios</span><b>${DB.talonarios.length}</b><small>${DB.talonarios.length*50} remitos</small></div>${per.slice(0,3).map(x=>`<div class="fig"><span>Reservados para ${esc(x.d.name)}</span><b>${x.n}</b></div>`).join('')}</div>
+ <div class="filters"><input class="inp grow" data-f="rm.q" value="${esc(r.q)}" placeholder="Buscar talonario o número de remito" inputmode="numeric"><select class="sel" data-f="rm.st"><option value="">Estado: todos</option>${Object.keys(BTAL).map(x=>`<option ${r.st===x?'selected':''}>${x}</option>`).join('')}</select><select class="sel" data-f="rm.al"><option value="">Alertas: todas</option><option value="salto" ${r.al==='salto'?'selected':''}>Con saltos a revisar</option><option value="ok" ${r.al==='ok'?'selected':''}>Sin pendientes</option></select></div>
+ <div class="tbl-wrap"><table class="dense"><thead><tr><th>Talonario</th><th>Numeración</th><th>Chofer / reserva</th><th>Estado</th><th>Controlados</th><th>Alertas</th><th></th></tr></thead><tbody>
+ ${fl.map(x=>`<tr data-act="set" data-k="rm.open" data-v="${x.t.id}" tabindex="0"><td><b>Talonario ${x.t.n}</b></td><td class="tnum">${x.t.from} – ${x.t.to}</td><td>${x.t.drv?`<b>${esc(dname(x.t.drv))}</b><span class="sub">${x.t.deliv?'Entregado: '+fd(x.t.deliv):'Reservado, en oficina'}</span>`:'<span class="muted">Sin asignar</span>'}</td><td>${badge(x.st,BTAL)}</td><td><div class="ctl"><span class="tnum">${x.ctrl} / 50</span><span class="cj-tr"><i style="width:${x.ctrl*2}%"></i></span></div></td><td>${x.c['Salto a revisar']?`<span class="late">${ic('alert')}${pl(x.c['Salto a revisar'],'salto','saltos')} a revisar</span>`:x.ctrl?'<span class="muted">Sin pendientes</span>':'—'}</td><td>›</td></tr>`).join('')||'<tr><td colspan="7" class="empty">Sin talonarios con esos filtros.</td></tr>'}
+ </tbody></table></div><p class="note">Reservar no es entregar: la fecha de entrega se registra cuando el chofer se lleva el talonario. Controlados = cargados + anulados con respaldo.</p>`;
+}
+
+/* ---------- Cheques ---------- */
+const BCHQ={'Pendiente':'warn','Cobrado':'ok','Anulado':'off','Rechazado':'bad'};
+const chqLabel=c=>c.tipo==='eCheq'?c.num:String(c.num);
+function chqNext(ch){const used=new Set(DB.cheques.filter(c=>c.chequeraId===ch.id).map(c=>c.num));for(let n=ch.from;n<=ch.to;n++)if(!used.has(n))return n;return null}
+function vCheques(){
+ const c=S.cq,q=norm(c.q),pend=DB.cheques.filter(x=>x.estado==='Pendiente'&&(!c.cuenta||x.cuenta===c.cuenta));
+ const sum=l=>l.reduce((s,x)=>s+x.monto,0),p7=pend.filter(x=>x.cobro>=TODAY&&x.cobro<=TODAY+7),p30=pend.filter(x=>x.cobro>=TODAY&&x.cobro<=TODAY+30);
+ const head=pageHead('Cheques','Chequeras, eCheqs y próximos cobros',`<button class="btn" data-act="cqExp" data-fmt="xlsx">${ic('up')}Exportar</button><button class="btn" data-act="cqBookDlg">${ic('plus')}Nueva chequera</button><button class="btn pri big" data-act="cqDlg">${ic('plus')}Registrar cheque</button>`)+`<div class="filters">${chips('cq.tab',[['venc','Vencimientos'],['books','Chequeras']],c.tab)}<span class="spacer"></span><span class="muted">Fecha de referencia: ${fd(TODAY)}</span></div>`;
+ if(c.tab==='books')return head+`<div class="tbl-wrap"><table class="dense"><thead><tr><th>Chequera</th><th>Banco · cuenta</th><th>Numeración</th><th class="r">Usados</th><th class="r">Disponibles</th><th>Próximo número</th></tr></thead><tbody>${DB.chequeras.map(ch=>{const u=DB.cheques.filter(x=>x.chequeraId===ch.id).length;return `<tr><td><b>N.º ${ch.n}</b></td><td>${esc(ch.banco)} · ${esc(ch.cuenta)}</td><td class="tnum">${ch.from} – ${ch.to}</td><td class="r tnum">${u}</td><td class="r tnum">${50-u}</td><td class="tnum">${chqNext(ch)||'Completa'}</td></tr>`}).join('')}</tbody></table></div><p class="note">Cada chequera física trae 50 cheques: al cargarla se generan los números disponibles. Los eCheqs no usan chequera.</p>`;
+ const list=DB.cheques.filter(x=>(!c.cuenta||x.cuenta===c.cuenta)&&(!c.tipo||x.tipo===c.tipo)&&(!c.st||x.estado===c.st)&&(c.from==null||x.cobro>=c.from)&&(c.to==null||x.cobro<=c.to)&&(!q||norm(chqLabel(x)+' '+x.benef+' '+x.concepto).includes(q))).sort((a,b)=>a.cobro-b.cobro);
+ const nx=pend.filter(x=>x.cobro>=TODAY).sort((a,b)=>a.cobro-b.cobro)[0];
+ return head+`<div class="cj-grid"><div class="cj-main"><div class="cards3x"><div class="fig"><span>${ic('clock')}Pendiente de débito</span><b>${money(sum(pend))}</b><small>${pl(pend.length,'cheque','cheques')}${c.cuenta?' · cuenta '+c.cuenta:''}</small></div><div class="fig"><span>${ic('cal')}Próximos 7 días</span><b>${money(sum(p7))}</b><small>${p7.length?pl(p7.length,'cheque','cheques'):'Sin vencimientos'}</small></div><div class="fig"><span>${ic('cal')}Próximos 30 días</span><b>${money(sum(p30))}</b><small>${pl(p30.length,'cheque','cheques')}</small></div></div>
+  <div class="filters"><select class="sel" data-f="cq.cuenta"><option value="">Cuenta: todas</option>${[...new Set(DB.chequeras.map(x=>x.cuenta))].map(x=>`<option ${c.cuenta===x?'selected':''}>${x}</option>`).join('')}</select><select class="sel" data-f="cq.tipo"><option value="">Tipo: todos</option><option ${c.tipo==='Físico'?'selected':''}>Físico</option><option ${c.tipo==='eCheq'?'selected':''}>eCheq</option></select><select class="sel" data-f="cq.st"><option value="">Estado: todos</option>${Object.keys(BCHQ).map(x=>`<option ${c.st===x?'selected':''}>${x}</option>`).join('')}</select><input class="inp grow" data-f="cq.q" value="${esc(c.q)}" placeholder="Número o beneficiario"><label class="chip" style="gap:6px">Desde<input type="date" data-f="cqfrom" value="${c.from!=null?dOut(c.from):''}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0"></label><label class="chip" style="gap:6px">Hasta<input type="date" data-f="cqto" value="${c.to!=null?dOut(c.to):''}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0"></label></div>
+  <div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha de cobro</th><th>N.º / tipo</th><th>Beneficiario / concepto</th><th>Cuenta</th><th class="r">Monto</th><th>Estado</th><th></th></tr></thead><tbody>
+  ${list.map(x=>`<tr><td class="tnum ${x.estado==='Pendiente'&&x.cobro<TODAY?'late':''}">${fd(x.cobro)}<span class="sub">emitido ${fs(x.emision)}</span></td><td class="tnum"><b>${chqLabel(x)}</b> <span class="b ${x.tipo==='eCheq'?'info':'off'}">${x.tipo}</span></td><td><b>${esc(x.benef)}</b><span class="sub">${esc(x.concepto)}${x.compraId?' · compra #'+x.compraId:''}</span></td><td>${esc(x.cuenta)}</td><td class="r tnum">${money(x.monto)}</td><td>${badge(x.estado,BCHQ)}${x.debito!=null?`<span class="sub">debitado ${fs(x.debito)}</span>`:''}${x.motivo?`<span class="sub">${esc(x.motivo)}</span>`:''}</td>
+   <td><div class="acts-col">${x.estado==='Pendiente'?`<button class="btn sm pri" data-act="cqCobr" data-id="${x.id}">Cobrado</button><span><button class="btn sm ghost" data-act="cqState" data-id="${x.id}" data-v="Rechazado">Rechazado</button><button class="btn sm ghost" data-act="cqState" data-id="${x.id}" data-v="Anulado">Anular</button></span>`:''}${x.file?`<span class="muted" title="${esc(x.file)}">${ic('link')} comprobante</span>`:''}</div></td></tr>`).join('')||'<tr><td colspan="7" class="empty">Sin cheques con esos filtros.</td></tr>'}
+  </tbody></table></div><p class="note">Los anulados quedan guardados pero no suman al pendiente. Al confirmar que se cobró, se registra la fecha real de débito.</p>
+  <div class="info-box" style="margin-top:12px">${ic('card')}<span><b>¿Una compra en varios cheques?</b> Cargá el beneficiario una vez y definí los montos y fechas.</span><button class="btn sm" data-act="cqMultiDlg">Cargar varios</button></div></div>
+ <aside class="cj-side"><section class="panel"><h3>${ic('alert')}Recordatorios</h3><div class="fgrid1"><label class="fld"><span>Avisar</span><select class="sel" data-chg="cqCfg" data-k="days">${[3,5,7,10].map(n=>`<option value="${n}" ${DB.cqCfg.days===n?'selected':''}>${n} días antes</option>`).join('')}</select></label><label class="check"><input type="checkbox" data-chg="cqCfg" data-k="mail" ${DB.cqCfg.mail?'checked':''}> Email</label><label class="check"><input type="checkbox" data-chg="cqCfg" data-k="wa" ${DB.cqCfg.wa?'checked':''}> WhatsApp</label><label class="fld"><span>Destinatarios</span><input class="inp" data-chg="cqCfg" data-k="to" value="${esc(DB.cqCfg.to)}"></label></div>
+  ${nx?`<div class="warn-box" style="margin-top:10px">${ic('clock')}<span><b>Próximo aviso: ${fd(Math.max(TODAY,nx.cobro-DB.cqCfg.days))}</b><br>Cheque ${chqLabel(nx)} · ${money(nx.monto)} · ${esc(nx.benef)} · cuenta ${esc(nx.cuenta)} · cobro ${fd(nx.cobro)}</span></div>`:''}<p class="note">El envío real por WhatsApp o mail se conecta al programar.</p></section>
+  ${DB.chequeras.slice(0,2).map(ch=>{const u=DB.cheques.filter(x=>x.chequeraId===ch.id).length;return `<section class="panel"><h3>${ic('card')}Chequera ${esc(ch.cuenta)} · N.º ${ch.n}</h3><p class="muted">${ch.from} – ${ch.to}</p><div class="cards3"><div><b>50</b><small>cheques</small></div><div><b>${50-u}</b><small>disponibles</small></div><div><b>${u}</b><small>usados o anulados</small></div></div><button class="btn sm ghost" data-act="set" data-k="cq.tab" data-v="books">Ver chequera</button></section>`}).join('')}</aside></div>`;
+}
+
+/* ---------- Grupo Chamba (cierres quincenales) ---------- */
+const chEf=o=>o.payMethod==='Efectivo'&&o.paid>0?o.paid:0;
+const chFav=o=>chEf(o)?(o.chFavor??Math.max(0,chEf(o)-o.price)):0;
+const chConte=o=>chEf(o)?chEf(o)-chFav(o):o.price;
+function chOps(cl){const ch=DB.customers.find(c=>c.name==='Grupo Chamba');return DB.ops.filter(o=>o.customerId===ch.id&&o.status==='Realizado'&&inRange(o.delDay,cl.from,cl.to)).sort((a,b)=>a.delDay-b.delDay||a.id-b.id)}
+function chCalc(cl){const ops=chOps(cl),conte=ops.reduce((s,o)=>s+chConte(o),0),ef=ops.reduce((s,o)=>s+chEf(o),0),fav=ops.reduce((s,o)=>s+chFav(o),0),debe=conte-ef,pag=cl.pays.reduce((s,p)=>s+p.amount,0);
+ return{ops,conte,ef,fav,cobradoConte:ef-fav,debe,pag,saldo:debe-pag,st:cl.state==='Abierto'?'Abierto':debe-pag<=0?'Pagado':pag>0?'Pago parcial':'Pendiente'}}
+const BCH={'Abierto':'info','Pendiente':'bad','Pago parcial':'warn','Pagado':'ok'};
+const qLabel=cl=>`${fs(cl.from)} al ${fs(cl.to)}`;
+function vChamba(){
+ const c=S.chb,open=c.open?DB.chCierres.find(x=>x.id===c.open):null;
+ if(open)return chDetail(open);
+ const rows=DB.chCierres.slice().sort((a,b)=>b.from-a.from).map(cl=>({cl,...chCalc(cl)})),closed=rows.filter(r=>r.cl.state!=='Abierto'),cur=rows.find(r=>r.cl.state==='Abierto');
+ const list=rows.filter(r=>!c.st||r.st===c.st);
+ return pageHead('Grupo Chamba','Cierres quincenales y pagos recibidos',`<button class="btn" data-act="chExp" data-fmt="xlsx">${ic('up')}Exportar</button>`)+`
+ <div class="cards3x"><div class="fig"><span>Pendiente de cierres cerrados</span><b>${money(closed.reduce((s,r)=>s+Math.max(0,r.saldo),0))}</b></div><div class="fig"><span>Cierres con saldo pendiente</span><b>${closed.filter(r=>r.saldo>0).length}</b></div><div class="fig"><span>Cierre actual · ${cur?badge('Abierto',BCH):''}</span><b>${cur?qLabel(cur.cl):'—'}</b><small>${cur?'Saldo provisorio '+money(cur.saldo):''}</small></div></div>
+ <div class="filters">${chips('chb.st',[['','Todos'],['Abierto','Abiertos'],['Pendiente','Pendientes'],['Pago parcial','Pago parcial'],['Pagado','Pagados']],c.st)}</div>
+ <div class="tbl-wrap"><table class="dense"><thead><tr><th>Quincena</th><th class="r">Saldo al cerrar</th><th class="r">Pagos recibidos</th><th class="r">Pendiente</th><th>Estado</th><th></th></tr></thead><tbody>
+ ${list.map(r=>`<tr data-act="set" data-k="chb.open" data-v="${r.cl.id}" tabindex="0"><td><b>${qLabel(r.cl)}</b></td><td class="r tnum">${r.cl.state==='Abierto'?'<span class="muted">En preparación</span>':money(r.debe)}</td><td class="r tnum">${money(r.pag)}</td><td class="r tnum ${r.saldo>0&&r.cl.state!=='Abierto'?'late':''}">${r.cl.state==='Abierto'?'—':money(Math.max(0,r.saldo))}</td><td>${badge(r.st,BCH)}</td><td style="white-space:nowrap"><button class="btn sm ghost" data-act="set" data-k="chb.open" data-v="${r.cl.id}">Ver cierre</button>${r.cl.state!=='Abierto'&&r.saldo>0?` <button class="btn sm pri" data-act="chPayDlg" data-id="${r.cl.id}">Registrar pago</button>`:''}</td></tr>`).join('')}
+ </tbody></table></div><p class="note">El saldo al cerrar ya descuenta el efectivo que entró de los clientes y lo que queda a favor de Chamba.</p>`;
+}
+function chDetail(cl){
+ const k=chCalc(cl),cont=k.ops.filter(o=>o.type!=='Servicio'),otros=k.ops.filter(o=>o.type==='Servicio'||o.type==='Extensión'),tab=S.chb.tab;
+ return `<button class="btn ghost sm" data-act="set" data-k="chb.open" data-v="">← Todos los cierres</button>`+pageHead(`Grupo Chamba ${badge(k.st,BCH)}`,`Cierre del ${fd(cl.from)} al ${fd(cl.to)}`,`<button class="btn" data-act="chExp" data-fmt="pdf" data-id="${cl.id}">${ic('doc')}PDF</button><button class="btn" data-act="chExp" data-fmt="xlsx" data-id="${cl.id}">${ic('chart')}Excel</button>${cl.state==='Abierto'?`<button class="btn pri" data-act="chClose" data-id="${cl.id}">Cerrar quincena</button>`:k.saldo>0?`<button class="btn pri" data-act="chPayDlg" data-id="${cl.id}">Registrar pago</button>`:''}`)+`
+ <div class="cards4"><div class="fig"><span>Contenedores</span><b>${cont.length}</b><small>${cont.filter(o=>chEf(o)).length} cobrados en efectivo</small></div><div class="fig"><span>Otros servicios</span><b>${otros.length}</b></div><div class="fig"><span>Efectivo recibido</span><b>${money(k.ef)}</b><small>ya registrado en caja</small></div><div class="fig"><span>Saldo a cobrar a Chamba</span><b class="${k.saldo>0?'late':''}">${money(Math.max(0,k.saldo))}</b><small>${k.pag?'después de pagos':'antes de pagos del cierre'}</small></div></div>
+ <div class="filters">${chips('chb.tab',[['svc',`Servicios (${k.ops.length})`],['pay',`Pagos del cierre (${cl.pays.length})`]],tab)}</div>
+ ${tab==='pay'?`<div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Medio de pago</th><th>Cuenta / origen</th><th class="r">Monto</th><th>Comprobante</th></tr></thead><tbody>${cl.pays.map(p=>`<tr><td class="tnum">${fd(p.day)}</td><td>${esc(p.medio)}</td><td>${esc(p.where)}</td><td class="r tnum">${money(p.amount)}</td><td>${p.file?`<span class="muted">${ic('doc')}${esc(p.file)}</span>`:'—'}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">Sin pagos registrados.</td></tr>'}</tbody></table></div>${cl.state!=='Abierto'&&k.saldo>0?`<button class="btn pri" style="margin-top:12px" data-act="chPayDlg" data-id="${cl.id}">${ic('plus')}Registrar pago</button>`:''}`
+ :`<div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th>Servicio / dirección</th><th class="r">Para Conte Nic</th><th class="r">Efectivo recibido</th><th class="r">A favor de Chamba</th><th class="r">Saldo</th></tr></thead><tbody>
+ ${k.ops.map(o=>{const ef=chEf(o),fv=chFav(o),cn=chConte(o);return `<tr class="${ef?'efrow':''}"><td class="tnum">${fs(o.delDay)}</td><td><b>${esc(rubro(o)==='Contenedor'?'Contenedor · '+(o.type==='Alquiler'?'Entrega':o.type):o.svc)}</b> ${ef?'<span class="b ok">Efectivo recibido</span>':''}<span class="sub">${esc(aline(addr(o)))}</span></td><td class="r tnum">${money(cn)}</td><td class="r tnum">${ef?money(ef):'—'}${ef&&o.cashAt?`<span class="sub">${esc(o.cashAt)}</span>`:''}</td>
+  <td class="r tnum">${ef?(cl.state==='Abierto'?`<input class="inp sm r" style="max-width:110px" inputmode="numeric" value="${fv}" data-chg="chFav" data-id="${o.id}" aria-label="A favor de Chamba">`:money(fv)):'—'}</td><td class="r tnum ${cn-ef<0?'':'late'}">${money(cn-ef)}</td></tr>`}).join('')||'<tr><td colspan="6" class="empty">Sin servicios de Grupo Chamba en la quincena.</td></tr>'}
+ </tbody></table></div><p class="note">Los servicios se incorporan solos desde los pedidos de Grupo Chamba. El monto a favor de Chamba se edita a mano (comisión); el efectivo no se registra dos veces.</p>`}
+ <div class="grid2"><section class="panel"><h3>Resumen de la quincena</h3><dl class="cj-sum"><dt>Importe correspondiente a Conte Nic</dt><dd>${money(k.conte)}</dd><dt>Parte de Conte Nic ya cobrada en efectivo</dt><dd>− ${money(k.cobradoConte)}</dd><dt>Descuentos a favor de Chamba</dt><dd>− ${money(k.fav)}</dd>${k.pag?`<dt>Pagos recibidos</dt><dd>− ${money(k.pag)}</dd>`:''}</dl><div class="cj-disp"><span>Chamba debe abonar</span><b>${money(Math.max(0,k.saldo))}</b></div></section>
+ <section class="panel"><h3>Pagos del cierre</h3>${cl.pays.length?cl.pays.map(p=>`<div class="rv"><span><b>${money(p.amount)}</b><small>${fd(p.day)} · ${esc(p.medio)} · ${esc(p.where)}</small></span></div>`).join(''):'<p class="muted">Sin pagos registrados. Registrá los pagos de Chamba con fecha, medio y comprobante.</p>'}${cl.state!=='Abierto'&&k.saldo>0?`<button class="btn sm" data-act="chPayDlg" data-id="${cl.id}">${ic('plus')}Registrar pago</button>`:cl.state==='Abierto'?'<p class="note">Al cerrar, se conserva el detalle y las tarifas de la quincena.</p>':''}</section></div>`;
+}
+
+(function seedV6(){
+ const r1=(a,b)=>ri(a,b);
+ // km diarios (Warrior) y cargas extra para FEO 193 y máquinas
+ DB.kms=[];DB.vdocs=[];
+ VEH.filter(v=>!v.machine).forEach(v=>{for(let d=TODAY-42;d<TODAY;d++){if(dow(d)===0)continue;if(d>=TODAY-2&&v.plate==='EPK 581')continue;if(R()<.06)continue;DB.kms.push({plate:v.plate,day:d,km:v.plate==='FEO 193'?r1(110,200):r1(150,260),user:'Mili'})}});
+ for(let d=TODAY-42;d<=TODAY;d++){if(dow(d)===0)continue;
+  ['CASE','JCB'].forEach(p=>{if(R()<.12)DB.fuel.push({day:d,min:r1(7*60,9*60),plate:p,driverId:null,liters:r1(20,40),amount:r1(20,40)*1230,user:'Lucía',source:'Bidón'})})}
+ ['FWU 010','EPK 581','RXB 892','FEO 193'].forEach(p=>{const l=DB.fuel.filter(x=>x.plate===p).sort((a,b)=>a.day-b.day||a.min-b.min);for(let i=1;i<l.length;i++){const km=DB.kms.filter(k=>k.plate===p&&k.day>=l[i-1].day&&k.day<l[i].day).reduce((s,k)=>s+k.km,0);if(km){l[i].liters=+(km*(.36+R()*.1)).toFixed(1);l[i].amount=Math.round(l[i].liters*(1215+(l[i].day-TODAY+42)*.9))}}});
+ VEH.forEach((v,i)=>{DB.vdocs.push({plate:v.plate,doc:'Seguro',venc:TODAY+[160,12,90,-3,200,45][i],file:`poliza_${v.plate.replace(' ','')}.pdf`,user:'Mili'});
+  if(!v.machine)DB.vdocs.push({plate:v.plate,doc:'Revisión técnica',venc:TODAY+[13,120,60,200][i],file:`rto_${v.plate.replace(' ','')}.pdf`,user:'Mili'});
+  DB.vdocs.push({plate:v.plate,doc:'Título',venc:null,file:`titulo_${v.plate.replace(' ','')}.pdf`,user:'Mili'});if(!v.machine)DB.vdocs.push({plate:v.plate,doc:'Tarjeta verde',venc:null,file:`tarjeta_verde_${v.plate.replace(' ','')}.pdf`,user:'Mili'})});
+ // gastos de camiones con patente
+ DB.exp.forEach(x=>{if(x.cat==='Camiones'&&!/Seguro/.test(x.sub))x.plate=pick(['FWU 010','EPK 581','RXB 892','FEO 193'])});
+ // compras
+ DB.compras=[];let cid=0;const CP=[['Cubiertas','2 cubiertas delanteras','Gomas Marchetti',635000,'FWU 010'],['Repuestos','Batería 12V 180A','Repuestos Córdoba',289000,'EPK 581'],['Accesorios','Bocina y calcomanías','Accesorios Ruta 53',48000,null],['Aceites y filtros','4 tarros de aceite hidráulico 20 L','Lubricentro Sierras',412000,null],['Repuestos','Kit de embrague','Repuestos Córdoba',540000,'RXB 892'],['Cubiertas','Cubierta trasera','Gomas Marchetti',442000,null],['Herramientas','Llave de impacto','Ferretería El Tala',96000,null],['Repuestos','Manguera hidráulica','Hidráulica Unquillo',73000,'FEO 193'],['Aceites y filtros','Filtros de aire y combustible','Lubricentro Sierras',118000,null],['Oficina','Talonarios de remitos (60)','Imprenta Sierras',180000,null],['Repuestos','Diente de balde','Repuestos Viales',165000,'JCB']];
+ CP.forEach((x,i)=>{const day=TODAY-40+i*3+r1(0,2);if(day>TODAY)return;DB.compras.push({id:++cid,day,cat:x[0],detalle:x[1],prov:x[2],amount:x[3],plate:x[4],forVeh:x[0]!=='Oficina'&&x[0]!=='Herramientas',medio:x[3]>400000?'Cheque':pick(['Transf SAS','Efectivo · Oficina','Transf SAS']),file:R()<.7?`factura_compra_${cid}.pdf`:'',stocked:x[0]==='Aceites y filtros',installed:!!x[4]&&R()<.7,user:'Mili'})});
+ DB.seq.compra=cid;
+ // stock de oficina
+ DB.products=[];DB.stockMoves=[];let pid=0,mid=0;
+ const PR=[['Aceite hidráulico','Aceites','Marca A','ISO VG 68','L',10,'Oficina · Estante 1',8200],['Aceite ATF','Aceites','Marca B','Dexron III','L',10,'Oficina · Estante 1',9100],['Aceite de motor','Aceites','Marca C','SAE 15W-40','L',10,'Oficina · Estante 2',8800],['Filtro de aceite','Filtros','Marca A','FA-001','un.',1,'Oficina · Estante 2',21000],['Filtro de combustible','Filtros','Marca B','FC-002','un.',1,'Oficina · Estante 2',26000],['Filtro de aire','Filtros','Marca C','FAR-003','un.',1,'Oficina · Estante 3',34000],['Grasa multipropósito','Grasas','Marca A','NLGI 2','kg',2,'Oficina · Estante 3',7600],['Refrigerante','Refrigerantes','Marca D','Orgánico · rosa','L',5,'Oficina · Estante 3',5200],['Lámpara H4','Repuestos','Marca E','12V 60/55W','un.',2,'Oficina · Cajón 1',6500]];
+ const init=[40,20,30,4,3,2,10,15,4];
+ PR.forEach((x,i)=>{const p={id:++pid,name:x[0],cat:x[1],brand:x[2],spec:x[3],unit:x[4],min:x[5],loc:x[6],cost:x[7]};DB.products.push(p);DB.stockMoves.push({id:++mid,day:TODAY-42,min:9*60,pid:p.id,qty:init[i],type:'Stock inicial',obs:'Conteo inicial',user:'Mili'})});
+ const vs=['FWU 010','EPK 581','RXB 892','FEO 193','CASE','JCB'];
+ for(let d=TODAY-40;d<=TODAY;d++){if(dow(d)===0||R()>.32)continue;const p=pick(DB.products),q=p.unit==='L'?pick([2,4,5,8]):p.unit==='kg'?1:1,pl=pick(vs),v=vehOf(pl),drv=v.drv||pick([1,2,3]);if(stockOf(p.id)-q<0)continue;
+  DB.stockMoves.push({id:++mid,day:d,min:r1(7*60,18*60),pid:p.id,qty:-q,type:'Salida',driverId:drv,plate:pl,motivo:pick(SALIDA_MOT),installed:d<TODAY-1?R()<.85:false,user:pick(['Mili','Lucía'])})}
+ const oil=DB.products[0],cpo=DB.compras.find(x=>/hidráulico/.test(x.detalle));if(cpo)DB.stockMoves.push({id:++mid,day:cpo.day,min:9*60,pid:oil.id,qty:80,type:'Ingreso',pres:'Tarro de 20 L',count:4,prov:cpo.prov,compraId:cpo.id,obs:'Se recibieron 4 tarros de 20 L',user:'Mili'});
+ const fx=DB.compras.find(x=>/Filtros de aire/.test(x.detalle));if(fx){DB.stockMoves.push({id:++mid,day:fx.day,min:10*60,pid:6,qty:2,type:'Ingreso',pres:'Unidad',count:2,prov:fx.prov,compraId:fx.id,user:'Mili'});DB.stockMoves.push({id:++mid,day:fx.day,min:10*60,pid:5,qty:2,type:'Ingreso',pres:'Unidad',count:2,prov:fx.prov,compraId:fx.id,user:'Mili'})}
+ // vaciar un filtro para mostrar "sin stock"
+ {const p=DB.products[5],q=stockOf(p.id);if(q>0)DB.stockMoves.push({id:++mid,day:TODAY-1,min:15*60,pid:p.id,qty:-q,type:'Salida',driverId:1,plate:'RXB 892',motivo:'Cambio programado',installed:false,user:'Lucía'})}
+ DB.seq.mov=mid;
+ // talonarios de remitos: cada chofer usa su propio talonario
+ DB.talonarios=[];DB.remAnul={};let tn=0,next=1100;
+ const newTal=(drv,deliv)=>{const t={id:++tn,n:tn+2,from:next,to:next+49,drv,deliv,obs:'',user:'Mili'};next+=50;DB.talonarios.push(t);return t};
+ DB.ops.forEach(o=>{if(o.status!=='Realizado')o.remito=null});
+ const cur={},ptr={};let skips=0,anul=0;
+ DB.ops.filter(o=>o.status==='Realizado'&&o.driverId&&o.type!=='Extensión').sort((a,b)=>(a.delDay-b.delDay)||(a.delMin-b.delMin)).forEach(o=>{const d=o.driverId;
+  if(!cur[d]||ptr[d]>cur[d].to){cur[d]=newTal(d,o.delDay-1);ptr[d]=cur[d].from}
+  if(o.delDay>=TODAY-6&&skips<3&&R()<.04){skips++;ptr[d]++}
+  else if(anul<3&&R()<.02){DB.remAnul[ptr[d]]={day:o.delDay,motivo:pick(['Error al completar el comprobante','Se rompió la hoja','Datos del cliente equivocados']),file:`remito_anulado_${ptr[d]}.jpg`,user:'Mili'};anul++;ptr[d]++}
+  if(ptr[d]>cur[d].to){cur[d]=newTal(d,o.delDay-1);ptr[d]=cur[d].from}
+  o.remito=ptr[d]++;o.firmado=o.firmado??R()<.85});
+ // los saltos que quedaron al final del talonario se ven como disponibles: forzar uno visible
+ [1,2,3,4].forEach(d=>{newTal(d,null)});[2,3].forEach(d=>newTal(d,null));newTal(null,null);newTal(null,null);
+ DB.seq.remito=next-1;
+ // un día de control con servicios sin remito
+ DB.ops.filter(o=>o.status==='Realizado'&&o.delDay===TODAY-1&&o.driverId===2).slice(0,2).forEach(o=>{o.remito=null});
+ // cheques
+ DB.chequeras=[{id:1,n:1,banco:'Banco de Córdoba',cuenta:'SAS',from:39550550,to:39550599},{id:2,n:2,banco:'Banco Galicia',cuenta:'YPF',from:12008800,to:12008849}];
+ DB.cheques=[];let qid=0;const BEN=[['Gomas Marchetti','Cubiertas'],['Repuestos Córdoba','Repuestos'],['Encendidos Río','Reparación eléctrica'],['Lubricentro Sierras','Aceites y filtros'],['Taller Ferreyra','Reparación de caja']];
+ const addQ=(o)=>{DB.cheques.push(Object.assign({id:++qid,tipo:'Físico',chequeraId:1,cuenta:'SAS',file:R()<.6?`cheque_${qid}.jpg`:'',estado:'Pendiente',debito:null,compraId:null},o))};
+ for(let i=0;i<12;i++){const b=pick(BEN),em=TODAY-r1(5,40),co=em+r1(15,75),ch=i%5===4?DB.chequeras[1]:DB.chequeras[0];addQ({chequeraId:ch.id,cuenta:ch.cuenta,num:ch.from+DB.cheques.filter(x=>x.chequeraId===ch.id).length,emision:em,cobro:co,monto:Math.round(r1(90,640))*1000,benef:b[0],concepto:b[1]+(R()<.5?' · '+pick(['FWU 010','EPK 581','RXB 892']):'')})}
+ DB.cheques.forEach(c=>{if(c.cobro<TODAY){c.estado='Cobrado';c.debito=c.cobro+r1(0,2)}});
+ addQ({tipo:'eCheq',chequeraId:null,num:'EC-000125',emision:TODAY-3,cobro:TODAY+12,monto:193000,benef:'Repuestos Córdoba',concepto:'Compra de repuestos'});
+ addQ({tipo:'eCheq',chequeraId:null,num:'EC-000126',emision:TODAY-1,cobro:TODAY+5,monto:248000,benef:'Taller Ferreyra',concepto:'Service RXB 892'});
+ {const c=DB.cheques[2];c.estado='Anulado';c.motivo='Mal confeccionado'}{const c=DB.cheques.find(x=>x.estado==='Cobrado');if(c){c.estado='Rechazado';c.debito=null;c.motivo='Fondos insuficientes'}}
+ DB.compras.filter(x=>x.medio==='Cheque').forEach((x,i)=>{const c=DB.cheques.filter(q=>q.estado==='Pendiente')[i];if(c){c.compraId=x.id;c.benef=x.prov;c.concepto=x.detalle}});
+ DB.seq.chq=qid;DB.cqCfg={days:7,mail:true,wa:true,to:'Administración (Mili)'};
+ // Grupo Chamba: algunos pedidos se cobran en efectivo ($145.000) y se liquidan por quincena
+ const chc=DB.customers.find(c=>c.name==='Grupo Chamba');
+ DB.ops.filter(o=>o.customerId===chc.id&&o.status==='Realizado'&&o.type!=='Extensión').forEach(o=>{if(R()<.25){o.payMethod='Efectivo';o.paid=145000*o.qty;o.payDay=o.delDay;o.cashAt=R()<.5?'Oficina':(opPlate(o)||'Oficina');o.verified=true}});
+ DB.chCierres=[];let chid=0;
+ for(let m=monthStart(TODAY-45);m<=TODAY;m=monthStart(m+40)){[[m,m+14],[m+15,monthStart(m+40)-1]].forEach(([a,b])=>{if(b<TODAY-45)return;if(a>TODAY)return;DB.chCierres.push({id:++chid,from:a,to:b,state:TODAY<=b?'Abierto':'Cerrado',pays:[]})})}
+ const closed=DB.chCierres.filter(c=>c.state==='Cerrado');
+ closed.forEach((cl,i)=>{const k=chCalc(cl),left=closed.length-1-i;if(k.debe<=0)return;
+  if(left>=2)cl.pays.push({day:cl.to+r1(4,9),amount:k.debe,medio:'Transferencia',where:'Banco SAS',file:`pago_chamba_${cl.id}.pdf`});
+  else if(left===1)cl.pays.push({day:Math.min(TODAY,cl.to+5),amount:Math.round(k.debe*.6/1000)*1000,medio:'Transferencia',where:'Banco SAS',file:''})});
+})();
+
 (function seedLate(){
  DB.pay=[];let pid=0;
  for(let w=weekStart(TODAY)-42;w<=weekStart(TODAY);w+=7)DB.emps.forEach(e=>{
@@ -2665,10 +3257,16 @@ function salActivity(e,a,b){const l=actOf(e,a,b).sort((x,y)=>x.delDay-y.delDay||
   DB.cierres[d]={ini,rend,egr,dep,fin:s,by:'Mili',min:ri(19*60,20*60+15),note:dep?pick(['Depósito en banco','Lo retiró el dueño','Depósito en banco']):''}}
 })();
 
-const VIEWS={servicios:vServ,caja:vCaja,facturacion:vFact,chamba:vChamba,sueldos:vSueldos,gastos:vGastos,inicio:vInicio,tablero:vTab,agenda:vAgenda,entregas:vEnt,retiros:vRet,choferes:vChof,combustible:vComb,basurales:vBas,contenedores:vCont,mapa:vMapa,pagos:vPagos,clientes:vClientes,reportes:vRep,usuarios:vUsers,auditoria:vAud};
+const VIEWS={flota:vFlota,stock:vStock,compras:vCompras,remitos:vRemitos,cheques:vCheques,servicios:vServ,caja:vCaja,facturacion:vFact,chamba:vChamba,sueldos:vSueldos,gastos:vGastos,inicio:vInicio,tablero:vTab,agenda:vAgenda,entregas:vEnt,retiros:vRet,choferes:vChof,combustible:vComb,basurales:vBas,contenedores:vCont,mapa:vMapa,pagos:vPagos,clientes:vClientes,reportes:vRep,usuarios:vUsers,auditoria:vAud};
 
 /* ============ acciones ============ */
 function setF(path,v){
+ const DP={rtfrom:['rt','from'],rtto:['rt','to'],flfrom:['fl','from'],flto:['fl','to'],skfrom:['sk','from'],skto:['sk','to'],cqfrom:['cq','from'],cqto:['cq','to'],rmday:['rm','day']};
+ if(DP[path]){const d=v?dIn(v):null;S[DP[path][0]][DP[path][1]]=d;return}
+ if(path==='agday'){const d=dIn(v);if(d!=null){S.ag.day=d;S.ag.sel=null}return}
+ if(['rm.open','chb.open','fl.int'].includes(path)){const[a,b]=path.split('.');S[a][b]=v===''||v==null?null:+v;if(path==='rm.open')S.rm.nf='';if(path==='chb.open')S.chb.tab='svc';return}
+ if(path==='fl.plate'){S.fl.plate=v;S.fl.int=null;return}
+ if(path==='ag.when'){S.ag.when=v;S.ag.sel=null;return}
  if(path==='su.week'){S.su.week=+v;S.su.open=null;return}
  if(path==='cjday'){const d=dIn(v);if(d!=null){S.cj.day=Math.min(TODAY,d);S.cj.when='dia';S.cj.sel=[]}return}
  if(path==='cjfrom'||path==='cjto'){const d=dIn(v);if(d!=null)S.cj[path==='cjfrom'?'from':'to']=Math.min(TODAY,d);return}
@@ -2712,6 +3310,98 @@ function saveOpImpl(d){
  S.modal=null;render();toast(`Pedido ${opn(op.id)} agendado para el ${fs(day)}.`);
 }
 const ACT={
+ agSel:d=>{S.ag.sel=d.id?+d.id:null;render()},
+ agMove:d=>{S.ag.day+=(+d.v)*(S.ag.when==='semana'?7:1);if(S.ag.when==='dia'&&dow(S.ag.day)===0)S.ag.day+=+d.v;S.ag.sel=null;render()},
+ agToday:()=>{S.ag.day=TODAY;S.ag.sel=null;render()},
+ editOp:d=>{S.modal={t:'op',id:+d.id};S.editCom=+d.id;S.drawer=null;renderLayers()},
+ rtSel:d=>{S.rt.sel=d.id?+d.id:null;render()},
+ rtClear:()=>{Object.assign(S.rt,{q:'',loc:'',barrio:'',from:null,to:null});render()},
+ npSet:d=>{const D=npD(),k=d.k;let v=d.v;
+  if(k==='cid'){Object.assign(D,{cid:null,phone:'',q:'',addrId:null,na:null,repl:null});if(D.payM==='Grupo Chamba')D.payM='Efectivo';npRender();return}
+  if(k==='na'){D.na=v?true:null;npRender();return}
+  if(['size','ext'].includes(k))v=+v;
+  npSetPath(D,k,v);
+  if(k==='size'&&D.type==='Alquiler')D.unit=DEFP[v];
+  if(k==='type'){const c=D.cid&&CU(D.cid);D.repl=c?(DB.ops.find(o=>o.customerId===c.id&&isActive(o))||{}).id||null:null;if(v==='Extensión')D.unit='';else if(v==='Movimiento')D.unit=40000;else D.unit=DEFP[D.size]}
+  if(k==='payM'&&v==='Grupo Chamba')D.paySt='Pendiente';
+  npRender()},
+ npStep:d=>{const D=npD();D[d.k]=Math.max(1,Math.min(30,(D[d.k]||1)+(+d.v)));npRender()},
+ npTog:d=>{const D=npD();if(d.k==='fac.nc')D.fac.ncOpen=!D.fac.ncOpen;else D[d.k].open=!D[d.k].open;npRender()},
+ npPick:d=>{const D=npD(),c=CU(d.id);Object.assign(D,{cid:c.id,phone:c.phone,q:'',addrId:c.addrs[0].id,na:null});if(isChamba(c)){D.payM='Grupo Chamba';D.unit=125000}if(c.cuit)D.fac.cuit=c.cuit;byId('no-err')&&(byId('no-err').innerHTML='');npRender()},
+ npArca:()=>{const D=npD(),f=D.fac,cu=digits(f.cuit);if(cu.length<10){toast('Ingresá un CUIT de 11 dígitos.');return}
+  const c=DB.customers.find(x=>digits(x.cuit)===cu)||(D.cid&&CU(D.cid)),alt=RS_ALT.find(x=>digits(x.c)===cu);
+  f.rs=alt?alt.n:(c?c.name.toUpperCase():'RAZÓN SOCIAL DE EJEMPLO');f.cond=/^3/.test(cu)?'Responsable Inscripto':'Monotributo';f.dom=c?`${aline(c.addrs[0])} - ${c.addrs[0].loc} - Córdoba`:'Domicilio fiscal de ejemplo';f.tipo=/^3/.test(cu)?'A':'B';
+  npRender();toast('Datos de ejemplo: la consulta a ARCA se conecta al programar.')},
+ npSave:d=>npSave(!!(d&&d.force)),
+ kmDlg:()=>{S.dialog={t:'km',plate:VEH.find(v=>v.plate===S.fl.plate&&!v.machine)?S.fl.plate:'FWU 010'};renderLayers()},
+ saveKm:()=>{const p=S.dialog.plate;let n=0;for(let d=TODAY-1;d>=TODAY-14;d--){const el=byId('km-'+d);if(!el)continue;const v=+digits(el.value);const k=DB.kms.find(x=>x.plate===p&&x.day===d);if(v){if(k)k.km=v;else DB.kms.push({plate:p,day:d,km:v,user:S.user.name});n++}}
+  audNow(`${S.user.name} cargó km de Warrior de ${p}`);S.dialog=null;render();toast(`Kilómetros de ${p} guardados (${n} días).`)},
+ vdocDlg:()=>{S.dialog={t:'vdoc'};renderLayers()},
+ saveVdoc:()=>{const f=document.querySelector('#vd-f').files[0];DB.vdocs.push({plate:S.fl.plate,doc:byId('vd-t').value,venc:dIn(byId('vd-v').value),file:f?f.name:'',obs:byId('vd-o').value.trim(),user:S.user.name});S.dialog=null;render();toast('Documento cargado.')},
+ flExp:d=>{const p=S.fl.plate,[a,b]=flRange(),ms=vehMoves(p,a,b);exportTable({fmt:d.fmt,file:`flota-${p.replace(' ','')}-${dOut(a)}`,title:`Control de flota · ${p}`,sub:`${vehOf(p).type} · ${fd(a)} al ${fd(b)}`,cols:['Fecha','Origen','Detalle','Estado','Importe'],rows:ms.map(m=>[fd(m.day),m.o,m.t,m.st,m.v||'']),totals:['','','','Total',ms.reduce((s,m)=>s+(m.v||0),0)]})},
+ skIn:d=>{S.dialog={t:'skin',pid:DB.products[0].id,newP:d.new?1:0,unit:'L',pres:'',count:1};renderLayers()},
+ skInSet:d=>{S.dialog[d.k]=d.v?1:0;renderLayers()},
+ saveSkIn:()=>{const D=S.dialog,e=m=>byId('sk-err').innerHTML=`<p class="err">${esc(m)}</p>`;let p;
+  if(D.newP){const n=byId('sk-n').value.trim();if(!n)return e('Poné el nombre del producto.');p={id:Math.max(...DB.products.map(x=>x.id))+1,name:n,cat:byId('sk-c').value,brand:byId('sk-b').value.trim()||'—',spec:byId('sk-s').value.trim()||'—',unit:D.unit,min:+digits(byId('sk-m').value)||1,loc:byId('sk-u').value.trim(),cost:0};DB.products.push(p)}else p=prodOf(D.pid);
+  const pres=(PRESENT[p.unit]||PRESENT['un.']).find(x=>x[0]===D.pres)||(PRESENT[p.unit]||PRESENT['un.'])[0],cnt=+byId('sk-q').value||0;if(!cnt)return e('Poné la cantidad.');
+  const cp=+byId('sk-cp').value||null;DB.stockMoves.push({id:++DB.seq.mov,day:dIn(byId('sk-d').value)??TODAY,min:nowMin(),pid:p.id,qty:pres[1]*cnt,type:byId('sk-t').value==='Compra'?'Ingreso':byId('sk-t').value,pres:pres[0],count:cnt,prov:byId('sk-pv').value.trim(),compraId:cp,comp:byId('sk-nc').value.trim(),obs:byId('sk-o').value.trim(),user:S.user.name});
+  if(cp){const c=DB.compras.find(x=>x.id===cp);if(c)c.stocked=true}p.loc=byId('sk-u').value.trim()||p.loc;
+  audNow(`${S.user.name} ingresó ${qtyTxt(pres[1]*cnt,p.unit)} de ${p.name}`);S.dialog=null;render();toast(`Ingreso guardado: ${qtyTxt(pres[1]*cnt,p.unit)} de ${p.name}.`)},
+ skOut:d=>{S.dialog={t:'skout',pid:d.pid?+d.pid:DB.products[0].id,q:0};renderLayers()},
+ saveSkOut:()=>{const D=S.dialog,p=prodOf(D.pid),q=parseFloat(String(byId('so-q').value).replace(',','.'))||0,e=m=>byId('so-err').innerHTML=`<p class="err">${esc(m)}</p>`;if(!q)return e('Poné la cantidad.');if(q>stockOf(p.id))return e(`Solo hay ${qtyTxt(stockOf(p.id),p.unit)} en la oficina.`);
+  const pl=byId('so-v').value,dr=+byId('so-d').value;DB.stockMoves.push({id:++DB.seq.mov,day:dIn(byId('so-f').value)??TODAY,min:nowMin(),pid:p.id,qty:-q,type:'Salida',driverId:dr,plate:pl,motivo:byId('so-m').value,obs:byId('so-o').value.trim(),installed:byId('so-i').checked,user:S.user.name});
+  audNow(`${S.user.name} registró la salida de ${qtyTxt(q,p.unit)} de ${p.name} para ${pl} (${dname(dr)})`);S.dialog=null;render();toast(`Salida guardada. Aparece en el Control de flota de ${pl}.`)},
+ skInst:d=>{const m=DB.stockMoves.find(x=>x.id===+d.id);m.installed=true;render();toast('Marcado como instalado.')},
+ skRet:d=>{const m=DB.stockMoves.find(x=>x.id===+d.id),p=prodOf(m.pid);confirmDlg('¿Registrar devolución?',`Vuelve a sumarse ${qtyTxt(-m.qty,p.unit)} de ${p.name} al stock de la oficina.`,'Registrar devolución',()=>{m.returned=true;DB.stockMoves.push({id:++DB.seq.mov,day:TODAY,min:nowMin(),pid:m.pid,qty:-m.qty,type:'Devolución',driverId:m.driverId,plate:m.plate,obs:'Devolución de la salida del '+fs(m.day),user:S.user.name});toast('Devolución registrada.')})},
+ skAdj:()=>{S.dialog={t:'skadj'};renderLayers()},
+ saveSkAdj:()=>{const p=prodOf(byId('sa-p').value),q=parseFloat(String(byId('sa-q').value).replace(',','.')),m=byId('sa-m').value.trim();if(isNaN(q)||!m){byId('sa-err').innerHTML='<p class="err">Poné la cantidad contada y el motivo.</p>';return}
+  const diff=q-stockOf(p.id);if(diff)DB.stockMoves.push({id:++DB.seq.mov,day:TODAY,min:nowMin(),pid:p.id,qty:diff,type:'Ajuste',motivo:m,user:S.user.name});S.dialog=null;render();toast(diff?`Ajuste de ${diff>0?'+':''}${qtyTxt(diff,p.unit)} guardado.`:'Sin diferencias.')},
+ skExp:d=>{const s=S.sk,ms=DB.stockMoves.filter(m=>inRange(m.day,Math.min(s.from,s.to),Math.max(s.from,s.to))&&(!s.pid||m.pid===+s.pid)&&(!s.drv||m.driverId===+s.drv)&&(!s.plate||m.plate===s.plate)).sort((x,y)=>x.day-y.day);
+  exportTable({fmt:d.fmt,file:`movimientos-stock-${dOut(s.from)}`,title:'Movimientos de stock',sub:`${fd(Math.min(s.from,s.to))} al ${fd(Math.max(s.from,s.to))}`,cols:['Fecha','Tipo','Producto','Cantidad','Unidad','Chofer','Vehículo','Detalle','Cargó'],rows:ms.map(m=>{const p=prodOf(m.pid);return[fd(m.day),m.type,p.name+' · '+p.spec,m.qty,p.unit,m.driverId?dname(m.driverId):'',m.plate||'',m.motivo||m.obs||m.prov||'',m.user]})})},
+ cpDlg:()=>{S.dialog={t:'cp'};renderLayers()},
+ saveCp:()=>{const t=byId('cp-t').value.trim(),a=+digits(byId('cp-a').value);if(!t||!a){byId('cp-err').innerHTML='<p class="err">Completá detalle y monto.</p>';return}
+  DB.compras.push({id:++DB.seq.compra,day:dIn(byId('cp-d').value)??TODAY,cat:byId('cp-c').value,detalle:t,prov:byId('cp-p').value.trim()||'—',amount:a,plate:byId('cp-v').value||null,forVeh:byId('cp-veh').checked,medio:byId('cp-m').value,file:byId('cp-fn').textContent!=='Adjuntar factura'?byId('cp-fn').textContent:'',stocked:false,installed:false,user:S.user.name});
+  audNow(`${S.user.name} cargó la compra ${t} por ${money(a)}`);S.dialog=null;render();toast('Compra guardada.')},
+ talDlg:()=>{S.dialog={t:'tal'};renderLayers()},
+ saveTal:()=>{const n0=+digits(byId('tl-n').value),c=Math.max(1,+digits(byId('tl-c').value)||1),f0=+digits(byId('tl-f').value),dr=+byId('tl-d').value||null,e=dIn(byId('tl-e').value),err=m=>byId('tl-err').innerHTML=`<p class="err">${esc(m)}</p>`;
+  if(!f0)return err('Poné el primer número.');const to=f0+c*50-1,ov=DB.talonarios.find(t=>!(to<t.from||f0>t.to));if(ov)return err(`Se superpone con el talonario ${ov.n} (${ov.from}–${ov.to}).`);
+  if(DB.talonarios.some(t=>t.n>=n0&&t.n<n0+c))return err('Ese número de talonario ya existe.');
+  for(let i=0;i<c;i++)DB.talonarios.push({id:Math.max(0,...DB.talonarios.map(t=>t.id))+1,n:n0+i,from:f0+i*50,to:f0+i*50+49,drv:dr,deliv:e,obs:byId('tl-o').value.trim(),user:S.user.name});
+  audNow(`${S.user.name} cargó ${c} talonario${c>1?'s':''} (${f0}–${to})`);S.dialog=null;render();toast(`${c} talonario${c>1?'s':''} cargado${c>1?'s':''}: ${f0}–${to}.`)},
+ talDeliv:d=>{const t=DB.talonarios.find(x=>x.id===+d.id);t.deliv=TODAY;audNow(`${S.user.name} entregó el talonario ${t.n} a ${dname(t.drv)}`);render();toast(`Talonario ${t.n} entregado a ${dname(t.drv)}.`)},
+ talAssign:d=>{S.dialog={t:'talas',id:+d.id};renderLayers()},
+ saveTalAs:()=>{const t=DB.talonarios.find(x=>x.id===S.dialog.id);t.drv=+byId('ta-d').value||null;t.deliv=dIn(byId('ta-e').value);t.obs=byId('ta-o').value.trim();S.dialog=null;render();toast('Asignación guardada.')},
+ remAnulDlg:d=>{S.dialog={t:'remanul',n:+d.n};renderLayers()},
+ saveRemAnul:()=>{const m=byId('ra-m').value.trim();if(!m){byId('ra-err').innerHTML='<p class="err">Escribí el motivo.</p>';return}const n=S.dialog.n,fn=byId('ra-fn').textContent;DB.remAnul[n]={day:TODAY,motivo:m,file:fn==='Adjuntar foto'?'':fn,user:S.user.name};audNow(`${S.user.name} anuló el remito ${n}: ${m}`);S.dialog=null;render();toast(`Remito ${n} anulado.`)},
+ rmExp:d=>{const rows=DB.talonarios.map(t=>{const I=talInfo(t);return[t.n,`${t.from}-${t.to}`,t.drv?dname(t.drv):'Sin asignar',t.deliv!=null?fd(t.deliv):'',I.st,I.c['Cargado']||0,I.c['Anulado']||0,I.c['Salto a revisar']||0,I.c['Disponible']||0]});
+  exportTable({fmt:d.fmt,file:'talonarios-remitos',title:'Control de remitos · talonarios',sub:`Emitido ${fd(TODAY)}`,cols:['Talonario','Numeración','Chofer','Entregado','Estado','Cargados','Anulados','Saltos','Disponibles'],rows})},
+ cqDlg:()=>{S.dialog={t:'cq',tipo:'Físico',ch:DB.chequeras[0].id};renderLayers()},
+ cqSet:d=>{S.dialog[d.k]=d.v;renderLayers()},
+ saveCq:()=>{const D=S.dialog,err=m=>byId('cq-err').innerHTML=`<p class="err">${esc(m)}</p>`,ch=D.tipo==='Físico'?DB.chequeras.find(x=>x.id===+D.ch):null;
+  const nRaw=byId('cq-n').value.trim(),num=D.tipo==='Físico'?+digits(nRaw):nRaw,m=+digits(byId('cq-m').value),em=dIn(byId('cq-e').value),co=dIn(byId('cq-c').value),b=byId('cq-b').value.trim();
+  if(!num||!m||co==null||!b)return err('Completá número, monto, fecha de cobro y beneficiario.');if(em!=null&&co<em)return err('La fecha de cobro no puede ser anterior a la emisión.');
+  if(ch&&(num<ch.from||num>ch.to))return err(`Ese número no es de la chequera (${ch.from}–${ch.to}).`);if(DB.cheques.some(x=>String(x.num)===String(num)&&(x.chequeraId||null)===(ch?ch.id:null)))return err('Ese número de cheque ya está cargado.');
+  const l=byId('cq-l').value,fn=byId('cq-fn').textContent;DB.cheques.push({id:++DB.seq.chq,tipo:D.tipo,chequeraId:ch?ch.id:null,cuenta:ch?ch.cuenta:byId('cq-cu').value,num,emision:em??TODAY,cobro:co,monto:m,benef:b,concepto:byId('cq-k').value.trim(),compraId:l&&l[0]==='c'?+l.slice(1):null,gastoId:l&&l[0]==='g'?+l.slice(1):null,file:fn==='Adjuntar'?'':fn,estado:'Pendiente',debito:null});
+  audNow(`${S.user.name} registró el cheque ${num} a ${b} por ${money(m)}`);S.dialog=null;render();toast(`Cheque ${num} registrado.`)},
+ cqMultiDlg:()=>{S.dialog={t:'cqmulti'};renderLayers()},
+ saveCqMulti:()=>{const b=byId('cm-b').value.trim(),ch=DB.chequeras.find(x=>x.id===+byId('cm-ch').value);if(!b){byId('cm-err').innerHTML='<p class="err">Poné el beneficiario.</p>';return}let n=0;
+  [1,2,3].forEach(i=>{const m=+digits(byId('cm-m'+i).value),co=dIn(byId('cm-d'+i).value);if(!m||co==null)return;const num=chqNext(ch);if(!num)return;DB.cheques.push({id:++DB.seq.chq,tipo:'Físico',chequeraId:ch.id,cuenta:ch.cuenta,num,emision:TODAY,cobro:co,monto:m,benef:b,concepto:byId('cm-k').value.trim(),compraId:+byId('cm-l').value||null,file:'',estado:'Pendiente',debito:null});n++});
+  if(!n){byId('cm-err').innerHTML='<p class="err">Poné al menos un monto.</p>';return}S.dialog=null;render();toast(`${n} cheques registrados a ${b}.`)},
+ cqBookDlg:()=>{S.dialog={t:'cqbook'};renderLayers()},
+ saveCqBook:()=>{const f=+digits(byId('cb-f').value);if(!f){byId('cb-err').innerHTML='<p class="err">Poné el primer número.</p>';return}if(DB.chequeras.some(x=>!(f+49<x.from||f>x.to))){byId('cb-err').innerHTML='<p class="err">Se superpone con otra chequera.</p>';return}
+  DB.chequeras.push({id:DB.chequeras.length+1,n:DB.chequeras.length+1,banco:byId('cb-b').value.trim(),cuenta:byId('cb-c').value.trim(),from:f,to:f+49});S.dialog=null;render();toast('Chequera cargada con 50 cheques disponibles.')},
+ cqCobr:d=>{S.dialog={t:'cqcobr',id:+d.id};renderLayers()},
+ saveCqCobr:()=>{const c=DB.cheques.find(x=>x.id===S.dialog.id);c.estado='Cobrado';c.debito=dIn(byId('cc2-d').value)??TODAY;audNow(`${S.user.name} confirmó el débito del cheque ${chqLabel(c)}`);S.dialog=null;render();toast('Cheque marcado como cobrado.')},
+ cqState:d=>{const c=DB.cheques.find(x=>x.id===+d.id);confirmDlg(`¿Marcar el cheque ${chqLabel(c)} como ${d.v.toLowerCase()}?`,d.v==='Anulado'?'Queda guardado pero no suma al pendiente.':'Queda registrado como rechazado.',d.v==='Anulado'?'Anular':'Marcar rechazado',()=>{c.estado=d.v;audNow(`${S.user.name} marcó ${d.v.toLowerCase()} el cheque ${chqLabel(c)}`);toast(`Cheque ${d.v.toLowerCase()}.`)},true)},
+ cqExp:d=>{const l=DB.cheques.slice().sort((a,b)=>a.cobro-b.cobro);exportTable({fmt:d.fmt,landscape:true,file:'cheques',title:'Cheques',sub:`Emitido ${fd(TODAY)}`,cols:['Fecha de cobro','Número','Tipo','Cuenta','Beneficiario','Concepto','Monto','Estado','Débito'],rows:l.map(c=>[fd(c.cobro),chqLabel(c),c.tipo,c.cuenta,c.benef,c.concepto,c.monto,c.estado,c.debito!=null?fd(c.debito):'']),totals:['','','','','','Total pendiente',l.filter(c=>c.estado==='Pendiente').reduce((s,c)=>s+c.monto,0),'','']})},
+ chClose:d=>{const cl=DB.chCierres.find(x=>x.id===+d.id),k=chCalc(cl);confirmDlg(`¿Cerrar la quincena ${qLabel(cl)}?`,`Chamba debe abonar ${money(k.debe)}. Se conserva el detalle y lo que quedó a favor de Chamba.`,'Cerrar quincena',()=>{cl.state='Cerrado';cl.closedAt=TODAY;const nx=cl.to+1;if(!DB.chCierres.some(x=>x.from===nx))DB.chCierres.push({id:DB.chCierres.length+1,from:nx,to:Dt(nx).getUTCDate()===1?nx+14:monthStart(nx+40)-1,state:'Abierto',pays:[]});audNow(`${S.user.name} cerró la quincena de Grupo Chamba ${qLabel(cl)}`);toast('Quincena cerrada.')})},
+ chPayDlg:d=>{S.dialog={t:'chpay',id:+d.id,medio:'Transferencia'};renderLayers()},
+ chpSet:d=>{S.dialog[d.k]=d.v;renderLayers()},
+ saveChPay:()=>{const cl=DB.chCierres.find(x=>x.id===S.dialog.id),m=+digits(byId('chp-m').value);if(!m)return toast('Poné el monto.');const fn=byId('chp-fn').textContent;
+  cl.pays.push({day:dIn(byId('chp-d').value)??TODAY,amount:m,medio:S.dialog.medio,where:byId('chp-w').value,file:fn.startsWith('Adjuntar')?'':fn,obs:byId('chp-o').value.trim()});audNow(`${S.user.name} registró un pago de Grupo Chamba de ${money(m)} (${qLabel(cl)})`);S.dialog=null;render();toast('Pago de Chamba registrado.')},
+ chExp:d=>{const cls=d.id?[DB.chCierres.find(x=>x.id===+d.id)]:DB.chCierres;const rows=[];cls.forEach(cl=>{chOps(cl).forEach(o=>rows.push([qLabel(cl),fd(o.delDay),rubro(o)==='Contenedor'?'Contenedor · '+o.type:o.svc,aline(addr(o)),chConte(o),chEf(o)||'',chFav(o)||'',chConte(o)-chEf(o)]))});
+  const k=d.id?chCalc(cls[0]):null;exportTable({fmt:d.fmt,landscape:true,file:`grupo-chamba${d.id?'-'+dOut(cls[0].from):''}`,title:`Grupo Chamba${d.id?' · cierre '+qLabel(cls[0]):''}`,sub:k?`Para Conte Nic ${money(k.conte)} · efectivo recibido ${money(k.ef)} · a favor de Chamba ${money(k.fav)} · pagos ${money(k.pag)} · Chamba debe ${money(Math.max(0,k.saldo))}`:`Emitido ${fd(TODAY)}`,cols:['Quincena','Fecha','Servicio','Dirección','Para Conte Nic','Efectivo recibido','A favor de Chamba','Saldo'],rows,totals:['','','','Total',rows.reduce((s,r)=>s+r[4],0),rows.reduce((s,r)=>s+(r[5]||0),0),rows.reduce((s,r)=>s+(r[6]||0),0),rows.reduce((s,r)=>s+r[7],0)]})},
+ navG:d=>{const items=NAV.filter(n=>n.g===d.v&&n.r.includes(role())),cur=S.navG[d.v]??items.some(x=>x.id===S.view);S.navG[d.v]=!cur;render()},
  doLogin:()=>{const u=norm(byId('lg-user').value),p=byId('lg-pass').value,us=DB.users.find(x=>x.user===u&&x.pass===p);if(!us){byId('lg-msg').innerHTML='<p class="err">Usuario o contraseña incorrectos.</p>';return}ACT.login({id:us.id})},
  fillLogin:d=>{byId('lg-user').value=d.u;byId('lg-pass').value='conte';byId('lg-pass').focus()},
  saveRemito:d=>{const o=O(d.id),n=+digits(byId('rm-n').value);o.remito=n||null;if(n>DB.seq.remito)DB.seq.remito=n;o.firmado=byId('rm-f').checked;audNow(`${S.user.name} cargó el remito ${n?'N° '+n:''}${o.firmado?' (firmado)':''} del pedido ${opn(o.id)}`,o.id);renderLayers();toast('Remito guardado.')},
@@ -2799,7 +3489,7 @@ const ACT={
  openOp:d=>{S.modal={t:'op',id:+d.id};S.editCom=null;S.drawer=null;renderLayers()},
  closeDrawer:()=>{S.drawer=null;renderLayers()},closeModal:()=>{S.modal=null;renderLayers()},closeDialog:()=>{S.dialog=null;renderLayers()},
  confirmYes:()=>{const r=S.dialog.run;S.dialog=null;r();render()},
- newOp:d=>{S.modal={t:'newop',cid:d.cid?+d.cid:null,day:d.day!=null?+d.day:null,svc:d.svc||null};S.drawer=null;renderLayers();if(d.svc)noSvcSync();setTimeout(()=>{const q=byId('no-q');if(q)q.focus()},30)},
+ newOp:d=>{if(!can.createOp())return toast('Tu perfil no agenda pedidos.');S.modal={t:'newop',d:npInit({cid:d.cid?+d.cid:null,day:d.day!=null?+d.day:null,svc:d.svc||null,ext:d.ext?+d.ext:null})};S.drawer=null;S.dialog=null;renderLayers();setTimeout(()=>{const q=byId('np-q');if(q)q.focus()},30)},
  pickCust:d=>{const c=CU(d.id);byId('no-cust').innerHTML=custBlock(c);byId('no-rec').innerHTML=recBlock();byId('no-err').innerHTML='';if(c.name==='Grupo Chamba'){const r=document.querySelector('input[name="no-pay"][value="Grupo Chamba"]');if(r){r.checked=true;byId('no-acct-box').hidden=true}}},
  noClear:()=>{byId('no-cust').innerHTML=custBlock(null);byId('no-rec').innerHTML=recBlock()},
  saveOp:d=>saveOpImpl(d),
@@ -2861,6 +3551,33 @@ const ACT={
  gqGo:d=>{byId('gq').value='';byId('gq-res').hidden=true;if(d.k==='cont')ACT.openCont(d);else if(d.k==='op')ACT.openOp(d);else if(can.cust())ACT.openCust(d);else{S.view='agenda';S.ag.when='todas';S.ag.q=CU(d.id).name;render()}}
 };
 const LIVE={
+ np:t=>{const D=npD();if(!D)return;let v=t.value;if(t.dataset.money){v=digits(v);const f=v?num(+v):'';if(t.value!==f){t.value=f}}npSetPath(D,t.dataset.k,v);
+  if(['unit','paidAmt','lit','hose'].includes(t.dataset.k))npTotals();
+  if(t.dataset.k==='rem.num'){const el=byId('np-tal');if(el)el.textContent=talHint(talOf(+digits(v)),v)}},
+ npq:t=>{const D=npD();D.q=t.value;const q=norm(t.value),dg=digits(t.value),box=byId('np-sug');if(q.length<2){box.innerHTML='';return}
+  const res=DB.customers.filter(c=>norm(c.name).includes(q)||(dg.length>=4&&digits(c.phone).includes(dg))).slice(0,6);
+  box.innerHTML=res.map(c=>`<button type="button" data-act="npPick" data-id="${c.id}"><b>${esc(c.name)}</b><small>${esc(c.phone)} · ${c.addrs.map(a=>esc(aline(a))+', '+esc(a.loc)).slice(0,2).join(' / ')}</small></button>`).join('')+(res.length?'':`<div class="muted" style="padding:8px 10px">Cliente nuevo: completá teléfono y dirección.</div>`)},
+ npAddr:t=>{npD().addrId=+t.value;npRender()},
+ npLoc:t=>{const D=npD();D.loc=t.value;D.barrio='';npRender()},
+ npField:t=>{const D=npD();npSetPath(D,t.dataset.k,t.dataset.num?+t.value:t.value);npRender()},
+ npSvc:t=>{const D=npD();D.svc=t.value;D.sq=1;D.qty=1;D.unit=t.value==='Contenedor'?DEFP[D.size]:SVCS[t.value].p;if(t.value!=='Contenedor')D.type='Alquiler';npRender()},
+ npDate:t=>{const D=npD(),d=dIn(t.value);if(d==null)return;npSetPath(D,t.dataset.k,d);if(t.dataset.k==='obrFrom'&&D.obrTo<=d)D.obrTo=addMonths(d,1);npRender()},
+ npFile:t=>{const f=t.files[0];npSetPath(npD(),t.dataset.k,f?f.name:'');npRender()},
+ fileName:t=>{const f=t.files[0],o=byId(t.dataset.out);if(o)o.textContent=f?f.name:o.textContent},
+ kmPlate:t=>{S.dialog.plate=t.value;renderLayers()},
+ skUnit:t=>{S.dialog.unit=t.value;S.dialog.pres='';renderLayers()},
+ skPid:t=>{S.dialog.pid=+t.value;S.dialog.pres='';renderLayers()},
+ skPres:t=>{S.dialog.pres=t.value;S.dialog.count=+byId('sk-q').value||1;renderLayers()},
+ skCount:t=>{const D=S.dialog;D.count=+t.value||0;const p=D.newP?null:prodOf(D.pid),unit=D.newP?D.unit:p.unit,pres=PRESENT[unit]||PRESENT['un.'],pr=pres.find(x=>x[0]===D.pres)||pres[0],cur=p?stockOf(p.id):0,tot=pr[1]*D.count;byId('sk-tot').textContent=qtyTxt(tot,unit);byId('sk-new').textContent=qtyTxt(cur+tot,unit)},
+ skOutPid:t=>{S.dialog.pid=+t.value;renderLayers()},
+ soQ:t=>{const q=parseFloat(String(t.value).replace(',','.'))||0,r=byId('so-r');byId('so-s').textContent=qtyTxt(q,r.dataset.u);r.textContent=qtyTxt(+r.dataset.cur-q,r.dataset.u);r.classList.toggle('late',+r.dataset.cur-q<0)},
+ cpPlate:t=>{const c=DB.compras.find(x=>x.id===+t.dataset.id);c.plate=t.value||null;audNow(`${S.user.name} asignó la compra ${c.detalle} a ${t.value||'sin vehículo'}`);toast(t.value?`Asignada a ${t.value}: aparece en el Control de flota.`:'Compra sin vehículo.')},
+ talPrev:()=>{const f=+digits(byId('tl-f').value),c=Math.max(1,+digits(byId('tl-c').value)||1);byId('tl-h').textContent=f?f+c*50-1:'—'},
+ cqCh:t=>{S.dialog.ch=+t.value;renderLayers()},
+ cqCfg:t=>{const k=t.dataset.k;DB.cqCfg[k]=t.type==='checkbox'?t.checked:k==='days'?+t.value:t.value;render();toast('Recordatorio actualizado.')},
+ cbPrev:t=>{const f=+digits(t.value);byId('cb-h').textContent=f?f+49:'—'},
+ chFav:t=>{const o=O(t.dataset.id),v=+digits(t.value);o.chFavor=Math.min(v,chEf(o));audNow(`${S.user.name} ajustó a ${money(o.chFavor)} lo que queda a favor de Chamba en ${opn(o.id)}`);render();toast('Monto a favor de Chamba actualizado.')},
+ chpPrev:t=>{const m=+digits(t.value)||0,s=+t.dataset.saldo,r=s-m,b=byId('chp-prev');b.innerHTML=r<=0?`Saldo luego de guardar: <b>$ 0</b> · el cierre quedará Pagado.`:`Saldo luego de guardar: <b>${money(r)}</b> · quedará como Pago parcial.`},
  noSq:t=>{const k=val('no-svc');if(SVCS[k]&&k!=='Contenedor')byId('no-price').value=svcPrice(k,+digits(t.value)||0)},
  cjSel:t=>{const id=+t.dataset.id,s=new Set(S.cj.sel);t.checked?s.add(id):s.delete(id);S.cj.sel=[...s];render()},
  cjAll:t=>{S.cj.sel=t.checked?JSON.parse(t.dataset.ids):[];render()},

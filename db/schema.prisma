@@ -1,4 +1,4 @@
-// Conte Nic · modelo de datos (borrador v3 · notas 10/10: servicios, caja, sueldos por modalidad)
+// Conte Nic · modelo de datos (borrador v4 · diseño final 02/11: pedido en 5 partes, flota, stock, compras, remitos, cheques, Chamba quincenal)
 // PostgreSQL + Prisma. Los nombres de tablas y campos van en inglés (convención de código);
 // cada uno tiene su explicación en castellano.
 //
@@ -65,7 +65,51 @@ enum ContainerState {
 enum InvoiceType {
   A
   B
-  C
+  C // no se usa por ahora: solo A y B
+}
+
+/// Opciones del menú IVA al tomar el pedido
+enum VatRate {
+  NO_AGREGAR
+  IVA_2_5
+  IVA_5
+  IVA_10_5
+  IVA_21
+  IVA_27
+  EXENTO
+  NO_GRAVADO
+}
+
+enum VehicleType {
+  PORTA_VOLQUETES
+  ROLLOFF_AGUA
+  MINICARGADORA
+  RETROEXCAVADORA
+}
+
+enum StockMoveType {
+  STOCK_INICIAL
+  INGRESO
+  SALIDA
+  DEVOLUCION
+  AJUSTE
+}
+
+enum ChequeType {
+  FISICO
+  ECHEQ
+}
+
+enum ChequeStatus {
+  PENDIENTE
+  COBRADO
+  ANULADO
+  RECHAZADO
+}
+
+enum ClosingStatus {
+  ABIERTO
+  CERRADO // el estado Pendiente / Pago parcial / Pagado se calcula con los pagos
 }
 
 /// Condición de la factura (colores de la planilla: amarillo, verde, rojo)
@@ -126,6 +170,12 @@ enum AttachmentKind {
   FOTO_REMITO
   COMPROBANTE_PAGO
   FACTURA
+  NOTA_CREDITO
+  CONTRATO_OBRADOR
+  DOCUMENTO_VEHICULO
+  COMPROBANTE_COMPRA
+  CHEQUE
+  REMITO_ANULADO
   COMPROBANTE_SUELDO
   COMPROBANTE_GASTO
   OTRO
@@ -282,6 +332,14 @@ model Order {
   paymentMethod       PaymentMethod
   paymentAccountId    Int? // SAS / YPF / Otro si es transferencia
   pendingConfirmation Boolean        @default(false) // el cliente todavía no confirmó
+  pendingReason       String? // motivo obligatorio si está pendiente de confirmación
+  unitPrice           Decimal?       @db.Decimal(12, 2) // precio unitario sin IVA (carga manual)
+  vatRate             VatRate        @default(IVA_21) // el total del pedido = unitario × cantidad × (1 + IVA)
+  waterLiters         Int? // viaje de agua: litros (8.000–10.000 por viaje)
+  hoseMeters          Int? // viaje de agua: metros de manguera que lleva el chofer
+  rentalFrom          DateTime?      @db.Date // obrador: fecha de entrega
+  rentalTo            DateTime?      @db.Date // obrador: fecha de vencimiento (mínimo 1 mes); el período se calcula
+  chambaInFavor       Decimal?       @db.Decimal(12, 2) // Grupo Chamba: parte del efectivo que queda a favor de Chamba (carga manual)
   notes               String?
   logisticsNotes      String?
   driverId            Int? // chofer de la entrega
@@ -453,20 +511,29 @@ model Driver {
   movements  ContainerMovement[]
   employee   Employee?
   handovers  CashHandover[]
+  remitoBooks RemitoBook[]
+  stockMoves StockMovement[]
 }
 
+/// Vehículo de la flota (Control de flota): FWU 010, EPK 581, RXB 892, FEO 193, CASE, JCB
 model Truck {
-  id              Int     @id @default(autoincrement())
-  plate           String  @unique // RXB 892
+  id              Int         @id @default(autoincrement())
+  plate           String      @unique // RXB 892 (o CASE / JCB para las máquinas)
+  type            VehicleType @default(PORTA_VOLQUETES)
   description     String?
   defaultDriverId Int?
-  active          Boolean @default(true)
+  active          Boolean     @default(true)
 
   defaultDriver Driver?    @relation(fields: [defaultDriverId], references: [id])
   trips         Trip[]
   fuelLoads     FuelLoad[]
   cashPayments  Payment[]
   cashExpenses  Expense[]
+  expenses      Expense[]     @relation("ExpenseTruck")
+  kmReadings    KmReading[]
+  documents     VehicleDocument[]
+  purchases     Purchase[]
+  stockMoves    StockMovement[]
 }
 
 /// Viaje de un camión: agrupa entregas y retiros hechos juntos ("mismo viaje")
@@ -575,6 +642,8 @@ model Invoice {
   periodTo       DateTime      @db.Date // período facturado hasta
   customerId     Int? // quién pidió (puede no coincidir con la razón social)
   businessName   String // razón social a la que se factura
+  vatCondition   String? // condición frente al IVA (ARCA)
+  fiscalAddress  String? // domicilio fiscal (ARCA)
   taxId          String? // CUIT de la factura
   description    String // producto / servicio: "1 contenedor 12/01", "abono mensual 4 cont + 2 extras"
   netAmount      Decimal       @db.Decimal(14, 2) // monto neto
@@ -596,6 +665,7 @@ model Invoice {
   createdBy   User             @relation("InvoiceCreatedBy", fields: [createdById], references: [id])
   items       InvoiceItem[]
   payments    InvoicePayment[]
+  creditNotes CreditNote[]
   attachments Attachment[]
 
   @@unique([type, pointOfSale, number])
@@ -696,6 +766,7 @@ model Expense {
   paymentMethod PaymentMethod
   accountId     Int? // si fue transferencia
   cashTruckId   Int? // si fue efectivo de un camión; vacío = Oficina
+  truckId       Int? // a qué vehículo corresponde (arreglos, gomería): aparece en Control de flota
   employeeId    Int? // adelanto de sueldo: a quién (lo carga Ventas o Administración)
   description   String?
   createdById   Int
@@ -704,6 +775,8 @@ model Expense {
   category    ExpenseCategory @relation(fields: [categoryId], references: [id])
   account     PaymentAccount? @relation(fields: [accountId], references: [id])
   cashTruck   Truck?          @relation(fields: [cashTruckId], references: [id])
+  truck       Truck?          @relation("ExpenseTruck", fields: [truckId], references: [id])
+  cheques     Cheque[]
   employee    Employee?       @relation(fields: [employeeId], references: [id])
   createdBy   User            @relation(fields: [createdById], references: [id])
   attachments Attachment[]
@@ -760,4 +833,195 @@ model CashClosing {
   closedAt       DateTime @default(now())
 
   closedBy User @relation(fields: [closedById], references: [id])
+}
+
+// ─────────────────────────────── Diseño final 02/11 ───────────────────────────────
+
+/// Nota de crédito vinculada a una factura mal hecha
+model CreditNote {
+  id        Int      @id @default(autoincrement())
+  invoiceId Int
+  number    String
+  date      DateTime @db.Date
+  amount    Decimal  @db.Decimal(14, 2)
+  reason    String
+  pdfUrl    String?
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id])
+}
+
+/// Kilómetros del día cargados a mano desde el satelital (Warrior). Con las cargas de combustible se calcula L/km.
+model KmReading {
+  id          Int      @id @default(autoincrement())
+  truckId     Int
+  date        DateTime @db.Date
+  km          Int
+  createdById Int
+
+  truck Truck @relation(fields: [truckId], references: [id])
+
+  @@unique([truckId, date])
+}
+
+/// Documentación del vehículo: seguro, título, tarjeta verde, revisión técnica
+model VehicleDocument {
+  id        Int       @id @default(autoincrement())
+  truckId   Int
+  kind      String // "Seguro", "Revisión técnica", "Título", "Tarjeta verde"
+  expiresAt DateTime? @db.Date
+  fileUrl   String?
+  notes     String?
+
+  truck Truck @relation(fields: [truckId], references: [id])
+}
+
+/// Compras: gomas, repuestos, accesorios. El vehículo puede asignarse después.
+model Purchase {
+  id          Int      @id @default(autoincrement())
+  date        DateTime @db.Date
+  category    String
+  detail      String
+  supplier    String?
+  amount      Decimal  @db.Decimal(14, 2)
+  paymentKind String // "Efectivo · Oficina", "Transf SAS", "Cheque"...
+  truckId     Int? // vacío = todavía no se sabe a qué camión va
+  forVehicle  Boolean  @default(true)
+  installed   Boolean  @default(false)
+  fileUrl     String?
+  createdById Int
+  createdAt   DateTime @default(now())
+
+  truck      Truck?          @relation(fields: [truckId], references: [id])
+  stockMoves StockMovement[]
+  cheques    Cheque[]
+}
+
+/// Productos del stock de oficina (aceites, filtros, repuestos)
+model Product {
+  id       Int     @id @default(autoincrement())
+  name     String
+  category String
+  brand    String?
+  spec     String? // especificación o código: ISO VG 68, FA-001
+  unit     String // "L", "un.", "kg"
+  minStock Decimal @db.Decimal(10, 2) // aviso de bajo stock
+  location String? // Oficina · Estante 1
+  active   Boolean @default(true)
+
+  moves StockMovement[]
+}
+
+/// Movimiento de stock. El stock disponible = suma de cantidades (ingresos +, salidas −).
+model StockMovement {
+  id            Int           @id @default(autoincrement())
+  productId     Int
+  type          StockMoveType
+  date          DateTime
+  quantity      Decimal       @db.Decimal(10, 2) // en la unidad del producto (ej. 2 tarros de 20 L = +40)
+  presentation  String? // "Tarro de 20 L"
+  packCount     Int? // cantidad de tarros
+  driverId      Int? // salida: quién lo retiró
+  truckId       Int? // salida: para qué camión o máquina → aparece en Control de flota
+  installed     Boolean       @default(false) // retirado de la oficina vs. efectivamente instalado
+  purchaseId    Int? // ingreso vinculado a una compra (no se carga dos veces)
+  supplier      String?
+  receiptNumber String?
+  reason        String? // motivo de salida o de ajuste
+  notes         String?
+  createdById   Int
+
+  product  Product   @relation(fields: [productId], references: [id])
+  driver   Driver?   @relation(fields: [driverId], references: [id])
+  truck    Truck?    @relation(fields: [truckId], references: [id])
+  purchase Purchase? @relation(fields: [purchaseId], references: [id])
+
+  @@index([productId, date])
+}
+
+/// Talonario de remitos (50 por talonario). El estado de cada número se calcula: cargado, salto a revisar, anulado, disponible.
+model RemitoBook {
+  id          Int       @id @default(autoincrement())
+  bookNumber  Int       @unique
+  fromNumber  Int       @unique
+  toNumber    Int       @unique // fromNumber + 49; no se permiten rangos superpuestos
+  driverId    Int? // reservado o entregado a
+  deliveredAt DateTime? @db.Date // reservar no es entregar
+  notes       String?
+
+  driver Driver? @relation(fields: [driverId], references: [id])
+}
+
+/// Remito anulado: no se borra ni se libera
+model RemitoVoid {
+  number    Int      @id
+  date      DateTime @db.Date
+  reason    String
+  fileUrl   String?
+  createdById Int
+}
+
+/// Chequera física de 50 cheques
+model Checkbook {
+  id         Int    @id @default(autoincrement())
+  bank       String
+  account    String // SAS, YPF
+  bookNumber Int
+  fromNumber Int
+  toNumber   Int
+
+  cheques Cheque[]
+}
+
+/// Cheque físico o eCheq emitido
+model Cheque {
+  id          Int          @id @default(autoincrement())
+  type        ChequeType
+  checkbookId Int?
+  account     String
+  number      String
+  issueDate   DateTime     @db.Date
+  dueDate     DateTime     @db.Date // fecha de cobro
+  amount      Decimal      @db.Decimal(14, 2)
+  beneficiary String
+  concept     String?
+  status      ChequeStatus @default(PENDIENTE)
+  debitDate   DateTime?    @db.Date // fecha real de débito
+  statusNote  String? // motivo de anulación o rechazo
+  purchaseId  Int?
+  expenseId   Int?
+  fileUrl     String?
+
+  checkbook Checkbook? @relation(fields: [checkbookId], references: [id])
+  purchase  Purchase?  @relation(fields: [purchaseId], references: [id])
+  expense   Expense?   @relation(fields: [expenseId], references: [id])
+
+  @@unique([account, number])
+  @@index([status, dueDate])
+}
+
+/// Cierre quincenal de Grupo Chamba. Los servicios salen de los pedidos de Chamba realizados en el período.
+model ChambaClosing {
+  id       Int           @id @default(autoincrement())
+  fromDate DateTime      @db.Date
+  toDate   DateTime      @db.Date
+  status   ClosingStatus @default(ABIERTO)
+  closedAt DateTime?
+  amountDue Decimal?     @db.Decimal(14, 2) // lo que Chamba debe abonar al cerrar
+
+  payments ChambaPayment[]
+
+  @@unique([fromDate, toDate])
+}
+
+model ChambaPayment {
+  id        Int      @id @default(autoincrement())
+  closingId Int
+  date      DateTime @db.Date
+  amount    Decimal  @db.Decimal(14, 2)
+  method    PaymentMethod
+  where     String? // cuenta destino o lugar donde se recibió
+  fileUrl   String?
+  notes     String?
+
+  closing ChambaClosing @relation(fields: [closingId], references: [id])
 }

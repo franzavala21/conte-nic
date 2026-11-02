@@ -18,6 +18,20 @@ También se puede publicar con **GitHub Pages** (Settings → Pages → Deploy f
 - `docs/modelo-de-datos.html`: diagrama interactivo de las tablas y sus relaciones, recorrido de un pedido, datos que se calculan y cómo se importa el Excel.
 - `db/schema.prisma`: el mismo modelo en Prisma (PostgreSQL), validado. La conexión va en `prisma.config.ts` (variable `DATABASE_URL` en un `.env`).
 
+## Versión 5 · diseño final del cliente (02/11)
+
+- **Menú agrupado** como en el diseño: Inicio, Agenda, Operaciones (Servicios, Entregas, Retiros), Caja, Logística (Contenedores, Mapa), Camiones (Control de flota, Choferes, Combustible, Basurales), Administración (Pagos, Gastos, Compras, Stock, Remitos, Cheques, Facturación, Grupo Chamba, Sueldos…) y Clientes.
+- **Agenda**: navegación por día o semana, "Martes 20 · 12 pedidos", chips Agendados / Por confirmar / Sin asignar / Realizados, filtros en el orden pedido (buscar, localidad, barrio, pendientes de confirmación, cancelados), separación por servicio y panel lateral con el resumen del pedido (mapa, WhatsApp, pago, documentos).
+- **Agendar pedido en 5 partes**: cliente y entrega (varias direcciones por cliente, link de Maps, WhatsApp), pedido (contenedor, obrador, viaje de agua, viaje de tierra, minicargadora, retroexcavadora, Roll-Off), precio y pago (precio sin IVA + menú IVA, dónde se cobró, comprobante), datos adicionales opcionales (CUIT con búsqueda ARCA simulada, factura A/B, punto de venta 00001, nota de crédito) y remitos (encuentra el talonario solo). Estado pendiente de confirmación o cancelado con motivo obligatorio.
+- **Localidades y barrios privados** reales, ordenados de Ascochinga a Argüello Norte.
+- **Retiros** por vencimiento con WhatsApp y resumen lateral del cliente con pago y comprobante. **Mapa** con lista, filtros y extensión.
+- **Control de flota** (FWU 010, EPK 581, RXB 892, FEO 193, CASE, JCB): km de Warrior a mano, consumo en L/km entre cargas, actividad por localidad (top 5), documentación con vencimientos e historial que junta combustible, stock, compras y gastos.
+- **Stock de oficina** (ingresos por presentación, salidas a un vehículo, devoluciones, ajustes, retirado vs. instalado), **Compras** con vehículo asignable después.
+- **Control de remitos**: talonarios de 50, reservas y entregas, estados por número (cargado, salto a revisar, anulado, disponible) y control diario por chofer.
+- **Cheques**: chequeras de 50, eCheqs, vencimientos a 7 y 30 días, recordatorios, varios cheques por compra.
+- **Grupo Chamba** por cierres quincenales: efectivo recibido, monto a favor de Chamba editable, pagos parciales.
+- Modelo de datos v4: 43 tablas (`CreditNote`, `KmReading`, `VehicleDocument`, `Purchase`, `Product`, `StockMovement`, `RemitoBook`, `RemitoVoid`, `Checkbook`, `Cheque`, `ChambaClosing`, `ChambaPayment`).
+
 ## Versión 4 · notas del 10/10
 
 - **Servicios nuevos** además de contenedores: Agua, Obradores, Minicargadora, Retroexcavadora y Rolloff, cada uno con su color. En la Agenda hay filtros por servicio arriba de las fechas y una sección **Servicios** (entre Agenda y Entregas). Cómo se carga cada servicio (litros, días, horas, m³) queda a revisar.
