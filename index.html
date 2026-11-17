@@ -1262,6 +1262,75 @@ tr.efrow>td{background:color-mix(in srgb,var(--ok) 7%,transparent)}
 @media (max-width:560px){.npg.g2,.npg.g3,.npg.g4,.npg.g3x{grid-template-columns:minmax(0,1fr)}.npg .span2{grid-column:auto}.seg2 button{flex:1 1 40%}}
 
 .acts-col{display:flex;flex-direction:column;gap:4px;align-items:flex-start}.acts-col>span{display:flex;gap:4px}
+
+/* ---- v7 · reunión 04/11 ---- */
+:root{--fu:#B0237E;--fu-bg:#F8DDEE;--zv:#EADFF7;--zc:#D7E9FA;--zg:#D9F0D6;--zy:#FBEDBF;--zagua:#8FEAF6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--fu:#F17CC8;--fu-bg:#3A1830;--zv:rgba(150,110,220,.24);--zc:rgba(80,150,230,.24);--zg:rgba(80,180,100,.22);--zy:rgba(220,180,50,.22);--zagua:rgba(0,200,230,.32)}}
+:root[data-theme="dark"]{--fu:#F17CC8;--fu-bg:#3A1830;--zv:rgba(150,110,220,.24);--zc:rgba(80,150,230,.24);--zg:rgba(80,180,100,.22);--zy:rgba(220,180,50,.22);--zagua:rgba(0,200,230,.32)}
+.pd.fu{background:var(--fu);color:var(--surface)}.dot.fu{background:var(--fu)}
+td.z-v,.tbcard.z-v,i.z-v{background:var(--zv)}td.z-c,.tbcard.z-c,i.z-c{background:var(--zc)}td.z-g,.tbcard.z-g,i.z-g{background:var(--zg)}td.z-y,.tbcard.z-y,i.z-y{background:var(--zy)}
+tr.z-agua>td,td.z-agua,.tbcard.z-agua,i.z-agua{background:var(--zagua)}
+.tbtabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.tbt{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-weight:600;font-size:14px}
+.tbt b{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--surface2);font-size:12.5px}
+.tbt.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}.tbt.on b{background:rgba(255,255,255,.18);color:inherit}
+.tbt .dcol{width:10px;height:10px;border-radius:50%;background:var(--dc)}.tbt[style*="--dc"]{border-left:4px solid var(--dc)}
+.tbt .wn{display:inline-flex;align-items:center;gap:3px;color:var(--bad);font-size:12.5px}.tbt .wn .ic{width:14px;height:14px}
+.tbt.on .wn{color:#FFB4AC}.tbt:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.tb-info{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13.5px;margin:0 0 8px}.tb-info .ic{width:15px;height:15px}
+table.tbt-t td{vertical-align:middle}
+.gcol{width:34px;padding-right:0!important;white-space:nowrap}
+.grip{display:inline-flex;color:var(--muted);cursor:grab;vertical-align:middle}.grip .ic{width:16px;height:16px}
+.mv{display:inline-flex;flex-direction:column;gap:1px;vertical-align:middle;margin-left:2px}
+.btn.icon.xs{min-height:0;height:16px;width:18px;padding:0;font-size:8px;line-height:1;border-radius:4px;justify-content:center}
+tr.dragging{opacity:.45}tr.drop-b>td{box-shadow:inset 0 3px 0 var(--accent)}tr.drop-a>td{box-shadow:inset 0 -3px 0 var(--accent)}
+.prio-b{border:0;cursor:pointer;font:inherit;font-weight:600;font-size:12.5px}.prio-b:disabled{cursor:default}
+.tb-drv{min-width:120px}
+.chipx{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:7px;font-size:12.5px;font-weight:600;white-space:nowrap;margin-top:3px}
+.chipx .ic{width:13px;height:13px}.chipx.warn{background:var(--warn-bg);color:var(--warn)}.chipx.bad{background:var(--bad-bg);color:var(--bad)}.chipx.ok{background:var(--ok-bg);color:var(--ok)}
+.late-ish{color:var(--warn)}
+.rec-h{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:4px 0 10px}.rec-h h2{margin:0;font:600 24px var(--f-cond)}
+.tb-alert{margin:0 0 10px}
+.tb-foot{display:flex;align-items:center;gap:8px;margin:10px 2px;font-size:13px}.tb-foot .ic{width:15px;height:15px;vertical-align:-3px}
+.zleg{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:13px;margin:6px 0 14px}
+.zleg span{display:inline-flex;align-items:center;gap:6px}.zleg i{display:inline-block;width:18px;height:12px;border-radius:3px;border:1px solid var(--line)}
+.tb-done{margin:12px 0}.tb-done>summary{cursor:pointer;font:600 16px var(--f-body);padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);list-style:none}
+.tb-done>summary::before{content:'▸ ';color:var(--muted)}.tb-done[open]>summary::before{content:'▾ '}.tb-done[open]>summary{border-radius:10px 10px 0 0}.tb-done .tbl-wrap{border-radius:0 0 12px 12px;border-top:0}
+tr.done-row td:first-child b{color:var(--ok)}
+.small{font-size:12.5px}
+.tbp .agp-h h3{font-size:20px}
+.tbcard{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:10px;border:1px solid var(--line)}.tbcard .ic{flex:none;margin-top:2px}.tbcard span{display:flex;flex-direction:column}.tbcard small{color:var(--muted)}
+.rlist{display:flex;flex-direction:column;gap:6px;max-height:320px;overflow:auto;margin:6px 0}
+.ropt{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;border:1px solid var(--line);border-radius:10px;cursor:pointer}.ropt span:first-of-type{display:flex;flex-direction:column;flex:1}.ropt small{color:var(--muted)}.ropt.on{border-color:var(--info);box-shadow:0 0 0 1px var(--info);background:var(--info-bg)}
+.ropt input{margin-top:3px}
+.stp3{display:flex;justify-content:space-between;gap:6px;margin:0 0 12px}.stp3>div{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12.5px;color:var(--muted)}
+.stp3 span{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);font-weight:700}.stp3 .s-cur span{background:var(--accent);border-color:var(--accent);color:#fff}.stp3 .s-cur b{color:var(--accent)}
+.stp3 .s-ok span{background:var(--ok);border-color:var(--ok);color:#fff}.stp3 .s-ok small{background:var(--ok-bg);color:var(--ok);padding:0 6px;border-radius:5px;font-weight:700}
+.tbsum{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin:0}.tbsum p{display:flex;gap:8px;align-items:center;margin:0}.tbsum .ic{flex:none;width:17px;height:17px;color:var(--muted)}
+.agp-s h4{margin-top:0}
+.cards5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.figb{font:inherit;color:inherit;text-align:left;cursor:pointer;width:100%}.fig.figb{display:flex;flex-direction:column}.figb.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}.figb span{display:flex;align-items:center;gap:6px}.figb .ic{width:16px;height:16px}
+.obph svg,.obph img{width:100%;height:auto;border-radius:10px;display:block;margin:4px 0}
+.pdfn{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:7px;background:#D93025;color:#fff;font:700 11px var(--f-body)}
+.lm-ob{display:grid;place-items:center;min-width:24px;height:24px;padding:0 4px;background:#7B3FD0;color:#fff;font:700 12px/1 Arial,sans-serif;border:3px solid #fff;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,.4);transform:translate(-50%,-50%)}
+.lm-ob.warn{border-color:#F2B705}.lm-ob.bad{border-color:#D93025}
+.sq-ob{display:inline-block;width:12px;height:12px;background:#7B3FD0;border-radius:2px}
+.ttl-ic{display:inline-flex;vertical-align:-2px;margin-right:6px;color:var(--info)}.ttl-ic .ic{width:26px;height:26px}
+.stkc .fig b{font-size:40px}.stkc .fig.okc b{color:var(--ok)}.stkc .fig.low b{color:var(--bad)}
+.chqav h3{display:flex;align-items:center;gap:8px;margin:0}.chqav .avrow{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin:10px 0}
+.chqav .seg2{width:max-content}.avd .muted{font-size:12.5px}
+.tiles3x{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.chq-red .tbl-wrap{border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}.chq-red td{color:var(--bad)}.chq-red td .muted{color:color-mix(in srgb,var(--bad) 60%,var(--muted))}
+.thm{display:flex;align-items:center;gap:8px;width:100%;margin:0 0 6px;padding:7px 10px;border-radius:8px;border:1px solid var(--side-hi);background:transparent;color:var(--side-ink);font:600 13px var(--f-body);cursor:pointer}.thm .ic{width:16px;height:16px}
+.thm.lg{width:auto;margin:14px auto 0;color:var(--ink);border-color:var(--line)}
+.su-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start;margin-top:12px}.su-l,.su-r{display:flex;flex-direction:column;gap:14px}.su-r .panel,.su-l .panel{margin:0}
+.su-grid h3{display:flex;align-items:center;justify-content:flex-start;gap:8px}.su-grid h3 .ic{width:18px;height:18px}
+.donut{display:flex;flex-wrap:wrap;gap:14px;align-items:center}.donut svg{width:170px;height:170px;flex:none}.dn-t{font:600 18px var(--f-cond);fill:var(--ink)}.dn-s{font-size:11px;fill:var(--muted)}
+.legend.vert{flex-direction:column;align-items:flex-start;gap:4px;margin:0}.legend.vert li{display:flex;align-items:center;gap:6px}
+.chart text.bv{font-size:11px;fill:var(--ink);font-weight:600}
+.rep-grid .wide2{grid-column:1/-1}
+@media (max-width:1100px){.su-grid{grid-template-columns:minmax(0,1fr)}.cards5{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:700px){.tiles3x{grid-template-columns:minmax(0,1fr)}.cards5{grid-template-columns:repeat(2,minmax(0,1fr))}.tbt{padding:7px 10px}}
 </style></head><body>
 
 <div id="app"></div>
@@ -1925,7 +1994,7 @@ function vChof(){
  const svcOf=dId=>{const r=[];DB.ops.forEach(o=>{if(o.status==='Cancelado'||o.type==='Extensión')return;
   if(o.driverId===dId&&inRange(o.delDay,a,b))r.push({d:o.delDay,m:o.delMin,t:o.type==='Recambio'?'Recambio':o.type==='Movimiento'?'Movimiento':'Entrega',o,lugar:`${aline(addr(o)).split(',')[0]} · ${addr(o).loc}`});
   if(o.pickDriverId===dId&&inRange(o.pickDay,a,b)){if(!o.closedByRecambio)r.push({d:o.pickDay,m:o.pickMin,t:'Retiro',o,lugar:`${aline(addr(o)).split(',')[0]} · ${addr(o).loc}`});if(o.basural)r.push({d:o.pickDay,m:o.dumpMin!=null?o.dumpMin:o.pickMin+30,t:'Basural',o,lugar:'B. '+o.basural})}});
-  return r.sort((x,y)=>(y.d*1440+y.m)-(x.d*1440+x.m))};
+  return r.sort((x,y)=>(x.d*1440+x.m)-(y.d*1440+y.m))};
  const all=Object.fromEntries(DB.drivers.map(d=>[d.id,svcOf(d.id)]));
  const cntT=(id,t)=>all[id].filter(x=>x.t===t).length;
  const max=Math.max(1,...DB.drivers.map(d=>all[d.id].filter(x=>x.t!=='Basural').length));
@@ -3001,7 +3070,7 @@ function docState(d){if(d.venc==null)return['ok','Vigente'];const x=d.venc-TODAY
 function vFlota(){
  const f=S.fl,p=f.plate,v=vehOf(p),[a,b]=flRange(),fu=fuelOf(p,a,b),km=kmOf(p,a,b),act=vehOps(p,a,b);
  const workDays=(()=>{let n=0;for(let d=a;d<=b;d++)if(dow(d)!==0)n++;return n})();
- const mant=vehMoves(p,a,b).filter(m=>m.o!=='Combustible').reduce((s,m)=>s+m.v,0),ints=intervals(p),last=ints[0],docs=DB.vdocs.filter(d=>d.plate===p);
+ const mant=vehMoves(p,a,b).filter(m=>m.o!=='Combustible'&&m.o!=='Basural').reduce((s,m)=>s+m.v,0),ints=intervals(p),last=ints[0],docs=DB.vdocs.filter(d=>d.plate===p);
  const kmPend=(()=>{let n=0;for(let d=TODAY-1;d>=TODAY-10;d--){if(dow(d)===0)continue;if(DB.kms.some(k=>k.plate===p&&k.day===d))break;n++}return n})();
  const locs={};[...act.ent,...act.rec].forEach(o=>{const l=addr(o).loc;locs[l]=(locs[l]||0)+o.qty});const top=Object.entries(locs).sort((x,y)=>y[1]-x[1]).slice(0,5);
  const tabs=[['res','Resumen'],['cons','Consumo entre cargas'],['hist','Historial y mantenimiento'],['neu','Neumáticos'],['doc','Documentación']];
@@ -3636,6 +3705,708 @@ document.addEventListener('change',e=>{const t=e.target;
  if(t.dataset.photo&&t.files[0]){const f=t.files[0],o=O(t.dataset.id),r=new FileReader();r.onload=()=>{o.photos.push({kind:t.dataset.photo,url:r.result});audNow(`${S.user.name} subió “${t.dataset.photo}” al pedido ${opn(o.id)}`,o.id);const bid=t.dataset.box||('ph-'+o.id),box=byId(bid);if(box)box.innerHTML=o.photos.filter(p=>(p.kind==='Foto del remito')===(t.dataset.photo==='Foto del remito')).map(p=>`<div class="photo"><img src="${p.url}" alt="${esc(p.kind)}"><span>${esc(p.kind)}</span></div>`).join('');toast('Foto cargada.')};r.readAsDataURL(f)}
 });
 document.addEventListener('focusout',e=>{if(e.target.id==='gq')setTimeout(()=>{const b=byId('gq-res');if(b&&!b.contains(document.activeElement))b.hidden=true},180)});
+
+/* ============ v7 · reunión 04/11: base, colores y datos ============ */
+Object.assign(ICONS,{
+ grip:'M9 5h.01M9 12h.01M9 19h.01M15 5h.01M15 12h.01M15 19h.01',
+ sun:'M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6L4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z',
+ moon:'M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z',
+ key:'M15 7a4 4 0 1 1-3.9 4.9L4 19v2h3v-2h2v-2h2l1.1-1.1A4 4 0 0 1 15 7zM16 9h.01',
+ cam:'M4 7h3l2-3h6l2 3h3v12H4zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',
+ home2:'M4 20V9l8-5 8 5v11H4zM9 20v-6h6v6',
+ drop:'M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z',
+ bell:'M6 16V11a6 6 0 1 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0'
+});
+const T0=Date.now();
+const tbNow=()=>Math.min(20*60,SIMNOW+Math.floor((Date.now()-T0)/60000));
+const ALERT_MIN=60;
+/* colores por zona (como los usa Lucía) */
+const ZONES={v:{l:'Ascochinga a Salsipuedes',locs:['Ascochinga','La Granja','Agua de Oro','El Manzano','El Pueblito','Salsipuedes']},c:{l:'Río Ceballos',locs:['Río Ceballos']},g:{l:'Unquillo, Cabana y Mendiolaza',locs:['Unquillo','Cabana','Mendiolaza']},y:{l:'Villa Allende a Argüello Norte',locs:['Villa Allende','Saldán','Barrio Norte','Argüello Norte']}};
+const zoneOf=loc=>Object.keys(ZONES).find(k=>ZONES[k].locs.includes(loc))||'';
+const isAgua=o=>o.type==='Servicio'&&o.svc==='Viaje de agua';
+const zcls=o=>isAgua(o)?'z-agua':('z-'+zoneOf(addr(o).loc));
+/* colores de choferes: Gustavo naranja, Nico verde, Chucky azul, Alambre fucsia */
+const DCOL={1:'#E8711C',2:'#2E9E4F',3:'#2F6FD0',4:'#D0238E'};
+DB.drivers.forEach(d=>{d.cls={1:'acc',2:'ok',3:'info',4:'fu'}[d.id]||d.cls});
+DB.drivers.sort((a,b)=>[1,2,3,4].indexOf(a.id)-[1,2,3,4].indexOf(b.id));
+/* perfil de Laura (Ventas, igual que Belén) */
+DB.users.push({id:'laura',user:'laura',pass:'conte',name:'Laura',role:'Ventas',desc:'Ventas, igual que Belén: agenda, caja, pagos, gastos y clientes.',last:TODAY-1});
+const prevWork=d=>{d--;while(dow(d)===0)d--;return d};
+
+/* ---------- Tablero: datos del día ---------- */
+(function seedTablero(){
+ DB.tbOrd=[];
+ // pedidos que quedaron de ayer
+ const y=prevWork(TODAY);
+ for(let i=0;i<2;i++){const op=makeOp(y,{assign:false,createdDay:prevWork(y)});if(op){op.obs=op.obs||'Quedó de ayer';aud(y,18*60+10,'Lucía',`Lucía pasó el pedido ${opn(op.id)} para el día siguiente`,op.id)}}
+ const today=DB.ops.filter(o=>o.status!=='Cancelado'&&o.type!=='Extensión'&&preDel(o)&&o.reqDay<=TODAY);
+ today.forEach(o=>{o.flow=o.flow||{};if(o.driverId){o.asgMin=Math.max(7*60+20,SIMNOW-ri(8,45));if(o.cids.length&&o.type!=='Servicio'&&o.type!=='Movimiento')o.link={src:'dep',cid:o.cids[0]}}});
+ // prioridad: primera hora
+ today.filter(o=>o.reqDay===TODAY&&o.slot==='Por la mañana').slice(0,3).forEach(o=>o.prio='Primera hora');
+ // recorrido de Nico con pasos a medias (como en el diseño)
+ const nico=today.filter(o=>o.driverId===2&&o.reqDay===TODAY&&(o.type==='Alquiler'));
+ const rets=DB.ops.filter(x=>isActive(x)&&x.plannedPickup<=TODAY&&!x.linkedTo&&x.cids.length===1&&x.type!=='Recambio');
+ const takeRet=size=>{const i=rets.findIndex(x=>x.size===size);return i<0?null:rets.splice(i,1)[0]};
+ const unres=o=>{o.cids.forEach(id=>{const c=C(id);if(c&&c.opId===o.id)c.opId=null});o.cids=[];o.link=null};
+ if(nico[0]){unres(nico[0]);nico[0].asgMin=SIMNOW-75}
+ const linkRet=(o,r,m)=>{unres(o);o.link={src:'ret',retId:r.id,cid:r.cids[0]};r.linkedTo=o.id;o.cids=[r.cids[0]];o.asgMin=m};
+ const doRet=(o,m)=>{const r=O(o.link.retId),c=C(o.link.cid);r.pickDay=TODAY;r.pickMin=m;r.pickDriverId=o.driverId;r.closedByRecambio=false;c.opId=o.id;c.place='En camión';mv(TODAY,m,c.id,`Retirado de ${cust(r).name} · va para ${cust(o).name}`,'retirado',r.id,o.driverId);o.flow.ret={min:m};aud(TODAY,m,'Lucía',`Lucía registró el retiro de ${c.id} (${opn(r.id)}) para la entrega ${opn(o.id)}`,o.id)};
+ const doDesc=(o,m,b)=>{const r=O(o.link.retId),c=C(o.link.cid);r.basural=b;r.dumpMin=m;r.pickPlace='Reutilizado';mv(TODAY,m,c.id,`Descargado en B. ${b} · vacío, reservado para ${cust(o).name}`,'disponible',r.id,o.driverId);o.flow.desc={min:m,basural:b};aud(TODAY,m,'Lucía',`Lucía registró la descarga de ${c.id} en B. ${b}`,o.id)};
+ if(nico[1]){const r=takeRet(nico[1].size);if(r){linkRet(nico[1],r,SIMNOW-95);doRet(nico[1],SIMNOW-55)}}
+ if(nico[2]){const r=takeRet(nico[2].size);if(r){linkRet(nico[2],r,SIMNOW-120);doRet(nico[2],SIMNOW-90);doDesc(nico[2],SIMNOW-60,basFor(addr(r).loc));nico[2].draft={step:'ent',note:'Falta hora de entrega'}}}
+ const gus=today.filter(o=>o.driverId===1&&o.reqDay===TODAY&&o.type==='Alquiler');
+ if(gus[0]){const r=takeRet(gus[0].size);if(r)linkRet(gus[0],r,SIMNOW-30)}
+ // los ya entregados hoy: pasos completos
+ DB.ops.filter(o=>o.delDay===TODAY&&o.status==='Realizado').forEach(o=>{o.flow=o.flow||{};o.flow.ent={min:o.delMin};if(!o.asgMin)o.asgMin=Math.max(7*60+10,o.delMin-ri(40,90))});
+ const ord=[...today].sort((a,b)=>((a.reqDay<TODAY?0:a.prio?1:2)-(b.reqDay<TODAY?0:b.prio?1:2))||a.min-b.min||a.id-b.id);
+ DB.tbOrd=ord.map(o=>o.id);
+})();
+
+/* ---------- Basurales y puntos de carga: ingresos comprados ---------- */
+(function seedPuntos(){
+ const st=TODAY-40;
+ DB.stk={
+  va:{key:'va',name:'Basural Villa Allende',short:'Villa Allende',unit:'ingresos',alert:100,start:st,buys:[{id:1,day:st,qty:1000,unit:11500,medio:'Transf SAS',receipt:'compra_ingresos_va_001.pdf',user:'Mili',note:'Compra anual de ingresos'}],adj:[]},
+  agua:{key:'agua',name:'Pileta Arcoíris',short:'Arcoíris',unit:'ingresos',alert:10,start:st,buys:[{id:1,day:st+2,qty:60,unit:16000,medio:'Transf SAS',receipt:'arcoiris_60.pdf',user:'Mili',note:''},{id:2,day:TODAY-12,qty:40,unit:17500,medio:'Efectivo · Oficina',receipt:'',user:'Mili',note:'Aumentó el precio'}],adj:[{id:1,day:TODAY-20,qty:-1,reason:'Carga que no se usó (se volcó la manguera)',user:'Lucía'}]}
+ };
+ DB.basCost=[{bas:'Unquillo',from:TODAY-60,unit:9000},{bas:'Río Ceballos',from:TODAY-60,unit:8500},{bas:'Salsipuedes',from:TODAY-60,unit:7000},{bas:'Salsipuedes',from:TODAY-15,unit:8000}];
+ DB.seq.stk=10;
+})();
+/* usos: cada contenedor descargado en Villa Allende usa 1 ingreso; cada viaje de agua usa 1 de Arcoíris */
+function stkUses(k){const S0=DB.stk[k];
+ if(k==='va')return DB.ops.filter(o=>o.basural==='Villa Allende'&&o.pickDay!=null&&o.pickDay>=S0.start).flatMap(o=>{const n=Math.max(1,o.qty||o.cids.length||1);return Array.from({length:n},(_,i)=>({day:o.pickDay,min:o.dumpMin!=null?o.dumpMin:o.pickMin+30,o,cid:o.cids[i]||o.cids[0],drv:o.pickDriverId,qty:1}))}).sort((a,b)=>a.day-b.day||a.min-b.min);
+ return DB.ops.filter(o=>isAgua(o)&&o.delDay!=null&&o.delDay>=S0.start&&o.status==='Realizado').flatMap(o=>Array.from({length:o.sq||1},(_,i)=>({day:o.delDay,min:(o.delMin||9*60)-25+i*50,o,drv:o.driverId,qty:1,lit:o.lit||10000}))).sort((a,b)=>a.day-b.day||a.min-b.min);
+}
+/* costo de cada uso: sale de la compra de la que salió (primero se usan los más viejos) */
+function stkCalc(k){const S0=DB.stk[k],uses=stkUses(k),lots=S0.buys.slice().sort((a,b)=>a.day-b.day||a.id-b.id).map(b=>({b,left:b.qty}));
+ S0.adj.filter(a=>a.qty<0).forEach(a=>{let q=-a.qty;for(const l of lots){const t=Math.min(l.left,q);l.left-=t;q-=t;if(!q)break}});
+ uses.forEach(u=>{const l=lots.find(x=>x.left>0&&x.b.day<=u.day)||lots.find(x=>x.left>0);if(l){l.left--;u.cost=l.b.unit}else u.cost=(lots[lots.length-1]||{b:{unit:0}}).b.unit});
+ const bought=S0.buys.reduce((s,b)=>s+b.qty,0),adj=S0.adj.reduce((s,a)=>s+a.qty,0);
+ return{uses,bought,used:uses.length,adj,avail:bought+adj-uses.length}}
+const basUnit=(b,day)=>{const l=DB.basCost.filter(x=>x.bas===b&&x.from<=day).sort((x,y)=>y.from-x.from)[0];return l?l.unit:0};
+/* costo de un viaje al basural (por contenedor descargado) */
+function tripCost(o){if(!o.basural)return 0;const n=Math.max(1,o.cids.length);if(o.basural==='Villa Allende'){const u=(stkCalc('va').uses).filter(x=>x.o===o);return u.reduce((s,x)=>s+(x.cost||0),0)}return basUnit(o.basural,o.pickDay)*n}
+const stkC=k=>stkCalc(k);
+function tripCostFast(o){if(!o.basural)return 0;if(o.basural==='Villa Allende'){const m=vaCostMap();return m.get(o)||0}return basUnit(o.basural,o.pickDay)*Math.max(1,o.cids.length)}
+let VA_MAP=null;function vaCostMap(){if(VA_MAP&&VA_MAP.rid===RID)return VA_MAP.m;const m=new Map();stkCalc('va').uses.forEach(u=>m.set(u.o,(m.get(u.o)||0)+(u.cost||0)));VA_MAP={rid:RID,m};return m}
+let RID=0,RENDERING=false,RQ=false;
+const _render0=render;
+render=function(){if(RENDERING){RQ=true;return}RENDERING=true;RID++;try{_render0()}finally{RENDERING=false}if(RQ){RQ=false;setTimeout(render)}};
+
+/* ---------- Obradores (16) ---------- */
+(function seedObradores(){
+ DB.obradores=[];const cl=DB.customers.slice(6),obrOps=DB.ops.filter(o=>o.type==='Servicio'&&o.svc==='Obrador'&&o.delDay!=null&&o.obrTo>=TODAY-3).sort((a,b)=>a.obrTo-b.obrTo);
+ const LOCK=['Cerradura','Candado','Cerradura y candado'];
+ const plan=['A','A','A','D','D','A','D','A','A','R','A','D','A','A','X','D'];
+ const venc=[4,-2,null,null,null,6,null,25,40,null,70,null,110,180,null,null];
+ plan.forEach((p,i)=>{const n=i+1,lk=pick(LOCK),cerr=lk==='Candado'?0:ri(1,2),cand=lk==='Cerradura'?0:1,jue=ri(2,3);
+  const ob={id:'OB-'+String(n).padStart(2,'0'),n,name:'Obrador '+n,state:p==='A'?'Alquilado':p==='R'?'Reservado':p==='X'?'En reparación':'Disponible',place:p==='A'?'En calle':(i%3===0?'Simonna':'Lote Paraguay'),
+   cid:null,addrId:null,opId:null,from:null,to:null,contract:'',photos:0,lock:{tipo:lk,cerr,cand,jue,cli:p==='A'?1:0},hist:[],obs:p==='X'?'Cambio de cerradura y pintura':''};
+  if(p==='A'||p==='R'){const op=p==='A'?obrOps.shift():null,cu=op?cust(op):pick(cl);
+   ob.cid=cu.id;ob.addrId=op?op.addrId:pick(cu.addrs).id;ob.opId=op?op.id:null;
+   if(p==='A'){const v=venc[i]!=null?venc[i]:ri(15,90),months=v>150?6:v>60?3:1;ob.to=TODAY+v;ob.from=ob.to-30*months;if(op){op.obrId=ob.id}}
+   else{ob.from=nextWork(TODAY+2);ob.to=ob.from+30}
+   ob.contract=`Contrato_${ob.id.replace('-','')}.pdf`;ob.photos=p==='A'?1:0}
+  for(let k=0;k<ri(1,4);k++){const c2=pick(cl),t=TODAY-ri(200,560)+k*90;ob.hist.push({cid:c2.id,from:t,to:t+30*pick([1,1,2,3])})}
+  DB.obradores.push(ob)});
+})();
+const obAddr=ob=>{const cu=CU(ob.cid);return cu?cu.addrs.find(a=>a.id===ob.addrId)||cu.addrs[0]:null};
+const obVence=ob=>ob.state==='Alquilado'&&ob.to!=null?ob.to-TODAY:null;
+const OB_ALERT=7;
+const obFlag=ob=>{const v=obVence(ob);return v==null?null:v<0?'bad':v<=OB_ALERT?'warn':null};
+const BOB={'Alquilado':'ok','Disponible':'info','Reservado':'rep','En reparación':'warn'};
+
+/* ---------- Sueldos: modalidades nuevas, horas de Laura y préstamos ---------- */
+(function seedSueldos(){
+ const E=id=>DB.emps.find(e=>e.id===id);
+ Object.assign(E(1),{mode:'Servicio',rates:{'Contenedores':15000,'Viaje de tierra':25000,'Movimiento':15000}});
+ Object.assign(E(2),{mode:'Servicio',rates:{'Contenedores':15000,'Viaje de tierra':25000,'Movimiento':15000}});
+ Object.assign(E(3),{mode:'Fijo',weekly:210000});Object.assign(E(6),{mode:'Fijo',weekly:210000});
+ Object.assign(E(4),{weekly:190000});Object.assign(E(5),{weekly:190000});
+ DB.emps.push({id:7,name:'Mili',area:'Oficina',mode:'Fijo',weekly:230000},{id:8,name:'Benja',area:'A confirmar',mode:'Fijo',weekly:180000},{id:9,name:'Laura',area:'Ventas',mode:'Hora',hourly:6500});
+ DB.emps.sort((a,b)=>[1,2,3,6,5,4,9,7,8].indexOf(a.id)-[1,2,3,6,5,4,9,7,8].indexOf(b.id));
+ // horas de Laura
+ DB.hours=[];let hid=0;for(let d=TODAY-42;d<TODAY;d++){if(dow(d)===0||dow(d)===6)continue;if(R()<.12)continue;const am=R()<.7,f=am?8*60:14*60,t=f+pick([4,5,5,5,6])*60;DB.hours.push({id:++hid,empId:9,day:d,from:f,to:t,user:'Mili'})}
+ DB.seq.hrs=hid;
+ // préstamo de Gustavo: $300.000 en 3 cuotas semanales
+ const wNow=weekStart(TODAY),wPrev=wNow-7;
+ DB.loans=[{id:1,empId:1,day:wPrev-17,amount:300000,medio:'Transferencia',cuenta:'Banco SAS',cuotas:3,freq:'Semanal',cuota:100000,first:wPrev-14,note:'Préstamo personal',receipt:'transf_prestamo_gustavo.jpg',pays:[]}];
+ DB.exp.push({id:++DB.seq.exp,day:wPrev-17,cat:'Sueldos y cargas',sub:'Préstamo a empleado',medio:'Transf SAS',amount:300000,desc:'Préstamo Gustavo (3 cuotas de $100.000)',receipt:'transf_prestamo_gustavo.jpg',user:'Mili',loanId:1});
+ // adelantos de Gustavo la semana pasada (como en el diseño)
+ DB.exp=DB.exp.filter(x=>!(x.empId===1&&inRange(x.day,wPrev,wPrev+6)));
+ [[0,60000,'Efectivo · Oficina'],[0,50000,'Transf SAS'],[1,40000,'Efectivo · Oficina'],[2,40000,'Transf SAS'],[3,40000,'Efectivo · Oficina'],[4,40000,'Transf SAS']].forEach(([k,a,m])=>DB.exp.push({id:++DB.seq.exp,day:wPrev+k,cat:'Sueldos y cargas',sub:'Adelanto de sueldo',medio:m,amount:a,desc:'Adelanto Gustavo',receipt:m.startsWith('Transf')?`transf_adelanto_${DB.seq.exp}.jpg`:'',user:'Belén',empId:1}));
+ // se recalculan los cierres pagados con las modalidades nuevas
+ DB.pay=[];DB.seq.pay=0;
+ for(let w=wNow-42;w<wNow;w+=7)DB.emps.forEach(e=>{if(w===wPrev&&e.id===1)return;const c=salCalc(e,w),desc=c.advAvail,loan=c.loanCuota,net=Math.max(0,c.gross-desc-loan),cash=e.mode==='Hora'?net:R()<.35?Math.round(net*pick([.2,.3])/1000)*1000:0;
+  DB.pay.push({id:++DB.seq.pay,empId:e.id,day:w+5,week:w,type:'Sueldo',gross:c.gross,adv:desc,loan,cash,transfer:net-cash,receipt:net-cash>0?`transf_sueldo_${DB.seq.pay}.jpg`:'',note:'',user:'Mili'});
+  if(loan)c.loanObj.pays.push({week:w,amount:loan})});
+ // caja: se rehacen los cierres con los pagos nuevos
+ let s=DB.cfg.cajaStart;
+ for(let d=TODAY-42;d<TODAY;d++){const ini=s,rend=cajaRend(d),egr=cajaEgr(d);s=ini+rend-egr;if(!rend&&!egr){delete DB.cierres[d];continue}
+  const dep=Math.max(0,Math.round((s-ri(150,320)*1000)/1000)*1000);s-=dep;const old=DB.cierres[d]||{};DB.cierres[d]={ini,rend,egr,dep,fin:s,by:old.by||'Mili',min:old.min||ri(19*60,20*60+15),note:dep?(old.note||'Depósito en banco'):''}}
+})();
+/* cálculo de un cierre semanal */
+function salSvcRows(e,a,b){if(!e.driverId)return[];const r={};
+ DB.ops.forEach(o=>{if(o.driverId!==e.driverId||o.delDay==null||!inRange(o.delDay,a,b)||o.status==='Cancelado')return;
+  const k=o.type==='Alquiler'||o.type==='Recambio'?'Contenedores':o.type==='Movimiento'?'Movimiento':o.type==='Servicio'&&o.svc==='Viaje de tierra'?'Viaje de tierra':null;if(!k)return;
+  const key=o.delDay+'|'+k;(r[key]=r[key]||{day:o.delDay,k,n:0,ops:[]}).n+=k==='Viaje de tierra'?(o.sq||1):o.qty;r[key].ops.push(o)});
+ return Object.values(r).sort((x,y)=>x.day-y.day||x.k.localeCompare(y.k)).map(x=>Object.assign(x,{rate:e.rates[x.k]||0,imp:x.n*(e.rates[x.k]||0)}))}
+function hoursOf(e,a,b){return DB.hours.filter(h=>h.empId===e.id&&inRange(h.day,a,b)).sort((x,y)=>x.day-y.day||x.from-y.from)}
+function advsOf(e,a,b){return DB.exp.filter(x=>x.empId===e.id&&inRange(x.day,a,b)).sort((x,y)=>x.day-y.day||x.id-y.id)}
+function salCalc(e,w){const a=w,b=w+6;
+ const svc=e.mode==='Servicio'?salSvcRows(e,a,b):[],hrs=e.mode==='Hora'?hoursOf(e,a,b):[];
+ const gross=e.mode==='Servicio'?svc.reduce((s,x)=>s+x.imp,0):e.mode==='Hora'?hrs.reduce((s,h)=>s+(h.to-h.from)/60*e.hourly,0):e.weekly||0;
+ const advWeek=advsOf(e,a,b),advBefore=DB.exp.filter(x=>x.empId===e.id&&x.day<a).reduce((s,x)=>s+x.amount,0),applied=DB.pay.filter(p=>p.empId===e.id&&p.week<w).reduce((s,p)=>s+(p.adv||0),0);
+ const carry=Math.max(0,advBefore-applied),advW=advWeek.reduce((s,x)=>s+x.amount,0),advAvail=carry+advW;
+ const loanObj=(DB.loans||[]).find(l=>l.empId===e.id&&w>=l.first&&l.amount-l.pays.filter(p=>p.week!==w).reduce((s,p)=>s+p.amount,0)>0);
+ const loanPaid=loanObj?loanObj.pays.filter(p=>p.week<w).reduce((s,p)=>s+p.amount,0):0,loanSaldo=loanObj?loanObj.amount-loanPaid:0,loanCuota=loanObj?Math.min(loanObj.cuota,loanSaldo):0;
+ const loanN=loanObj?loanObj.pays.filter(p=>p.week<w).length+1:0;
+ const pay=DB.pay.find(p=>p.empId===e.id&&p.week===w);
+ return{e,w,svc,hrs,gross:Math.round(gross),advWeek,advW,carry,advAvail,loanObj,loanSaldo,loanCuota,loanN,pay}}
+
+/* ============ v7 · Tablero del día (Logística) ============ */
+Object.assign(S.tb,{tab:'todos',q:'',sel:null,src:'ret',rloc:'',rbar:'',pick:null,showDone:false});
+const tbDay=()=>S.lday?nextWork(TODAY+1):TODAY;
+const isSvcLike=o=>o.type==='Servicio'||o.type==='Movimiento';
+function tbOps(){const day=tbDay(),F=o=>lbMatch(o,S.tb.loc,S.tb.barrio)&&(!S.tb.q||norm(`${cust(o).name} ${aline(addr(o))} ${addr(o).loc} ${opn(o.id)} ${o.id}`).includes(norm(S.tb.q)));
+ const l=DB.ops.filter(o=>o.status!=='Cancelado'&&o.type!=='Extensión'&&preDel(o)&&(S.lday?o.reqDay===day:o.reqDay<=day)&&F(o));
+ l.forEach(o=>{if(!DB.tbOrd.includes(o.id))DB.tbOrd.push(o.id)});
+ return l.sort((a,b)=>DB.tbOrd.indexOf(a.id)-DB.tbOrd.indexOf(b.id))}
+const tbDone=()=>S.lday?[]:DB.ops.filter(o=>o.delDay===TODAY&&o.status==='Realizado'&&o.type!=='Extensión'&&lbMatch(o,S.tb.loc,S.tb.barrio)).sort((a,b)=>b.delMin-a.delMin);
+const prioOf=o=>o.reqDay<TODAY?'Pendiente de ayer':o.prio==='Primera hora'?'Primera hora':'Normal';
+const PRIO_B={'Pendiente de ayer':'bad','Primera hora':'warn','Normal':'off'};
+function tbStage(o){if(o.status==='Realizado')return 'done';if(isSvcLike(o))return o.driverId?'svc':'none';if(!o.driverId)return 'none';if(!o.link)return 'link';if(o.link.src==='ret'&&!o.flow.ret)return 'ret';if(o.link.src==='ret'&&!o.flow.desc)return 'desc';return 'ent'}
+const tbLast=o=>Math.max(o.asgMin||0,(o.flow&&o.flow.ret&&o.flow.ret.min)||0,(o.flow&&o.flow.desc&&o.flow.desc.min)||0);
+const tbLate=o=>!S.lday&&o.driverId&&o.reqDay<=TODAY&&tbStage(o)!=='done'&&o.asgMin!=null&&tbNow()-tbLast(o)>=ALERT_MIN;
+const ago=m=>{const x=tbNow()-m;return x<60?`hace ${x} min`:`hace ${Math.floor(x/60)} h${x%60>=10?' '+x%60+' min':''}`};
+function cobro(o){
+ if(o.payMethod==='Grupo Chamba')return['Grupo Chamba','off'];if(o.payMethod==='Cliente aparte')return['Cliente aparte','off'];
+ if(o.payMethod==='Efectivo'&&o.paid<o.price)return[`Cobrar ${money(o.price-o.paid)}`,'warn','Efectivo'];
+ if(o.payMethod==='Transferencia'&&o.paid>0&&!o.verified)return['Pago por verificar','acc',`Transf ${o.payAcct||''}`];
+ if(o.paid>=o.price)return['No cobrar','ok',o.payMethod==='Transferencia'?'Verificado':'Pagado'];
+ return['No cobrar','off',`Transf ${o.payAcct||''} · a verificar`]}
+const cobroCell=o=>{const[t,k,s]=cobro(o);return `<b class="${k==='warn'?'late-ish':''}">${t}</b>${s?`<span class="sub">${esc(s)}</span>`:''}`};
+const svcTxt=o=>o.type==='Servicio'?`${o.svc}${o.svc==='Viaje de agua'?` · ${num(o.lit||10000)} L`:''}`:o.type==='Movimiento'?'Movimiento en obra':`${o.type==='Recambio'?'Recambio':'Entrega'} ${o.qty>1?o.qty+'× ':''}${o.size} m³`;
+const drvSel=o=>`<select class="sel sm tb-drv" data-chg="tbDrv" data-id="${o.id}" aria-label="Chofer del pedido ${opn(o.id)}" style="${o.driverId?`border-color:${DCOL[o.driverId]};color:${DCOL[o.driverId]};font-weight:700`:''}"><option value="">Sin asignar</option>${DB.drivers.map(d=>`<option value="${d.id}" ${o.driverId===d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select>`;
+const grip=(o,i,n)=>`<span class="grip" title="Arrastrá para cambiar el orden">${ic('grip')}</span><span class="mv"><button class="btn icon xs" data-act="tbMove" data-id="${o.id}" data-d="-1" ${i===0?'disabled':''} aria-label="Subir">▲</button><button class="btn icon xs" data-act="tbMove" data-id="${o.id}" data-d="1" ${i===n-1?'disabled':''} aria-label="Bajar">▼</button></span>`;
+function linkCell(o){const st=tbStage(o),L=o.link;
+ if(st==='svc')return `<span class="muted">${isAgua(o)?'Carga en Arcoíris':'No lleva contenedor'}</span>`;
+ if(st==='none')return '<span class="muted">—</span>';
+ if(st==='link')return `<span class="chipx ${tbLate(o)?'bad':'warn'}">Falta elegir retiro · ${ago(o.asgMin)}</span>`;
+ const c=L.cid;
+ if(L.src==='dep')return `<span class="cname">${c}</span><span class="sub">Desde depósito</span>`;
+ if(st==='ret')return `<span class="cname">${c}</span><span class="sub">Retiro vinculado · ${esc(cust(O(L.retId)).name)}</span>`;
+ if(st==='desc')return `<span class="chipx ok">✓ Retirado ${fmin(o.flow.ret.min)}</span><span class="sub">${ic('truck')} ${c} en camión</span>`;
+ return `<span class="chipx ok">✓ Descargado ${fmin(o.flow.desc.min)}</span><span class="sub">${c} · B. ${esc(o.flow.desc.basural)}</span>`}
+const ACT_L={link:'Vincular retiro',ret:'Registrar retiro',desc:'Registrar descarga',ent:'Completar entrega',svc:'Registrar servicio'};
+function actBtn(o){const st=tbStage(o);if(S.lday||st==='none'||st==='done')return `<button class="btn sm ghost" data-act="openOp" data-id="${o.id}">Ver pedido</button>`;
+ return `<button class="btn sm ${tbLate(o)||st==='link'?'pri':''} ${S.tb.sel===o.id?'on':''}" data-act="tbOpen" data-id="${o.id}">${ACT_L[st]}</button>`}
+function vTab2(){
+ const day=tbDay(),all=tbOps(),done=tbDone(),t=S.tb.tab;
+ const sin=all.filter(o=>!o.driverId),byD=id=>all.filter(o=>o.driverId===id),lateBy=id=>byD(id).filter(tbLate).length;
+ const tabBtn=(k,l,n,col,warn)=>`<button class="tbt ${t===k?'on':''}" data-act="set" data-k="tb.tab" data-v="${k}" style="${col?`--dc:${col}`:''}">${col?'<i class="dcol"></i>':''}${l} <b>${n}</b>${warn?`<span class="wn" title="${warn} con carga incompleta">${ic('alert')}${warn}</span>`:''}</button>`;
+ const tabs=`<div class="tbtabs">${tabBtn('todos','Todos',all.length)}${tabBtn('sin','Sin asignar',sin.length)}${DB.drivers.map(d=>tabBtn('d'+d.id,d.name,byD(d.id).length,DCOL[d.id],lateBy(d.id))).join('')}${S.lday?'':tabBtn('done','Realizados hoy',done.length)}</div>`;
+ const head=pageHead('Tablero del día','Organizá las entregas y registrá lo realizado.',`<div class="chips"><button class="chip ${!S.lday?'on':''}" data-act="tbDay" data-v="0">Hoy · ${fs(TODAY)}</button><button class="chip ${S.lday?'on':''}" data-act="tbDay" data-v="1">${cap(DIAS[dow(nextWork(TODAY+1))])} ${fs(nextWork(TODAY+1))}</button></div>`)
+  +tabs+`<p class="tb-info">${ic('alert')}Al asignar chofer, el pedido sale de <b>Sin asignar</b> y aparece en su recorrido. Pasa a <b>Realizados</b> cuando se registra la entrega con su hora real.</p>
+  <div class="filters"><input class="inp grow" id="tbq" data-f="tb.q" value="${esc(S.tb.q)}" placeholder="Buscar por cliente, dirección u orden…" aria-label="Buscar">${lbFilters('tb',S.tb.loc,S.tb.barrio)}</div>`;
+ let body='';
+ if(t==='done')body=doneTable(done,true);
+ else if(t[0]==='d'){const d=drv(+t.slice(1)),l=byD(d.id),dd=done.filter(o=>o.driverId===d.id),late=l.filter(tbLate);
+  body=`<div class="rec-h"><h2>Recorrido de ${esc(d.name)}</h2><span class="plate">${ic('truck')} ${esc(d.plates[0]||'—')}</span><span class="pill">${l.length} pendientes · ${dd.length} realizados</span></div>
+  ${late.length?`<div class="warn-box tb-alert">${ic('alert')}<span><b>${late.length} ${late.length===1?'asignación incompleta':'asignaciones incompletas'}</b> · hace más de ${ALERT_MIN/60} h que no se carga el retiro, la descarga o la entrega. ¿Le mandaste la orden a ${esc(d.name)}?</span><button class="btn sm" data-act="tbOpen" data-id="${late[0].id}">Revisar</button></div>`:''}
+  <div class="tbl-wrap"><table class="dense tbt-t"><thead><tr><th class="gcol"></th><th>Orden</th><th>Cliente / Dirección</th><th>Servicio</th><th>Retiro / Contenedor</th><th>Cobro</th><th>Acción</th></tr></thead><tbody>
+  ${l.map((o,i)=>`<tr draggable="true" data-drag="${o.id}" class="${S.tb.sel===o.id?'sel':''} ${isAgua(o)?'z-agua':''}"><td class="gcol">${grip(o,i,l.length)}</td><td class="tnum"><b>${i+1}</b></td><td class="${zcls(o)}"><b>${esc(cust(o).name)}</b><span class="sub">${esc(aline(addr(o)))} · ${esc(addr(o).loc)} ${gmaps(o,'GPS')}</span>${o.obs?`<span class="sub obs">${esc(o.obs)}</span>`:''}${o.draft?`<span class="chipx warn">Borrador · ${esc(o.draft.note||'')}</span>`:''}${tbLate(o)&&tbStage(o)!=='link'?`<span class="chipx bad">Sin novedades ${ago(tbLast(o))}</span>`:''}</td><td>${esc(svcTxt(o))}<span class="sub">${badge(prioOf(o),PRIO_B)}</span></td><td>${linkCell(o)}</td><td>${cobroCell(o)}</td><td>${actBtn(o)}</td></tr>`).join('')||'<tr><td colspan="7" class="empty">Sin pedidos asignados todavía.</td></tr>'}
+  </tbody></table></div>
+  <details class="tb-done" ${S.tb.showDone?'open':''}><summary data-act="tbShowDone">Realizados de ${esc(d.name)} (${dd.length})</summary>${doneTable(dd,false)}</details>`}
+ else{const l=t==='sin'?sin:all;
+  body=`<div class="tbl-wrap"><table class="dense tbt-t"><thead><tr><th class="gcol"></th><th>Orden</th><th>Prioridad</th><th>Cliente</th><th>Dirección / GPS</th><th>Servicio</th><th>Chofer</th><th>Cobrar</th><th>Indicaciones</th></tr></thead><tbody>
+  ${l.map((o,i)=>`<tr draggable="true" data-drag="${o.id}" class="${isAgua(o)?'z-agua':''}"><td class="gcol">${grip(o,i,l.length)}</td><td class="code">${opn(o.id)}</td><td><button class="b ${PRIO_B[prioOf(o)]} prio-b" data-act="tbPrio" data-id="${o.id}" ${o.reqDay<TODAY?'disabled':''} title="${o.reqDay<TODAY?'Quedó del día anterior':'Tocá para marcar o sacar Primera hora'}">${prioOf(o)}</button></td><td class="${zcls(o)}"><b>${esc(cust(o).name)}</b>${o.pendConf?'<span class="sub late">Pendiente de confirmación</span>':''}</td><td class="${zcls(o)}">${esc(aline(addr(o)))} · ${esc(addr(o).loc)}<span class="sub">${gmaps(o,'Ver en Google Maps')}</span></td><td>${esc(svcTxt(o))}</td><td>${can.assign()?drvSel(o):esc(dname(o.driverId))}${tbLate(o)?`<span class="sub late">${ic('alert')} sin novedades</span>`:''}</td><td>${cobroCell(o)}</td><td>${o.obs?esc(o.obs):'<span class="muted">—</span>'}</td></tr>`).join('')||`<tr><td colspan="9" class="empty">${t==='sin'?'Todo asignado.':'No hay pedidos con esos filtros.'}</td></tr>`}
+  </tbody></table></div>
+  <div class="tb-foot"><span class="muted">${ic('grip')} Arrastrá las filas (o usá ▲▼) para cambiar el orden.</span></div>
+  <div class="zleg"><b>Referencias (localidad del cliente):</b>${Object.entries(ZONES).map(([k,z])=>`<span><i class="z-${k}"></i>${z.l}</span>`).join('')}<span><i class="z-agua"></i>Viaje de agua</span></div>
+  ${S.lday?'':`<details class="tb-done" ${S.tb.showDone?'open':''}><summary data-act="tbShowDone">Realizados hoy (${done.length})</summary>${doneTable(done,true)}</details>`}`}
+ const sel=S.tb.sel?O(S.tb.sel):null;
+ return head+`<div class="ag-grid ${sel?'with':''}"><div class="ag-main">${body}</div>${sel?tbPanel(sel):''}</div>`;
+}
+function doneTable(l,withDrv){return `<div class="tbl-wrap"><table class="dense"><thead><tr><th>Hora</th><th>Cliente</th><th>Servicio</th>${withDrv?'<th>Chofer</th>':''}<th>Contenedor</th><th>Pasos</th><th>Foto</th></tr></thead><tbody>
+ ${l.map(o=>{const f=o.flow||{};return `<tr data-act="openOp" data-id="${o.id}" tabindex="0" class="done-row"><td class="tnum"><b>✓ ${fmin(o.delMin)}</b></td><td class="${zcls(o)}"><b>${esc(cust(o).name)}</b><span class="sub">${esc(addr(o).loc)}</span></td><td>${esc(svcTxt(o))}</td>${withDrv?`<td>${pill(o.driverId)}</td>`:''}<td class="cname">${o.cids.join(', ')||'—'}</td><td class="small">${f.ret?`Retiro ${fmin(f.ret.min)} · `:''}${f.desc?`Descarga ${fmin(f.desc.min)} B. ${esc(f.desc.basural)} · `:''}Entrega ${fmin(o.delMin)}</td><td>${o.photos.some(p=>p.kind==='Contenedor entregado')||o.demoPhoto?`<span class="b ok">${ic('cam')}Sí</span>`:'<span class="muted">—</span>'}</td></tr>`}).join('')||`<tr><td colspan="${withDrv?7:6}" class="empty">Todavía no hay entregas realizadas.</td></tr>`}</tbody></table></div>`}
+
+/* ---------- panel lateral: los 4 pasos ---------- */
+const tbStepper=(o,cur)=>{const f=o.flow||{},dep=o.link&&o.link.src==='dep';const st=[['ret','Retiro',f.ret],['desc','Descarga',f.desc],['ent','Entrega',null]].filter(x=>!dep||x[0]==='ent');
+ return `<div class="stp3">${st.map(([k,l,d],i)=>`<div class="${d?'s-ok':k===cur?'s-cur':''}"><span>${d?'✓':i+1}</span><b>${l}</b>${d?`<small>${fmin(d.min)}</small>`:''}</div>`).join('')}</div>`};
+function tbPanel(o){const st=tbStage(o),cu=cust(o),d=drv(o.driverId),hdr=`<div class="agp-h"><div><p class="eyebrow">${opn(o.id)} · ${esc(svcTxt(o))}</p><h3>${{link:'1. Vincular retiro',ret:'2. Registrar retiro',desc:'3. Registrar descarga',ent:'4. Completar entrega',svc:'Registrar servicio',done:'Pedido realizado',none:'Sin chofer'}[st]}</h3></div><button class="x" data-act="tbOpen" data-id="" aria-label="Cerrar">${ic('x')}</button></div>`;
+ const card=`<div class="tbcard ${zcls(o)}">${ic('truck')}<span><b>${esc(cu.name)}</b><small>${esc(aline(addr(o)))} · ${esc(addr(o).loc)}</small><small>${d?esc(d.name)+' · '+esc(d.plates[0]||''):'Sin chofer'}</small></span></div>`;
+ const now=fmin(tbNow()),foot=(btn,draft)=>`<div class="agp-f">${draft?`<button class="btn" data-act="tbDraft" data-id="${o.id}">Guardar borrador</button>`:`<button class="btn" data-act="tbOpen" data-id="">Cancelar</button>`}${btn}</div>`;
+ const err='<div id="tb-err"></div>',obs=`<label class="fld"><span>Observaciones <small class="muted">(opcional)</small></span><textarea id="tb-obs" rows="2">${esc((o.draft&&o.draft.obs)||'')}</textarea></label>`;
+ if(st==='link'){const src=S.tb.src;
+  const rets=DB.ops.filter(x=>isActive(x)&&x.plannedPickup<=TODAY&&(!x.linkedTo||x.linkedTo===o.id)&&x.cids.length===1&&x.id!==o.replacesOpId&&lbMatch(x,S.tb.rloc,S.tb.rbar)).sort((a,b)=>(a.size===o.size?0:1)-(b.size===o.size?0:1)||a.plannedPickup-b.plannedPickup).slice(0,30);
+  const deps=DB.containers.filter(c=>DEPOTS.includes(c.place)&&!c.opId&&c.state==='Disponible'&&c.size===o.size);
+  return `<aside class="agp panel tbp">${hdr}<div class="agp-s">${card}</div>
+  <div class="agp-s"><div class="seg2"><button class="${src==='ret'?'on':''}" data-act="set" data-k="tb.src" data-v="ret">Desde un retiro</button><button class="${src==='dep'?'on':''}" data-act="set" data-k="tb.src" data-v="dep">Desde depósito</button></div></div>
+  ${src==='ret'?`<div class="agp-s"><div class="inrow">${(()=>{const bars=S.tb.rloc?LOCS[S.tb.rloc].barrios:[];return `<select class="sel sm" data-f="tbr.loc" aria-label="Localidad del retiro"><option value="">Todas las localidades</option>${LOC_NAMES.map(l=>`<option ${S.tb.rloc===l?'selected':''}>${l}</option>`).join('')}</select><select class="sel sm" data-f="tbr.bar" aria-label="Barrio del retiro" ${bars.length?'':'disabled'}><option value="">Todos los barrios</option>${bars.map(b=>`<option value="${esc(b+'|'+S.tb.rloc)}" ${S.tb.rbar===b+'|'+S.tb.rloc?'selected':''}>${esc(b)}</option>`).join('')}</select>`})()}</div>
+   <h4 style="margin-top:12px">Retiros para hoy y vencidos</h4><div class="rlist">${rets.map(x=>`<label class="ropt ${S.tb.pick===x.id?'on':''}"><input type="radio" name="tb-ret" value="${x.id}" ${S.tb.pick===x.id?'checked':''} data-chg="tbPick"><span><b>${esc(cust(x).name)}</b><small>${esc(aline(addr(x)).split(',')[0])} · ${esc(addr(x).loc)}</small><small class="cname">${x.cids[0]} · ${x.size} m³ ${x.size!==o.size?'<span class="late">· otra medida</span>':''}</small></span><span class="small ${x.plannedPickup<TODAY?'late':''}">${x.plannedPickup<TODAY?`Vencido ${TODAY-x.plannedPickup} d`:'Vence hoy'}</span></label>`).join('')||'<p class="muted">No hay retiros con esos filtros.</p>'}</div>
+   <p class="info-box">${ic('alert')}<span>El contenedor que se retira es el que se entrega a ${esc(cu.name)}: queda reservado para este viaje.</span></p></div>${err}${foot(`<button class="btn pri" data-act="tbLink" data-id="${o.id}">Vincular retiro</button>`)}`
+  :`<div class="agp-s"><label class="fld"><span>Contenedor de ${o.size} m³ en depósito</span><select id="tb-cid">${DEPOTS.map(dp=>{const l=deps.filter(c=>c.place===dp);return l.length?`<optgroup label="${dp} (${l.length})">${l.map(c=>`<option value="${c.id}">${cname(c)}</option>`).join('')}</optgroup>`:''}).join('')}</select></label>${deps.length?'':'<p class="late">No hay contenedores de esa medida en depósito.</p>'}<p class="note">Sale directo del depósito: no hay retiro ni descarga, solo la entrega.</p></div>${err}${foot(`<button class="btn pri" data-act="tbLinkDep" data-id="${o.id}" ${deps.length?'':'disabled'}>Usar este contenedor</button>`)}`}
+  </aside>`}
+ if(st==='ret'){const r=O(o.link.retId);
+  return `<aside class="agp panel tbp">${hdr}<div class="agp-s">${tbStepper(o,'ret')}<div class="tbsum"><p>${ic('up')}<span>Retirar: <b>${esc(cust(r).name)}</b> · ${esc(aline(addr(r)).split(',')[0])} · ${esc(addr(r).loc)}</span></p><p>${ic('boxin')}<span>Entregar: <b>${esc(cu.name)}</b> · ${esc(addr(o).loc)}</span></p><p>${ic('truck')}<span>${esc(d.name)} · ${esc(d.plates[0]||'')}</span></p></div></div>
+  <div class="agp-s fgrid1"><label class="fld"><span>Contenedor</span><input value="${esc(cname(C(o.link.cid)))}" disabled></label><div class="inrow"><label class="fld"><span>Fecha del retiro</span><input type="date" id="tb-day" value="${dOut(TODAY)}" max="${dOut(TODAY)}"></label><label class="fld"><span>Hora real del retiro</span><input type="time" id="tb-min" value="${now}"></label></div>${obs}<p class="note">Se actualiza también en Retiros. La entrega sigue pendiente.</p>${err}</div>
+  ${foot(`<button class="btn pri" data-act="tbRet" data-id="${o.id}">Confirmar retiro</button>`,true)}</aside>`}
+ if(st==='desc'){const r=O(o.link.retId),def=basFor(addr(r).loc),va=stkC('va');
+  return `<aside class="agp panel tbp">${hdr}<div class="agp-s">${tbStepper(o,'desc')}<p class="tbsum">${ic('truck')}<span><b class="cname">${o.link.cid}</b> · ${esc(d.name)} · ${esc(d.plates[0]||'')}</span></p></div>
+  <div class="agp-s fgrid1"><h4>Descarga en basural</h4><label class="fld"><span>Basural *</span><select id="tb-bas">${BASURALES.map(b=>`<option ${b===def?'selected':''}>${b}</option>`).join('')}</select></label><div class="inrow"><label class="fld"><span>Fecha *</span><input type="date" id="tb-day" value="${dOut(TODAY)}" max="${dOut(TODAY)}"></label><label class="fld"><span>Hora real de descarga *</span><input type="time" id="tb-min" value="${now}"></label></div>${obs}
+  <p class="info-box">${ic('bin')}<span>En Villa Allende se descuenta 1 ingreso. Quedan <b>${num(va.avail)}</b>.</span></p>
+  <div class="tbcard">${ic('pin')}<span><small>Próxima entrega</small><b>${esc(cu.name)}</b><small>${esc(aline(addr(o)))} · ${esc(addr(o).loc)}</small></span></div><p class="note">Al confirmar, el contenedor queda vacío y reservado para esta entrega.</p>${err}</div>
+  ${foot(`<button class="btn pri" data-act="tbDesc" data-id="${o.id}">Confirmar descarga</button>`,true)}</aside>`}
+ if(st==='ent'||st==='svc'){const[ct,ck]=cobro(o),agua=isAgua(o),ag=stkC('agua'),obr=o.type==='Servicio'&&o.svc==='Obrador';
+  return `<aside class="agp panel tbp">${hdr}<div class="agp-s">${st==='ent'?tbStepper(o,'ent'):''}${card}</div>
+  ${o.draft?`<div class="agp-s"><span class="chipx warn">${ic('alert')}Borrador pendiente · ${esc(o.draft.note||'')}</span></div>`:''}
+  <div class="agp-s fgrid1"><div class="inrow"><label class="fld"><span>Fecha de ${st==='ent'?'entrega':'servicio'}</span><input type="date" id="tb-day" value="${dOut(TODAY)}" max="${dOut(TODAY)}"></label><label class="fld"><span>Hora real *</span><input type="time" id="tb-min" value="${o.draft&&o.draft.min?fmin(o.draft.min):''}"></label></div>
+   <p class="note" style="margin-top:-6px">Ingresá la hora informada por el chofer.</p>
+   ${agua?`<p class="info-box">${ic('drop')}<span>Carga en Pileta Arcoíris: se descuenta 1 ingreso por viaje (${o.sq||1}). Quedan <b>${num(ag.avail)}</b>.</span></p>`:''}
+   ${obr?`<label class="fld"><span>Obrador que se entrega</span><select id="tb-obr"><option value="">A confirmar</option>${DB.obradores.filter(x=>x.state==='Disponible'||x.state==='Reservado'&&x.cid===o.customerId).map(x=>`<option value="${x.id}">${x.id} · ${esc(x.place)}</option>`).join('')}</select></label>`:''}
+   ${st==='ent'?`<div class="fld"><span>Foto del contenedor entregado</span><label class="up sm">${ic('cam')}<span id="tb-ph-n">Sacar o adjuntar foto</span><input type="file" accept="image/*" capture="environment" id="tb-ph" data-chg="tbPh"></label></div>`:''}
+   ${obs}
+   <p class="info-box">${ic('cash')}<span><b>${esc(ct)}</b>${ck==='warn'?' · La entrega no confirma el cobro: se registra en Caja cuando el chofer rinde.':''}</span></p>${err}</div>
+  ${foot(`<button class="btn pri" data-act="tbEnt" data-id="${o.id}">${st==='ent'?'Confirmar entrega':'Confirmar servicio'}</button>`,true)}
+  <p class="note" style="padding:0 18px 14px">Al confirmar pasa a Realizados hoy y queda marcado en el recorrido de ${d?esc(d.name):'el chofer'}.</p></aside>`}
+ return `<aside class="agp panel tbp">${hdr}<div class="agp-s">${card}<button class="btn sm" data-act="openOp" data-id="${o.id}">Ver pedido</button></div></aside>`;
+}
+let TB_PHOTO=null;
+function tbReadTime(){const m=byId('tb-min').value,d=dIn(byId('tb-day').value);if(!m)return null;const[h,mi]=m.split(':').map(Number);return{min:h*60+mi,day:d??TODAY}}
+const tbErr=t=>{const e=byId('tb-err');if(e)e.innerHTML=`<p class="err">${esc(t)}</p>`};
+Object.assign(LIVE,{
+ tbDrv:t=>{const o=O(t.dataset.id),v=t.value?+t.value:null;
+  if(v){const was=o.driverId;doAssign(o,o.cids,v,TODAY,tbNow(),S.user.name,true);o.asgMin=tbNow();o.flow=o.flow||{};toast(`${opn(o.id)} asignado a ${dname(v)}${was&&was!==v?' (antes '+dname(was)+')':''}.`)}
+  else{if(o.link&&o.link.src==='ret'&&!o.flow.ret){const r=O(o.link.retId);if(r)r.linkedTo=null;o.link=null;o.cids=[]}o.driverId=null;o.asgMin=null;audNow(`${S.user.name} sacó el chofer del pedido ${opn(o.id)}`,o.id);toast(`${opn(o.id)} volvió a Sin asignar.`)}
+  render()},
+ tbPick:t=>{S.tb.pick=+t.value;document.querySelectorAll('.ropt').forEach(l=>l.classList.toggle('on',l.contains(t)))},
+ tbPh:t=>{const f=t.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{TB_PHOTO=r.result;byId('tb-ph-n').textContent=f.name};r.readAsDataURL(f)}
+});
+const _setF=setF;
+setF=function(path,v){if(path==='tbr.loc'){S.tb.rloc=v;S.tb.rbar='';return}if(path==='tbr.bar'){S.tb.rbar=v;return}if(path==='tb.tab'){S.tb.tab=v;S.tb.sel=null;return}return _setF(path,v)};
+Object.assign(ACT,{
+ tbDay:d=>{S.lday=+d.v;S.tb.sel=null;if(S.lday&&S.tb.tab==='done')S.tb.tab='todos';render()},
+ tbShowDone:(d,el,e)=>{S.tb.showDone=!S.tb.showDone;render()},
+ tbOpen:d=>{S.tb.sel=d.id?+d.id:null;S.tb.pick=null;TB_PHOTO=null;if(S.tb.sel){const o=O(S.tb.sel);S.tb.rloc=addr(o).loc;S.tb.rbar=''}render();if(S.tb.sel){const p=document.querySelector('.tbp');if(p&&window.innerWidth<1100)p.scrollIntoView({behavior:'smooth',block:'start'})}},
+ tbPrio:d=>{const o=O(d.id);o.prio=o.prio==='Primera hora'?null:'Primera hora';audNow(`${S.user.name} marcó ${opn(o.id)} como ${o.prio||'Normal'}`,o.id);render()},
+ tbMove:d=>{const id=+d.id,list=tbVisible(),i=list.findIndex(o=>o.id===id),j=i+(+d.d);if(i<0||j<0||j>=list.length)return;tbReorder(id,list[j].id,+d.d>0);render()},
+ tbLink:d=>{const o=O(d.id),r=S.tb.pick?O(S.tb.pick):null;if(!r)return tbErr('Elegí el retiro que se va a entregar.');
+  o.cids.forEach(id=>{const c=C(id);if(c&&c.opId===o.id)c.opId=null});
+  if(o.link&&o.link.retId){const old=O(o.link.retId);if(old)old.linkedTo=null}
+  o.link={src:'ret',retId:r.id,cid:r.cids[0]};r.linkedTo=o.id;o.cids=[r.cids[0]];if(r.size!==o.size){o.size=r.size}
+  audNow(`${S.user.name} vinculó el retiro de ${r.cids[0]} (${cust(r).name}) a la entrega ${opn(o.id)}`,o.id);S.tb.pick=null;toast(`Retiro vinculado: ${r.cids[0]} va para ${cust(o).name}.`);render()},
+ tbLinkDep:d=>{const o=O(d.id),cid=byId('tb-cid')&&byId('tb-cid').value;if(!cid)return tbErr('Elegí el contenedor.');
+  o.cids.forEach(id=>{const c=C(id);if(c&&c.opId===o.id)c.opId=null});C(cid).opId=o.id;o.cids=[cid];o.link={src:'dep',cid};
+  mv(TODAY,tbNow(),cid,`Reservado para ${cust(o).name} (${opn(o.id)})`,'asignado',o.id,o.driverId);audNow(`${S.user.name} asignó ${cid} desde ${C(cid).place} al pedido ${opn(o.id)}`,o.id);toast(`${cid} reservado para ${cust(o).name}.`);render()},
+ tbRet:d=>{const o=O(d.id),t=tbReadTime();if(!t)return tbErr('Falta la hora real del retiro.');const r=O(o.link.retId),c=C(o.link.cid);
+  r.pickDay=t.day;r.pickMin=t.min;r.pickDriverId=o.driverId;r.closedByRecambio=false;c.opId=o.id;c.place='En camión';
+  mv(t.day,t.min,c.id,`Retirado de ${cust(r).name} · va para ${cust(o).name}`,'retirado',r.id,o.driverId);o.flow.ret={min:t.min,obs:byId('tb-obs').value.trim()};o.draft=null;
+  audNow(`${S.user.name} registró el retiro de ${c.id} (${fmin(t.min)}) para la entrega ${opn(o.id)}`,o.id);toast(`Retiro registrado ${fmin(t.min)}. Ahora la descarga.`);render()},
+ tbDesc:d=>{const o=O(d.id),t=tbReadTime();if(!t)return tbErr('Falta la hora real de descarga.');const r=O(o.link.retId),c=C(o.link.cid),b=byId('tb-bas').value;
+  r.basural=b;r.dumpMin=t.min;r.pickPlace='Reutilizado';mv(t.day,t.min,c.id,`Descargado en B. ${b} · vacío, reservado para ${cust(o).name}`,'disponible',r.id,o.driverId);
+  o.flow.desc={min:t.min,basural:b,obs:byId('tb-obs').value.trim()};o.draft=null;audNow(`${S.user.name} registró la descarga de ${c.id} en B. ${b} (${fmin(t.min)})`,o.id);
+  toast(b==='Villa Allende'?`Descarga registrada. Se descontó 1 ingreso de Villa Allende (quedan ${num(stkC('va').avail)}).`:`Descarga registrada en B. ${b}.`);render()},
+ tbEnt:d=>{const o=O(d.id),t=tbReadTime();if(!t)return tbErr('Falta la hora real.');const ob=byId('tb-obs').value.trim();
+  if(o.link&&o.link.src==='ret'){const c=C(o.link.cid);c.place='Lote Paraguay'}
+  if(o.type==='Servicio'&&o.svc==='Obrador'&&byId('tb-obr')&&byId('tb-obr').value){const x=DB.obradores.find(y=>y.id===byId('tb-obr').value);Object.assign(x,{state:'Alquilado',place:'En calle',cid:o.customerId,addrId:o.addrId,opId:o.id,from:t.day,to:o.obrTo||t.day+30});o.obrId=x.id}
+  doDeliver(o,t.day,t.min,S.user.name,PLAZO());o.flow=o.flow||{};o.flow.ent={min:t.min,obs:ob};o.draft=null;if(ob)o.logObs=ob;
+  if(TB_PHOTO){o.photos.push({kind:'Contenedor entregado',url:TB_PHOTO});TB_PHOTO=null}else if(!isSvcLike(o))o.demoPhoto=true;
+  S.tb.sel=null;toast(`${cust(o).name}: ${o.type==='Servicio'?'servicio':'entrega'} registrada ${fmin(t.min)}. Pasó a Realizados.`);render()},
+ tbDraft:d=>{const o=O(d.id),m=byId('tb-min')&&byId('tb-min').value,st=tbStage(o);o.draft={step:st,obs:byId('tb-obs')?byId('tb-obs').value.trim():'',min:m?(+m.split(':')[0])*60+(+m.split(':')[1]):null,note:st==='ent'||st==='svc'?(m?'Falta confirmar':'Falta hora de entrega'):st==='desc'?'Falta confirmar la descarga':'Falta confirmar el retiro'};toast('Borrador guardado.');S.tb.sel=null;render()}
+});
+function tbVisible(){const t=S.tb.tab,all=tbOps();return t==='sin'?all.filter(o=>!o.driverId):t[0]==='d'?all.filter(o=>o.driverId===+t.slice(1)):all}
+function tbReorder(id,targetId,after){const a=DB.tbOrd;a.splice(a.indexOf(id),1);let k=a.indexOf(targetId);if(after)k++;a.splice(k,0,id);audNow(`${S.user.name} cambió el orden del tablero (${opn(id)})`,id)}
+/* arrastrar filas */
+let TB_DRAG=null;
+document.addEventListener('dragstart',e=>{const tr=e.target.closest&&e.target.closest('tr[data-drag]');if(!tr)return;TB_DRAG=+tr.dataset.drag;tr.classList.add('dragging');try{e.dataTransfer.setData('text/plain',String(TB_DRAG));e.dataTransfer.effectAllowed='move'}catch(x){}});
+document.addEventListener('dragover',e=>{const tr=e.target.closest&&e.target.closest('tr[data-drag]');if(!tr||TB_DRAG==null)return;e.preventDefault();document.querySelectorAll('tr.drop-b,tr.drop-a').forEach(x=>x.classList.remove('drop-b','drop-a'));const r=tr.getBoundingClientRect();tr.classList.add(e.clientY>r.top+r.height/2?'drop-a':'drop-b')});
+document.addEventListener('drop',e=>{const tr=e.target.closest&&e.target.closest('tr[data-drag]');if(!tr||TB_DRAG==null)return;e.preventDefault();const tid=+tr.dataset.drag;if(tid!==TB_DRAG){const r=tr.getBoundingClientRect();tbReorder(TB_DRAG,tid,e.clientY>r.top+r.height/2)}TB_DRAG=null;render()});
+document.addEventListener('dragend',()=>{TB_DRAG=null;document.querySelectorAll('tr.dragging,tr.drop-b,tr.drop-a').forEach(x=>x.classList.remove('dragging','drop-b','drop-a'))});
+VIEWS.tablero=vTab2;
+
+/* ============ v7 · Basurales y puntos de carga ============ */
+S.pc={tab:'viajes',sub:'uso',drv:'',q:'',from:TODAY-30,to:TODAY};
+const stkKey=()=>S.pc.tab==='agua'?'agua':'va';
+function vBas2(){
+ const t=S.pc.tab;
+ const tabs=chips('pc.tab',[['viajes','Viajes a basurales'],['va','Basural Villa Allende'],['agua','Pileta Arcoíris'],['costos','Costos por basural']],t);
+ if(t==='va'||t==='agua')return stkView(t,tabs);
+ if(t==='costos')return costView(tabs);
+ // viajes (pantalla de siempre + costo por viaje)
+ const[a,b]=range(S.bp),trips=DB.ops.filter(o=>inRange(o.pickDay,a,b)&&o.basural).sort((x,y)=>(y.pickDay*1440+(y.dumpMin||y.pickMin))-(x.pickDay*1440+(x.dumpMin||x.pickMin)));
+ const c={},v={};BASURALES.forEach(x=>{c[x]=0;v[x]=0});trips.forEach(o=>{c[o.basural]+=o.cids.length;v[o.basural]+=tripCostFast(o)});
+ return pageHead('Basurales y puntos de carga','Cada retiro termina en un basural. Los ingresos a Villa Allende y las cargas en Arcoíris se descuentan solos.',chips('bp',[['hoy','Hoy'],['semana','Esta semana'],['mes','Este mes'],['todas','Todo']],S.bp))+`<div class="filters">${tabs}</div>${stkAlerts()}
+ <div class="tiles tiles4 block">${BASURALES.map(bn=>tile('bin','B. '+bn,c[bn],`viajes · ${money(v[bn])}`,`data-act="set" data-k="pc.tab" data-v="${bn==='Villa Allende'?'va':'costos'}"`,false,true)).join('')}</div>
+ <div class="tbl-wrap"><table><thead><tr><th>Fecha</th><th>Retiro</th><th>Llegó al basural</th><th>Basural</th><th>Chofer</th><th>Contenedor</th><th>Cliente</th><th>De dónde</th><th class="r">Costo</th></tr></thead><tbody>
+ ${trips.slice(0,200).map(o=>`<tr data-act="openOp" data-id="${o.id}" tabindex="0"><td class="tnum">${fs(o.pickDay)}</td><td class="tnum">${fmin(o.pickMin)}</td><td class="tnum">${o.dumpMin!=null?fmin(o.dumpMin):'—'}</td><td><b>B. ${esc(o.basural)}</b></td><td>${pill(o.pickDriverId)}</td><td class="cname">${o.cids.join(', ')}</td><td>${esc(cust(o).name)}${o.closedByRecambio?' <span class="muted">(recambio)</span>':''}</td><td>${esc(aline(addr(o)))} · ${esc(addr(o).loc)}</td><td class="r tnum">${money(tripCostFast(o))}</td></tr>`).join('')||`<tr><td colspan="9" class="empty">Sin viajes a basurales en este período.</td></tr>`}
+ </tbody></table></div><p class="note">El costo de Villa Allende sale de la compra de ingresos de la que se descontó. El de los otros basurales es el costo por ingreso cargado a mano en “Costos por basural”.</p>`;
+}
+function stkAlerts(){return ['va','agua'].map(k=>{const x=stkC(k),s=DB.stk[k];return x.avail<=s.alert?`<div class="warn-box">${ic('bell')}<span><b>${esc(s.name)}:</b> quedan ${num(x.avail)} ingresos (aviso al quedar ${s.alert}).</span><button class="btn sm" data-act="stkBuyDlg" data-k="${k}">Cargar compra</button></div>`:''}).join('')}
+function stkView(k,tabs){
+ const s=DB.stk[k],x=stkC(k),p=S.pc,a=Math.min(p.from,p.to),b=Math.max(p.from,p.to),q=norm(p.q);
+ const uses=x.uses.filter(u=>inRange(u.day,a,b)&&(!p.drv||u.drv===+p.drv)&&(!q||norm(`${u.cid||''} ${drv(u.drv)?drv(u.drv).plates.join(' '):''} ${opn(u.o.id)} ${cust(u.o).name}`).includes(q))).reverse();
+ const plateOf=u=>{const d=drv(u.drv);return d?d.plates[0]:'—'};
+ const sub=chips('pc.sub',[['uso',k==='va'?'Descargas':'Cargas de agua'],['compras','Compras'],['ajustes','Ajustes']],p.sub);
+ let tbl='';
+ if(p.sub==='compras')tbl=`<div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th class="r">Ingresos</th><th class="r">Costo por ingreso</th><th class="r">Total</th><th>Forma de pago</th><th>Comprobante</th><th>Registró</th></tr></thead><tbody>${s.buys.slice().reverse().map(y=>`<tr><td class="tnum">${fd(y.day)}</td><td class="r tnum"><b>${num(y.qty)}</b></td><td class="r tnum">${money(y.unit)}</td><td class="r tnum">${money(y.qty*y.unit)}</td><td>${esc(y.medio)}</td><td>${y.receipt?`<span class="muted">${ic('doc')}${esc(y.receipt)}</span>`:'—'}</td><td>${esc(y.user)}${y.note?`<span class="sub">${esc(y.note)}</span>`:''}</td></tr>`).join('')}</tbody></table></div>`;
+ else if(p.sub==='ajustes')tbl=`<div class="filters"><button class="btn" data-act="stkAdjDlg" data-k="${k}">${ic('plus')}Cargar ajuste</button></div><div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th class="r">Cantidad</th><th>Motivo</th><th>Registró</th></tr></thead><tbody>${s.adj.slice().reverse().map(y=>`<tr><td class="tnum">${fd(y.day)}</td><td class="r tnum" style="color:var(--${y.qty<0?'bad':'ok'})">${y.qty>0?'+':''}${y.qty}</td><td>${esc(y.reason)}</td><td>${esc(y.user)}</td></tr>`).join('')||'<tr><td colspan="4" class="empty">Sin ajustes.</td></tr>'}</tbody></table></div><p class="note">Para corregir diferencias con el conteo real (un ingreso que no se usó, uno que se usó y no se registró).</p>`;
+ else tbl=`<div class="filters"><label class="chip" style="gap:6px">Desde<input type="date" data-f="pcfrom" value="${dOut(a)}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0"></label><label class="chip" style="gap:6px">Hasta<input type="date" data-f="pcto" value="${dOut(b)}" style="border:0;background:transparent;color:inherit;font:inherit;min-height:0"></label><select class="sel" data-f="pc.drv"><option value="">Todos los choferes</option>${DB.drivers.map(d=>`<option value="${d.id}" ${+p.drv===d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select><input class="inp grow" data-f="pc.q" id="pcq" value="${esc(p.q)}" placeholder="${k==='va'?'Buscar contenedor o patente':'Buscar patente o pedido'}"></div>
+  <div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha y hora</th><th>${k==='va'?'Chofer':'Chofer / Camión'}</th>${k==='va'?'<th>Camión</th><th>Contenedor</th>':'<th>Pedido</th><th class="r">Litros cargados</th>'}<th class="r">Ingresos usados</th><th class="r">Costo</th><th>Registró</th><th></th></tr></thead><tbody>
+  ${uses.slice(0,150).map(u=>`<tr><td class="tnum">${fd(u.day)} ${fmin(u.min)}</td><td>${k==='va'?esc(dname(u.drv)):`${esc(dname(u.drv))} / ${esc(plateOf(u))}`}</td>${k==='va'?`<td>${esc(plateOf(u))}</td><td class="cname">${u.cid||'—'}</td>`:`<td class="code">${opn(u.o.id)}</td><td class="r tnum">${num(u.lit)} L</td>`}<td class="r tnum">1</td><td class="r tnum">${money(u.cost||0)}</td><td>Lucía</td><td><a href="#" data-act="openOp" data-id="${u.o.id}">Ver ${k==='va'?'descarga':'carga'}</a></td></tr>`).join('')||'<tr><td colspan="8" class="empty">Sin movimientos en el período.</td></tr>'}
+  </tbody></table></div><p class="note">Mostrando ${Math.min(150,uses.length)} de ${uses.length} ${k==='va'?'descargas':'cargas'} · ${money(uses.reduce((t,u)=>t+(u.cost||0),0))} en el período.</p>`;
+ return pageHead(`<span class="ttl-ic">${ic(k==='va'?'bin':'drop')}</span>${esc(s.name)}`,`Camiones › Basurales y puntos de carga`,`<button class="btn pri big" data-act="stkBuyDlg" data-k="${k}">${ic('plus')}${k==='va'?'Comprar ingresos':'Cargar compra de ingresos'}</button>`)+`<div class="filters">${tabs}</div>
+ <div class="cards3x stkc"><div class="fig"><span>Comprados</span><b>${num(x.bought)}</b></div><div class="fig"><span>Utilizados</span><b>${num(x.used)}</b>${x.adj?`<small>ajustes ${x.adj>0?'+':''}${x.adj}</small>`:''}</div><div class="fig ${x.avail<=s.alert?'low':'okc'}"><span>Disponibles</span><b>${num(x.avail)}</b></div></div>
+ <div class="filters"><span class="muted">Saldo actual · todas las fechas</span><span class="spacer"></span><label class="chip" style="gap:6px">${ic('bell')}Avisar al quedar<input class="inp sm r" style="width:70px" inputmode="numeric" value="${s.alert}" data-chg="stkAlert" data-k="${k}" aria-label="Avisar al quedar"> ingresos</label></div>
+ <div class="filters">${sub}</div>${tbl}
+ <p class="info-box">${ic('alert')}<span>${k==='va'?'Los ingresos se descuentan al confirmar una descarga en Villa Allende (1 ingreso por contenedor, regla a confirmar).':'Se descuenta al confirmar el viaje de agua: siempre se carga en Arcoíris (1 ingreso por viaje, regla a confirmar). La entrega al cliente no vuelve a descontar.'}</span></p>`;
+}
+function costView(tabs){
+ const[a,b]=range(S.bp),trips=DB.ops.filter(o=>inRange(o.pickDay,a,b)&&o.basural);
+ const rows=BASURALES.map(bn=>{const l=trips.filter(o=>o.basural===bn),n=l.reduce((s,o)=>s+o.cids.length,0),v=l.reduce((s,o)=>s+tripCostFast(o),0);return{bn,n,v,unit:bn==='Villa Allende'?null:basUnit(bn,TODAY)}});
+ const ag=stkC('agua').uses.filter(u=>inRange(u.day,a,b)),agv=ag.reduce((s,u)=>s+(u.cost||0),0);
+ const hist=DB.basCost.slice().sort((x,y)=>y.from-x.from);
+ return pageHead('Basurales y puntos de carga','Costo de cada ingreso y totales del período',chips('bp',[['hoy','Hoy'],['semana','Esta semana'],['mes','Este mes'],['todas','Todo']],S.bp))+`<div class="filters">${tabs}</div>
+ <div class="tbl-wrap block"><table class="dense"><thead><tr><th>Lugar</th><th>Costo por ingreso</th><th class="r">Ingresos ${PLBL[S.bp]}</th><th class="r">Total ${PLBL[S.bp]}</th></tr></thead><tbody>
+ ${rows.map(r=>`<tr><td><b>B. ${esc(r.bn)}</b></td><td>${r.unit==null?`<span class="muted">Según cada compra (hoy ${money((DB.stk.va.buys.slice(-1)[0]||{unit:0}).unit)})</span>`:`<span class="inrow"><input class="inp sm r" style="width:110px" inputmode="numeric" value="${r.unit}" data-chg="basUnit" data-b="${esc(r.bn)}" aria-label="Costo por ingreso en ${esc(r.bn)}"><span class="muted small">desde hoy</span></span>`}</td><td class="r tnum">${num(r.n)}</td><td class="r tnum">${money(r.v)}</td></tr>`).join('')}
+ <tr><td><b>Pileta Arcoíris</b> <span class="muted">(agua)</span></td><td><span class="muted">Según cada compra</span></td><td class="r tnum">${num(ag.length)}</td><td class="r tnum">${money(agv)}</td></tr>
+ </tbody><tfoot><tr><td colspan="2"><b>Total</b></td><td class="r tnum"><b>${num(rows.reduce((s,r)=>s+r.n,0)+ag.length)}</b></td><td class="r tnum"><b>${money(rows.reduce((s,r)=>s+r.v,0)+agv)}</b></td></tr></tfoot></table></div>
+ <h2 class="sec">Historial de costos cargados</h2><div class="tbl-wrap"><table class="dense"><thead><tr><th>Basural</th><th>Desde</th><th class="r">Costo por ingreso</th></tr></thead><tbody>${hist.map(h=>`<tr><td>B. ${esc(h.bas)}</td><td class="tnum">${fd(h.from)}</td><td class="r tnum">${money(h.unit)}</td></tr>`).join('')}</tbody></table></div>
+ <p class="note">Los costos se suman al costo de cada camión en Control de flota. Si un basural cambia el precio, se carga el nuevo valor y rige desde ese día.</p>`;
+}
+const _setF2=setF;
+setF=function(path,v){if(path==='pcfrom'||path==='pcto'){const d=dIn(v);if(d!=null)S.pc[path==='pcfrom'?'from':'to']=d;return}if(path==='pc.tab'){S.pc.tab=v;S.pc.sub='uso';return}return _setF2(path,v)};
+Object.assign(LIVE,{
+ stkAlert:t=>{const n=+digits(t.value);if(n>=0){DB.stk[t.dataset.k].alert=n;audNow(`${S.user.name} cambió el aviso de ${DB.stk[t.dataset.k].name} a ${n} ingresos`);render();toast(`Aviso al quedar ${n} ingresos.`)}},
+ basUnit:t=>{const n=+digits(t.value),b=t.dataset.b;if(!n)return;const ex=DB.basCost.find(x=>x.bas===b&&x.from===TODAY);if(ex)ex.unit=n;else DB.basCost.push({bas:b,from:TODAY,unit:n});audNow(`${S.user.name} cargó costo por ingreso de ${money(n)} en B. ${b}`);render();toast(`B. ${b}: ${money(n)} por ingreso desde hoy.`)}
+});
+Object.assign(DIALOGS,{
+ stkbuy:()=>{const k=S.dialog.k,s=DB.stk[k];return `<div class="m-head"><div><p class="eyebrow">${esc(s.name)}</p><h2>${k==='va'?'Comprar ingresos':'Cargar compra de ingresos'}</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+ <div class="m-body"><div class="fgrid"><label class="fld"><span>Fecha</span><input type="date" id="sb-d" value="${dOut(TODAY)}" max="${dOut(TODAY)}"></label><label class="fld"><span>Cantidad de ingresos</span><input id="sb-q" inputmode="numeric" placeholder="${k==='va'?'1000':'100'}" data-live="sbTot"></label>
+ <label class="fld"><span>Costo por ingreso</span><input id="sb-u" inputmode="numeric" placeholder="${(s.buys.slice(-1)[0]||{unit:''}).unit}" data-live="sbTot"></label><div class="fld"><span>Total</span><b id="sb-t" style="font:600 22px var(--f-cond);padding-top:8px">—</b></div>
+ <label class="fld"><span>Forma de pago</span><select id="sb-m">${PAYOUT.map(x=>`<option>${x}</option>`).join('')}<option>Cheque</option></select></label><div class="fld"><span>Comprobante</span><label class="up sm">${ic('up')}<span>Adjuntar</span><input type="file" id="sb-f"></label></div>
+ <label class="fld full"><span>Nota</span><input id="sb-n" placeholder="Opcional"></label></div><div id="sb-err"></div></div>
+ <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="stkBuy" data-k="${k}">${ic('check')}Guardar compra</button></div>`},
+ stkadj:()=>{const k=S.dialog.k,s=DB.stk[k];return `<div class="m-head"><div><p class="eyebrow">${esc(s.name)}</p><h2>Ajuste de ingresos</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+ <div class="m-body"><div class="fgrid"><label class="fld"><span>Cantidad (+ suma, − resta)</span><input id="sa-q" placeholder="-1"></label><label class="fld"><span>Fecha</span><input type="date" id="sa-d" value="${dOut(TODAY)}" max="${dOut(TODAY)}"></label><label class="fld full"><span>Motivo</span><input id="sa-r" placeholder="Ej.: conteo con el basural"></label></div><div id="sa-err"></div></div>
+ <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="stkAdj" data-k="${k}">${ic('check')}Guardar ajuste</button></div>`}
+});
+Object.assign(LIVE,{sbTot:()=>{const q=+digits(byId('sb-q').value),u=+digits(byId('sb-u').value);byId('sb-t').textContent=q&&u?money(q*u):'—'}});
+Object.assign(ACT,{
+ stkBuyDlg:d=>{S.dialog={t:'stkbuy',k:d.k};renderLayers()},
+ stkAdjDlg:d=>{S.dialog={t:'stkadj',k:d.k};renderLayers()},
+ stkBuy:d=>{const s=DB.stk[d.k],q=+digits(byId('sb-q').value),u=+digits(byId('sb-u').value),day=dIn(byId('sb-d').value),f=byId('sb-f').files[0];
+  if(!q||!u||day==null){byId('sb-err').innerHTML='<p class="err">Completá fecha, cantidad y costo por ingreso.</p>';return}
+  s.buys.push({id:++DB.seq.stk,day,qty:q,unit:u,medio:byId('sb-m').value,receipt:f?f.name:'',user:S.user.name,note:byId('sb-n').value.trim()});
+  if(byId('sb-m').value==='Efectivo · Oficina')DB.exp.push({id:++DB.seq.exp,day,cat:'Basurales',sub:'Compra de ingresos',medio:'Efectivo · Oficina',amount:q*u,desc:`${s.name}: ${q} ingresos`,receipt:f?f.name:'',user:S.user.name});
+  audNow(`${S.user.name} cargó una compra de ${q} ingresos en ${s.name} (${money(q*u)})`);S.dialog=null;render();toast(`${s.name}: +${num(q)} ingresos.`)},
+ stkAdj:d=>{const s=DB.stk[d.k],q=parseInt(byId('sa-q').value,10),r=byId('sa-r').value.trim();if(!q||!r){byId('sa-err').innerHTML='<p class="err">Poné la cantidad y el motivo.</p>';return}
+  s.adj.push({id:++DB.seq.stk,day:dIn(byId('sa-d').value)??TODAY,qty:q,reason:r,user:S.user.name});audNow(`${S.user.name} cargó un ajuste de ${q} en ${s.name}: ${r}`);S.dialog=null;render();toast('Ajuste guardado.')}
+});
+VIEWS.basurales=vBas2;
+{const n=NAV.find(x=>x.id==='basurales');n.l='Basurales y puntos de carga'}
+/* Control de flota: ingresos a basural y su costo por camión */
+const _vehMoves=vehMoves;
+vehMoves=function(p,a,b){const r=_vehMoves(p,a,b),v=vehOf(p);if(v.machine)return r;const ids=DB.drivers.filter(d=>d.plates[0]===p||v.drv===d.id).map(d=>d.id);
+ DB.ops.filter(o=>o.basural&&inRange(o.pickDay,a,b)&&ids.includes(o.pickDriverId)).forEach(o=>r.push({day:o.pickDay,o:'Basural',t:`Ingreso a B. ${o.basural} · ${o.cids.join(', ')} (${cust(o).name})`,st:'Descargado',v:tripCostFast(o)}));
+ if(p==='FEO 193')stkC('agua').uses.filter(u=>inRange(u.day,a,b)).forEach(u=>r.push({day:u.day,o:'Basural',t:`Carga de agua en Arcoíris · ${opn(u.o.id)}`,st:'Cargado',v:u.cost||0}));
+ return r.sort((x,y)=>y.day-x.day)};
+ORIG_C.Basural='bad';
+function flBas(p,a,b){const v=vehOf(p);if(v.machine)return null;const l=vehMoves(p,a,b).filter(m=>m.o==='Basural');return{n:l.length,v:l.reduce((s,m)=>s+m.v,0)}}
+const _vFlota=vFlota;
+VIEWS.flota=function(){let h=_vFlota();const f=S.fl;if(f.tab!=='res')return h;const[a,b]=flRange(),x=flBas(f.plate,a,b);if(!x)return h;
+ const box=`<div class="info-box block">${ic('bin')}<span><b>${f.plate==='FEO 193'?'Basurales y cargas de agua':'Ingresos a basural'}:</b> ${num(x.n)} en el período · <b>${money(x.v)}</b> sumados al costo del camión.</span><button class="btn sm ghost" data-act="set" data-k="fl.tab" data-v="hist">Ver detalle</button></div>`;
+ const i=h.indexOf('<div class="grid2">');return i<0?h+box:h.slice(0,i)+box+h.slice(i)};
+
+/* ============ v7 · Obradores ============ */
+S.ob={q:'',pl:'',st:'',loc:'',sel:null,flt:''};
+const obPhoto=ob=>`<svg viewBox="0 0 320 180" role="img" aria-label="Foto de ${ob.id}"><rect width="320" height="180" fill="#B9C9D6"/><rect y="128" width="320" height="52" fill="#9B8B6E"/><rect x="18" y="40" width="70" height="90" fill="#8A97A3"/><rect x="230" y="30" width="80" height="100" fill="#97A4AE"/><g><rect x="70" y="66" width="190" height="70" fill="#E46A1A" stroke="#7a3a10" stroke-width="2"/><path d="M70 66h190v8H70z" fill="#c45512"/><g stroke="rgba(0,0,0,.14)" stroke-width="2">${Array.from({length:14},(_,i)=>`<path d="M${82+i*13} 76v58"/>`).join('')}</g><rect x="186" y="82" width="26" height="52" fill="#5f6b75" stroke="#333"/><rect x="96" y="86" width="40" height="22" fill="#cfe3ef" stroke="#333"/><text x="160" y="126" font-family="Arial" font-weight="700" font-size="11" fill="#fff" text-anchor="middle">${ob.id}</text></g><rect x="80" y="136" width="10" height="6" fill="#444"/><rect x="240" y="136" width="10" height="6" fill="#444"/></svg>`;
+function obRows(){const f=S.ob,q=norm(f.q);return DB.obradores.filter(ob=>{const cu=CU(ob.cid),a=obAddr(ob);return(!f.pl||ob.place===f.pl)&&(!f.st||ob.state===f.st)&&(!f.loc||(a&&a.loc===f.loc))&&(!f.flt||obFlag(ob))&&(!q||norm(`${ob.id} ${ob.name} ${cu?cu.name:''} ${a?a.loc+' '+a.barrio:''}`).includes(q))})}
+function vObr(){
+ const all=DB.obradores,cnt=s=>all.filter(x=>x.state===s).length,pv=all.filter(x=>obFlag(x)==='warn').length,vc=all.filter(x=>obFlag(x)==='bad').length;
+ const l=obRows(),sel=S.ob.sel?DB.obradores.find(x=>x.id===S.ob.sel):null;
+ const fig=(i,t,n,st)=>`<button class="fig figb ${S.ob.st===st&&st?'on':''}" data-act="set" data-k="ob.st" data-v="${S.ob.st===st?'':st}"><span>${ic(i)}${t}</span><b>${n}</b></button>`;
+ return pageHead('Obradores',`Control de los ${all.length} obradores`,can.cont()||can.com()?`<button class="btn pri big" data-act="obNew">${ic('plus')}Nuevo obrador</button>`:'')+`
+ <div class="cards5 block">${fig('home2','Total',all.length,'')}${fig('check','Disponibles',cnt('Disponible'),'Disponible')}${fig('truck','Alquilados',cnt('Alquilado'),'Alquilado')}${fig('cal','Reservados',cnt('Reservado'),'Reservado')}${fig('cog','En reparación',cnt('En reparación'),'En reparación')}</div>
+ ${pv||vc?`<div class="warn-box">${ic('alert')}<span><b>${pv} por vencer · ${vc} vencido${vc===1?'':'s'}</b> (aviso ${OB_ALERT} días antes)</span><button class="btn sm" data-act="set" data-k="ob.flt" data-v="${S.ob.flt?'':'1'}">${S.ob.flt?'Ver todos':'Ver'}</button></div>`:''}
+ <div class="filters"><input class="inp grow" id="obq" data-f="ob.q" value="${esc(S.ob.q)}" placeholder="Buscar obrador o cliente" aria-label="Buscar obrador"><select class="sel" data-f="ob.pl" aria-label="Ubicación"><option value="">Ubicación</option>${['En calle','Simonna','Lote Paraguay'].map(x=>`<option ${S.ob.pl===x?'selected':''}>${x}</option>`).join('')}</select><select class="sel" data-f="ob.st" aria-label="Estado"><option value="">Estado</option>${Object.keys(BOB).map(x=>`<option ${S.ob.st===x?'selected':''}>${x}</option>`).join('')}</select><select class="sel" data-f="ob.locx" aria-label="Localidad"><option value="">Localidad</option>${LOC_NAMES.map(x=>`<option ${S.ob.loc===x?'selected':''}>${x}</option>`).join('')}</select></div>
+ <div class="ag-grid ${sel?'with':''}"><div class="ag-main"><div class="tbl-wrap"><table class="dense"><thead><tr><th>Obrador</th><th>Estado / Ubicación</th><th>Cliente / Zona</th><th>Entrega</th><th>Vencimiento</th></tr></thead><tbody>
+ ${l.map(ob=>{const cu=CU(ob.cid),a=obAddr(ob),v=obVence(ob),fl=obFlag(ob);return `<tr data-act="obSel" data-id="${ob.id}" tabindex="0" class="${S.ob.sel===ob.id?'sel':''}"><td><b>${ob.id}</b><span class="sub">${esc(ob.name)}</span></td><td>${badge(ob.state,BOB)}<span class="sub">${ic('pin')} ${esc(ob.place)}</span></td><td>${cu&&ob.state!=='Disponible'?`<b>${esc(cu.name)}</b><span class="sub">${a?esc((a.barrio!=='Centro'?a.barrio+' · ':'')+a.loc):''}</span>`:'<span class="muted">—</span>'}</td><td class="tnum">${ob.from&&ob.state!=='Disponible'?fd(ob.from):'—'}</td><td class="tnum">${ob.to&&ob.state!=='Disponible'?fd(ob.to):'—'}${fl==='warn'?`<span class="sub"><span class="chipx warn">${ic('alert')}Vence en ${v} día${v===1?'':'s'}</span></span>`:fl==='bad'?`<span class="sub"><span class="chipx bad">✕ Vencido hace ${-v} día${v===-1?'':'s'}</span></span>`:''}</td></tr>`}).join('')||'<tr><td colspan="5" class="empty">No hay obradores con esos filtros.</td></tr>'}
+ </tbody></table></div><div class="info-box">${ic('map')}<span>En el mapa: <b>cuadrado violeta + número</b>. Con borde ámbar si está por vencer y rojo si venció.</span><button class="btn sm ghost" data-act="nav" data-v="mapa">Ver mapa</button></div></div>${sel?obPanel(sel):''}</div>`;
+}
+function obPanel(ob){const cu=CU(ob.cid),a=obAddr(ob),v=obVence(ob),fl=obFlag(ob),L=ob.lock,ed=can.cont()||can.com();
+ return `<aside class="agp panel"><div class="agp-h"><div><p class="eyebrow">${ob.id} · ${esc(ob.name)}</p><h3>${badge(ob.state,BOB)} ${fl==='warn'?`<span class="chipx warn">${ic('alert')}Por vencer</span>`:fl==='bad'?'<span class="chipx bad">Vencido</span>':''}</h3></div><button class="x" data-act="obSel" data-id="" aria-label="Cerrar">${ic('x')}</button></div>
+ <div class="agp-s"><p>${ic('users')} Cliente: <b>${cu&&ob.state!=='Disponible'?esc(cu.name):'—'}</b></p><p>${ic('pin')} ${a&&ob.state!=='Disponible'?`${esc(aline(a))} · ${esc(a.loc)}`:esc(ob.place)}</p>${ob.from&&ob.state!=='Disponible'?`<p>${ic('cal')} ${fd(ob.from)} al ${fd(ob.to)}${v!=null?` · ${v<0?`<b class="late">vencido hace ${-v} d</b>`:`vence en ${v} d`}`:''}</p>`:''}${cu&&ob.state!=='Disponible'?`<div class="agp-b" style="padding:4px 0 0">${waBtn(cu.phone)}</div>`:''}</div>
+ <div class="agp-s"><h4>${ic('cam')}Fotos del obrador <small class="muted" style="text-transform:none;letter-spacing:0">· historial</small></h4>${ob.photos?`<div class="obph">${obPhoto(ob)}</div>`:'<p class="muted">Sin fotos.</p>'}${(ob.imgs||[]).map(u=>`<div class="obph"><img src="${u}" alt="Foto de ${ob.id}"></div>`).join('')}<label class="up sm" style="margin-top:6px">${ic('up')}<span>Adjuntar foto</span><input type="file" accept="image/*" data-chg="obImg" data-id="${ob.id}"></label></div>
+ <div class="agp-s"><h4>${ic('doc')}Contrato</h4>${ob.contract?`<div class="inrow"><span class="pdfn">PDF</span><span style="flex:1">${esc(ob.contract)}</span><button class="btn sm" data-act="obPdf" data-id="${ob.id}">Ver PDF</button></div>`:'<p class="muted">Sin contrato cargado.</p>'}<label class="up sm" style="margin-top:6px">${ic('up')}<span>${ob.contract?'Reemplazar':'Adjuntar'} contrato PDF</span><input type="file" accept="application/pdf" data-chg="obPdfUp" data-id="${ob.id}"></label></div>
+ <div class="agp-s"><h4>${ic('key')}Cerraduras y llaves</h4><dl class="cj-sum"><dt>Tipo de cierre</dt><dd>${esc(L.tipo)}</dd><dt>Cerraduras</dt><dd>${L.cerr}</dd><dt>Candados</dt><dd>${L.cand}</dd><dt>Juegos de llaves</dt><dd>${L.jue}</dd><dt>En cliente / en oficina</dt><dd>${L.cli} · ${Math.max(0,L.jue-L.cli)}</dd></dl>${ed?`<button class="btn sm ghost" data-act="obLockDlg" data-id="${ob.id}">Editar</button>`:''}</div>
+ <div class="agp-s"><h4>${ic('hist')}Historial de alquileres</h4>${ob.hist.slice().reverse().map(h=>`<p class="small">${fs(h.from)} al ${fs(h.to)} · ${esc((CU(h.cid)||{name:'—'}).name)}</p>`).join('')||'<p class="muted">Sin alquileres anteriores.</p>'}</div>
+ ${ob.obs?`<div class="agp-s"><h4>Observaciones</h4><p>${esc(ob.obs)}</p></div>`:''}
+ ${ed?`<div class="agp-f">${ob.state==='Alquilado'?`<button class="btn" data-act="obEndDlg" data-id="${ob.id}">Retirado</button><button class="btn pri" data-act="obRenDlg" data-id="${ob.id}">Renovar período</button>`:`<button class="btn" data-act="obStDlg" data-id="${ob.id}">Cambiar estado</button><button class="btn pri" data-act="obRentDlg" data-id="${ob.id}">Alquilar</button>`}</div>`:''}
+ </aside>`}
+const obDlgHead=(ob,t)=>`<div class="m-head"><div><p class="eyebrow">${ob?ob.id+' · '+esc(ob.name):'Obradores'}</p><h2>${t}</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>`;
+const obDlgFoot=(act,l,id)=>`<div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="${act}" data-id="${id||''}">${ic('check')}${l}</button></div>`;
+const OBX=()=>DB.obradores.find(x=>x.id===S.dialog.id);
+Object.assign(DIALOGS,{
+ obren:()=>{const ob=OBX();return obDlgHead(ob,'Renovar período')+`<div class="m-body"><div class="fgrid"><label class="fld"><span>Vence actualmente</span><input value="${fd(ob.to)}" disabled></label><label class="fld"><span>Extender</span><select id="or-m">${[1,2,3,6,12].map(m=>`<option value="${m}">${m} ${m===1?'mes':'meses'}</option>`).join('')}</select></label><label class="fld full"><span>Nota</span><input id="or-n" placeholder="Opcional"></label></div><p class="note">Se alquilan por mínimo un mes. El nuevo vencimiento se cuenta desde el vencimiento actual.</p></div>`+obDlgFoot('obRen','Renovar',ob.id)},
+ obrent:()=>{const ob=OBX(),cl=DB.customers;return obDlgHead(ob,'Alquilar obrador')+`<div class="m-body"><div class="fgrid"><label class="fld full"><span>Cliente</span><select id="ot-c">${cl.map(c=>`<option value="${c.id}" ${ob.cid===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></label><label class="fld"><span>Entrega</span><input type="date" id="ot-f" value="${dOut(ob.state==='Reservado'&&ob.from?ob.from:TODAY)}"></label><label class="fld"><span>Período</span><select id="ot-m">${[1,2,3,6,12].map(m=>`<option value="${m}">${m} ${m===1?'mes':'meses'}</option>`).join('')}</select></label><div class="fld full"><span>Contrato PDF</span><label class="up sm">${ic('up')}<span>Adjuntar</span><input type="file" id="ot-pdf" accept="application/pdf"></label></div></div><p class="note">La dirección es la primera del cliente; se puede cambiar desde la ficha del cliente.</p></div>`+obDlgFoot('obRent','Alquilar',ob.id)},
+ obst:()=>{const ob=OBX();return obDlgHead(ob,'Estado y ubicación')+`<div class="m-body"><div class="fgrid"><label class="fld"><span>Estado</span><select id="os-s">${['Disponible','Reservado','En reparación'].map(x=>`<option ${ob.state===x?'selected':''}>${x}</option>`).join('')}</select></label><label class="fld"><span>Ubicación</span><select id="os-p">${['Simonna','Lote Paraguay'].map(x=>`<option ${ob.place===x?'selected':''}>${x}</option>`).join('')}</select></label><label class="fld full"><span>Observaciones</span><input id="os-o" value="${esc(ob.obs)}"></label></div></div>`+obDlgFoot('obSt','Guardar',ob.id)},
+ obend:()=>{const ob=OBX();return obDlgHead(ob,'Registrar retiro del obrador')+`<div class="m-body"><div class="fgrid"><label class="fld"><span>Fecha</span><input type="date" id="oe-d" value="${dOut(TODAY)}" max="${dOut(TODAY)}"></label><label class="fld"><span>Queda en</span><select id="oe-p"><option>Lote Paraguay</option><option>Simonna</option></select></label><label class="fld"><span>Chofer</span><select id="oe-dr">${DB.drivers.map(d=>`<option value="${d.id}">${esc(d.name)}</option>`).join('')}</select></label><label class="fld"><span>Juegos de llaves devueltos</span><input id="oe-k" inputmode="numeric" value="${ob.lock.cli}"></label></div></div>`+obDlgFoot('obEnd','Confirmar retiro',ob.id)},
+ oblock:()=>{const ob=OBX(),L=ob.lock;return obDlgHead(ob,'Cerraduras y llaves')+`<div class="m-body"><div class="fgrid"><label class="fld"><span>Tipo de cierre</span><select id="ol-t">${['Cerradura','Candado','Cerradura y candado'].map(x=>`<option ${L.tipo===x?'selected':''}>${x}</option>`).join('')}</select></label><label class="fld"><span>Cerraduras</span><input id="ol-c" inputmode="numeric" value="${L.cerr}"></label><label class="fld"><span>Candados</span><input id="ol-a" inputmode="numeric" value="${L.cand}"></label><label class="fld"><span>Juegos de llaves</span><input id="ol-j" inputmode="numeric" value="${L.jue}"></label><label class="fld"><span>Juegos en el cliente</span><input id="ol-k" inputmode="numeric" value="${L.cli}"></label></div></div>`+obDlgFoot('obLock','Guardar',ob.id)},
+ obnew:()=>obDlgHead(null,'Nuevo obrador')+`<div class="m-body"><div class="fgrid"><label class="fld"><span>Número</span><input id="on-n" inputmode="numeric" value="${DB.obradores.length+1}"></label><label class="fld"><span>Nombre</span><input id="on-name" value="Obrador ${DB.obradores.length+1}"></label><label class="fld"><span>Ubicación</span><select id="on-p"><option>Lote Paraguay</option><option>Simonna</option></select></label><label class="fld"><span>Tipo de cierre</span><select id="on-t"><option>Cerradura</option><option>Candado</option><option>Cerradura y candado</option></select></label><label class="fld"><span>Juegos de llaves</span><input id="on-j" inputmode="numeric" value="2"></label></div><div id="on-err"></div></div>`+obDlgFoot('obCreate','Crear obrador')
+});
+Object.assign(ACT,{
+ obSel:d=>{S.ob.sel=d.id||null;render()},
+ obNew:()=>{S.dialog={t:'obnew'};renderLayers()},
+ obRenDlg:d=>{S.dialog={t:'obren',id:d.id};renderLayers()},
+ obRentDlg:d=>{S.dialog={t:'obrent',id:d.id};renderLayers()},
+ obStDlg:d=>{S.dialog={t:'obst',id:d.id};renderLayers()},
+ obEndDlg:d=>{S.dialog={t:'obend',id:d.id};renderLayers()},
+ obLockDlg:d=>{S.dialog={t:'oblock',id:d.id};renderLayers()},
+ obRen:d=>{const ob=DB.obradores.find(x=>x.id===d.id),m=+byId('or-m').value;ob.to+=30*m;audNow(`${S.user.name} renovó ${ob.id} por ${m} ${m===1?'mes':'meses'} (vence ${fd(ob.to)})`);S.dialog=null;render();toast(`${ob.id}: nuevo vencimiento ${fd(ob.to)}.`)},
+ obRent:d=>{const ob=DB.obradores.find(x=>x.id===d.id),cu=CU(byId('ot-c').value),f=dIn(byId('ot-f').value)??TODAY,m=+byId('ot-m').value,pdf=byId('ot-pdf').files[0];
+  Object.assign(ob,{state:f>TODAY?'Reservado':'Alquilado',place:f>TODAY?ob.place:'En calle',cid:cu.id,addrId:cu.addrs[0].id,from:f,to:f+30*m});ob.lock.cli=Math.min(1,ob.lock.jue);if(pdf)ob.contract=pdf.name;else if(!ob.contract)ob.contract=`Contrato_${ob.id.replace('-','')}.pdf`;
+  audNow(`${S.user.name} alquiló ${ob.id} a ${cu.name} (${fd(f)} al ${fd(ob.to)})`);S.dialog=null;render();toast(`${ob.id} ${ob.state.toLowerCase()} a ${cu.name}.`)},
+ obSt:d=>{const ob=DB.obradores.find(x=>x.id===d.id);ob.state=byId('os-s').value;ob.place=byId('os-p').value;ob.obs=byId('os-o').value.trim();audNow(`${S.user.name} cambió ${ob.id}: ${ob.state} · ${ob.place}`);S.dialog=null;render();toast(`${ob.id} actualizado.`)},
+ obEnd:d=>{const ob=DB.obradores.find(x=>x.id===d.id);ob.hist.push({cid:ob.cid,from:ob.from,to:dIn(byId('oe-d').value)??TODAY});const pl=byId('oe-p').value,dr=dname(+byId('oe-dr').value);
+  audNow(`${S.user.name} registró el retiro de ${ob.id} (${dr}) · queda en ${pl}`);Object.assign(ob,{state:'Disponible',place:pl,cid:null,addrId:null,opId:null,from:null,to:null});ob.lock.cli=0;S.dialog=null;render();toast(`${ob.id} disponible en ${pl}.`)},
+ obLock:d=>{const ob=DB.obradores.find(x=>x.id===d.id),n=id=>+digits(byId(id).value)||0;ob.lock={tipo:byId('ol-t').value,cerr:n('ol-c'),cand:n('ol-a'),jue:n('ol-j'),cli:n('ol-k')};audNow(`${S.user.name} actualizó cerraduras y llaves de ${ob.id}`);S.dialog=null;render();toast('Guardado.')},
+ obCreate:()=>{const n=+digits(byId('on-n').value),id='OB-'+String(n).padStart(2,'0');if(!n||DB.obradores.some(x=>x.id===id)){byId('on-err').innerHTML='<p class="err">Ese número ya existe.</p>';return}
+  const t=byId('on-t').value;DB.obradores.push({id,n,name:byId('on-name').value.trim()||'Obrador '+n,state:'Disponible',place:byId('on-p').value,cid:null,addrId:null,opId:null,from:null,to:null,contract:'',photos:0,lock:{tipo:t,cerr:t==='Candado'?0:1,cand:t==='Cerradura'?0:1,jue:+digits(byId('on-j').value)||2,cli:0},hist:[],obs:''});
+  audNow(`${S.user.name} dio de alta ${id}`);S.dialog=null;S.ob.sel=id;render();toast(`${id} creado.`)},
+ obPdf:async d=>{const ob=DB.obradores.find(x=>x.id===d.id),cu=CU(ob.cid);toast('Preparando el PDF…');try{await needLib('pdf');const doc=new window.jspdf.jsPDF({unit:'pt',format:'a4'});doc.setFont('helvetica','bold');doc.setFontSize(16);doc.text(pdfTxt(`Contrato de alquiler · ${ob.id}`),40,60);doc.setFont('helvetica','normal');doc.setFontSize(11);
+  [`Archivo: ${ob.contract}`,`Cliente: ${cu?cu.name:'—'}`,`Período: ${ob.from?fd(ob.from):'—'} al ${ob.to?fd(ob.to):'—'}`,`Cierre: ${ob.lock.tipo} · ${ob.lock.jue} juegos de llaves`,'','Documento de ejemplo: en el sistema real se ve el PDF que se adjuntó.'].forEach((t,i)=>doc.text(pdfTxt(t),40,96+i*20));saveFile(`${fname(ob.contract.replace('.pdf',''))}.pdf`,doc.output('blob'))}catch(e){toast('No se pudo generar el PDF.')}}
+});
+Object.assign(LIVE,{
+ obImg:t=>{const f=t.files[0],ob=DB.obradores.find(x=>x.id===t.dataset.id);if(!f)return;const r=new FileReader();r.onload=()=>{(ob.imgs=ob.imgs||[]).push(r.result);audNow(`${S.user.name} subió una foto de ${ob.id}`);render();toast('Foto agregada al historial.')};r.readAsDataURL(f)},
+ obPdfUp:t=>{const f=t.files[0],ob=DB.obradores.find(x=>x.id===t.dataset.id);if(!f)return;ob.contract=f.name;audNow(`${S.user.name} cargó el contrato de ${ob.id}`);render();toast('Contrato cargado.')}
+});
+const _setF3=setF;
+setF=function(path,v){if(path==='ob.locx'){S.ob.loc=v;return}return _setF3(path,v)};
+VIEWS.obradores=vObr;
+NAV.splice(NAV.findIndex(n=>n.id==='mapa'),0,{id:'obradores',l:'Obradores',i:'home2',r:ALL,g:'Logística'});
+/* mapa: obradores como cuadrado violeta con número */
+const _initMap=initMap;
+initMap=function(){_initMap();if(!LMAP)return;DB.obradores.filter(ob=>ob.state==='Alquilado').forEach(ob=>{const a=obAddr(ob);if(!a||a.lat==null)return;const fl=obFlag(ob);
+ L.marker([a.lat+.0012,a.lng+.0012],{icon:L.divIcon({className:'',html:`<div class="lm-ob ${fl||''}">${ob.n}</div>`,iconSize:null}),keyboard:false}).addTo(LMAP).bindTooltip(`${ob.id} · ${esc((CU(ob.cid)||{name:''}).name)} · vence ${fs(ob.to)}`,{direction:'top',offset:[0,-10]}).on('click',()=>{S.view='obradores';S.ob.sel=ob.id;render()})})};
+const _vMapa=vMapa;
+VIEWS.mapa=function(){const h=_vMapa();return h.replace('</ul>',`<li><i class="sq-ob"></i>Obrador alquilado (número)</li></ul>`)};
+
+/* ============ v7 · descargas, avisos de cheques, Inicio, contenedores, modo oscuro ============ */
+const xbtns=(act,extra='')=>`<button class="btn" data-act="${act}" data-fmt="pdf" ${extra}>${ic('doc')}PDF</button><button class="btn" data-act="${act}" data-fmt="xlsx" ${extra}>${ic('chart')}Excel</button>`;
+const injRight=(h,html)=>h.replace('<div class="ph-r">','<div class="ph-r">'+html);
+/* Contenedores: descarga de la lista con los filtros elegidos */
+const _vCont=vCont;
+VIEWS.contenedores=()=>injRight(_vCont(),xbtns('contExp'));
+function contList(){const f=S.cf,q=norm(f.q);return DB.containers.map(c=>{const op=c.opId?O(c.opId):null;return{c,op,cu:op?cust(op):null,a:op?addr(op):null}}).filter(r=>(!f.size||r.c.size==f.size)&&(!f.loc||(r.a&&r.a.loc===f.loc&&r.c.place==='En calle'))&&(!f.st||r.c.state===f.st)&&(!q||norm(cname(r.c)).includes(q)||(r.cu&&norm(r.cu.name).includes(q)))&&(!f.pl||r.c.place===f.pl))}
+/* Choferes: servicios del día ordenados por hora */
+function chofSvc(dId,a,b){const r=[];DB.ops.forEach(o=>{if(o.status==='Cancelado'||o.type==='Extensión')return;
+ if(o.driverId===dId&&inRange(o.delDay,a,b))r.push({d:o.delDay,m:o.delMin,t:o.type==='Recambio'?'Recambio':o.type==='Movimiento'?'Movimiento':o.type==='Servicio'?o.svc:'Entrega',o,lugar:`${aline(addr(o)).split(',')[0]} · ${addr(o).loc}`});
+ if(o.pickDriverId===dId&&inRange(o.pickDay,a,b)){if(!o.closedByRecambio)r.push({d:o.pickDay,m:o.pickMin,t:'Retiro',o,lugar:`${aline(addr(o)).split(',')[0]} · ${addr(o).loc}`});if(o.basural)r.push({d:o.pickDay,m:o.dumpMin!=null?o.dumpMin:o.pickMin+30,t:'Basural',o,lugar:'B. '+o.basural})}});
+ return r.sort((x,y)=>(x.d*1440+x.m)-(y.d*1440+y.m))}
+const _vChof=vChof;
+VIEWS.choferes=()=>{let h=_vChof();if(S.dsel){h=h.replace(/(<section class="block"><div class="sechead"><h2 class="sec">Servicios de [^<]*<\/h2>)/,`$1<span class="inrow">${xbtns('chofExp')}</span>`)}else h=injRight(h,`<button class="btn" data-act="chofExpAll" data-fmt="pdf">${ic('doc')}Servicios del día (PDF)</button>`);return h};
+/* Facturación y Pagos: descarga por período */
+const _vFact=vFact;VIEWS.facturacion=()=>injRight(_vFact(),`<button class="btn" data-act="xDlg" data-k="fact">${ic('up')}Descargar A y B</button>`);
+const _vPagos=vPagos;VIEWS.pagos=()=>injRight(_vPagos(),`<button class="btn" data-act="xDlg" data-k="pagos">${ic('up')}Descargar por cuenta</button>`);
+DIALOGS.xdl=()=>{const k=S.dialog.k,fa=k==='fact';return `<div class="m-head"><div><p class="eyebrow">${fa?'Facturación':'Pagos'}</p><h2>${fa?'Descargar lo facturado en A y B':'Descargar ingresos por cuenta'}</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+ <div class="m-body"><div class="filters">${['hoy','semana','mes','pmes'].map(p=>`<button class="chip" data-act="xPer" data-v="${p}">${{hoy:'Hoy',semana:'Esta semana',mes:'Este mes',pmes:'Mes anterior'}[p]}</button>`).join('')}</div>
+ <div class="fgrid"><label class="fld"><span>Desde</span><input type="date" id="xd-a" value="${dOut(monthStart(TODAY))}"></label><label class="fld"><span>Hasta</span><input type="date" id="xd-b" value="${dOut(TODAY)}"></label>
+ ${fa?`<label class="fld"><span>Tipo</span><select id="xd-t"><option value="">A y B</option><option>A</option><option>B</option></select></label><label class="fld"><span>Anuladas</span><select id="xd-an"><option value="0">No incluir</option><option value="1">Incluir</option></select></label>`:`<label class="fld full"><span>Cuenta</span><select id="xd-c"><option value="">Todas</option><option>Transf SAS</option><option>Transf YPF</option><option>Transf Otro</option><option>Efectivo</option><option>Chamba</option></select></label>`}</div>
+ <p class="note">${fa?'Para mostrarle al contador: separado por tipo, con neto, IVA y total.':'Para controlar lo que entró en cada cuenta.'}</p><div id="xd-err"></div></div>
+ <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn" data-act="xRun" data-fmt="xlsx">${ic('chart')}Excel</button><button class="btn pri" data-act="xRun" data-fmt="pdf">${ic('doc')}PDF</button></div>`};
+Object.assign(ACT,{
+ contExp:d=>{const l=contList(),f=S.cf;exportTable({fmt:d.fmt,landscape:true,file:`contenedores-${f.pl?fname(f.pl)+'-':''}${dOut(TODAY)}`,title:`Contenedores${f.pl?' · '+f.pl:''}`,sub:`${l.length} contenedores al ${fd(TODAY)}${f.st?' · '+f.st:''}${f.size?' · '+f.size+' m3':''}${f.loc?' · '+f.loc:''}`,
+  cols:['Contenedor','Medida','Estado','Ubicación','Cliente','Barrio · localidad','Entrega','Retiro previsto'],rows:l.map(({c,op,cu,a})=>{const calle=c.place==='En calle';return[c.id+' | '+c.detail,c.size+' m3',c.state,c.place+(c.placeNote?' ('+c.placeNote+')':''),calle&&cu?cu.name:'',calle&&a?(a.barrio!=='Centro'?a.barrio+' · ':'')+a.loc:'',calle&&op?fd(op.delDay):'',calle&&op?fd(op.plannedPickup):'']})})},
+ chofExp:d=>{const dr=drv(S.dsel),[a,b]=range(S.dp),l=chofSvc(dr.id,a,b).filter(x=>!S.dsvc||x.t===S.dsvc);exportTable({fmt:d.fmt,landscape:true,file:`servicios-${fname(dr.name)}-${dOut(a)}${a!==b?'_'+dOut(b):''}`,title:`Servicios de ${dr.name} · ${a===b?fd(a):fd(a)+' al '+fd(b)}`,sub:`${l.length} movimientos ordenados por hora · ${dr.plates.join(', ')}`,cols:['Fecha','Hora','Servicio','Pedido','Contenedor','Cliente','Lugar'],rows:l.map(x=>[fd(x.d),fmin(x.m),x.t,opn(x.o.id),(x.o.type==='Movimiento'?(O(x.o.replacesOpId)||{cids:[]}).cids:x.o.cids).join(', '),cust(x.o).name,x.lugar])})},
+ chofExpAll:d=>{const[a,b]=range(S.dp),rows=[];DB.drivers.forEach(dr=>chofSvc(dr.id,a,b).forEach(x=>rows.push([dr.name,fd(x.d),fmin(x.m),x.t,opn(x.o.id),x.o.cids.join(', '),cust(x.o).name,x.lugar])));exportTable({fmt:d.fmt,landscape:true,file:`servicios-choferes-${dOut(a)}`,title:`Servicios de los choferes · ${a===b?fd(a):fd(a)+' al '+fd(b)}`,sub:'Ordenados por chofer y por hora',cols:['Chofer','Fecha','Hora','Servicio','Pedido','Contenedor','Cliente','Lugar'],rows})},
+ xDlg:d=>{S.dialog={t:'xdl',k:d.k};renderLayers()},
+ xPer:d=>{const r={hoy:[TODAY,TODAY],semana:[weekStart(TODAY),TODAY],mes:[monthStart(TODAY),TODAY],pmes:[monthStart(monthStart(TODAY)-1),monthStart(TODAY)-1]}[d.v];byId('xd-a').value=dOut(r[0]);byId('xd-b').value=dOut(r[1])},
+ xRun:d=>{const a=dIn(byId('xd-a').value),b=dIn(byId('xd-b').value);if(a==null||b==null){byId('xd-err').innerHTML='<p class="err">Elegí las dos fechas.</p>';return}const A=Math.min(a,b),B=Math.max(a,b),k=S.dialog.k;
+  if(k==='fact'){const tp=byId('xd-t').value,an=byId('xd-an').value==='1',l=DB.invs.filter(i=>inRange(i.day,A,B)&&(i.tipo==='A'||i.tipo==='B')&&(!tp||i.tipo===tp)&&(an||i.cond!=='Anulada')).sort((x,y)=>x.tipo.localeCompare(y.tipo)||x.day-y.day||x.num-y.num);
+   const sum=(t,f)=>l.filter(i=>i.tipo===t&&i.cond!=='Anulada').reduce((s,i)=>s+i[f],0);
+   S.dialog=null;renderLayers();return exportTable({fmt:d.fmt,landscape:true,file:`facturacion-${tp||'A-B'}-${dOut(A)}_${dOut(B)}`,title:`Facturación ${tp||'A y B'} · ${fd(A)} al ${fd(B)}`,sub:`Factura A: neto ${money(sum('A','neto'))} · total ${money(sum('A','total'))}   |   Factura B: neto ${money(sum('B','neto'))} · total ${money(sum('B','total'))}`,
+    cols:['Tipo','N.º','Fecha','CUIT','Razón social','Producto / servicio','Neto','IVA','Total','Condición'],rows:l.map(i=>[i.tipo,`${i.pv}-${ivn(i)}`,fd(i.day),i.cuit,i.rs,i.det,i.neto,i.total-i.neto,i.total,i.cond]),totals:['','','','','','Total',sum('A','neto')+sum('B','neto'),sum('A','total')+sum('B','total')-sum('A','neto')-sum('B','neto'),sum('A','total')+sum('B','total'),'']})}
+  const c=byId('xd-c').value,l=DB.ops.filter(o=>o.status!=='Cancelado'&&o.paid>0&&inRange(o.payDay,A,B)&&(!c||payLabel(o).startsWith(c)||(c==='Chamba'&&o.payMethod==='Grupo Chamba'))).sort((x,y)=>x.payDay-y.payDay||x.id-y.id);
+  S.dialog=null;renderLayers();exportTable({fmt:d.fmt,landscape:true,file:`pagos-${c?fname(c):'todas'}-${dOut(A)}_${dOut(B)}`,title:`Ingresos ${c||'de todas las cuentas'} · ${fd(A)} al ${fd(B)}`,sub:`${l.length} pagos · ${money(l.reduce((s,o)=>s+o.paid,0))}`,cols:['Fecha','Pedido','Cliente','Servicio','Cuenta / forma','Estado','Monto'],rows:l.map(o=>[fd(o.payDay),opn(o.id),cust(o).name,svcLine(o),payLabel(o),payStatus(o),o.paid]),totals:['','','','','','Total',l.reduce((s,o)=>s+o.paid,0)]})}
+});
+/* Cheques: avisos por Telegram o mail a Mili y Camilo */
+DB.cfg.chqAv={canal:'Telegram',dias:7,dia1:true,dest:[{n:'Mili',on:true,tg:'@mili_contenic',mail:'mili@contenic.com.ar'},{n:'Camilo',on:true,tg:'@camilo_contenic',mail:'camilo@contenic.com.ar'}]};
+const _vCheques=vCheques;
+VIEWS.cheques=()=>{const h=_vCheques(),A=DB.cfg.chqAv,i=h.indexOf('</header>')+9,nx=DB.cheques.filter(x=>x.estado==='Pendiente'&&x.cobro>=TODAY&&x.cobro<=TODAY+A.dias).length;
+ const panel=`<section class="panel block chqav"><div class="sechead"><h3>${ic('bell')}Avisos de vencimiento</h3><span class="muted">${nx} cheque${nx===1?'':'s'} entran en el próximo aviso</span></div>
+ <div class="avrow"><div class="fld"><span>Canal</span><div class="seg2">${['Telegram','Mail','Ambos'].map(c=>`<button class="${A.canal===c?'on':''}" data-act="chqAv" data-k="canal" data-v="${c}">${c}</button>`).join('')}</div></div>
+ <label class="fld"><span>Avisar</span><select class="sel" data-chg="chqAvDias">${[3,5,7,10,15].map(n=>`<option value="${n}" ${A.dias===n?'selected':''}>${n} días antes</option>`).join('')}</select></label>
+ <label class="chip" style="gap:8px;align-self:end"><input type="checkbox" data-chg="chqAvD1" ${A.dia1?'checked':''}>y el día anterior</label></div>
+ <div class="avrow">${A.dest.map((p,k)=>`<label class="chip avd" style="gap:8px"><input type="checkbox" data-chg="chqAvP" data-k="${k}" ${p.on?'checked':''}><b>${p.n}</b><span class="muted">${A.canal!=='Mail'?esc(p.tg):''}${A.canal==='Ambos'?' · ':''}${A.canal!=='Telegram'?esc(p.mail):''}</span></label>`).join('')}<button class="btn sm" data-act="chqAvTest">${ic('bell')}Enviar aviso de prueba</button></div>
+ <p class="note">El aviso dice qué cheques vencen, a quién, el monto y la cuenta. En la demo no se envía nada.</p></section>`;
+ return h.slice(0,i)+panel+h.slice(i)};
+Object.assign(ACT,{chqAv:d=>{DB.cfg.chqAv[d.k]=d.v;render()},chqAvTest:()=>{const A=DB.cfg.chqAv,to=A.dest.filter(p=>p.on).map(p=>p.n).join(' y ');toast(to?`Aviso de prueba por ${A.canal.toLowerCase()} a ${to} (simulado).`:'Elegí al menos una persona.')}});
+Object.assign(LIVE,{chqAvDias:t=>{DB.cfg.chqAv.dias=+t.value;render()},chqAvD1:t=>{DB.cfg.chqAv.dia1=t.checked},chqAvP:t=>{DB.cfg.chqAv.dest[+t.dataset.k].on=t.checked;render()}});
+/* Inicio: dinero en caja para todos; cheques por vencer en rojo para Administración */
+const _vInicio=vInicio;
+VIEWS.inicio=()=>{const h=_vInicio(),i=h.indexOf('</header>')+9,D=cajaData(TODAY,TODAY),pend=D.list.filter(D.pend).reduce((s,o)=>s+o.paid,0);
+ let x=`<section class="block"><div class="tiles tiles3x">${tile('coins','Dinero en caja ahora',money(D.disp),`${pend?money(pend)+' en manos de choferes, sin rendir':'todo rendido'}`,inR('Administración','Ventas')?'data-act="goView" data-v="caja"':'',true)}`;
+ if(inR('Administración','Logística')){const late=tbOps().filter(tbLate).length,sin=DB.ops.filter(o=>preDel(o)&&!o.driverId&&o.reqDay<=TODAY&&o.status!=='Cancelado'&&o.type!=='Extensión').length;x+=tile('truck','Tablero del día',`${sin} sin asignar`,late?`<span class="late">${late} con carga incompleta</span>`:'todo al día','data-act="goView" data-v="tablero"')}
+ const ob=DB.obradores.filter(o=>obFlag(o)).length;x+=tile('home2','Obradores',`${DB.obradores.filter(o=>o.state==='Alquilado').length} alquilados`,ob?`<span class="late">${ob} por vencer o vencidos</span>`:'ninguno por vencer','data-act="goView" data-v="obradores"');
+ x+='</div></section>';
+ if(inR('Administración')){const l=DB.cheques.filter(c=>c.estado==='Pendiente'&&c.cobro<=TODAY+7).sort((a,b)=>a.cobro-b.cobro);
+  x+=`<section class="block chq-red"><div class="sechead"><h2 class="sec" style="color:var(--bad)">${ic('alert')}Cheques por vencer · próximos 7 días</h2><button class="btn sm ghost" data-act="goView" data-v="cheques">Ver cheques</button></div>${l.length?`<div class="tbl-wrap"><table class="dense"><tbody>${l.map(c=>`<tr><td class="tnum"><b>${fd(c.cobro)}</b>${c.cobro<TODAY?' <span class="b bad">vencido</span>':c.cobro===TODAY?' <span class="b bad">hoy</span>':` <span class="muted">en ${c.cobro-TODAY} d</span>`}</td><td>${chqLabel(c)} · ${esc(c.benef)}</td><td>${esc(c.cuenta)}</td><td class="r tnum"><b>${money(c.monto)}</b></td></tr>`).join('')}</tbody></table></div>`:'<p class="muted">No hay cheques por vencer esta semana.</p>'}</section>`}
+ x+=stkAlerts();
+ return h.slice(0,i)+x+h.slice(i)};
+/* Contenedores: cambio de ubicación con fecha, hora y chofer */
+const _dCont=dCont;
+dCont=function(id){let h=_dCont(id);const c=C(id);if(c.place==='En calle'||!can.cont())return h;
+ return h.replace('<label class="fld full"><span>Observaciones</span>',`<label class="fld"><span>Chofer que lo llevó</span><select id="ce-dr"><option value="">—</option>${DB.drivers.map(d=>`<option value="${d.id}">${esc(d.name)}</option>`).join('')}</select></label><label class="fld"><span>Fecha y hora</span><span class="inrow"><input type="date" id="ce-d" value="${dOut(TODAY)}" max="${dOut(TODAY)}"><input type="time" id="ce-t" value="${fmin(tbNow())}"></span></label><label class="fld full"><span>Observaciones</span>`)};
+const _saveCE=ACT.saveContEdit;
+ACT.saveContEdit=d=>{const c=C(d.id),pl=byId('ce-pl').value,st=byId('ce-st').value,dr=byId('ce-dr')?+byId('ce-dr').value||null:null;
+ if(c.place!=='En calle'&&(pl!==c.place||st!==c.state)&&byId('ce-d')){const day=dIn(byId('ce-d').value)??TODAY,t=byId('ce-t').value,min=t?(+t.split(':')[0])*60+(+t.split(':')[1]):nowMin(),n0=DB.moves.length;
+  _saveCE(d);DB.moves.slice(n0).forEach(m=>{m.day=day;m.min=min;if(dr)m.driverId=dr;if(dr&&/Llevado a|Estado/.test(m.text))m.text+=` · lo llevó ${dname(dr)}`});
+  if(DB.moves.length>n0){const a=DB.audit[DB.audit.length-1];if(a&&dr)a.text+=` · chofer ${dname(dr)}, ${fd(day)} ${fmin(min)}`;render()}return}
+ _saveCE(d)};
+/* Retiros: foto del contenedor entregado en el panel */
+const _rtPanel=rtPanel;
+rtPanel=function(o){const h=_rtPanel(o);const ph=o.photos.filter(p=>p.kind==='Contenedor entregado'),dm=o.demoPhoto&&o.cids[0];
+ const sec=`<div class="agp-s"><h4>${ic('cam')}Foto de la entrega</h4>${ph.length?ph.map(p=>`<div class="photo"><img src="${p.url}" alt="Contenedor entregado"></div>`).join(''):dm?`<div class="photo">${photoSvg(C(o.cids[0]),'Foto de entrega')}<span>Entrega ${fs(o.delDay)}</span></div>`:'<p class="muted">Sin foto de la entrega.</p>'}</div>`;
+ const i=h.indexOf('<div class="agp-s"><h4>'+ic('pin'));return i<0?h:h.slice(0,i)+sec+h.slice(i)};
+/* modo oscuro / claro */
+let THEME=null;try{THEME=localStorage.getItem('cn-theme')}catch(e){}
+const applyTheme=()=>{if(THEME)document.documentElement.dataset.theme=THEME;else delete document.documentElement.dataset.theme};applyTheme();
+const isDark=()=>THEME?THEME==='dark':window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+ACT.theme=()=>{THEME=isDark()?'light':'dark';try{localStorage.setItem('cn-theme',THEME)}catch(e){}applyTheme();render()};
+const _shell=shell;
+shell=function(){let h=_shell();h=h.replace('<button data-act="logout">',`<button class="thm" data-act="theme">${ic(isDark()?'sun':'moon')}${isDark()?'Modo claro':'Modo oscuro'}</button><button data-act="logout">`);
+ const late=tbOps.length!==undefined&&S.user&&inR('Administración','Logística')?DB.ops.filter(o=>preDel(o)&&o.reqDay<=TODAY&&o.status!=='Cancelado'&&tbLate(o)).length:0;
+ if(late)h=h.replace(/(data-v="tablero"[^>]*>[\s\S]*?<span>Tablero del día<\/span>)/,`$1<span class="cnt bad" title="Cargas incompletas">${late}</span>`);
+ const ob=DB.obradores.filter(o=>obFlag(o)).length;if(ob)h=h.replace(/(data-v="obradores"[^>]*>[\s\S]*?<span>Obradores<\/span>)/,`$1<span class="cnt">${ob}</span>`);
+ return h};
+const _loginView=loginView;
+loginView=function(){return _loginView().replace('</form>',`</form><button class="thm lg" data-act="theme" type="button">${ic(isDark()?'sun':'moon')}${isDark()?'Modo claro':'Modo oscuro'}</button>`)};
+
+/* ============ v7 · Sueldos (cierres semanales, préstamos) ============ */
+S.su2={week:null,det:null,tab:'cierre'};
+const MODE7={Servicio:'Por servicio',Fijo:'Sueldo fijo',Hora:'Por hora'};
+const MODE7B={Servicio:'info',Fijo:'rep',Hora:'acc'};
+const mode7Txt=e=>e.mode==='Servicio'?Object.entries(e.rates).map(([k,v])=>`${k.toLowerCase()} ${money(v)}`).join(' · '):e.mode==='Hora'?`${money(e.hourly)} por hora`:`${money(e.weekly)} por semana`;
+const advEf=x=>x.medio.startsWith('Efectivo');
+function su2Week(){if(S.su2.week!=null)return S.su2.week;const prev=weekStart(TODAY)-7;return DB.emps.some(e=>!DB.pay.find(p=>p.empId===e.id&&p.week===prev))?prev:weekStart(TODAY)}
+function vSueldos2(){
+ const w=su2Week(),we=w+6;if(S.su2.det)return salDetail(DB.emps.find(e=>e.id===S.su2.det),w);
+ if(S.su2.tab==='prest')return loansView();
+ const rows=DB.emps.map(e=>salCalc(e,w)),pend=DB.emps.filter(e=>{const p=weekStart(TODAY)-7;return p!==w&&!DB.pay.find(x=>x.empId===e.id&&x.week===p)});
+ const net=c=>c.pay?c.pay.cash+c.pay.transfer:Math.max(0,c.gross-Math.min(c.advAvail,c.gross)-c.loanCuota);
+ const T=f=>rows.reduce((s,c)=>s+f(c),0);
+ return pageHead('Sueldos','Cierre semanal: se paga el sábado. Adelantos y préstamos se cargan en Gastos.',`${chips('su2.tab',[['cierre','Cierres'],['prest','Préstamos']],S.su2.tab)}<button class="btn" data-act="su2Week" data-v="${w-7}">←</button><span class="pill">Semana <b>${fs(w)}</b> al <b>${fs(we)}</b> · sáb ${fs(w+5)}</span>${w<weekStart(TODAY)?`<button class="btn" data-act="su2Week" data-v="${w+7}">→</button>`:''}`)+`
+ ${pend.length?`<div class="warn-box">${ic('alert')}<span>Hay ${pend.length} cierre${pend.length===1?'':'s'} de la semana pasada sin confirmar (${pend.map(e=>e.name).join(', ')}).</span><button class="btn sm" data-act="su2Week" data-v="${weekStart(TODAY)-7}">Ver</button></div>`:''}
+ <div class="cards4"><div class="fig"><span>Generado</span><b>${compact(T(c=>c.gross))}</b></div><div class="fig"><span>Adelantos a descontar</span><b>${compact(T(c=>c.pay?c.pay.adv:Math.min(c.advAvail,c.gross)))}</b></div><div class="fig"><span>Cuotas de préstamos</span><b>${compact(T(c=>c.pay?c.pay.loan||0:c.loanCuota))}</b></div><div class="fig"><span>Neto a pagar</span><b>${compact(T(net))}</b><small>${rows.filter(c=>c.pay).length} de ${rows.length} pagados</small></div></div>
+ <div class="tbl-wrap block"><table class="dense"><thead><tr><th>Empleado</th><th>Modalidad</th><th>Actividad</th><th class="r">Generado</th><th class="r">Adelantos</th><th class="r">Préstamo</th><th class="r">Neto</th><th>Estado</th><th></th></tr></thead><tbody>
+ ${rows.map(c=>{const e=c.e,act=e.mode==='Servicio'?`${c.svc.filter(x=>x.k==='Contenedores').reduce((s,x)=>s+x.n,0)} contenedores${c.svc.some(x=>x.k!=='Contenedores')?' + '+c.svc.filter(x=>x.k!=='Contenedores').reduce((s,x)=>s+x.n,0)+' otros':''}`:e.mode==='Hora'?`${num(c.hrs.reduce((s,h)=>s+(h.to-h.from)/60,0),1)} horas`:'Semana completa';
+  return `<tr data-act="su2Det" data-id="${e.id}" tabindex="0"><td><b>${esc(e.name)}</b><span class="sub">${esc(e.area)}</span></td><td>${badge(MODE7[e.mode],{[MODE7[e.mode]]:MODE7B[e.mode]})}</td><td>${act}</td><td class="r tnum">${money(c.gross)}</td><td class="r tnum">${c.pay?(c.pay.adv?'− '+money(c.pay.adv):'—'):c.advAvail?'− '+money(Math.min(c.advAvail,c.gross)):'—'}${!c.pay&&c.carry?`<span class="sub">incluye ${money(c.carry)} de antes</span>`:''}</td><td class="r tnum">${(c.pay?c.pay.loan:c.loanCuota)?'− '+money(c.pay?c.pay.loan:c.loanCuota):'—'}</td><td class="r tnum"><b>${money(net(c))}</b></td><td>${c.pay?badge('Pagado',{Pagado:'ok'}):badge('Borrador',{Borrador:'warn'})}</td><td><button class="btn sm ${c.pay?'ghost':'pri'}" data-act="su2Det" data-id="${e.id}">${c.pay?'Ver':'Cerrar'}</button></td></tr>`}).join('')}
+ </tbody></table></div>
+ <section class="panel block"><h3>Valores <small>se cambian cuando cambia el acuerdo</small></h3><div class="su-vals">${DB.emps.map(e=>e.mode==='Servicio'?Object.entries(e.rates).map(([k,v])=>`<label class="fld"><span>${esc(e.name)} · ${k.toLowerCase()}</span><input inputmode="numeric" id="sv7-${e.id}-${fname(k)}" value="${v}"></label>`).join(''):`<label class="fld"><span>${esc(e.name)} · ${e.mode==='Hora'?'por hora':'fijo semanal'}</span><input inputmode="numeric" id="sv7-${e.id}" value="${e.mode==='Hora'?e.hourly:e.weekly}"></label>`).join('')}<div style="align-self:end"><button class="btn" data-act="su2Vals">${ic('check')}Guardar valores</button></div></div><p class="note">Nico y Gustavo cobran por servicio (contenedor, viaje de tierra, movimiento). Laura cobra por hora. El resto, sueldo fijo.</p></section>`;
+}
+function salDetail(e,w){const c=salCalc(e,w),p=c.pay,we=w+6;
+ const descDef=p?p.adv:(S.su2.desc!=null?Math.min(S.su2.desc,c.advAvail):Math.min(c.advAvail,c.gross));const loan=p?(p.loan||0):c.loanCuota;
+ const neto=p?p.cash+p.transfer:Math.max(0,c.gross-descDef-loan),left=c.advAvail-descDef;
+ const svcT=e.mode==='Servicio'?`<section class="panel"><h3>${ic('truck')}Servicios realizados</h3><div class="tbl-wrap"><table class="dense"><thead><tr><th>Día</th><th>Servicio</th><th class="r">Cantidad</th><th class="r">Comisión</th><th class="r">Importe</th></tr></thead><tbody>${c.svc.map(x=>`<tr><td>${cap(DC[dow(x.day)])} ${fs(x.day)}</td><td>${x.k}</td><td class="r tnum">${x.n}</td><td class="r tnum">${money(x.rate)}</td><td class="r tnum">${money(x.imp)}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">Sin servicios en la semana.</td></tr>'}</tbody><tfoot><tr><td colspan="2"><b>Total</b> <span class="muted">${c.svc.filter(x=>x.k==='Contenedores').reduce((s,x)=>s+x.n,0)} contenedores${c.svc.some(x=>x.k!=='Contenedores')?' + '+c.svc.filter(x=>x.k!=='Contenedores').reduce((s,x)=>s+x.n,0)+' servicios adicionales':''}</span></td><td></td><td></td><td class="r tnum"><b>${money(c.gross)}</b></td></tr></tfoot></table></div></section>`
+  :e.mode==='Hora'?`<section class="panel"><div class="sechead"><h3>${ic('clock')}Horas trabajadas</h3>${p?'':`<button class="btn sm" data-act="hrsDlg" data-id="${e.id}">${ic('plus')}Cargar horas</button>`}</div><div class="tbl-wrap"><table class="dense"><thead><tr><th>Día</th><th>Horario</th><th class="r">Horas</th><th class="r">Valor hora</th><th class="r">Importe</th></tr></thead><tbody>${c.hrs.map(h=>`<tr><td>${cap(DIAS[dow(h.day)])} ${fs(h.day)}</td><td class="tnum">${fmin(h.from)} a ${fmin(h.to)}</td><td class="r tnum">${num((h.to-h.from)/60,1)}</td><td class="r tnum">${money(e.hourly)}</td><td class="r tnum">${money((h.to-h.from)/60*e.hourly)}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">Sin horas cargadas.</td></tr>'}</tbody><tfoot><tr><td colspan="2"><b>Total</b></td><td class="r tnum"><b>${num(c.hrs.reduce((s,h)=>s+(h.to-h.from)/60,0),1)}</b></td><td></td><td class="r tnum"><b>${money(c.gross)}</b></td></tr></tfoot></table></div></section>`
+  :`<section class="panel"><h3>${ic('users')}Sueldo fijo</h3><dl class="cj-sum"><dt>Sueldo semanal</dt><dd>${money(e.weekly)}</dd><dt>Días de la semana</dt><dd>${fs(w)} al ${fs(we)}</dd></dl></section>`;
+ const adv=`<section class="panel"><h3>${ic('cash')}Adelantos del período</h3><div class="tbl-wrap"><table class="dense"><thead><tr><th>Fecha</th><th class="r">Efectivo</th><th class="r">Transferencia</th><th class="r">Total</th></tr></thead><tbody>${c.carry?`<tr class="warnrow"><td>Pendiente de semanas anteriores</td><td></td><td></td><td class="r tnum">${money(c.carry)}</td></tr>`:''}${(()=>{const g={};c.advWeek.forEach(x=>{const r=g[x.day]=g[x.day]||{d:x.day,ef:0,tr:0};r[advEf(x)?'ef':'tr']+=x.amount});return Object.values(g).map(r=>`<tr><td>${fs(r.d)}</td><td class="r tnum">${r.ef?money(r.ef):'—'}</td><td class="r tnum">${r.tr?money(r.tr):'—'}</td><td class="r tnum">${money(r.ef+r.tr)}</td></tr>`).join('')})()||(!c.carry?'<tr><td colspan="4" class="empty">Sin adelantos.</td></tr>':'')}</tbody><tfoot><tr><td><b>Total</b></td><td class="r tnum"><b>${money(c.advWeek.filter(advEf).reduce((s,x)=>s+x.amount,0))}</b></td><td class="r tnum"><b>${money(c.advWeek.filter(x=>!advEf(x)).reduce((s,x)=>s+x.amount,0))}</b></td><td class="r tnum"><b>${money(c.advAvail)}</b></td></tr></tfoot></table></div>
+  ${p?`<p class="note">Se descontaron ${money(p.adv)}${c.advAvail-p.adv>0?` y quedaron ${money(c.advAvail-p.adv)} para la semana siguiente`:''}.</p>`:c.advAvail?`<div class="inrow" style="margin-top:12px"><label class="fld" style="max-width:220px"><span>Descontar en este cierre</span><input id="su-desc" inputmode="numeric" value="${descDef}" data-chg="suDesc"></label>${left>0?`<span class="chipx warn" style="align-self:end">Quedan ${money(left)} para próximos cierres</span>`:''}</div>`:''}</section>`;
+ const right=`<section class="panel"><h3>${ic('doc')}Resumen del cierre</h3><dl class="cj-sum"><dt>${e.mode==='Servicio'?'Servicios':e.mode==='Hora'?'Horas':'Sueldo'}</dt><dd>${money(c.gross)}</dd><dt>Adelantos aplicados</dt><dd>− ${money(descDef)}</dd>${loan?`<dt>Préstamo · cuota ${c.loanN}/${c.loanObj.cuotas}</dt><dd>− ${money(loan)}</dd>`:''}</dl><div class="np-tot" style="display:flex;justify-content:space-between"><span>Neto a pagar</span><span>${money(neto)}</span></div></section>
+  ${c.loanObj?`<section class="panel"><h3>${ic('card')}Préstamo</h3><dl class="cj-sum"><dt>Saldo antes del cierre</dt><dd>${money(c.loanSaldo)}</dd><dt>Cuota de este cierre</dt><dd>${money(loan)}</dd><dt>Saldo al confirmar</dt><dd>${money(c.loanSaldo-loan)}</dd></dl></section>`:''}
+  ${!p&&left>0?`<section class="panel" style="background:var(--warn-bg)"><h3>${ic('cal')}Saldo para la próxima semana</h3><dl class="cj-sum"><dt>Adelantos pendientes</dt><dd><b>${money(left)}</b></dd></dl><p class="note">Aparecen como saldo anterior en el próximo cierre.</p></section>`:''}
+  <section class="panel"><h3>${ic('cash')}Pagos del cierre</h3>${p?`<dl class="cj-sum"><dt>Fecha del pago</dt><dd>${fd(p.day)}</dd><dt>Efectivo</dt><dd>${money(p.cash)}</dd><dt>Transferencia</dt><dd>${money(p.transfer)}</dd>${p.receipt?`<dt>Comprobante</dt><dd class="muted">${esc(p.receipt)}</dd>`:''}<dt><b>Total pagado</b></dt><dd><b>${money(p.cash+p.transfer)}</b></dd></dl><div class="info-box" style="background:var(--ok-bg)"><b>Saldo pendiente $0</b></div>`
+   :`<div class="fgrid1"><div class="inrow"><label class="fld"><span>Efectivo</span><input id="su-ef" inputmode="numeric" value="${neto}" data-live="suPays"></label><label class="fld"><span>Transferencia</span><input id="su-tr" inputmode="numeric" value="0" data-live="suPays"></label></div><p class="muted" id="su-chk">Pendiente de pago: <b>${money(neto)}</b></p><div class="fld"><span>Comprobante</span><label class="up sm">${ic('up')}<span>Adjuntar</span><input type="file" id="su-f"></label></div></div>`}</section>`;
+ return pageHead(`Detalle de sueldo · ${esc(e.name)} ${badge(MODE7[e.mode],{[MODE7[e.mode]]:MODE7B[e.mode]})} ${p?badge('Pagado',{Pagado:'ok'}):badge('Borrador',{Borrador:'warn'})}`,`<a href="#" data-act="su2Det" data-id="">← Sueldos</a> · Período ${fd(w)} al ${fd(we)} · se paga el sábado ${fs(w+5)}`,`<button class="btn" data-act="su2Week" data-v="${w-7}" data-keep="1">←</button>${w<weekStart(TODAY)?`<button class="btn" data-act="su2Week" data-v="${w+7}" data-keep="1">→</button>`:''}<button class="btn" data-act="suPdf" data-id="${e.id}">${ic('doc')}Descargar PDF</button><button class="btn" data-act="suImg" data-id="${e.id}">${ic('cam')}Descargar imagen</button>`)+`
+ <div class="cards4"><div class="fig"><span>Generado</span><b>${money(c.gross)}</b></div><div class="fig"><span>Adelantos a descontar</span><b>${money(descDef)}</b></div><div class="fig"><span>Cuota préstamo</span><b>${loan?money(loan):'—'}</b></div><div class="fig" style="background:var(--ok-bg);border-color:var(--ok)"><span>Neto a pagar</span><b>${money(neto)}</b></div></div>
+ <div class="su-grid"><div class="su-l">${svcT}${adv}</div><div class="su-r">${right}${p?'':`<button class="btn pri big" style="width:100%;justify-content:center" data-act="suConfirm" data-id="${e.id}">${ic('check')}Confirmar cierre</button>`}<button class="btn ghost" style="width:100%;justify-content:center;margin-top:8px" data-act="su2Det" data-id="">Volver a Sueldos</button></div></div>`;
+}
+function loansView(){const L=DB.loans;return pageHead('Sueldos','Préstamos a empleados: se devuelven en cuotas que se descuentan en cada cierre.',`${chips('su2.tab',[['cierre','Cierres'],['prest','Préstamos']],S.su2.tab)}<button class="btn pri" data-act="loanDlg">${ic('plus')}Nuevo préstamo</button>`)+`
+ <div class="tbl-wrap"><table class="dense"><thead><tr><th>Empleado</th><th>Fecha</th><th class="r">Importe</th><th>Plan</th><th>Entrega</th><th class="r">Devuelto</th><th class="r">Saldo</th><th>Estado</th></tr></thead><tbody>${L.map(l=>{const dev=l.pays.reduce((s,p)=>s+p.amount,0),sal=l.amount-dev;return `<tr><td><b>${esc(DB.emps.find(e=>e.id===l.empId).name)}</b>${l.note?`<span class="sub">${esc(l.note)}</span>`:''}</td><td class="tnum">${fd(l.day)}</td><td class="r tnum">${money(l.amount)}</td><td>${l.cuotas} cuotas de ${money(l.cuota)} · ${l.freq.toLowerCase()}</td><td>${esc(l.medio)}${l.cuenta?' · '+esc(l.cuenta):''}</td><td class="r tnum">${money(dev)}<span class="sub">${l.pays.length} de ${l.cuotas} cuotas</span></td><td class="r tnum"><b>${money(sal)}</b></td><td>${sal>0?badge('En curso',{'En curso':'warn'}):badge('Cancelado',{Cancelado:'ok'})}</td></tr>`}).join('')||'<tr><td colspan="8" class="empty">Sin préstamos.</td></tr>'}</tbody></table></div><p class="note">El préstamo se registra una sola vez como salida de dinero (en Gastos) y se vincula al sueldo. En cada cierre se puede ajustar cuánto descontar.</p>`}
+DIALOGS.loan=()=>`<div class="m-head"><div><p class="eyebrow">Gastos · registrar movimiento</p><h2>Préstamo a empleado</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+ <div class="m-body"><h4 class="sublbl">Datos de la entrega</h4><div class="fgrid"><label class="fld"><span>Empleado</span><select id="ln-e">${DB.emps.map(e=>`<option value="${e.id}">${esc(e.name)}</option>`).join('')}</select></label><label class="fld"><span>Fecha de entrega</span><input type="date" id="ln-d" value="${dOut(TODAY)}" max="${dOut(TODAY)}"></label>
+ <label class="fld"><span>Importe entregado</span><input id="ln-a" inputmode="numeric" placeholder="300000" data-live="lnCalc"></label><label class="fld"><span>Medio de entrega</span><select id="ln-m"><option>Efectivo · Oficina</option><option selected>Transf SAS</option><option>Transf Otro</option></select></label>
+ <div class="fld full"><span>Comprobante</span><label class="up sm">${ic('up')}<span>Adjuntar (opcional)</span><input type="file" id="ln-f"></label></div></div>
+ <h4 class="sublbl" style="margin-top:14px">Plan de devolución</h4><div class="fgrid"><label class="fld"><span>Cantidad de cuotas</span><select id="ln-c" data-chg="lnCalc">${[1,2,3,4,5,6,8,10,12].map(n=>`<option ${n===3?'selected':''}>${n}</option>`).join('')}</select></label><label class="fld"><span>Frecuencia</span><select id="ln-fr"><option>Semanal</option><option>Mensual</option></select></label>
+ <label class="fld"><span>Importe por cuota</span><input id="ln-q" disabled value="—"></label><label class="fld"><span>Primer cierre a descontar</span><select id="ln-w">${[0,7,14].map(k=>{const w=weekStart(TODAY)+k;return `<option value="${w}">${fs(w)} al ${fs(w+6)}</option>`}).join('')}</select></label>
+ <label class="fld full"><span>Observaciones</span><input id="ln-n" placeholder="Préstamo personal"></label></div>
+ <p class="info-box">${ic('alert')}<span>Se registra una sola salida de dinero y se vincula al sueldo. No se descuenta nada hasta confirmar cada cierre.</span></p><div id="ln-err"></div></div>
+ <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Cancelar</button><button class="btn pri big" data-act="loanSave">${ic('check')}Guardar préstamo</button></div>`;
+DIALOGS.hrs=()=>{const e=DB.emps.find(x=>x.id===S.dialog.id);return `<div class="m-head"><div><p class="eyebrow">Sueldos · ${esc(e.name)}</p><h2>Cargar horas</h2></div><button class="x" data-act="closeDialog" aria-label="Cerrar">${ic('x')}</button></div>
+ <div class="m-body"><div class="fgrid"><label class="fld"><span>Día</span><input type="date" id="hr-d" value="${dOut(TODAY)}" max="${dOut(TODAY)}"></label><span></span><label class="fld"><span>Desde</span><input type="time" id="hr-f" value="08:00"></label><label class="fld"><span>Hasta</span><input type="time" id="hr-t" value="13:00"></label></div><p class="note">${money(e.hourly)} por hora.</p><div id="hr-err"></div></div>
+ <div class="m-foot"><button class="btn ghost" data-act="closeDialog">Volver</button><button class="btn pri big" data-act="hrsSave" data-id="${e.id}">${ic('check')}Guardar</button></div>`};
+const tmin=v=>{if(!v)return null;const[h,m]=v.split(':').map(Number);return h*60+m};
+Object.assign(LIVE,{
+ suDesc:t=>{S.su2.desc=+digits(t.value);render()},
+ suPays:()=>{const ef=+digits(byId('su-ef').value),tr=+digits(byId('su-tr').value),e=DB.emps.find(x=>x.id===S.su2.det),w=su2Week(),c=salCalc(e,w),desc=S.su2.desc!=null?Math.min(S.su2.desc,c.advAvail):Math.min(c.advAvail,c.gross),neto=Math.max(0,c.gross-desc-c.loanCuota),dif=neto-ef-tr;byId('su-chk').innerHTML=dif===0?'<b style="color:var(--ok)">Cubre el neto a pagar.</b>':`${dif>0?'Falta':'Sobra'}: <b>${money(Math.abs(dif))}</b>`},
+ lnCalc:()=>{const a=+digits(byId('ln-a').value),n=+byId('ln-c').value;byId('ln-q').value=a?money(Math.round(a/n)):'—'}
+});
+Object.assign(ACT,{
+ su2Week:d=>{S.su2.week=+d.v;S.su2.desc=null;if(!d.keep)S.su2.det=null;render()},
+ su2Det:d=>{S.su2.det=d.id?+d.id:null;S.su2.desc=null;render();window.scrollTo(0,0)},
+ su2Vals:()=>{DB.emps.forEach(e=>{if(e.mode==='Servicio')Object.keys(e.rates).forEach(k=>{const el=byId(`sv7-${e.id}-${fname(k)}`);const v=el&&+digits(el.value);if(v)e.rates[k]=v});else{const el=byId('sv7-'+e.id),v=el&&+digits(el.value);if(v){if(e.mode==='Hora')e.hourly=v;else e.weekly=v}}});audNow(`${S.user.name} actualizó los valores de sueldos`);render();toast('Valores guardados. Se aplican a los cierres sin confirmar.')},
+ suConfirm:d=>{const e=DB.emps.find(x=>x.id===+d.id),w=su2Week(),c=salCalc(e,w),desc=byId('su-desc')?Math.min(+digits(byId('su-desc').value),c.advAvail):0,neto=Math.max(0,c.gross-desc-c.loanCuota),ef=+digits(byId('su-ef').value),tr=+digits(byId('su-tr').value),f=byId('su-f').files[0];
+  if(ef+tr!==neto){toast(`El efectivo más la transferencia tiene que dar ${money(neto)}.`);return}
+  DB.pay.push({id:++DB.seq.pay,empId:e.id,day:Math.min(TODAY,w+5),week:w,type:'Sueldo',gross:c.gross,adv:desc,loan:c.loanCuota,cash:ef,transfer:tr,receipt:f?f.name:'',note:'',user:S.user.name});
+  if(c.loanCuota)c.loanObj.pays.push({week:w,amount:c.loanCuota});
+  audNow(`${S.user.name} confirmó el cierre de ${e.name} (${fs(w)} al ${fs(w+6)}): neto ${money(neto)}`);S.su2.desc=null;render();toast(`Cierre de ${e.name} confirmado: ${money(neto)}${c.advAvail-desc>0?` · quedan ${money(c.advAvail-desc)} de adelantos para la próxima semana`:''}.`)},
+ loanDlg:()=>{S.dialog={t:'loan'};renderLayers()},
+ loanSave:()=>{const e=DB.emps.find(x=>x.id===+byId('ln-e').value),a=+digits(byId('ln-a').value),n=+byId('ln-c').value,day=dIn(byId('ln-d').value),m=byId('ln-m').value,f=byId('ln-f').files[0];if(!a||day==null){byId('ln-err').innerHTML='<p class="err">Completá fecha e importe.</p>';return}
+  const l={id:DB.loans.length+1,empId:e.id,day,amount:a,medio:m.startsWith('Efectivo')?'Efectivo':'Transferencia',cuenta:m.startsWith('Transf')?m.replace('Transf ','Banco '):'',cuotas:n,freq:byId('ln-fr').value,cuota:Math.round(a/n),first:+byId('ln-w').value,note:byId('ln-n').value.trim(),receipt:f?f.name:'',pays:[]};DB.loans.push(l);
+  DB.exp.push({id:++DB.seq.exp,day,cat:'Sueldos y cargas',sub:'Préstamo a empleado',medio:m,amount:a,desc:`Préstamo ${e.name} (${n} cuotas de ${money(l.cuota)})`,receipt:l.receipt,user:S.user.name,loanId:l.id});
+  audNow(`${S.user.name} registró un préstamo de ${money(a)} a ${e.name} en ${n} cuotas`);S.dialog=null;render();toast(`Préstamo a ${e.name}: ${n} cuotas de ${money(l.cuota)}.`)},
+ hrsDlg:d=>{S.dialog={t:'hrs',id:+d.id};renderLayers()},
+ hrsSave:d=>{const day=dIn(byId('hr-d').value),f=tmin(byId('hr-f').value),t=tmin(byId('hr-t').value);if(day==null||f==null||t==null||t<=f){byId('hr-err').innerHTML='<p class="err">Revisá el día y el horario.</p>';return}
+  DB.hours.push({id:++DB.seq.hrs,empId:+d.id,day,from:f,to:t,user:S.user.name});audNow(`${S.user.name} cargó horas de ${DB.emps.find(e=>e.id===+d.id).name}: ${fs(day)} ${fmin(f)} a ${fmin(t)}`);S.dialog=null;render();toast('Horas cargadas.')},
+ suPdf:d=>{const e=DB.emps.find(x=>x.id===+d.id),w=su2Week(),c=salCalc(e,w),p=c.pay,desc=p?p.adv:Math.min(S.su2.desc??c.advAvail,c.advAvail,c.gross),loan=p?p.loan||0:c.loanCuota,neto=p?p.cash+p.transfer:Math.max(0,c.gross-desc-loan);
+  const rows=[...(e.mode==='Servicio'?c.svc.map(x=>[`${cap(DC[dow(x.day)])} ${fs(x.day)}`,`${x.k} · ${x.n} × ${money(x.rate)}`,x.imp]):e.mode==='Hora'?c.hrs.map(h=>[`${cap(DC[dow(h.day)])} ${fs(h.day)}`,`${fmin(h.from)} a ${fmin(h.to)} · ${num((h.to-h.from)/60,1)} h × ${money(e.hourly)}`,(h.to-h.from)/60*e.hourly]):[['Semana','Sueldo fijo',e.weekly]]),['','Generado',c.gross],...c.advWeek.map(x=>[fs(x.day),`Adelanto (${advEf(x)?'efectivo':'transferencia'})`,-x.amount]),...(c.carry?[['','Adelantos de semanas anteriores',-c.carry]]:[]),['','Adelantos aplicados en este cierre',-desc],...(loan?[['',`Préstamo · cuota ${c.loanN} de ${c.loanObj.cuotas}`,-loan]]:[])];
+  exportTable({fmt:'pdf',file:`sueldo-${fname(e.name)}-${dOut(w)}`,title:`Sueldo · ${e.name}`,sub:`Semana ${fd(w)} al ${fd(w+6)} · ${MODE7[e.mode]} · ${p?`Pagado el ${fd(p.day)}: efectivo ${money(p.cash)}, transferencia ${money(p.transfer)}`:'Borrador'}${c.advAvail-desc>0?` · Quedan ${money(c.advAvail-desc)} de adelantos para la próxima semana`:''}`,cols:['Día','Concepto','Importe'],rows,totals:['','Neto a pagar',neto]})},
+ suImg:d=>{const e=DB.emps.find(x=>x.id===+d.id),w=su2Week(),c=salCalc(e,w),p=c.pay,desc=p?p.adv:Math.min(S.su2.desc??c.advAvail,c.advAvail,c.gross),loan=p?p.loan||0:c.loanCuota,neto=p?p.cash+p.transfer:Math.max(0,c.gross-desc-loan);
+  const lines=[...(e.mode==='Servicio'?c.svc.map(x=>[`${cap(DC[dow(x.day)])} ${fs(x.day)} · ${x.k} ${x.n} × ${money(x.rate)}`,money(x.imp)]):e.mode==='Hora'?c.hrs.map(h=>[`${cap(DC[dow(h.day)])} ${fs(h.day)} · ${fmin(h.from)} a ${fmin(h.to)}`,money((h.to-h.from)/60*e.hourly)]):[['Sueldo fijo semanal',money(e.weekly)]])];
+  const W=720,H=300+lines.length*30,cv=document.createElement('canvas');cv.width=W*2;cv.height=H*2;const g=cv.getContext('2d');g.scale(2,2);g.fillStyle='#fff';g.fillRect(0,0,W,H);g.fillStyle='#C9520A';g.fillRect(0,0,W,8);
+  g.fillStyle='#17212B';g.font='700 26px Arial';g.fillText(`Sueldo · ${e.name}`,32,52);g.font='15px Arial';g.fillStyle='#5A6570';g.fillText(`Semana ${fd(w)} al ${fd(w+6)} · ${MODE7[e.mode]} · Conte Nic`,32,78);
+  let y=118;g.font='15px Arial';lines.forEach(([l,v])=>{g.fillStyle='#17212B';g.fillText(l,32,y);g.textAlign='right';g.fillText(v,W-32,y);g.textAlign='left';y+=30});
+  g.strokeStyle='#DADDD4';g.beginPath();g.moveTo(32,y-12);g.lineTo(W-32,y-12);g.stroke();y+=14;
+  [['Generado',money(c.gross)],['Adelantos',`− ${money(desc)}`],...(loan?[['Préstamo',`− ${money(loan)}`]]:[])].forEach(([l,v])=>{g.fillStyle='#5A6570';g.fillText(l,32,y);g.textAlign='right';g.fillText(v,W-32,y);g.textAlign='left';y+=28});
+  g.fillStyle='#DFF1E5';g.fillRect(24,y-6,W-48,48);g.fillStyle='#1F6F44';g.font='700 22px Arial';g.fillText('Neto a pagar',40,y+26);g.textAlign='right';g.fillText(money(neto),W-40,y+26);g.textAlign='left';
+  cv.toBlob(b=>saveFile(`sueldo-${fname(e.name)}-${dOut(w)}.png`,b),'image/png')}
+});
+const _setF4=setF;setF=function(path,v){if(path==='su2.tab'){S.su2.tab=v;S.su2.det=null;return}return _setF4(path,v)};
+VIEWS.sueldos=vSueldos2;
+const _vGastos=vGastos;
+VIEWS.gastos=()=>injRight(_vGastos(),`<button class="btn" data-act="loanDlg">${ic('plus')}Préstamo</button>`);
+
+/* ============ v7 · Reportes: gráficos nuevos ============ */
+const RPAL=['#C9520A','#2F6FD0','#2E9E4F','#8A5BD0','#D0238E','#E3B23C','#5A6570','#18A0B5'];
+function donut(rows,fmt){const tot=rows.reduce((s,r)=>s+r.v,0)||1;let a=-Math.PI/2,s='';const R0=70,R1=44,cx=90,cy=90;
+ rows.forEach((r,i)=>{const da=r.v/tot*Math.PI*2;if(!r.v)return;const a2=a+da,lg=da>Math.PI?1:0,p=(ang,R)=>[cx+R*Math.cos(ang),cy+R*Math.sin(ang)];const[x1,y1]=p(a,R0),[x2,y2]=p(a2,R0),[x3,y3]=p(a2,R1),[x4,y4]=p(a,R1);
+  s+=da>=Math.PI*2-1e-6?`<circle cx="${cx}" cy="${cy}" r="${(R0+R1)/2}" fill="none" stroke="${RPAL[i%8]}" stroke-width="${R0-R1}"><title>${esc(r.l)}: ${fmt?fmt(r.v):r.v}</title></circle>`:`<path d="M${x1} ${y1}A${R0} ${R0} 0 ${lg} 1 ${x2} ${y2}L${x3} ${y3}A${R1} ${R1} 0 ${lg} 0 ${x4} ${y4}z" fill="${RPAL[i%8]}" stroke="var(--surface)" stroke-width="2"><title>${esc(r.l)}: ${fmt?fmt(r.v):r.v} (${Math.round(r.v/tot*100)} %)</title></path>`;a=a2});
+ return `<div class="donut"><svg viewBox="0 0 180 180" role="img" aria-label="Gráfico de torta">${s}<text x="90" y="86" text-anchor="middle" class="dn-t">${fmt?fmt(tot):tot}</text><text x="90" y="104" text-anchor="middle" class="dn-s">total</text></svg><ul class="legend vert">${rows.map((r,i)=>`<li><i class="dot" style="background:${RPAL[i%8]}"></i>${esc(r.l)} <b>${fmt?fmt(r.v):r.v}</b> <span class="muted">${Math.round(r.v/tot*100)} %</span></li>`).join('')}</ul></div>`}
+function vbars(rows,fmt,hi){const max=Math.max(1,...rows.map(r=>r.v)),W=Math.max(320,rows.length*46),H=180,bw=Math.min(30,W/rows.length-12);
+ return `<div class="chart"><svg viewBox="0 0 ${W} ${H+48}" role="img" aria-label="Gráfico de barras">${rows.map((r,i)=>{const x=10+i*(W-20)/rows.length+((W-20)/rows.length-bw)/2,h=r.v/max*H;return `<g><title>${esc(r.l)}: ${fmt?fmt(r.v):r.v}</title><rect x="${x}" y="${H-h+22}" width="${bw}" height="${Math.max(0,h)}" rx="3" fill="${r.ghost?'var(--line)':hi===i?'var(--accent)':'#2F6FD0'}"/><text x="${x+bw/2}" y="${H-h+16}" text-anchor="middle" class="bv">${r.v?(fmt?fmt(r.v):r.v):''}</text><text x="${x+bw/2}" y="${H+42}" text-anchor="middle">${esc(r.l)}</text></g>`}).join('')}</svg></div>`}
+function gbars(rows){const max=Math.max(1,...rows.flatMap(r=>[r.a,r.b])),W=Math.max(360,rows.length*90),H=170;
+ return `<div class="chart"><svg viewBox="0 0 ${W} ${H+34}" role="img" aria-label="Ingresos contra gastos por camión">${rows.map((r,i)=>{const gw=(W-20)/rows.length,x=10+i*gw+gw/2-26,ha=r.a/max*H,hb=r.b/max*H;return `<g><title>${esc(r.l)}: ingresos ${money(r.a)} · gastos ${money(r.b)}</title><rect x="${x}" y="${H-ha+10}" width="24" height="${ha}" rx="3" fill="#2E9E4F"/><rect x="${x+28}" y="${H-hb+10}" width="24" height="${hb}" rx="3" fill="#D93025"/><text x="${x+26}" y="${H+28}" text-anchor="middle">${esc(r.l)}</text></g>`}).join('')}</svg></div><ul class="legend"><li><i class="dot" style="background:#2E9E4F"></i>Ingresos (pedidos entregados)</li><li><i class="dot" style="background:#D93025"></i>Gastos (combustible, compras, gastos, basurales)</li></ul>`}
+/* meses anteriores al período de la demo: valores de ejemplo para ver el gráfico completo */
+const HIST_M=(()=>{const y=Dt(TODAY).getUTCFullYear(),m=Dt(TODAY).getUTCMonth(),out=[];let sd=17;for(let i=0;i<12;i++){sd=(sd*9301+49297)%233280;out.push(i<m-1?Math.round(300+sd/233280*180+(i>=9||i<2?60:0)):null)}return out})();
+function vRep2(){const h=vRep(),[a,b]=range(S.period),ms=monthStart(TODAY);
+ const done=DB.ops.filter(o=>o.status!=='Cancelado'&&o.delDay!=null&&(o.type==='Alquiler'||o.type==='Recambio'));
+ const truck=VEH.filter(v=>!v.machine).map(v=>{const ac=vehOps(v.plate,a,b),inc=ac.all.reduce((s,o)=>s+o.price,0),gx=vehMoves(v.plate,a,b).reduce((s,m)=>s+m.v,0);return{l:v.plate,a:inc,b:gx}});
+ const locM={};done.filter(o=>o.delDay>=ms).forEach(o=>{const l=addr(o).loc;locM[l]=(locM[l]||0)+o.qty});const locR=Object.entries(locM).sort((x,y)=>y[1]-x[1]);const loc6=[...locR.slice(0,6).map(([l,v])=>({l,v})),...(locR.length>6?[{l:'Otras',v:locR.slice(6).reduce((s,x)=>s+x[1],0)}]:[])];
+ const yr=Dt(TODAY).getUTCFullYear(),cm=Dt(TODAY).getUTCMonth(),mon=MESES.map((n,i)=>{const real=done.filter(o=>{const d=Dt(o.delDay);return d.getUTCFullYear()===yr&&d.getUTCMonth()===i}).reduce((s,o)=>s+o.qty,0);return{l:cap(n.slice(0,3)),v:i>cm?0:(HIST_M[i]!=null&&i<cm-1?HIST_M[i]:real),ghost:i>cm}});
+ const byD=DB.drivers.map(d=>({l:d.name,v:done.filter(o=>o.driverId===d.id&&inRange(o.delDay,a,b)).reduce((s,o)=>s+o.qty,0)}));
+ const paid=DB.ops.filter(o=>o.paid>0&&inRange(o.payDay,a,b)&&o.status!=='Cancelado'),pm=[{l:'Transferencia',v:paid.filter(o=>o.payMethod==='Transferencia').reduce((s,o)=>s+o.paid,0)},{l:'Efectivo',v:paid.filter(o=>o.payMethod==='Efectivo').reduce((s,o)=>s+o.paid,0)}];
+ const bar={};done.filter(o=>inRange(o.delDay,a,b)).forEach(o=>{const x=addr(o),k=x.barrio!=='Centro'?`${x.barrio} (${x.loc})`:`${x.loc} centro`;bar[k]=(bar[k]||0)+o.qty});const top5=Object.entries(bar).sort((x,y)=>y[1]-x[1]).slice(0,5).map(([l,v])=>({l,v}));
+ const add=`<h2 class="sec" style="margin-top:22px">Gráficos</h2><div class="rep-grid">
+  <section class="panel"><h3>Ingresos vs gastos por camión <small>${PLBL[S.period]}</small></h3>${gbars(truck)}</section>
+  <section class="panel"><h3>Localidades más vendidas <small>${MESES[Dt(TODAY).getUTCMonth()]} · contenedores</small></h3>${loc6.length?donut(loc6):'<p class="muted">Sin entregas este mes.</p>'}</section>
+  <section class="panel wide2"><h3>Contenedores por mes <small>${yr}</small></h3>${vbars(mon,null,cm)}<p class="note">Los meses anteriores a la demo son valores de ejemplo; en el sistema real salen de la planilla histórica.</p></section>
+  <section class="panel"><h3>Contenedores por chofer <small>${PLBL[S.period]}</small></h3>${vbars(byD)}</section>
+  <section class="panel"><h3>Transferencias vs efectivo <small>${PLBL[S.period]}</small></h3>${donut(pm,compact)}</section>
+  <section class="panel"><h3>Top 5 barrios <small>${PLBL[S.period]} · contenedores</small></h3>${top5.length?hbars(top5.map(r=>({l:esc(r.l),v:r.v}))):'<p class="muted">Sin entregas.</p>'}</section></div>`;
+ return h+add}
+VIEWS.reportes=vRep2;
+
 render();
 </script>
 </body></html>

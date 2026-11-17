@@ -1,4 +1,4 @@
-// Conte Nic · modelo de datos (borrador v4 · diseño final 02/11: pedido en 5 partes, flota, stock, compras, remitos, cheques, Chamba quincenal)
+// Conte Nic · modelo de datos (borrador v5 · reunión 04/11: tablero de logística, obradores, ingresos a basural y Arcoíris, préstamos y sueldos por servicio u hora)
 // PostgreSQL + Prisma. Los nombres de tablas y campos van en inglés (convención de código);
 // cada uno tiene su explicación en castellano.
 //
@@ -131,9 +131,39 @@ enum SalaryType {
 
 /// Cómo se calcula el sueldo semanal
 enum PayMode {
-  COMISION // por contenedor entregado (Nico, Gustavo)
-  MANUAL // se carga a mano al pagar (Chucky, Alambre)
-  FIJO // oficina
+  POR_SERVICIO // Nico y Gustavo: un valor por cada servicio (contenedor, viaje de tierra, movimiento) → EmployeeRate
+  FIJO // Lucía, Belén, Mili, Benja, Chucky, Alambre
+  POR_HORA // Laura: monto fijo por hora → WorkHours
+}
+
+/// Prioridad en el tablero. "Pendiente de ayer" no se guarda: se calcula (fecha del pedido anterior a hoy y sin entregar).
+enum OrderPriority {
+  NORMAL
+  PRIMERA_HORA
+}
+
+enum ObradorState {
+  DISPONIBLE
+  ALQUILADO
+  RESERVADO
+  EN_REPARACION
+}
+
+/// Lugares donde se compran ingresos por adelantado
+enum PrepaidKind {
+  BASURAL // Basural Villa Allende: 1 ingreso por contenedor descargado
+  AGUA // Pileta Arcoíris: 1 ingreso por viaje de agua
+}
+
+enum LoanFrequency {
+  SEMANAL
+  MENSUAL
+}
+
+enum AlertChannel {
+  TELEGRAM
+  MAIL
+  AMBOS
 }
 
 enum LocationKind {
@@ -178,6 +208,9 @@ enum AttachmentKind {
   REMITO_ANULADO
   COMPROBANTE_SUELDO
   COMPROBANTE_GASTO
+  FOTO_ENTREGA // foto del contenedor entregado (se ve también en Retiros)
+  FOTO_OBRADOR
+  COMPROBANTE_PRESTAMO
   OTRO
 }
 
@@ -194,6 +227,9 @@ model User {
   active       Boolean   @default(true)
   lastLoginAt  DateTime?
   createdAt    DateTime  @default(now())
+  telegramUser String? // para los avisos de cheques (@usuario)
+  chequeAlerts Boolean   @default(false) // recibe los avisos de vencimiento de cheques (Mili y Camilo)
+  theme        String? // "claro" u "oscuro"; vacío = el del dispositivo
 
   driver           Driver?
   ordersCreated    Order[]             @relation("OrderCreatedBy")
@@ -210,6 +246,9 @@ model User {
   expenses         Expense[]
   cashHandovers    CashHandover[]
   cashClosings     CashClosing[]
+  workHours        WorkHours[]
+  prepaidPurchases PrepaidPurchase[]
+  prepaidAdjusts   PrepaidAdjustment[]
 }
 
 /// Historial de cambios: quién hizo qué y cuándo
@@ -249,6 +288,7 @@ model Customer {
   orders    Order[]
   claims    Claim[]
   invoices  Invoice[]
+  obradorRentals ObradorRental[]
 
   @@index([name])
   @@index([phone])
@@ -295,6 +335,7 @@ model Address {
   locality Locality @relation(fields: [localityId], references: [id])
   barrio   Barrio?  @relation(fields: [barrioId], references: [id])
   orders   Order[]
+  obradorRentals ObradorRental[]
 
   @@index([customerId])
   @@index([barrioId])
@@ -343,6 +384,12 @@ model Order {
   notes               String?
   logisticsNotes      String?
   driverId            Int? // chofer de la entrega
+  priority            OrderPriority  @default(NORMAL)
+  assignedAt          DateTime? // cuándo Lucía asignó el chofer: base de la alerta de 1–2 h sin novedades
+  routeOrder          Int? // orden dentro del día / recorrido del chofer (se arrastra en el tablero)
+  sourcePlacementId   Int?           @unique // retiro vinculado: el contenedor que se retira es el que se entrega
+  draftStep           String? // borrador guardado del paso pendiente (retiro, descarga, entrega)
+  obradorId           Int? // obrador entregado (servicio Obrador)
   tripId              Int? // viaje (para combinar con retiros)
   remitoNumber        Int?           @unique
   remitoSigned        Boolean        @default(false)
@@ -366,6 +413,9 @@ model Order {
   replacedBy     Order[]         @relation("Replaces")
   createdBy      User            @relation("OrderCreatedBy", fields: [createdById], references: [id])
   service        Service?        @relation(fields: [serviceId], references: [id])
+  sourcePlacement Placement?     @relation("LinkedPickup", fields: [sourcePlacementId], references: [id])
+  obrador        Obrador?        @relation(fields: [obradorId], references: [id])
+  obradorRentals ObradorRental[]
 
   placements  Placement[]
   payments    Payment[]
@@ -397,6 +447,7 @@ model Placement {
   dumpedAt          DateTime? // hora en que lo dejó en el basural (se carga a mano)
   returnLocationId  Int? // dónde quedó: Lote Paraguay, Simonna...
   byRecambio        Boolean         @default(false)
+  dumpCost          Decimal?        @db.Decimal(12, 2) // costo del ingreso al basural (Villa Allende: de la compra de la que salió; otros: costo cargado)
 
   order          Order               @relation(fields: [orderId], references: [id])
   container      Container           @relation(fields: [containerId], references: [id])
@@ -406,6 +457,7 @@ model Placement {
   landfill       Landfill?           @relation(fields: [landfillId], references: [id])
   returnLocation Location?           @relation(fields: [returnLocationId], references: [id])
   movements      ContainerMovement[]
+  feedsOrder     Order?              @relation("LinkedPickup")
 
   @@index([containerId, status])
   @@index([plannedPickupDate])
@@ -421,6 +473,7 @@ model Attachment {
   invoiceId    Int?
   salaryId     Int?
   expenseId    Int?
+  obradorId    Int?
   uploadedById Int
   createdAt    DateTime       @default(now())
 
@@ -430,6 +483,7 @@ model Attachment {
   invoice    Invoice?       @relation(fields: [invoiceId], references: [id])
   salary     SalaryPayment? @relation(fields: [salaryId], references: [id])
   expense    Expense?       @relation(fields: [expenseId], references: [id])
+  obrador    Obrador?       @relation(fields: [obradorId], references: [id])
   uploadedBy User           @relation(fields: [uploadedById], references: [id])
 }
 
@@ -466,6 +520,7 @@ model Location {
   containers Container[]
   returns    Placement[]
   movements  ContainerMovement[]
+  obradores  Obrador[]
 }
 
 /// Historial de cada contenedor (nunca se borra)
@@ -557,6 +612,8 @@ model Landfill {
 
   locality Locality?   @relation(fields: [localityId], references: [id])
   pickups  Placement[]
+  costs    LandfillCost[]
+  prepaid  PrepaidPoint?
 }
 
 // ─────────────────────────────── Dinero ───────────────────────────────
@@ -710,7 +767,7 @@ model Employee {
   name         String
   area         EmployeeArea
   payMode      PayMode
-  ratePerContainer Decimal? @db.Decimal(12, 2) // COMISION: $10.000 por contenedor entregado, puede cambiar
+  hourlyRate   Decimal?     @db.Decimal(12, 2) // POR_HORA (Laura)
   weeklySalary Decimal?     @db.Decimal(12, 2) // FIJO
   active       Boolean      @default(true)
   driverId     Int?         @unique // si es chofer: su actividad es la base del sueldo
@@ -718,6 +775,9 @@ model Employee {
   driver   Driver?         @relation(fields: [driverId], references: [id])
   payments SalaryPayment[]
   advances Expense[]
+  rates    EmployeeRate[]
+  hours    WorkHours[]
+  loans    Loan[]
 }
 
 /// Pago de sueldo semanal (se paga el sábado). Los adelantos de la semana se descuentan.
@@ -728,7 +788,8 @@ model SalaryPayment {
   weekStart      DateTime   @db.Date // lunes de la semana que se paga
   type           SalaryType @default(SUELDO)
   grossAmount    Decimal    @db.Decimal(12, 2) // sueldo de la semana (comisión, fijo o carga manual)
-  advancesAmount Decimal    @default(0) @db.Decimal(12, 2) // adelantos descontados
+  advancesAmount Decimal    @default(0) @db.Decimal(12, 2) // adelantos descontados en este cierre (puede ser menos que lo adelantado: el resto pasa a la semana siguiente)
+  loanAmount     Decimal    @default(0) @db.Decimal(12, 2) // cuota de préstamo descontada
   cashAmount     Decimal    @default(0) @db.Decimal(12, 2)
   transferAmount Decimal    @default(0) @db.Decimal(12, 2)
   accountId      Int? // cuenta desde la que se transfirió
@@ -740,6 +801,7 @@ model SalaryPayment {
   account     PaymentAccount? @relation(fields: [accountId], references: [id])
   createdBy   User            @relation(fields: [createdById], references: [id])
   attachments Attachment[]
+  loanPayments LoanPayment[]
 
   @@index([paidAt])
   @@unique([employeeId, weekStart])
@@ -777,6 +839,7 @@ model Expense {
   cashTruck   Truck?          @relation(fields: [cashTruckId], references: [id])
   truck       Truck?          @relation("ExpenseTruck", fields: [truckId], references: [id])
   cheques     Cheque[]
+  loan        Loan?
   employee    Employee?       @relation(fields: [employeeId], references: [id])
   createdBy   User            @relation(fields: [createdById], references: [id])
   attachments Attachment[]
@@ -1024,4 +1087,154 @@ model ChambaPayment {
   notes     String?
 
   closing ChambaClosing @relation(fields: [closingId], references: [id])
+}
+
+// ─────────────────────────────── Reunión 04/11 ───────────────────────────────
+
+/// Obradores (16). En el mapa: cuadrado violeta con el número.
+model Obrador {
+  id              Int          @id @default(autoincrement())
+  number          Int          @unique // OB-01
+  name            String // "Obrador 1"
+  state           ObradorState @default(DISPONIBLE)
+  locationId      Int? // Simonna, Lote Paraguay (vacío = en la calle, con un cliente)
+  lockType        String // "Cerradura", "Candado", "Cerradura y candado"
+  locks           Int          @default(0) // cantidad de cerraduras
+  padlocks        Int          @default(0)
+  keySets         Int          @default(0) // juegos de llaves
+  keySetsAtClient Int          @default(0)
+  notes           String?
+
+  location    Location?       @relation(fields: [locationId], references: [id])
+  rentals     ObradorRental[]
+  orders      Order[]
+  attachments Attachment[] // fotos (historial)
+}
+
+/// Alquiler de un obrador: mínimo un mes. El aviso "por vencer" se calcula con rentTo.
+model ObradorRental {
+  id          Int       @id @default(autoincrement())
+  obradorId   Int
+  customerId  Int
+  addressId   Int
+  orderId     Int?
+  rentFrom    DateTime  @db.Date
+  rentTo      DateTime  @db.Date // se corre al renovar
+  returnedAt  DateTime? @db.Date
+  contractUrl String? // PDF del contrato
+
+  obrador  Obrador  @relation(fields: [obradorId], references: [id])
+  customer Customer @relation(fields: [customerId], references: [id])
+  address  Address  @relation(fields: [addressId], references: [id])
+  order    Order?   @relation(fields: [orderId], references: [id])
+
+  @@index([rentTo])
+}
+
+/// Costo por ingreso de un basural, con fecha desde la que rige (Unquillo, Río Ceballos, Salsipuedes)
+model LandfillCost {
+  id         Int      @id @default(autoincrement())
+  landfillId Int
+  validFrom  DateTime @db.Date
+  unitCost   Decimal  @db.Decimal(12, 2)
+
+  landfill Landfill @relation(fields: [landfillId], references: [id])
+
+  @@unique([landfillId, validFrom])
+}
+
+/// Lugar con ingresos comprados por adelantado: Basural Villa Allende y Pileta Arcoíris.
+/// Disponibles = compras + ajustes − usos (los usos salen de las descargas y de los viajes de agua).
+model PrepaidPoint {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  kind       PrepaidKind
+  landfillId Int?        @unique // para BASURAL
+  alertAt    Int         @default(100) // avisar al quedar N ingresos
+
+  landfill    Landfill?           @relation(fields: [landfillId], references: [id])
+  purchases   PrepaidPurchase[]
+  adjustments PrepaidAdjustment[]
+}
+
+model PrepaidPurchase {
+  id          Int      @id @default(autoincrement())
+  pointId     Int
+  date        DateTime @db.Date
+  quantity    Int
+  unitCost    Decimal  @db.Decimal(12, 2) // cada uso toma el costo de la compra de la que salió
+  paymentKind String
+  fileUrl     String?
+  notes       String?
+  createdById Int
+
+  point     PrepaidPoint @relation(fields: [pointId], references: [id])
+  createdBy User         @relation(fields: [createdById], references: [id])
+}
+
+model PrepaidAdjustment {
+  id          Int      @id @default(autoincrement())
+  pointId     Int
+  date        DateTime @db.Date
+  quantity    Int // + suma, − resta
+  reason      String
+  createdById Int
+
+  point     PrepaidPoint @relation(fields: [pointId], references: [id])
+  createdBy User         @relation(fields: [createdById], references: [id])
+}
+
+/// Valor por servicio para los que cobran por servicio (Nico, Gustavo)
+model EmployeeRate {
+  id         Int     @id @default(autoincrement())
+  employeeId Int
+  service    String // "Contenedores", "Viaje de tierra", "Movimiento"
+  amount     Decimal @db.Decimal(12, 2)
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@unique([employeeId, service])
+}
+
+/// Horas trabajadas (Laura): lunes de 08:00 a 13:00 = 5 h × valor hora
+model WorkHours {
+  id          Int      @id @default(autoincrement())
+  employeeId  Int
+  date        DateTime @db.Date
+  fromTime    String // "08:00"
+  toTime      String // "13:00"
+  createdById Int
+
+  employee  Employee @relation(fields: [employeeId], references: [id])
+  createdBy User     @relation(fields: [createdById], references: [id])
+
+  @@index([employeeId, date])
+}
+
+/// Préstamo a un empleado: una sola salida de dinero (Expense) y un plan de cuotas que se descuentan en los cierres
+model Loan {
+  id                Int           @id @default(autoincrement())
+  employeeId        Int
+  date              DateTime      @db.Date
+  amount            Decimal       @db.Decimal(12, 2)
+  installments      Int
+  frequency         LoanFrequency @default(SEMANAL)
+  installmentAmount Decimal       @db.Decimal(12, 2)
+  firstWeek         DateTime      @db.Date // primer cierre a descontar
+  notes             String?
+  expenseId         Int?          @unique
+
+  employee Employee      @relation(fields: [employeeId], references: [id])
+  expense  Expense?      @relation(fields: [expenseId], references: [id])
+  payments LoanPayment[]
+}
+
+model LoanPayment {
+  id              Int     @id @default(autoincrement())
+  loanId          Int
+  salaryPaymentId Int
+  amount          Decimal @db.Decimal(12, 2) // se puede ajustar en cada cierre
+
+  loan          Loan          @relation(fields: [loanId], references: [id])
+  salaryPayment SalaryPayment @relation(fields: [salaryPaymentId], references: [id])
 }

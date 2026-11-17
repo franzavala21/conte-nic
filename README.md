@@ -18,6 +18,19 @@ También se puede publicar con **GitHub Pages** (Settings → Pages → Deploy f
 - `docs/modelo-de-datos.html`: diagrama interactivo de las tablas y sus relaciones, recorrido de un pedido, datos que se calculan y cómo se importa el Excel.
 - `db/schema.prisma`: el mismo modelo en Prisma (PostgreSQL), validado. La conexión va en `prisma.config.ts` (variable `DATABASE_URL` en un `.env`).
 
+## Versión 6 · reunión del 04/11
+
+- **Tablero del día (Logística)** rediseñado: pestañas Todos, Sin asignar, una por chofer (Gustavo naranja, Nico verde, Chucky azul, Alambre fucsia) y Realizados hoy. Prioridad (Pendiente de ayer, Primera hora, Normal), colores por zona como los usa Lucía, viajes de agua en celeste fuerte y filas que se arrastran para ordenar.
+- Al asignar chofer, el pedido sale de Sin asignar y pasa al recorrido del chofer. Cada entrega se completa en pasos: **vincular retiro** (o sacar del depósito), **registrar retiro**, **registrar descarga** en el basural y **completar entrega** con hora real y foto. Recién ahí pasa a Realizados.
+- **Alerta** en pantalla si pasa más de 1 hora sin cargar datos de una entrega asignada. La foto de la entrega también se ve en Retiros.
+- **Basurales y puntos de carga**: ingresos comprados al Basural Villa Allende y a la Pileta Arcoíris, que se descuentan solos (1 por contenedor descargado y 1 por viaje de agua), con compras, ajustes y aviso al quedar pocos. Costo por ingreso de cada basural, sumado al costo de cada camión en Control de flota.
+- **Obradores** (16): estado, ubicación, cliente, entrega, vencimiento con aviso, fotos, contrato PDF, cerraduras, candados y juegos de llaves, renovación e historial. En el mapa, cuadrado violeta con el número.
+- **Sueldos** por cierre semanal: Nico y Gustavo por servicio (contenedor, viaje de tierra, movimiento), Laura por hora, el resto fijo. Adelantos que se pueden descontar en parte (el resto pasa a la semana siguiente), **préstamos** en cuotas y resumen en PDF o imagen.
+- **Descargas** en PDF y Excel: contenedores con cualquier filtro, servicios de cada chofer ordenados por hora, facturación A y B por período y pagos por cuenta.
+- **Avisos de cheques** por Telegram o mail a Mili y Camilo (simulado). En el Inicio de todos, el dinero en caja; en Administración, los cheques por vencer en rojo.
+- Usuario de Ventas para **Laura**. Cambio de ubicación de contenedores con fecha, hora y chofer. **Modo claro y oscuro**. Reportes con 6 gráficos nuevos.
+- Modelo de datos v5: 53 tablas (`Obrador`, `ObradorRental`, `LandfillCost`, `PrepaidPoint`, `PrepaidPurchase`, `PrepaidAdjustment`, `EmployeeRate`, `WorkHours`, `Loan`, `LoanPayment`) y campos nuevos en el pedido (prioridad, hora de asignación, orden, retiro vinculado).
+
 ## Versión 5 · diseño final del cliente (02/11)
 
 - **Menú agrupado** como en el diseño: Inicio, Agenda, Operaciones (Servicios, Entregas, Retiros), Caja, Logística (Contenedores, Mapa), Camiones (Control de flota, Choferes, Combustible, Basurales), Administración (Pagos, Gastos, Compras, Stock, Remitos, Cheques, Facturación, Grupo Chamba, Sueldos…) y Clientes.
@@ -44,7 +57,7 @@ También se puede publicar con **GitHub Pages** (Settings → Pages → Deploy f
 
 ## Versión 3 · modificaciones del 06/10
 
-- **Ingreso con usuario y contraseña**. Tres perfiles: Administración (Mili y Camilo, ven todo), Ventas y Logística. Usuarios de prueba: `mili`, `camilo`, `belen`, `lucia`, contraseña `conte`.
+- **Ingreso con usuario y contraseña**. Tres perfiles: Administración (Mili y Camilo, ven todo), Ventas y Logística. Usuarios de prueba: `mili`, `camilo`, `belen`, `lucia`, contraseña `conte` (desde la versión 6 también `laura`).
 - **Agenda**: filtros por localidad, barrio y pendiente de confirmación; sin columnas Chofer ni Contenedor; Cant. entre Dirección y Horario. Logística ya no ve la Agenda.
 - **Nuevo pedido**: CUIT, servicio *Extensión de tiempo* (corre la fecha de retiro, precio lo pone Ventas), efectivo cobrado por FWU 010 / EPK 581 / RXB 892 / Oficina, datos de factura y remito (N.º, firmado, foto), que pasan de Logística a Ventas.
 - **Tablero del día**: Por asignar y Retiros funcionan como pestañas; filtro por localidad y barrio.
